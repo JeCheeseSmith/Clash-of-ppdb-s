@@ -1,0 +1,1 @@
+--- Run this script to drop alle tables, DELETES ALL DATA FROM YOUR DATABASE!!
