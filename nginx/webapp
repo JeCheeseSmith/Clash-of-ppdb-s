@@ -5,7 +5,7 @@ server {
     listen 443;
     listen [::]:443;
 
-    server_name 0.0.0.0 team8.ua-ppdb.me www.team8.ua-ppdb.me;
+    server_name 0.0.0.0 team8.ua-ppdb.me;
 
     location / {
         include proxy_params;
