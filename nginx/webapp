@@ -1,9 +1,22 @@
 server {
-    listen 80;
-    listen [::]:80;
-
     listen 443;
     listen [::]:443;
+
+    ssl on;
+    ssl_certificate /etc/letsencrypt/live/team8.ua-ppdb.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/team8.ua-ppdb.me/privkey.pem;
+
+    server_name 0.0.0.0 team8.ua-ppdb.me;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/app/Clash-of-ppdb-s/src/webapp.sock;
+    }
+}
+
+server {
+    listen 80;
+    listen [::]:80;
 
     server_name 0.0.0.0 team8.ua-ppdb.me;
 
