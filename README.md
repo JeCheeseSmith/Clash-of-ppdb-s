@@ -71,7 +71,7 @@ pip3 install -r requirements.txt
 
 #### 4. Run development server
 ```bash
-cd src/
+cd backend/
 python app.py
 ```
 Then visit https://team8.ua-ppdb.me/
@@ -90,7 +90,7 @@ sudo su - app
 #### 5. Test if wsgi entrypoint works
 Instead of using the Flask debug server, we use gunicorn to serve the application.
 ```bash
-cd src/
+cd backend/
 gunicorn --bind 0.0.0.0:5000 wsgi:app
 ```
 

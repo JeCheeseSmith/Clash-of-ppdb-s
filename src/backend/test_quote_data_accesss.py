@@ -1,8 +1,7 @@
 # Author: Len Feremans
 # Unit tests for QuoteDataAccess
 import unittest
-from src.quote_data_access import DBConnection, QuoteDataAccess, Quote
-from src.config import *
+from src.backend.quote_data_access import DBConnection, QuoteDataAccess, Quote
 
 
 class TestQuoteDataAccess(unittest.TestCase):

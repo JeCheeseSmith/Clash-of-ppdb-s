@@ -9,6 +9,6 @@ server {
 
     location / {
         include proxy_params;
-        proxy_pass http://unix:/home/app/Clash-of-ppdb-s/src/webapp.sock;
+        proxy_pass http://unix:/home/app/Clash-of-ppdb-s/src/backend/webapp.sock;
     }
 }
