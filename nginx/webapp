@@ -12,15 +12,3 @@ server {
         proxy_pass http://unix:/home/app/Clash-of-ppdb-s/src/webapp.sock;
     }
 }
-
-server {
-    listen 80;
-    listen [::]:80;
-
-    server_name 0.0.0.0 team8.ua-ppdb.me;
-
-    location / {
-        include proxy_params;
-        proxy_pass http://unix:/home/app/Clash-of-ppdb-s/src/webapp.sock;
-    }
-}
