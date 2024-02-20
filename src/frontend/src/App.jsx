@@ -16,13 +16,13 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Legends' Warzone: Infinite Battles</h1>
+      <h1>Game Name</h1>
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
         <p>
-          Test Page, TODO: Login Page
+          Begin Template (Tijdelijk)
         </p>
       </div>
       <p className="read-the-docs">
