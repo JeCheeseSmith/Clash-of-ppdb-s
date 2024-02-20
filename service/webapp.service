@@ -15,7 +15,7 @@ Group=www-data
 
 # We'll then map out the working directory and set the PATH environmental variable so that the init system knows where our the executables for the process are located (within our virtual environment).
 WorkingDirectory=/home/app/Clash-of-ppdb-s/src/backend
-Environment="PATH=/home/app/Clash-of-ppdb-s/backend/env/bin"
+Environment="PATH=/home/app/Clash-of-ppdb-s/env/bin"
 
 # We'll then specify the commanded to start the service
 ExecStart=/home/app/Clash-of-ppdb-s/backend/env/bin/gunicorn --workers 3 --bind unix:webapp.sock -m 007 wsgi:app
