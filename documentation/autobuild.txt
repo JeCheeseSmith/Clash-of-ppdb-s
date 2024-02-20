@@ -1,0 +1,16 @@
+script.sh:
+
+#!/bin/bash
+
+cd /home/app/Clash-of-ppdb-s/
+git fetch --all && git checkout --force "origin/master"
+
+
+crontab watson:
+
+*/5 * * * * sudo systemctl restart webapp && sudo systemctl reload nginx | logger -t ppdb
+
+crontab app:
+
+*/5 * * * * /home/app/script.sh 2>&1 | logger -t ppdb
+
