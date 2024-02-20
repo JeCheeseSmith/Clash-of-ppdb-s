@@ -74,7 +74,7 @@ pip3 install -r requirements.txt
 cd src/
 python app.py
 ```
-Then visit http://localhost:5000
+Then visit https://team8.ua-ppdb.me/
 
 
 
