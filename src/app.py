@@ -4,8 +4,8 @@ from flask import Flask
 from flask.templating import render_template
 from flask import request, session, jsonify
 
-from src.config import config_data
-from src.quote_data_access import Quote, DBConnection, QuoteDataAccess
+from config import config_data
+from quote_data_access import Quote, DBConnection, QuoteDataAccess
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Tutorial ')
