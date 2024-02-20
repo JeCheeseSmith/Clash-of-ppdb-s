@@ -1,3 +1,5 @@
+git clone git@github.com:JeCheeseSmith/Clash-of-ppdb-s.git
+
 script.sh:
 
 #!/bin/bash
