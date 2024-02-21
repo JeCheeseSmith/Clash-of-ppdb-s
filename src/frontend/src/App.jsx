@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-import gameBackground from './assets/gameBackground.png'
+import MainPage from './pages/Homepage/mainpage'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <div>
-            <img src={gameBackground} alt=""/>
+            <MainPage/>
       </div>
     </>
   )
