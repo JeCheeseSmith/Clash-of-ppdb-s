@@ -1,6 +1,6 @@
 import React from 'react'; // Importing React library
-import gameBackground from '../../assets/background.jpg'; // Importing the background image
 import './mainpage.css'; // Importing the CSS file for styling
+import Chat from './Communication/chat';
 
 /**
  * Functional component representing the main page of the application.
@@ -8,8 +8,8 @@ import './mainpage.css'; // Importing the CSS file for styling
  */
 function MainPage() {
   return (
-    <div className="image-container"> {/* Container for the background image */}
-      <img src={gameBackground} alt="" /> {/* Background image */}
+    <div className="background"> {/* Container for the background image */}
+      <Chat/>
     </div>
   );
 }

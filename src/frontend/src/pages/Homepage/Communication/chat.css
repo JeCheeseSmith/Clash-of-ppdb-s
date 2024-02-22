@@ -1,0 +1,46 @@
+.chatName {
+    display: inline-block;
+    margin: 1cm; /* Reduced margin */
+    position: relative;
+}
+
+.chatName h1 {
+    background-color: rgb(0, 0, 0);
+    display: inline;
+    padding: 1cm 1.5cm; /* Reduced padding */
+    font-size: 1.5cm; /* Smaller font size */
+    color: rgb(243, 219, 0);
+    border-radius: 20px; /* Rounded corners */
+    position: relative;
+    top: 0.5cm; /* Move the heading down by 1cm */
+}
+
+
+.grayRectangle {
+    position: absolute;
+    top: calc(100% + 1.6cm); /* Position it below the chat header with reduced margin */
+    background-color: #21221f; /* Gray background color */
+    width: 7.22cm; /* Reduced width */
+    height: 15cm; /* Reduced height */
+    border-radius: 10px; /* Rounded corners */
+}
+
+.messageInput {
+    position: absolute;
+    bottom: 0.4cm; /* Position the input box at the bottom with 0.5cm from the bottom */
+    width: 7cm;
+    height: 1cm;
+    padding: 0.2cm;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 5px;
+    font-size: small;
+    margin-left: 0.1cm;
+    background: linear-gradient(to right, #9000ff, #FF69B4); /* Blue to pink gradient */
+    color: white;
+    font:italic;
+}
+
+.messageInput::placeholder {
+    color: white; /* Placeholder text color */
+}

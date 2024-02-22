@@ -1,14 +1,17 @@
-.image-container {
-    position: fixed; /* Position the container fixed to the viewport */
-    top: 0; /* Align to the top of the viewport */
-    left: 0; /* Align to the left of the viewport */
-    width: 100vw; /* Set width to viewport width */
-    height: 100vh; /* Set height to viewport height */
-    overflow: hidden; /* Hide any overflow from the image */
-  }
+.background {
+  position: fixed; /* Position the container fixed to the viewport */
+  top: 0; /* Align to the top of the viewport */
+  left: 0; /* Align to the left of the viewport */
+  width: 100vw; /* Set width to viewport width */
+  height: 100vh; /* Set height to viewport height */
+  overflow: hidden; /* Hide any overflow from the image */
+  background-image: url('../../assets/background.jpg'); /* Set the background image */
+  background-size: cover; /* Cover the container while maintaining aspect ratio */
+}
+
   
   /* Styles for the image */
-  .image-container img {
+  .background img {
     width: 100%; /* Set width to fill the container */
     height: 100%; /* Set height to fill the container */
     object-fit: cover; /* Cover the container while maintaining aspect ratio */
