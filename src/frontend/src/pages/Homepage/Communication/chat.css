@@ -8,7 +8,7 @@
     border-radius: 20px;
     font-size: 70px; /* Adjust the font size as needed */
   }
-  
+
 .message-display::-webkit-scrollbar {
     display: none;
   }
@@ -20,7 +20,7 @@
     z-index: 1;
     display: flex;
     flex-direction: column;
-    height: 700px;
+    height: 800px;
     width: 500px; /* Adjusted width */
     transition: left 0.5s ease; /* Slide animation */
   }
@@ -28,7 +28,7 @@
 .chat-container.visible {
     left: 20px; /* Slide in when visible */
   }
-  
+
 .chat-container.hidden {
     left: -500px; /* Slide out when hidden */
   }
@@ -40,21 +40,22 @@
     padding-right: 20px;
     margin-top: -5px;
     margin-bottom: 5px; /* Add margin to the bottom */
-    background-color: rgb(33, 29, 29); 
+    background-color: rgb(33, 29, 29);
     border-radius: 13px;
   }
 
-  .message {
+.message {
     display: flex;
     font-size: large;
+    font-family: italic, sans-serif;
     justify-content: space-between;
     margin-bottom: 10px;
-    padding: 20px;  
+    padding: 20px;
     border-radius: 20px;
     color: rgb(0, 0, 0);
-    background-image: linear-gradient(to right, rgb(0, 172, 206), rgb(229, 168, 0)); 
-  }
-  
+    background-image: linear-gradient(to right, rgb(0, 172, 206), rgb(229, 168, 0));
+}
+
 
 .sender-name {
   margin-left: 10px;
@@ -76,28 +77,40 @@
 }
 
 .toggle-chat-button {
-    position: fixed;
-    top: 20px;
-    left: 20px;
+    position: absolute;
+    top: 25px; /* Adjust as needed */
+    height: 750px;
+    width: 50px;
     z-index: 2;
     padding: 10px 20px;
-    background-color: #f6c07f; /* Light orange similar to Clash of Clans */
-    border: none;
-    border-radius: 8px; /* Slightly rounded corners */
+    background-color: #262826;
+    font-family: "Fira Code", italic;
+    border: 4px solid #ff0000; /* Thick red border */
+    border-radius: 8px;
     color: white;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    transition-duration: 0.4s;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Soft shadow */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: left 0.5s ease; /* Slide animation */
+}
+
+
+.toggle-chat-button.visible {
+    left: 522px; /* Slide in when visible */
   }
-  
+
+.toggle-chat-button.hidden {
+    left: 0px; /* Slide out when hidden */
+  }
+
+
   .toggle-chat-button:hover {
-    background-color: #e59e53; /* Darker shade of orange on hover */
+    background-color: #484f48;
+    transition: 0.5s ; /* Slide animation */
   }
-  
-  
-  
-  
+
+
+
