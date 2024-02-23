@@ -1,19 +1,21 @@
-User Password
+User: Email, Username, Password, AvatarString, Gems, XP, Money
 
-Settlement User
+(Settlement User)
 
-Settlement Wood Stone Food 
+Settlement: Wood Stone Food
 
-Settlement: Buildings 
+(Settlement Buildings Soldiers)
 
-Settlement Grid Building
+(Map Settlement)
 
-Settlements - Verschilledne type soldaten
-
-Soldier ID: Damage & Health
+Soldier: Consumption, Damage, Health, Capacity
 
 User : Direct Messages & Groupschat (Guild) 
 
-Guild - Users
+Guild: Leader, Status, Description
 
-Building Upgrade Costs , Build Cost
+(Guild Users)
+
+Building: Type, Description Upgrade Costs , Build Cost
+
+
