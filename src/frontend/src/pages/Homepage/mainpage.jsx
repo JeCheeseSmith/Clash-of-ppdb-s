@@ -1,6 +1,8 @@
 import React from 'react'; // Importing React library
 import './mainpage.css'; // Importing the CSS file for styling
 import Chat from './Communication/chat';
+import Grid from "./GridView/grid.jsx";
+import SocialBox from "./Communication/social.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -9,7 +11,8 @@ import Chat from './Communication/chat';
 function MainPage() {
   return (
     <div className="background"> {/* Container for the background image */}
-      <Chat/>
+        <Chat/>
+        <SocialBox/>
     </div>
   );
 }
