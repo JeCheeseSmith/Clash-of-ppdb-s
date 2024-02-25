@@ -21,6 +21,11 @@
     transition: left 0.5s ease;
 }
 
+.toggle-social-button:hover {
+    background-color: #d96b00;
+    transition: 0.5s ; /* Slide animation */
+}
+
 .box-container{
     margin: 80px;
     margin-left: 500px;
@@ -28,18 +33,18 @@
 
 .navbar {
     padding: 20px;
-    padding-left: 6.5%;
+    padding-left: 4.8%;
     font-size: large;
-    border: none;
-    border-radius: 20px; /* Match border-radius of message box */
-    width: 60%;
-    background-color: #1c7430;
+    border: 2px solid #ffd700; /* Golden border color */
+    border-radius: 10px; /* Match border-radius of message box */
+    background-color: #b26616;
     color: white;
     opacity: 0;
     transition: opacity 0.1s ease;
 }
+
 .visible {
-  opacity: 1;
+    opacity: 1;
 }
 
 .navbar-links {
@@ -59,3 +64,12 @@
 .navbar-links li a:hover {
   text-decoration: underline;
 }
+
+.socialOption{
+    background-color: rgba(84, 51, 6, 0.95);
+    color: white;
+    font-size: large;
+    border-radius: 15px;
+    padding: 15px;
+}
+

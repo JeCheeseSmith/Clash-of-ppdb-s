@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import "./social.css"
-import buttonSound from '../../../assets/Menu Selection Sound Effect.mp3';
+import "./socialOptionContents.css"
+import buttonSocial from '../../../assets/Menu Selection Sound Effect.mp3';
+import buttonOption from '../../../assets/socialOptionSound.mp3';
 
 function SocialBox() {
   const [socialVisible, setSocialVisible] = useState(false);
@@ -8,8 +10,8 @@ function SocialBox() {
     setSocialVisible(!socialVisible);
   };
 
-  const playSound = () => {
-    const sound = new Audio(buttonSound);
+  const playSocial = () => {
+    const sound = new Audio(buttonSocial);
     sound.currentTime = 0.315;
     sound.play();
   };
@@ -17,7 +19,7 @@ function SocialBox() {
 
   return (
       <div>
-          <button onClick={() => { toggleSocialVisibility(); playSound(); }} className={"toggle-social-button"}> social </button>
+          <button onClick={() => { toggleSocialVisibility(); playSocial(); }} className={"toggle-social-button"}> social </button>
           <div className="social-container"></div>
           <Box socialVisible={socialVisible}/>
       </div>
@@ -33,15 +35,97 @@ function Box({socialVisible}){
     )
 }
 
-function Navbar({socialVisible}) {
+function Navbar({ socialVisible }) {
+  const [currentPage, setCurrentPage] = useState(null);
+
+  const playOption = () => {
+    const sound = new Audio(buttonOption);
+    sound.currentTime = 0.5;
+    sound.play();
+  };
+
+  const handleButtonClick = (pageName) => {
+    setCurrentPage(pageName);
+    playOption();
+  };
+
   return (
-    <nav className={`navbar ${socialVisible ? 'visible' : 'hidden'}`}>
-      <ul className="navbar-links">
-        <li><a href="#">Create Clan</a></li>
-        <li><a href="#">Join Clan</a></li>
-        <li><a href="#">Friend Requests</a></li>
-        <li><a href="#">Search Person</a></li>
-      </ul>
-    </nav>
+      <div className="navbar-container">
+          {socialVisible && (
+              <nav className="navbar visible">
+                  <ul className="navbar-links">
+                      <li>
+                          <button onClick={() => handleButtonClick('createClan')} className={"socialOption"}>Create
+                              Clan
+                          </button>
+                      </li>
+                      <li>
+                          <button onClick={() => handleButtonClick('joinClan')} className={"socialOption"}>Join Clan
+                          </button>
+                      </li>
+                      <li>
+                          <button onClick={() => handleButtonClick('friendRequests')} className={"socialOption"}>Friend
+                              Requests
+                          </button>
+                      </li>
+                      <li>
+                          <button onClick={() => handleButtonClick('searchPerson')} className={"socialOption"}>Search
+                              Person
+                          </button>
+                      </li>
+                  </ul>
+              </nav>
+          )}
+          {socialVisible && currentPage && (
+              <div className="page-content">
+                  {/* Render different pages based on currentPage state */}
+                  {currentPage === 'createClan' && <CreateClanPage/>}
+                  {currentPage === 'joinClan' && <JoinClanPage/>}
+                  {currentPage === 'friendRequests' && <FriendRequestsPage/>}
+                  {currentPage === 'searchPerson' && <SearchPersonPage/>}
+              </div>
+          )}
+      </div>
   );
 }
+
+// Example page components
+function CreateClanPage() {
+  return (
+      <div className={"create-clan"}>
+          <input className={"nameClan"} placeholder={"Name"}/>
+          <select className={"clanStatus"} aria-placeholder={"status"}>
+              <option value="option1">Attack</option>
+              <option value="option2">Defence</option>
+              <option value="option3">Danger</option>
+          </select>
+          <textarea className={"descriptionClan"} placeholder={"Description"}/>
+          <button className={"create-clan-button"}>Create Clan</button>
+      </div>
+  )
+}
+
+function JoinClanPage() {
+    return (
+        <div>
+
+        </div>
+    )
+}
+
+function FriendRequestsPage() {
+    return (
+        <div>
+
+        </div>
+    )
+}
+
+function SearchPersonPage() {
+    return (
+        <div>
+
+      </div>
+  )
+}
+

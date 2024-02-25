@@ -108,10 +108,10 @@
     left: 0cm; /* Slide out when hidden */
   }
 
-  .toggle-chat-button:hover {
+.toggle-chat-button:hover {
     background-color: #d96b00;
     transition: 0.5s ; /* Slide animation */
-  }
+}
 
 
 
