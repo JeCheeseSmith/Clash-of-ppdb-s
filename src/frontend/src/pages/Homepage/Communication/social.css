@@ -20,3 +20,42 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: left 0.5s ease;
 }
+
+.box-container{
+    margin: 80px;
+    margin-left: 500px;
+}
+
+.navbar {
+    padding: 20px;
+    padding-left: 6.5%;
+    font-size: large;
+    border: none;
+    border-radius: 20px; /* Match border-radius of message box */
+    width: 60%;
+    background-color: #1c7430;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+}
+.visible {
+  opacity: 1;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+}
+
+.navbar-links li {
+  margin-right: 6rem; /* Increase the right margin to create larger spaces */
+}
+
+.navbar-links li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-links li a:hover {
+  text-decoration: underline;
+}
