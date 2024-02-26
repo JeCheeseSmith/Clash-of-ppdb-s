@@ -12,6 +12,8 @@
 
 ## Design Choices Overview
 
+Database variable names; same system in referring
+
 ## How to start?
 
 ###This Guide Assumes you have an Ubuntu Server running with Nginx Webserver inplace. You can use the nginx/webapp file as a starting config
@@ -56,7 +58,7 @@ and restart the service. Then initialize the database:
 ```bash
 sudo systemctl restart postgresql
 
-psql dbtutor -U app -f sql/schema.sql
+psql ppdb -U app -f sql/schema.sql
 ```
 
 
