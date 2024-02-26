@@ -36,7 +36,7 @@ function Box({socialVisible}){
 }
 
 function Navbar({ socialVisible }) {
-  const [currentPage, setCurrentPage] = useState(null);
+  const [currentPage, setCurrentPage] = useState('createClan');
 
   const playOption = () => {
     const sound = new Audio(buttonOption);
