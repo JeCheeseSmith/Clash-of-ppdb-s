@@ -18,10 +18,10 @@ CREATE TABLE Package(
     xp BIGINT
 );
 
-CREATE TABLE "User"(
+CREATE TABLE "user"(
     name VARCHAR PRIMARY KEY,
     password VARCHAR NOT NULL,
-    avatar VARCHAR NOT NULL,
+    avatar VARCHAR,
     gems BIGINT,
     xp BIGINT,
     level INT
@@ -31,7 +31,7 @@ CREATE TABLE Message(
     id SERIAL PRIMARY KEY,
     moment TIMESTAMP NOT NULL,
     content TEXT NOT NULL,
-    uname VARCHAR NOT NULL REFERENCES "User"(name) ON DELETE SET NULL -- Send Relation
+    uname VARCHAR NOT NULL REFERENCES "user"(name) ON DELETE SET NULL -- Send Relation
 );
 
 CREATE TABLE Request(
@@ -49,12 +49,12 @@ CREATE TABLE ClanRequest(
 );
 
 CREATE TABLE Admin(
-    name VARCHAR PRIMARY KEY REFERENCES "User"(name) ON DELETE CASCADE
+    name VARCHAR PRIMARY KEY REFERENCES "user"(name) ON DELETE CASCADE
 );
 
 CREATE TABLE Guild(
     name VARCHAR PRIMARY KEY,
-    uname VARCHAR NOT NULL REFERENCES "User"(name) ON DELETE CASCADE, -- Leader Relation
+    uname VARCHAR NOT NULL REFERENCES "user"(name) ON DELETE CASCADE, -- Leader Relation
     status VARCHAR,
     description TEXT
 );
@@ -65,7 +65,7 @@ CREATE TABLE Settlement(
     mapX INT UNIQUE NOT NULL, -- Coordinate on the map
     mapY INT UNIQUE NOT NULL,
     pid SERIAL NOT NULL REFERENCES Package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Has Relation: Resources currently in the Settlement
-    uname VARCHAR NOT NULL REFERENCES "User"(name) ON DELETE CASCADE -- Owns Relation
+    uname VARCHAR NOT NULL REFERENCES "user"(name) ON DELETE CASCADE -- Owns Relation
 );
 
 CREATE TABLE Achievement(
@@ -108,20 +108,20 @@ CREATE TABLE Building(
 );
 
 CREATE TABLE Friend(
-    uname1 VARCHAR REFERENCES "User"(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    uname2 VARCHAR REFERENCES "User"(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    uname1 VARCHAR REFERENCES "user"(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    uname2 VARCHAR REFERENCES "user"(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(uname1,uname2)
 );
 
 CREATE TABLE Member(
-    uname VARCHAR  REFERENCES "User"(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    uname VARCHAR  REFERENCES "user"(name) ON DELETE CASCADE ON UPDATE CASCADE,
     gname VARCHAR REFERENCES Guild(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (uname,gname)
 );
 
 CREATE TABLE Retrieved(
     mid SERIAL REFERENCES Message(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    uname VARCHAR REFERENCES "User"(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    uname VARCHAR REFERENCES "user"(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (mid,uname)
 );
 
@@ -161,14 +161,16 @@ CREATE TABLE UnlockedSoldier(
 );
 
 CREATE TABLE WheelofFortune(
-    uname VARCHAR REFERENCES "User"(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    uname VARCHAR REFERENCES "user"(name) ON DELETE CASCADE ON UPDATE CASCADE,
     pid SERIAL REFERENCES Package(id) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (pid,uname)
 );
 
 CREATE TABLE Achieved(
-    uname VARCHAR REFERENCES "User"(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    uname VARCHAR REFERENCES "user"(name) ON DELETE CASCADE ON UPDATE CASCADE,
     aname VARCHAR REFERENCES Achievement(name) ON DELETE CASCADE ON UPDATE CASCADE,
     moment TIMESTAMP,
     PRIMARY KEY (uname,aname)
 );
+
+INSERT INTO "user"(name,password) VALUES('watson','1234')
