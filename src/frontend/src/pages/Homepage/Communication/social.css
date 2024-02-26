@@ -1,14 +1,13 @@
 .toggle-social-button {
     position: absolute;
-    bottom: 41%;
+    bottom: 30%;
     transform: translateY(-50%);
     height: 70px;
     width: 55px;
-    z-index: 2;
     padding: 0px;
     background-color: #262826;
-    font-family: "Fira Code", italic;
-    border: 4px solid #5b1b1b;
+    font-family: "Fira Code", italic, serif;
+    border: 4px solid #bb4f00;
     border-bottom-right-radius: 25px; /* Adjust this value to control the roundness */
     border-top-right-radius: 25px; /* Adjust this value to control the roundness */
     color: white;

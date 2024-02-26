@@ -93,11 +93,11 @@ function Navbar({ socialVisible }) {
 function CreateClanPage() {
   return (
       <div className={"create-clan"}>
-          <input className={"nameClan"} placeholder={"Name"}/>
-          <select className={"clanStatus"} aria-placeholder={"status"}>
-              <option value="option1">Attack</option>
-              <option value="option2">Defence</option>
-              <option value="option3">Danger</option>
+          <input className={"nameClan"} placeholder={"Name"} />
+          <select className={"clanStatus"} aria-placeholder={"status"} defaultValue="Status">
+              <option value="option1">Online</option>
+              <option value="option2">Offline</option>
+              <option value="option3">Currently Building</option>
           </select>
           <textarea className={"descriptionClan"} placeholder={"Description"}/>
           <button className={"create-clan-button"}>Create Clan</button>
@@ -107,25 +107,27 @@ function CreateClanPage() {
 
 function JoinClanPage() {
     return (
-        <div>
-
+        <div className={"create-clan"}>
+          <input className={"nameClan"} placeholder={"Search Clan Name..."}/>
+          <button className={"join-clan-button"}>Search Clan</button>
         </div>
     )
 }
 
 function FriendRequestsPage() {
     return (
-        <div>
-
+        <div className={"friend-requests"}>
+            No Friend Requests :(
         </div>
     )
 }
 
 function SearchPersonPage() {
     return (
-        <div>
-
-      </div>
-  )
+        <div className={"create-clan"}>
+          <input className={"nameClan"} placeholder={"Search Name..."}/>
+          <button className={"join-clan-button"}>Search Person</button>
+        </div>
+    )
 }
 

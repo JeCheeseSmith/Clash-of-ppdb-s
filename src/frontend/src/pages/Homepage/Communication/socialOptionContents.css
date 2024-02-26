@@ -78,3 +78,25 @@
     background-color: #ab8340; /* Change this to the desired background color */
     color: black; /* Change this to the desired text color */
 }
+
+.join-clan-button {
+    background-color: green;
+    font-family: "Fira Code", cursive;
+    color: white;
+    top:2px;
+    right: 20px;
+    padding: 10px;
+    margin-left: 60px; /* Adjusted margin-left */
+    border-radius: 20px;
+    position: relative;
+    bottom: 30px;
+    font-size: 18px;
+}
+
+.friend-requests {
+    text-align: center;
+    margin-top: 25%;
+    color: white;
+    font-family: "Fira Code", serif;
+    font-size: 50px;
+}
