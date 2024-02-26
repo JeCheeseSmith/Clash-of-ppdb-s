@@ -1,18 +1,119 @@
 --- Standard Development Schema to load into your (empty) database
 
-CREATE TABLE Quote(
-	id SERIAL PRIMARY KEY,
-	text VARCHAR(256) UNIQUE NOT NULL,
-	author VARCHAR(128)
-);
+CREATE TABLE Message(
+    SERIAL id PRIMARY KEY,
+    DATETIME moment,
+    TEXT content
+)
 
-INSERT INTO Quote(text,author) VALUES('If people do not believe that mathematics is simple, it is only because they do not realize how complicated life is.','John Louis von Neumann');
-INSERT INTO Quote(text,author) VALUES('The choice you refuse to make, is the one that will be made for you.', 'Unknown');
-INSERT INTO Quote(text,author) VALUES('Computer science is no more about computers than astronomy is about telescopes.','Edsger Dijkstra');
-INSERT INTO Quote(text,author) VALUES('You look at things that are and ask, why? I dream of things that never were and ask, why not?','Unknown');
-INSERT INTO Quote(text,author) VALUES('Being efficient is also a form of perfection.', 'Joey');
-INSERT INTO Quote(text,author) VALUES('To understand recursion you must first understand recursion..', 'Unknown');
-INSERT INTO Quote(text,author) VALUES('Not everyone will understand your journey. Thats fine. Its not their journey to make sense of. Its yours.','Unknown');
-INSERT INTO Quote(text,author) VALUES('One must have enough self-confidence and immunity to peer pressure to break the grip of standard paradigms.', 'Marvin Minsky');
-INSERT INTO Quote(text,author) VALUES('Everyone you meet is fighting a battle you know nothing about. Be kind. Always.', 'Robin Williams');
-INSERT INTO Quote(text,author) VALUES('[...] it is usual to have the polite convention that everyone thinks.', 'Alan Turing');
+CREATE TABLE Request(
+    SERIAL id PRIMARY KEY REFERENCES Message(id),
+    BOOL status
+)
+
+CREATE TABLE TransferRequest(
+    SERIAL id PRIMARY KEY REFERENCES Request(id)
+)
+
+CREATE TABLE ClanRequest(
+    SERIAL id PRIMARY KEY REFERENCES Request(id)
+)
+
+
+CREATE TABLE User(
+    VARCHAR name PRIMARY KEY,
+    VARCHAR password NOT NULL,
+    VARCHAR avatar NOT NULL,
+    BIGINT gems,
+    BIGINT xp,
+    SERIAL mid NOT NULL REFERENCES Message(id) -- Send relation
+)
+
+CREATE TABLE Admin(
+    VARCHAR name PRIMARY KEY REFERENCES User(name)
+)
+
+CREATE TABLE Guild(
+    VARCHAR name PRIMARY KEY,
+    VARCHAR uname NOT NULL REFERENCES User(name), --Guild Leader relation
+    VARCHAR status,
+    TEXT description
+)
+
+CREATE TABLE Settlement(
+    SERIAL id PRIMARY KEY,
+    VARCHAR name UNIQUE NOT NULL,
+    INT mapX UNIQUE NOT NULL,
+    INT mapY UNIQUE NOT NULL
+)
+
+CREATE TABLE Achievement(
+    VARCHAR name PRIMARY KEY,
+    TEXT task NOT NULL, --Description of the tasks to do
+)
+
+CREATE TABLE Quest(
+    VARCHAR name PRIMARY KEY REFERENCES Achievement(name),
+    DATETIME deadline NOT NULL
+)
+
+CREATE TABLE Package(
+    SERIAL id PRIMARY KEY,
+    BIGINT stone,
+    BIGINT wood,
+    BIGINT food,
+    BIGINT gems,
+    BIGINT xp
+)
+
+CREATE TABLE Transfer(
+    SERIAL id PRIMARY KEY,
+    INT speed,
+)
+
+CREATE TABLE Buildable(
+    VARCHAR name PRIMARY KEY,
+    VARCHAR type NOT NULL,
+    TEXT production NOT NULL, -- The mathematical function to evaluate the resource production with
+    BIGINT storage
+)
+
+CREATE TABLE Building(
+    SERIAL id,
+    VARCHAR name FOREIGN KEY REFERENCES Buildable(name),
+    INT level NOT NULL,
+    INT gridX UNIQUE NOT NULL,
+    INT gridY UNIQUE NOT NULL,
+    PRIMARY KEY (id,name)
+)
+
+CREATE TABLE Troop(
+    VARCHAR type PRIMARY KEY,
+    INT health,
+    INT damage,
+    INT capacity,
+    INT consumption,
+    INT speed,
+)
+
+CREATE TABLE Friend(
+    VARCHAR uname1 REFERENCES User(name),
+    VARCHAR uname2 REFERENCES User(name),
+    PRIMARY KEY(uname1,uname2)
+)
+
+CREATE TABLE Member(
+    VARCHAR uname REFERENCES User(name),
+    VARCHAR gname REFERENCES Guild(name),
+    PRIMARY KEY (uname,gname)
+)
+
+CREATE TABLE Retrieved(
+    SERIAL mid REFERENCES Message(id),
+    VARCHAR uname REFERENCES User(name)
+)
+
+CREATE TABLE Shared(
+    SERIAL mid REFERENCES Message(id),
+    VARCHAR gname REFERENCES Guild(name)
+)
