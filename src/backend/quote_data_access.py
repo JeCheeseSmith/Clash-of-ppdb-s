@@ -29,11 +29,15 @@ class DBConnection:
         return self.conn.rollback()
 
 
-class Quote:
-    def __init__(self, iden, text, author):
-        self.id = iden
-        self.text = text
-        self.author = author
+class User:
+    def __init__(self, name, password, avatar, gems, xp, level, logout):
+        self.name = name
+        self.password = password
+        self.avatar = avatar
+        self.gems = gems
+        self.xp = xp
+        self.level = level
+        self.logout = logout
         
     def to_dct(self):
         return {'id': self.id, 'text': self.text, 'author': self.author}
