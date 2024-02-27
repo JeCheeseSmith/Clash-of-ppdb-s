@@ -12,3 +12,10 @@ Unlockecd relation for Settlement also keeps track of all the option a settlemen
 
 
 A transfer has a relation from and a relation to, to a settlement. This way a transfer can be easily changed to be captured by another nation.
+
+Soldier has a type
+Building has a type
+
+Specific type building is good/bad for specific Soldier (works with %)
+
+Can place defense buildings, and resource buildings, recruiting buildings

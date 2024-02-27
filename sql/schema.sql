@@ -1,7 +1,8 @@
 --- Standard Development Schema to load into your (empty) database
 
 CREATE TABLE Soldier(
-    type VARCHAR PRIMARY KEY,
+    name VARCHAR PRIMARY KEY,
+    type VARCHAR,
     health INT,
     damage INT,
     capacity INT,
@@ -139,11 +140,11 @@ CREATE TABLE Intercept(
 
 CREATE TABLE Troops(
     pid SERIAL REFERENCES Package(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    stype VARCHAR REFERENCES Soldier(type) ON DELETE CASCADE ON UPDATE CASCADE,
+    sname VARCHAR REFERENCES Soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     amount INT NOT NULL,
     transferable BOOL NOT NULL,
     discovered BOOL NOT NULL,
-    PRIMARY KEY (pid,stype)
+    PRIMARY KEY (pid,sname)
 );
 
 CREATE TABLE UnlockedBuildable(
@@ -154,10 +155,10 @@ CREATE TABLE UnlockedBuildable(
 );
 
 CREATE TABLE UnlockedSoldier(
-    stype VARCHAR REFERENCES Soldier(type) ON DELETE CASCADE ON UPDATE CASCADE,
+    sname VARCHAR REFERENCES Soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid SERIAL REFERENCES Settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
-    PRIMARY KEY (sid,stype)
+    PRIMARY KEY (sid,sname)
 );
 
 CREATE TABLE WheelofFortune(
