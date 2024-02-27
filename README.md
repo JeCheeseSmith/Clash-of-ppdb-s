@@ -9,7 +9,7 @@
 
 ### Code:
 - [ ] Documented
-- [ ] Beautifull?
+- [ ] Beautiful?
 
 ## How to start?
 
@@ -33,7 +33,7 @@ CREATE ROLE app WITH LOGIN 'password' CREATEDB;
 CREATE DATABASE ppdb OWNER app;
 ```
 
-You need to 'trust' the role to be able to login. Add the following line to `/etc/postgresql/9.6/main/pg_hba.conf` (you need root access, version may vary). __It needs to be the first rule (above local all all peer)__.
+You need to 'trust' the role to be able to log in. Add the following line to `/etc/postgresql/9.6/main/pg_hba.conf` (you need root access, version may vary). __It needs to be the first rule (above local all all peer)__.
 ```
 # TYPE  DATABASE        USER            ADDRESS                 METHOD
 
@@ -58,8 +58,10 @@ pip3 install -r requirements.txt
 #### 4. Run development server
 ```bash
 cd src/backend/
-python app.py
+python3 app.py
 ```
+
+### You can continue this tutorial to set this up on a server from here.
 
 #### 5. Create user to run application
 ```bash
@@ -75,7 +77,7 @@ gunicorn --bind 0.0.0.0:5000 wsgi:app
 ```
 
 #### 7. Enable the webservice
-As an account with sudo acces (not app), copy the file `service/webapp.service` to `/etc/systemd/system/` and enable the service:
+As an account with sudo access (not app), copy the file `service/webapp.service` to `/etc/systemd/system/` and enable the service:
 
 ```bash
 sudo ln -s /home/app/Clash-of-ppdb-s/service/webapp.service /etc/systemd/system/
