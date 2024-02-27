@@ -1,21 +1,12 @@
-- Usernames cannot be modified
-- Messages cannot be updated, send=send
+# Database
+> This documentation explains the database and it's structure
+> > Make sure to open ER-Diagram.pptx too!
+
+We would like to store the majority of our information in the database. This allows us to shut down the activity of a specific user totally when the user is not playing. 
 
 1. Each Clan Request is a message and has a status. It is created by a NonMember and SendTo the ClanLeader and so on shared with the Guild.
-2. Transfer Request is created by a Friend/Guild Member, send to another person.
-3. An Updae/Report is created by the system/admin user.
+2. Transfer Request is created by a friended Member (incl. Guild), send to another person.
+3. An Update/Report should be created by the system/admin user.
+4. A package consists of resources and troops. The troops themself can be transferable or not. All troops are used to defend the package.
+5. A transfer has a relation from and a relation to, to a settlement. This way a transfer can be easily changed to be captured by another nation.
 
-
-A package consists of resources and troops. The troops themself can be transferable or not. All troops are used to defend the package.
-
-Unlockecd relation for Settlement also keeps track of all the option a settlement can have
-
-
-A transfer has a relation from and a relation to, to a settlement. This way a transfer can be easily changed to be captured by another nation.
-
-Soldier has a type
-Building has a type
-
-Specific type building is good/bad for specific Soldier (works with %)
-
-Can place defense buildings, and resource buildings, recruiting buildings
