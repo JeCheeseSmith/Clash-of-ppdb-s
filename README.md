@@ -1,4 +1,4 @@
-# Clash of ppdb's - README
+# Travisia, Fallen Empire - README
 > Web-based idle game in a medieval context. A project for the course Programming Project Databases (INFORMAT 1002WETDAT)
 > > By Abobaker Rahman, Raadin Bahrami, Jonas Degruytere, Salaheddine Edfiri, Kars van Velzen
 
@@ -11,8 +11,6 @@
 
 
 ## Design Choices Overview
-
-Database variable names; same system in referring
 
 ## How to start?
 
