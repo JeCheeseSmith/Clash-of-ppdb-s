@@ -14,12 +14,9 @@
 
 ## How to start?
 
-###This Guide Assumes you have an Ubuntu Server running with Nginx Webserver inplace. You can use the nginx/webapp file as a starting config
+> This guide Assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL installed.
 
 
-We depend on the following technologies:
-
-![stack](https://github.com/JoeyDP/PPDB-Template-App/blob/master/doc/stack.png?raw=true "Stack") //TO DO Replace image with our system
 
 
 #### 1. Postgres database and Python interface

@@ -2,7 +2,6 @@
 > This documentation explains the use of different software packages & their organisation.
 > > We value the folder structure!
 
-
 **administration/**  This directory is used to store all University related files.
 
 **documentation/** Used to keep all (technical) documentation files
@@ -20,6 +19,8 @@
 ### Use of Technology
 
 > From frontend to backend
+> 
+<img src="include/tools.png" alt="drawing" width="200"/>
 
 1. HTML
 2. CSS (Boostrap)
