@@ -61,6 +61,21 @@ cd src/backend/
 python3 app.py
 ```
 
+### Setup the React.js frontend development
+> Currently, this is not properly linked with the backend build!
+
+#### A. Install Node.js & npm
+```bash
+cd src/frontend/
+sudo apt install nodejs
+sudo apt install npm
+sudo npm install -g n
+sudo n lts
+npm install
+npm run dev
+npm run build
+```
+
 ### You can continue this tutorial to set this up on a server from here.
 
 #### 5. Create user to run application
