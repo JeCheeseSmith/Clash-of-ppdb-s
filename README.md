@@ -2,6 +2,8 @@
 > Web-based idle game in a medieval context. A project for the course Programming Project Databases (INFORMAT 1002WETDAT)
 > > By Abobaker Rahman, Raadin Bahrami, Jonas Degruytere, Salaheddine Edfiri, Kars van Velzen
 
+## Play the game [here!](https://team8.ua-ppdb.me/)
+
 ### Functionalities: 
 - [X] Auto-Build to server (Follow Setup Guide)
 
@@ -9,26 +11,15 @@
 - [ ] Documented
 - [ ] Beautifull?
 
-
-
-
 ## How to start?
 
 > This guide Assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL installed. Optionally, like we did, you can retrieve your free SSL Certificate using Certbot. 
-
-
-
+> > Don't forget to clone this repository!
 
 #### 1. Install necessary dependencies
 ```bash
 sudo apt install python3-psycopg2
 ```
-
-//Deploy from Github using a Deploy Key
-
-//Clone Build
-
-//Explain simple auto build scripts
 
 #### 2. Create the database
 First configure the database with `postgres` user:
@@ -38,7 +29,7 @@ psql
 ```
 Then create a role 'app' that will create the database and be used by the application:
 ```sql
-CREATE ROLE app WITH LOGIN CREATEDB;
+CREATE ROLE app WITH LOGIN 'password' CREATEDB;
 CREATE DATABASE ppdb OWNER app;
 ```
 
@@ -56,8 +47,7 @@ sudo systemctl restart postgresql
 psql ppdb -U app -f sql/schema.sql
 ```
 
-
-#### 3. Download Dependencies
+#### 3. Download Python Dependencies
 
 ```bash
 virtualenv -p python3 env
@@ -65,34 +55,26 @@ source env/bin/activate
 pip3 install -r requirements.txt
 ```
 
-
 #### 4. Run development server
 ```bash
-cd backend/
+cd src/backend/
 python app.py
 ```
-Then visit https://team8.ua-ppdb.me/
 
-
-
-
-These steps demonstrate how to run this application with nginx. They are to be executed in addition to the setup in quick start. Instead of running the built in Flask debug server, we use an industrial grade webserver and reverse proxy server: nginx.
-
-#### 2. Create user to run application
+#### 5. Create user to run application
 ```bash
 sudo adduser --disabled-login app
 sudo su - app
 ```
 
-#### 5. Test if wsgi entrypoint works
+#### 6. Test if wsgi entrypoint works
 Instead of using the Flask debug server, we use gunicorn to serve the application.
 ```bash
-cd backend/
+cd src/backend/
 gunicorn --bind 0.0.0.0:5000 wsgi:app
 ```
 
-
-#### 6. Enable the webservice
+#### 7. Enable the webservice
 As an account with sudo acces (not app), copy the file `service/webapp.service` to `/etc/systemd/system/` and enable the service:
 
 ```bash
@@ -103,19 +85,15 @@ sudo systemctl start webapp
 ```
 A file `src/webapp.sock` should be created.
 
-
-#### 7. Setup nginx
+#### 8. Setup nginx
 Link or copy the nginx server block configuration file to the right nginx folders:
 ```bash
 sudo ln -s /home/app/Clash-of-ppdb-s/nginx/webapp /etc/nginx/sites-available/
 sudo ln -s /home/app/Clash-of-ppdb-s/nginx/webapp /etc/nginx/sites-enabled/
 ```
 
-
-
 Test the configuration with `sudo nginx -t`.
 
-
-#### 8. Restart the server
+#### 9. Restart the server
 
 Restart the server with `sudo systemctl restart nginx`. Your application should be available on port 80.
