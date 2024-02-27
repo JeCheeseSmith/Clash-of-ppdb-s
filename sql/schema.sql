@@ -25,7 +25,8 @@ CREATE TABLE "user"(
     avatar VARCHAR,
     gems BIGINT,
     xp BIGINT,
-    level INT
+    level INT,
+    logout TIMESTAMP -- Last time a user logged out at this time
 );
 
 CREATE TABLE Message(
