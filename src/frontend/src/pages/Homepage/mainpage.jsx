@@ -2,7 +2,7 @@ import React from 'react'; // Importing React library
 import './mainpage.css'; // Importing the CSS file for styling
 import Chat from './Communication/chat';
 import SocialBox from "./Communication/social.jsx";
-import Grid from "./GridView/grid.jsx";
+import ThreeScene from "./GridView/grid3D.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -10,11 +10,11 @@ import Grid from "./GridView/grid.jsx";
  */
 function MainPage() {
   return (
-    <div className="background"> {/* Container for the background image */}
-        <Chat/>
-        <SocialBox/>
-        <Grid/>
-    </div>
+      <div className="background"> {/* Container for the background image */}
+          <Chat/>
+          <SocialBox/>
+          <ThreeScene className={"background-3d"}/>
+      </div>
   );
 }
 

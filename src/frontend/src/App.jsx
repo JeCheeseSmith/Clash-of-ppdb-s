@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import MainPage from './pages/Homepage/mainpage'
-
 function App() {
-  return (
+    document
+    return (
     <>
       <div>
-            <MainPage/>
+          <MainPage/>
       </div>
     </>
-  )
+    )
 }
 
 export default App
