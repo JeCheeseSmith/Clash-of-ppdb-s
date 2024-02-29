@@ -4,7 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 
 function Grid()
 {
-    const gridSize = 15;
+    const gridSize = 30;
     const grid = [];
     for (let i = 0; i < gridSize; i++)
     {
@@ -24,7 +24,7 @@ function Grid()
             const centerX = (2 + 5) / 2;
             const centerY = (1 + 4) / 2;
             return (
-                <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 3, centerY - gridSize / 2]}>
+                <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 4, centerY - gridSize / 2]}>
                     <boxGeometry args={[4, 2, 4]} />
                     <meshBasicMaterial color="green" />
                 </mesh>
@@ -42,7 +42,7 @@ function Grid()
     };
 
     return (
-        <Canvas camera={{ position: [12, 20, 12] }}>
+        <Canvas camera={{ position: [40, 28, 60] }}>
             <ambientLight />
             <pointLight position={[10, 10, 10]} />
             <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={30} minDistance={15} />
