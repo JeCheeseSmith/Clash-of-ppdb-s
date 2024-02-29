@@ -1,4 +1,4 @@
-from database import *
+from src.backend.database import *
 
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout):
