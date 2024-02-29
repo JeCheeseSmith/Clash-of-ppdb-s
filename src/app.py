@@ -5,8 +5,8 @@ from flask.templating import render_template
 from flask import request, session, jsonify
 from os import path
 
-from src.backend.config import config_data
-from src.backend.player import *
+from backend.config import config_data
+from backend.player import *
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Travisia',static_folder='frontend/',template_folder='frontend/dist')
