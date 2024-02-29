@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+.login-form {
+  max-width: 350px; /* Form size */
+  margin: 250px auto; /* Horizontal */
+  margin-top: 40px; /* Horizontal */
+  padding: 40px;
+  background-color: #e0d8c3;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+  font-family: 'MedievalSharp', cursive; /* Lettertype */
+  font-size: 20px; /* Letter size */
+  font-weight: bold;
+}
+
+.login-form div {
+  margin-bottom: 15px;
+  margin-right: 20px;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 7px;
+  color: #D4AF37;
+  font-weight: bold;
+}
+
+.login-form input {
+  font-size: 19px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #a89f91;
+  border-radius: 8px;
+  background-color: #fbf8f1;
+  font-family: 'MedievalSharp', cursive; /* Lettertype */
+}
+
+.login-button {
+  width: 45%;
+  padding: 12px;
+  margin-left: 1px;
+  margin-right: 12px;
+  background-color: #8a795d;
+  color: #D4AF37;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px; /* Button size */
+  font-family: 'MedievalSharp', cursive; /* Lettertype */
+}
+
+.signup-button {
+  width: 45%;
+  padding: 12px;
+  margin-right: 1px;
+  margin-left: 21px;
+  background-color: #8a795d;
+  color: #D4AF37;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px; /* Button size */
+  font-family: 'MedievalSharp', cursive; /* Lettertype */
+}
+
+.login-form button:hover {
+  background-color: #7d6b4d; /* Button-color when you hold the cursor over it */
+}
+
+.gametitle {
+  margin-bottom: 15px; /* Space between title and form */
+  margin-top: 70px; /* Space between title and form */
+  text-align: center; /* Title in centre */
+  font-size: 100px; /* Title size */
+  color: #D4AF37; /* Title color */
+  font-family: 'MedievalSharp', cursive; /* Lettertype */
+
+}
+
+.gametitle2 {
+  margin-bottom: 15px; /* Space between title and form */
+  margin-top: 15px; /* Space between title and form */
+  text-align: center; /* Title in centre */
+  font-size: 50px; /* Title size */
+  color: #D4AF37; /* Title color */
+  font-family: 'MedievalSharp', cursive; /* Lettertype */
+}
+
+.signup {
+  margin-bottom: 0px;
+}
+

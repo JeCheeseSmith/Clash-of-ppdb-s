@@ -1,6 +1,5 @@
 import React from 'react'; // Importing React library
 import './login.css';
-import swordImage from './sword2.png'
 
 // Code for login page
 function LoginPage() {
@@ -8,6 +7,8 @@ function LoginPage() {
   return (
       // Makes a form<!-- Voeg dit toe in de <head> van je HTML-bestand -->
       <div className="login-container">
+          <h1 className="gametitle">TRAVISIA</h1>
+          <h2 className="gametitle2">FALLEN EMPIRE</h2>
           <form className="login-form">
               <div>
                   {/* <div> groupes the label and input together on one line*/}
@@ -28,10 +29,9 @@ function LoginPage() {
                       type="password"
                   />
               </div>
-              <button type="submit">Login</button>
-              <p className="signup">Don't have an account yet? <a href="./signUp.jsx">Sign up</a></p>
+              <button className="login-button">Login</button>
+              <button className="signup-button"> Sign Up</button>
           </form>
-          <img src={swordImage} alt="Sword" className="sword-image"/>
       </div>
   );
 }
