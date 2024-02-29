@@ -9,7 +9,8 @@ function ChatBox() {
     setMessages([...messages, { senderName, message }]);
   };
 
-  const toggleChatVisibility = () => {
+  const toggleChatVisibility = () =>
+  {
     setChatVisible(!chatVisible);
   };
 
