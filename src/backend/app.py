@@ -12,7 +12,7 @@ app = Flask('Tutorial ')
 app.secret_key = '*^*(*&)(*)(*afafafaSDD47j\3yX R~X@H!jmM]Lwf/,?KT'
 app_data = dict()
 app_data['app_name'] = config_data['app_name']
-connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'])
+connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'],password="password")
 player_data_access = PlayerDataAccess(connection)
 
 DEBUG = False
@@ -38,9 +38,9 @@ def get_login():
 
 
 # VIEW
-#@app.route("/")
-#def main():
-#    return render_template('index.html', app_data=app_data)
+@app.route("/")
+def main():
+    return render_template('index.html', app_data=app_data)
 
 
 # Route for seeing a data
