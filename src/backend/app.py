@@ -1,6 +1,6 @@
 # TUTORIAL Len Feremans, Sandy Moens and Joey De Pauw
 # see tutor https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql--cms-22972
-from flask import Flask
+from flask import Flask,send_from_directory
 from flask.templating import render_template
 from flask import request, session, jsonify
 
@@ -8,7 +8,7 @@ from config import config_data
 from player import *
 
 # INITIALIZE SINGLETON SERVICES
-app = Flask('Tutorial ')
+app = Flask('Travisia',static_folder='../frontend')
 app.secret_key = '*^*(*&)(*)(*afafafaSDD47j\3yX R~X@H!jmM]Lwf/,?KT'
 app_data = dict()
 app_data['app_name'] = config_data['app_name']
@@ -39,8 +39,8 @@ def get_login():
 
 # VIEW
 @app.route("/")
-def main():
-    return render_template('index.html', app_data=app_data)
+def serve():
+    return send_from_directory(app.static_folder,'index.html')
 
 
 # Route for seeing a data
