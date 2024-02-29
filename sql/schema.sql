@@ -12,13 +12,15 @@ CREATE TABLE IF NOT EXISTS soldier(
     damage INT,
     capacity INT,
     consumption INT,
-    speed INT
+    speed FLOAT4,
+    stealth FLOAT4
 );
 
 CREATE TABLE IF NOT EXISTS package(
     id SERIAL PRIMARY KEY,
     stone BIGINT,
     wood BIGINT,
+    steel BIGINT,
     food BIGINT,
     gems BIGINT,
     xp BIGINT
@@ -81,7 +83,7 @@ CREATE TABLE IF NOT EXISTS achievement(
     pid SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
 );
 
-CREATE TABLE IF NOT EXISTS Quest(
+CREATE TABLE IF NOT EXISTS quest(
     VARCHAR name PRIMARY KEY REFERENCES achievement(name) ON DELETE CASCADE ON UPDATE CASCADE,
     deadline TIMESTAMP NOT NULL
 );
@@ -98,8 +100,7 @@ CREATE TABLE IF NOT EXISTS transfer(
 CREATE TABLE IF NOT EXISTS buildable(
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
-    production TEXT NOT NULL, -- The mathematical function to evaluate the resource production with
-    storage BIGINT,
+    function TEXT NOT NULL, -- The mathematical function to evaluate the resource function with
     cost SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Costs Relation
     drawback SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Drawback Relation
 );
@@ -180,4 +181,44 @@ CREATE TABLE IF NOT EXISTS achieved(
     PRIMARY KEY (pname,aname)
 );
 
-INSERT INTO player(name,password) VALUES('watson','1234')
+INSERT INTO player(name,password) VALUES('watson','1234');
+INSERT INTO player(name,password) VALUES('admin','1234');
+
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','0','0');
+
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('WoodcuttersCamp','production','200*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Quarry','production','200*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('SteelMine','production','20+(25*x)',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Farm','production','300*x',1,1);
+
+-- INSERT INTO buildable(name,type,function,storage,cost,drawback) VALUES('Castle','storage');
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Wood','storage','2000*2^(x)',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Stone','storage','2000*2^(x)',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Steel','storage','10000*(2*x)',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Food','storage','2000*2^(x)',1,1);
+
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Stables','defense','1,1*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('ArcherTower','defense','1,1*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('LookoutTower','defense','1,1*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('BlackSmith','defense','1,1*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Tavern','defense','1,1*x',1,1);
+
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('OrderKnight','HeavyInfantry',45,25,5,4,1,1);
+
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Guardsman','Spearmen',12,12,8,2,1.3,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Pikeman','Spearmen',20,20,5,8,3.3,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Halbardier','Spearmen',32,32,8,4,1.3,1);
+
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Horseman','Cavalry',20,20,7,6,2,0.3);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Knight','Cavalry',40,40,5,12,2,0.3);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('WarElephant','Cavalry',45,45,7,15,2,0.3);
+
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Bowman','Ranged',10,15,10,2,1.4,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Longbowman','Ranged',15,25,10,3,1.4,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Crossbowman','Ranged',25,45,10,4,1.4,1);
+
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3);
