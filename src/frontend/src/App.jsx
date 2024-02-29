@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-import MainPage from './pages/Homepage/mainpage'
+import LoginMainPage from "./pages/Loginpage/loginMainPage.jsx";
 
 function App() {
   return (
     <>
       <div>
-            <MainPage/>
+          <LoginMainPage/>
       </div>
     </>
   )
