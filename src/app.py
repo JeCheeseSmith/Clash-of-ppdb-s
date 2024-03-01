@@ -43,7 +43,7 @@ def get_login():
 #    quote_obj = quote_data_access.add_quote(quote_obj)
 #    return jsonify(quote_obj.to_dct())
 
-
+#
 # VIEW
 #@app.route("/")
 #def serve():
