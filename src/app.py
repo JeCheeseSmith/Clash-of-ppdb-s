@@ -2,6 +2,7 @@
 # see tutor https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql--cms-22972
 import mimetypes
 mimetypes.add_type('application/javascript', '.js')
+mimetypes.add_type('text/javascript', '.js')
 mimetypes.add_type('text/css', '.css')
 from flask import Flask,send_from_directory
 from flask.templating import render_template
@@ -11,11 +12,8 @@ import os
 from config import config_data
 from player import *
 
-react_folder = 'frontend'
-directory= os.getcwd()+ f'/{react_folder}/build/static'
-
 # INITIALIZE SINGLETON SERVICES
-app = Flask('Travisia',static_folder='frontend/',template_folder='frontend/dist')
+app = Flask('Travisia',static_folder='frontend/dist/static',template_folder='frontend/dist')
 app.secret_key = '*^*(*&)(*)(*afafafaSDD47j\3yX R~X@H!jmM]Lwf/,?KT'
 app_data = dict()
 app_data['app_name'] = config_data['app_name']
