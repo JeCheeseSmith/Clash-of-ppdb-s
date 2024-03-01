@@ -18,20 +18,24 @@ class PlayerDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
        
-    def get_quotes(self):
-        cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT * FROM player;')
-        temp = cursor.fetchall()
-        print(temp)
+    def get_login(self,obj):
+        cursor=self.dbconnect.get_cursor()
+        cursor.execute('SELECT * FROM player WHERE name=%s AND password=%s;',(obj.name,obj.password))
+        Controle=cursor.fetchone()
+        if Controle:
+            return True
+        else:
+            return False
 
-    def add_user(self, obj):
+    def add_user(self,obj,test):
         cursor=self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO player(name,password) VALUES(%s,%s)', (obj.name,obj.password,))
             self.dbconnect.commit()
+            test=True
             return obj
         except:
             self.dbconnect.rollback()
-            raise Exception('Unable to save quote!')
+            test=False
 
 

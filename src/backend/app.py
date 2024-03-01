@@ -6,6 +6,7 @@ from flask import request, session, jsonify
 
 from config import config_data
 from player import *
+from message import *
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Tutorial ')
@@ -14,6 +15,7 @@ app_data = dict()
 app_data['app_name'] = config_data['app_name']
 connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'],password='password')
 player_data_access = PlayerDataAccess(connection)
+Message_data_access=MessageDataAccess(connection)
 
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
@@ -25,15 +27,47 @@ def add_player():
     data=request.json
     player_name=data.get('name')
     player_password=data.get('password')
-    test=Player(name=player_name,password=player_password,avatar=None,gems=None,xp=None,level=None,logout=None)
-    test=player_data_access.add_user(test)
-    return jsonify(test.to_dct())
+    Controle=False
+    playerobj =Player(name=player_name,password=player_password,avatar=None,gems=None,xp=None,level=None,logout=None)
+    playerobj =player_data_access.add_user(playerobj,Controle)
+    print(Controle)
+    if Controle==True:
+        return jsonify(playerobj.to_dct())
+    else:
+        return "Failed signup"
 
 @app.route('/login', methods=['GET'])
 def get_login():
-    objects = player_data_access.get_quotes()
-    # Translate to json
-    return jsonify([obj.to_dct() for obj in objects])
+    data = request.json
+    player_name = data.get('name')
+    player_password = data.get('password')
+    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None, logout=None)
+    Controle=False
+    Controle=player_data_access.get_login(playerobj)
+    if Controle==True:
+        return "Login successful"
+    else:
+        return "Login Failed"
+
+
+@app.route('/chat',methods=['POST','GET'])
+def update_chatbox():
+    data = request.json
+    message_id=data.get('id')
+    message_moment= data.get('moment')
+    message_content=data.get('content')
+    message_pname=data.get('pname')
+    if request.method=='POST':
+        chatobj=Message(message_id,message_moment,message_content,message_pname)
+        Controle = False
+        if Controle == True:
+            return "Chat is updated"
+        else:
+            return "Message failed to store"
+#-login
+#messages laatste tien en update naar mate aantal
+#clanrequest
+#clan aanmaken
 
 #@app.route('/quotes', methods=['POST'])
 #def add_quote():
