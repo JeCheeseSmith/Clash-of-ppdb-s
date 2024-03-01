@@ -21,6 +21,11 @@ git clone git@github.com:JeCheeseSmith/Clash-of-ppdb-s.git
 
 cd /home/app/Clash-of-ppdb-s/
 git fetch --all && git checkout --force "origin/master"
+
+cd /home/app/Clash-of-ppdb-s/src
+virtualenv -p python3 env
+source env/bin/activate
+pip3 install -r requirements.txt
 ```
 
 3. Call the script frequently using CRON (user: app)
@@ -32,6 +37,7 @@ git fetch --all && git checkout --force "origin/master"
 4. Reload the webserver frequently (e.g. user: watson)
 
 ```
+*/5 * * * * cd /home/app/Clash-of-ppdb-s/src/frontend && sudo npm run build | logger -t ppdb
 */5 * * * * sudo systemctl restart webapp && sudo systemctl reload nginx | logger -t ppdb
 ```
 

@@ -30,7 +30,8 @@ psql
 Then create a role 'app' that will create the database and be used by the application:
 ```sql
 CREATE ROLE app WITH LOGIN 'password' CREATEDB;
-CREATE DATABASE ppdb OWNER app;
+CREATE DATABASE ppdb OWNER postgres;
+ALTER USER postgres WITH PASSWORD 'password';
 ```
 
 You need to 'trust' the role to be able to log in. Add the following line to `/etc/postgresql/9.6/main/pg_hba.conf` (you need root access, version may vary). __It needs to be the first rule (above local all all peer)__.
@@ -44,7 +45,7 @@ and restart the service. Then initialize the database:
 ```bash
 sudo systemctl restart postgresql
 
-psql ppdb -U app -f sql/schema.sql
+psql ppdb -f sql/schema.sql
 ```
 
 #### 3. Download Python Dependencies
@@ -57,7 +58,7 @@ pip3 install -r requirements.txt
 
 #### 4. Run development server
 ```bash
-cd src/backend/
+cd src/
 python3 app.py
 ```
 
@@ -87,7 +88,7 @@ sudo su - app
 #### 6. Test if wsgi entrypoint works
 Instead of using the Flask debug server, we use gunicorn to serve the application.
 ```bash
-cd src/backend/
+cd src/
 gunicorn --bind 0.0.0.0:5000 wsgi:app
 ```
 
