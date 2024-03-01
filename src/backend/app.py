@@ -12,12 +12,22 @@ app = Flask('Tutorial ')
 app.secret_key = '*^*(*&)(*)(*afafafaSDD47j\3yX R~X@H!jmM]Lwf/,?KT'
 app_data = dict()
 app_data['app_name'] = config_data['app_name']
-connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'])
+connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'],password='password')
 player_data_access = PlayerDataAccess(connection)
 
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
 
+
+
+@app.route('/Signin', methods=['POST'])
+def add_player():
+    data=request.json
+    player_name=data.get('name')
+    player_password=data.get('password')
+    test=Player(name=player_name,password=player_password,avatar=None,gems=None,xp=None,level=None,logout=None)
+    test=player_data_access.add_user(test)
+    return jsonify(test.to_dct())
 
 @app.route('/login', methods=['GET'])
 def get_login():

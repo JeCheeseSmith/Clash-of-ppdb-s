@@ -11,7 +11,7 @@ class Player:
         self.logout = logout
         
     def to_dct(self):
-        return {'id': self.id, 'text': self.text, 'author': self.author}
+        return {'name': self.name, 'password': self.password}
 
 
 class PlayerDataAccess:
@@ -23,5 +23,15 @@ class PlayerDataAccess:
         cursor.execute('SELECT * FROM player;')
         temp = cursor.fetchall()
         print(temp)
+
+    def add_user(self, obj):
+        cursor=self.dbconnect.get_cursor()
+        try:
+            cursor.execute('INSERT INTO player(name,password) VALUES(%s,%s)', (obj.name,obj.password,))
+            self.dbconnect.commit()
+            return obj
+        except:
+            self.dbconnect.rollback()
+            raise Exception('Unable to save quote!')
 
 
