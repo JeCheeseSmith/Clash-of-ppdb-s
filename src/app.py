@@ -1,12 +1,18 @@
 # TUTORIAL Len Feremans, Sandy Moens and Joey De Pauw
 # see tutor https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql--cms-22972
+import mimetypes
+mimetypes.add_type('application/javascript', '.js')
+mimetypes.add_type('text/css', '.css')
 from flask import Flask,send_from_directory
 from flask.templating import render_template
 from flask import request, session, jsonify
-from os import path
+import os
 
 from config import config_data
 from player import *
+
+react_folder = 'frontend'
+directory= os.getcwd()+ f'/{react_folder}/build/static'
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Travisia',static_folder='frontend/',template_folder='frontend/dist')
