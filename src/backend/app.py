@@ -29,8 +29,7 @@ def add_player():
     player_password=data.get('password')
     Controle=False
     playerobj =Player(name=player_name,password=player_password,avatar=None,gems=None,xp=None,level=None,logout=None)
-    playerobj =player_data_access.add_user(playerobj,Controle)
-    print(Controle)
+    Controle=player_data_access.add_user(playerobj)
     if Controle==True:
         return jsonify(playerobj.to_dct())
     else:
@@ -58,10 +57,11 @@ def update_chatbox():
     message_content=data.get('content')
     message_pname=data.get('pname')
     if request.method=='POST':
+        Controle=False
         chatobj=Message(message_id,message_moment,message_content,message_pname)
-        Controle = False
-        if Controle == True:
-            return "Chat is updated"
+        Controle=Message_data_access.add_message(chatobj)
+        if Controle==True:
+            return jsonify(chatobj.to_dct())
         else:
             return "Message failed to store"
 #-login

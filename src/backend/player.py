@@ -27,15 +27,14 @@ class PlayerDataAccess:
         else:
             return False
 
-    def add_user(self,obj,test):
+    def add_user(self,obj):
         cursor=self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO player(name,password) VALUES(%s,%s)', (obj.name,obj.password,))
             self.dbconnect.commit()
-            test=True
-            return obj
+            return True
         except:
             self.dbconnect.rollback()
-            test=False
+            return False
 
 

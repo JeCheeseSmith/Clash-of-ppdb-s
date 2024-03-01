@@ -16,15 +16,15 @@ class MessageDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def add_message(self,obj,test):
+    def add_message(self,obj):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO message(id,moment,content,pname) VALUES(%s,%s,%s,%s)', (obj.id,obj.moment,obj.content,obj.pname))
+            cursor.execute('INSERT INTO message(id,moment,content,pname) VALUES(%s,%s,%s,%s)', (obj.id,obj.moment,obj.content,obj.pname,))
             self.dbconnect.commit()
-            test = True
-            return obj
+            return True
         except:
+            print("hallo")
             self.dbconnect.rollback()
-            test = False
+            return False
 
 
