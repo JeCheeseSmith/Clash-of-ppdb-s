@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import './chat.css'; // CSS file for styling
 
 function ChatBox() {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{ senderName: '', message: 'Welcome to Chat!' }]); // Initialize messages
   const [chatVisible, setChatVisible] = useState(false); // State variable to track chat visibility
 
   const handleMessageSubmit = (message, senderName) => {
@@ -15,8 +15,8 @@ function ChatBox() {
 
   return (
     <div>
-      <button onClick={toggleChatVisibility} className="toggle-chat-button">
-        {chatVisible ? 'Chat' : 'Chat'}
+      <button onClick={toggleChatVisibility} className={`toggle-chat-button ${chatVisible ? 'visible' : 'hidden'}`}>
+        {chatVisible ? 'chat' : 'chat'}
       </button>
       <div className={`chat-container ${chatVisible ? 'visible' : 'hidden'}`}>
         <h1 className="chat-title">CHAT</h1>
@@ -67,7 +67,6 @@ function MessageInput({ onSubmit }) {
     <input
       type="text"
       value={message}
-      maxLength={50}
       onChange={handleInputChange}
       onKeyPress={handleKeyPress}
       placeholder="Type a message and press Enter"

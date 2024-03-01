@@ -1,0 +1,29 @@
+/* GridComponent.css */
+.grid-container {
+  display: grid;
+  grid-template-rows: repeat(28, 35px); /* Adjust based on your requirements */
+  grid-template-columns: repeat(28, 35px); /* Adjust based on your requirements */
+  gap: 1px;
+  transform: rotate(45deg); /* Rotate the grid by 45 degrees */
+  perspective-origin: 120px;
+}
+
+.light-green {
+  background-color: #be8129; /* Light green color */
+}
+
+.dark-green {
+  background-color: #7a4c05; /* Darker green color */
+}
+
+.grid-item {
+  border: 1px solid #341f0b; /* Darker green border */
+  border-radius: 2px; /* Rounded corners */
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  background-image: linear-gradient(to right, rgb(96, 56, 7), rgb(190, 117, 1));
+}
+
+.grid {
+  margin-left: 22%;
+  margin-top: 6%;
+}
