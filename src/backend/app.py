@@ -58,11 +58,16 @@ def update_chatbox():
         chatobj = Message(message_id, message_moment, message_content, message_pname)
         Rchatobj = Retrieve(message_id,message_sname)
         controle = Message_data_access.add_message(chatobj)
-        controle = Message_data_access.add_message2(Rchatobj)
         if controle == True:
+            controle = Message_data_access.add_message2(Rchatobj)
             return jsonify(chatobj.to_dct(),Rchatobj.to_dct())
         else:
             return "Message failed to store"
+
+    elif request.method=='GET':
+        obj=Message_data_access.get_chatbox(message_pname)
+        return jsonify(for test in obj)
+
 
 # -login
 # messages laatste tien en update naar mate aantal

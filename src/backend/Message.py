@@ -47,3 +47,23 @@ class MessageDataAccess:
             self.dbconnect.rollback()
             return False
 
+
+    def get_chatbox(self,pname):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT * FROM message WHERE pname=%s ', (pname,))
+        name_exists = cursor.fetchone()[0]
+
+        if name_exists:
+            # Retrieve the last 10 messages sent by the provided name
+            query_messages = """
+                    SELECT id, moment, content, pname
+                    FROM message
+                    WHERE pname = %s
+                    ORDER BY moment DESC
+                    LIMIT 10
+                """
+            cursor.execute(query_messages, (pname,))
+            messages = cursor.fetchall()
+            return messages
+        else:
+            return None
