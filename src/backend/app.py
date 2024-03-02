@@ -22,8 +22,7 @@ def add_player():
     player_name = data.get('name')
     player_password = data.get('password')
     controle = False
-    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
-                       logout=None)
+    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,logout=None)
     controle = player_data_access.add_user(playerobj)
     if controle:
         return jsonify(playerobj.to_dct())
@@ -36,8 +35,7 @@ def get_login():
     data = request.json
     player_name = data.get('name')
     player_password = data.get('password')
-    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
-                       logout=None)
+    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,logout=None)
     controle = False
     controle = player_data_access.get_login(playerobj)
 
@@ -54,12 +52,15 @@ def update_chatbox():
     message_moment = data.get('moment')
     message_content = data.get('content')
     message_pname = data.get('pname')
+    message_sname = data.get('sname')
     if request.method == 'POST':
         controle = False
         chatobj = Message(message_id, message_moment, message_content, message_pname)
+        Rchatobj = Retrieve(message_id,message_sname)
         controle = Message_data_access.add_message(chatobj)
+        controle = Message_data_access.add_message2(Rchatobj)
         if controle == True:
-            return jsonify(chatobj.to_dct())
+            return jsonify(chatobj.to_dct(),Rchatobj.to_dct())
         else:
             return "Message failed to store"
 
