@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS message(
     id SERIAL PRIMARY KEY,
     moment TIMESTAMP NOT NULL,
     content TEXT NOT NULL,
-    sname VARCHAR NOT NULL REFERENCES player(name) ON DELETE SET NULL -- Send Relation
+    pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE SET NULL -- Send Relation
 );
 
 CREATE TABLE IF NOT EXISTS request(

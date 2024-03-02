@@ -34,10 +34,11 @@ pip3 install -r requirements.txt
 */5 * * * * /home/app/script.sh 2>&1 | logger -t ppdb
 ```
 
-4. Reload the webserver frequently (e.g. user: watson)
+4. Rebuild the files & Reload the webserver frequently (e.g. user: watson)
 
 ```
 */5 * * * * cd /home/app/Clash-of-ppdb-s/src/frontend && sudo npm run build | logger -t ppdb
+*/5 * * * * sudo -u postgres psql ppdb -f /home/app/Clash-of-ppdb-s/sql/schema.sql
 */5 * * * * sudo systemctl restart webapp && sudo systemctl reload nginx | logger -t ppdb
 ```
 
