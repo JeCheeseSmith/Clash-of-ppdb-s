@@ -1,36 +1,73 @@
 # TUTORIAL Len Feremans, Sandy Moens and Joey De Pauw
 # see tutor https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql--cms-22972
-import mimetypes
-mimetypes.add_type('application/javascript', '.js')
-mimetypes.add_type('text/javascript', '.js')
-mimetypes.add_type('text/css', '.css')
-from flask import Flask,send_from_directory
+from flask import Flask
 from flask.templating import render_template
 from flask import request, session, jsonify
-import os
 
 from config import config_data
 from player import *
+from message import *
 
 # INITIALIZE SINGLETON SERVICES
-app = Flask('Travisia',static_folder='frontend/dist/static',template_folder='frontend/dist')
+app = Flask('Tutorial ')
 app.secret_key = '*^*(*&)(*)(*afafafaSDD47j\3yX R~X@H!jmM]Lwf/,?KT'
 app_data = dict()
 app_data['app_name'] = config_data['app_name']
-connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'],password="password")
-
-
+connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'],password='password')
 player_data_access = PlayerDataAccess(connection)
+Message_data_access=MessageDataAccess(connection)
 
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
 
 
+
+@app.route('/Signin', methods=['POST'])
+def add_player():
+    data=request.json
+    player_name=data.get('name')
+    player_password=data.get('password')
+    Controle=False
+    playerobj =Player(name=player_name,password=player_password,avatar=None,gems=None,xp=None,level=None,logout=None)
+    Controle=player_data_access.add_user(playerobj)
+    if Controle==True:
+        return jsonify(playerobj.to_dct())
+    else:
+        return "Failed signup"
+
 @app.route('/login', methods=['GET'])
 def get_login():
-    objects = player_data_access.get_quotes()
-    # Translate to json
-    return jsonify([obj.to_dct() for obj in objects])
+    data = request.json
+    player_name = data.get('name')
+    player_password = data.get('password')
+    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None, logout=None)
+    Controle=False
+    Controle=player_data_access.get_login(playerobj)
+    if Controle==True:
+        return "Login successful"
+    else:
+        return "Login Failed"
+
+
+@app.route('/chat',methods=['POST','GET'])
+def update_chatbox():
+    data = request.json
+    message_id=data.get('id')
+    message_moment= data.get('moment')
+    message_content=data.get('content')
+    message_pname=data.get('pname')
+    if request.method=='POST':
+        Controle=False
+        chatobj=Message(message_id,message_moment,message_content,message_pname)
+        Controle=Message_data_access.add_message(chatobj)
+        if Controle==True:
+            return jsonify(chatobj.to_dct())
+        else:
+            return "Message failed to store"
+#-login
+#messages laatste tien en update naar mate aantal
+#clanrequest
+#clan aanmaken
 
 #@app.route('/quotes', methods=['POST'])
 #def add_quote():
@@ -43,17 +80,12 @@ def get_login():
 #    quote_obj = quote_data_access.add_quote(quote_obj)
 #    return jsonify(quote_obj.to_dct())
 
-#
+
 # VIEW
 #@app.route("/")
-#def serve():
-#    return send_from_directory(app.static_folder,'index.html')
+#def main():
+#    return render_template('index.html', app_data=app_data)
 
-
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return render_template("index.html")
 
 # Route for seeing a data
 @app.route('/data')
