@@ -1,6 +1,7 @@
 import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import './grid3D.css'
 
 function Grid()
 {
@@ -24,7 +25,7 @@ function Grid()
             const centerX = (2 + 5) / 2;
             const centerY = (1 + 4) / 2;
             return (
-                <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 4, centerY - gridSize / 2]}>
+                <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 7, centerY - gridSize / 2]}>
                     <boxGeometry args={[4, 2, 4]} />
                     <meshBasicMaterial color="green" />
                 </mesh>
@@ -34,7 +35,7 @@ function Grid()
         {
             return (
                 <gridHelper key={`${rowIndex}-${colIndex}`}
-                            position={[colIndex - gridSize / 2, 3, rowIndex - gridSize / 2]}
+                            position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
                             args={[1, 1]}
                 />
             );
@@ -42,7 +43,7 @@ function Grid()
     };
 
     return (
-        <Canvas camera={{ position: [40, 28, 60] }}>
+        <Canvas camera={{ position: [40, 35, 60] }} className={"grid"}>
             <ambientLight />
             <pointLight position={[10, 10, 10]} />
             <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={30} minDistance={15} />
