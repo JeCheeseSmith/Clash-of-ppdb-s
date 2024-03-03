@@ -1,0 +1,36 @@
+.toggle-menu-button {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center items vertically */
+    background-color: transparent;
+    padding: 10px 25px 10px 25px; /* Adjust padding as needed */
+    font-size: 50px;
+    border-radius: 20px;
+    font-family: "Fira Code", system-ui;
+}
+
+.image-container {
+    width: 50px; /* Set width of the image container */
+    height: 50px; /* Set height of the image container */
+    background-image: url(../../../assets/castle-icon.png); /* Ensure the image path is correct */
+    background-repeat: no-repeat;
+    background-size: cover; /* Adjust the size of the image */
+    border-radius: 20%; /* Apply border-radius to create a circular shape */
+    margin-left: 80px; /* Add more margin between image and text */
+    z-index: 2;
+    padding-right: 50px;
+    padding-top: 50px;
+}
+
+.build {
+    color: #ff0000;
+}
+
+.menu {
+    color: #ff8400;
+}
+
