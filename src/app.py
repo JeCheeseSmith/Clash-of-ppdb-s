@@ -1,13 +1,13 @@
 from flask import Flask
 from flask import request, jsonify
 from player import *
-from Message import *
+from message import *
 from flask.templating import render_template
+from database import *
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Travisia',static_folder='frontend/dist/static',template_folder='frontend/dist')
-app_data = dict()
-app_data['app_name'] = 'Travisia'
+app_data = {'app_name': 'Travisia'}
 connection = DBConnection()
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
@@ -66,13 +66,14 @@ def update_chatbox():
 
     elif request.method=='GET':
         obj=Message_data_access.get_chatbox(message_pname)
-        return jsonify(for test in obj)
+        #return jsonify(for test in obj)
 
 
 # -login
 # messages laatste tien en update naar mate aantal
 # clanrequest
 # clan aanmaken
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):

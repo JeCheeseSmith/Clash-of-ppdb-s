@@ -1,6 +1,3 @@
-from database import *
-
-
 class Message:
     def __init__(self,id,moment,content,pname):
         self.id=id

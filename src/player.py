@@ -1,6 +1,3 @@
-from database import *
-
-
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout):
         self.name = name
@@ -37,5 +34,3 @@ class PlayerDataAccess:
         except:
             self.dbconnect.rollback()
             return False
-
-
