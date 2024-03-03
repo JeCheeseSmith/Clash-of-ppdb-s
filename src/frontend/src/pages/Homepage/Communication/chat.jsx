@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './chat.css'; // CSS file for styling
 
-const SendUserName = async () =>
+const SendMassege = async (massege) =>
 {
-    const dataToSend = {info: "OpenChat"};
-    await fetch('http://127.0.0.1:5000/test2', {
+    await fetch('http://127.0.0.1:5000/chat', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(dataToSend)
+        body: JSON.stringify(massege)
     })
         .then(res => res.json())
         .then(data => {
@@ -24,12 +23,12 @@ function ChatBox() {
 
   const handleMessageSubmit = (message, senderName) => {
     setMessages([...messages, { senderName, message }]);
+    SendMassege({senderName,message})
   };
 
   const toggleChatVisibility = () =>
   {
     setChatVisible(!chatVisible);
-    SendUserName()
   };
 
   return (
