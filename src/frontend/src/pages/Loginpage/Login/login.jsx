@@ -1,5 +1,5 @@
 import React from 'react'; // Importing React library
-import './login.css';
+import './login_signup.css';
 
 // Code for login page
 function LoginPage() {
@@ -8,7 +8,7 @@ function LoginPage() {
       // Makes a form<!-- Voeg dit toe in de <head> van je HTML-bestand -->
       <div className="login-container">
           <h1 className="gametitle">TRAVISIA</h1>
-          <h2 className="gametitle2">FALLEN EMPIRE</h2>
+          <h2 className="subtitle">FALLEN EMPIRE</h2>
           <form className="login-form">
               <div>
                   {/* <div> groupes the label and input together on one line*/}
@@ -21,7 +21,7 @@ function LoginPage() {
                   />
               </div>
               <div>
-                  <label htmlFor="password">Password:</label>
+                  <label >Password:</label>
                   {/* When you click on the Label "Password", the input box is selected*/}
                   <input
                       id="password"

@@ -80,7 +80,7 @@
 
 }
 
-.gametitle2 {
+.subtitle {
   margin-bottom: 15px; /* Space between title and form */
   margin-top: 15px; /* Space between title and form */
   text-align: center; /* Title in centre */
@@ -93,3 +93,17 @@
   margin-bottom: 0px;
 }
 
+.save-button {
+  width: 45%;
+  padding: 12px;
+  margin-left: 1px;
+  margin-right: 12px;
+  background-color: #8a795d;
+  color: #D4AF37;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px; /* Button size */
+  font-family: 'MedievalSharp', cursive; /* Lettertype */
+}
