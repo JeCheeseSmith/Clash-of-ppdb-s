@@ -7,13 +7,12 @@ from database import *
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Travisia',static_folder='frontend/dist/static',template_folder='frontend/dist')
-app_data = {'app_name': 'Travisia'}
 connection = DBConnection()
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
 
-player_data_access = PlayerDataAccess(connection)
-Message_data_access = MessageDataAccess(connection)
+player_data_access = PlayerDataAccess(connection) # Run on the same connection to minimise usage / # of connections
+message_data_access = MessageDataAccess(connection)
 
 
 @app.route('/Signin', methods=['POST'])
@@ -57,15 +56,15 @@ def update_chatbox():
         controle = False
         chatobj = Message(message_id, message_moment, message_content, message_pname)
         Rchatobj = Retrieve(message_id,message_sname)
-        controle = Message_data_access.add_message(chatobj)
+        controle = message_data_access.add_message(chatobj)
         if controle == True:
-            controle = Message_data_access.add_message2(Rchatobj)
+            controle = message_data_access.add_message2(Rchatobj)
             return jsonify(chatobj.to_dct(),Rchatobj.to_dct())
         else:
             return "Message failed to store"
 
     elif request.method=='GET':
-        obj=Message_data_access.get_chatbox(message_pname)
+        obj=message_data_access.get_chatbox(message_pname)
         #return jsonify(for test in obj)
 
 
