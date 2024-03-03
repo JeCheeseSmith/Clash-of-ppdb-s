@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, jsonify
-from player import *
-from message import *
+from src.dataAcces.player import *
+from src.dataAcces.message import *
 from flask.templating import render_template
 from database import *
 
