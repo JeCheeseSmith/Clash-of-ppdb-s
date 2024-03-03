@@ -106,10 +106,8 @@ def test():
 @app.route('/test2', methods=['POST'])
 def test2():
     data = request.json
-    print(data.get('username'))
-    #print(data.get('password'))
-    print('t')
-    return jsonify({'t': "t"})
+    print(data)
+    return jsonify({'Chat': True})
 
 # -login
 # messages laatste tien en update naar mate aantal

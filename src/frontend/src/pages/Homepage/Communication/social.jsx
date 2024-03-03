@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./social.css"
 import "./socialOptionContents.css"
 import buttonSocial from '../../../assets/Menu Selection Sound Effect.mp3';
@@ -91,20 +91,22 @@ function Navbar({ socialVisible }) {
   );
 }
 
-// Example page components
-function CreateClanPage() {
-  return (
-      <div className={"create-clan"}>
-          <input className={"nameClan"} placeholder={"Name"} />
-          <select className={"clanStatus"} aria-placeholder={"status"} defaultValue="Status">
-              <option value="option1">Online</option>
-              <option value="option2">Offline</option>
-              <option value="option3">Currently Building</option>
-          </select>
-          <textarea className={"descriptionClan"} placeholder={"Description"}/>
-          <button className={"create-clan-button"}>Create Clan</button>
-      </div>
-  )
+function CreateClanPage()
+{
+
+    return (
+        <div className={"create-clan"}>
+            <input className={"nameClan"} placeholder={"Name"} />
+            <select className={"clanStatus"} aria-placeholder={"status"} defaultValue="Status">
+                <option value="option1">Online</option>
+                <option value="option2">Offline</option>
+                <option value="option3">Currently Building</option>
+            </select>
+            <textarea className={"descriptionClan"} placeholder={"Description"}/>
+            {/* Attach handleCreateClan function to onClick event of the button */}
+            <button className={"create-clan-button"}>Create Clan</button>
+        </div>
+    );
 }
 
 function JoinClanPage() {
@@ -124,7 +126,8 @@ function FriendRequestsPage() {
     )
 }
 
-function SearchPersonPage() {
+function SearchPersonPage()
+{
     return (
         <div className={"create-clan"}>
           <input className={"nameClan"} placeholder={"Search Name..."}/>

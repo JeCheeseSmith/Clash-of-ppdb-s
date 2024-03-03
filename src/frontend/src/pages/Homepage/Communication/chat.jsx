@@ -1,6 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './chat.css'; // CSS file for styling
 
+const SendUserName = async () =>
+{
+    const dataToSend = {info: "OpenChat"};
+    await fetch('http://127.0.0.1:5000/test2', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(dataToSend)
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+};
+
 function ChatBox() {
   const [messages, setMessages] = useState([{ senderName: '', message: 'Welcome to Chat!' }]); // Initialize messages
   const [chatVisible, setChatVisible] = useState(false); // State variable to track chat visibility
@@ -12,6 +29,7 @@ function ChatBox() {
   const toggleChatVisibility = () =>
   {
     setChatVisible(!chatVisible);
+    SendUserName()
   };
 
   return (
