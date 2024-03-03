@@ -1,19 +1,20 @@
 from flask import Flask
 from flask import request, jsonify
-from player import *
-from Message import *
+from src.dataAcces.player import *
+from src.dataAcces.message import *
 from flask.templating import render_template
+from database import *
+import dataAcces
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Travisia',static_folder='frontend/dist/static',template_folder='frontend/dist')
-app_data = dict()
-app_data['app_name'] = 'Travisia'
 connection = DBConnection()
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
 
-player_data_access = PlayerDataAccess(connection)
-Message_data_access = MessageDataAccess(connection)
+player_data_access = PlayerDataAccess(connection) # Run on the same connection to minimise usage / # of connections
+message_data_access = MessageDataAccess(connection)
+#package_data_acces =
 
 
 @app.route('/Signin', methods=['POST'])
@@ -57,22 +58,42 @@ def update_chatbox():
         controle = False
         chatobj = Message(message_id, message_moment, message_content, message_pname)
         Rchatobj = Retrieve(message_id,message_sname)
-        controle = Message_data_access.add_message(chatobj)
+        controle = message_data_access.add_message(chatobj)
         if controle == True:
-            controle = Message_data_access.add_message2(Rchatobj)
+            controle = message_data_access.add_message2(Rchatobj)
             return jsonify(chatobj.to_dct(),Rchatobj.to_dct())
         else:
             return "Message failed to store"
 
     elif request.method=='GET':
-        obj=Message_data_access.get_chatbox(message_pname)
-        return jsonify(for test in obj)
+        obj=message_data_access.get_chatbox(message_pname)
+        #return jsonify(for test in obj)
 
+@app.route('/resources/<int:id>', methods=['GET'])
+def get_resources():
+    """
+    Function to retrieve current amount of resources of a settlement
+    :return:
+    """
+    # User -> Settlement -> Package
+    #package
+
+
+    pass
+
+@app.route('/grid', methods=['GET'])
+def get_grid():
+    pass
+
+@app.route('/buildings', methods=['GET'])
+def get_buildings():
+    pass
 
 # -login
 # messages laatste tien en update naar mate aantal
 # clanrequest
 # clan aanmaken
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
