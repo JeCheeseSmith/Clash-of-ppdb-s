@@ -4,6 +4,7 @@ from src.dataAcces.player import *
 from src.dataAcces.message import *
 from flask.templating import render_template
 from database import *
+from src.dataAcces.package import *
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Travisia',static_folder='frontend/dist/static',template_folder='frontend/dist')
@@ -13,6 +14,7 @@ HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
 
 player_data_access = PlayerDataAccess(connection) # Run on the same connection to minimise usage / # of connections
 message_data_access = MessageDataAccess(connection)
+package_data_acces = PackageDataAccess(connection)
 
 
 @app.route('/Signin', methods=['POST'])
@@ -67,6 +69,26 @@ def update_chatbox():
         obj=message_data_access.get_chatbox(message_pname)
         #return jsonify(for test in obj)
 
+@app.route('/resources/<int:id>', methods=['GET'])
+def get_resources():
+    """
+    Function to retrieve current amount of resources of a settlement
+    :return:
+    """
+    # User -> Settlement -> Package
+    #package
+    package_data_acces.get_resources(id)
+
+
+    pass
+
+@app.route('/grid', methods=['GET'])
+def get_grid():
+    pass
+
+@app.route('/buildings', methods=['GET'])
+def get_buildings():
+    pass
 
 # -login
 # messages laatste tien en update naar mate aantal
