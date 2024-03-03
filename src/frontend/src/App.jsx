@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <div>
-          <LoginMainPage/>
+          <RegistrationPage/>
       </div>
     </>
   )
