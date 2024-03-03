@@ -1,5 +1,3 @@
-import dataAcces
-
 class Package:
     def __init__(self, id, stone, wood, steel, food, gems, xp):
         self.id = id
@@ -10,20 +8,7 @@ class Package:
         self.gems = gems
         self.xp = xp
 
-class Soldier:
-    def __init__(self,name,type,health,damage,capacity,consumption,speed,stealth):
-        self.name = name
-        self.type = type
-        self.health = health
-        self.damage = damage
-        self.capacity = capacity
-        self.consumption = consumption
-        self.speed = speed
-        self.stealth = stealth
 
-
-
-
-class PackageDataAccess(dataAcces):
-    def __init__(self,dbconnect):
-        super(PackageDataAccess, self).__init__(dbconnect)
+class PackageDataAccess():
+    def __init__(self, dbconnect):
+        self.dbconnect = dbconnect
