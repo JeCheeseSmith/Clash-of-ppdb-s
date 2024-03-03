@@ -66,7 +66,7 @@ def update_chatbox():
 
     elif request.method=='GET':
         obj=Message_data_access.get_chatbox(message_pname)
-        return jsonify(for test in obj)
+        return jsonify(obj)
 
 
 # -login
