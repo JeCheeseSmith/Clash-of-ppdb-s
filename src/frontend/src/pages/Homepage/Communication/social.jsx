@@ -6,6 +6,8 @@ import buttonOption from '../../../assets/socialOptionSound.mp3';
 
 function SocialBox() {
   const [socialVisible, setSocialVisible] = useState(false);
+
+  
   const toggleSocialVisibility = () => {
     setSocialVisible(!socialVisible);
   };
