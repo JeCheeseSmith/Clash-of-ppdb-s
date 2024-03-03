@@ -56,25 +56,28 @@ def get_login():
 @app.route('/chat', methods=['POST', 'GET'])
 def update_chatbox():
     data = request.json
-    message_id = data.get('id')
-    message_moment = data.get('moment')
-    message_content = data.get('content')
-    message_pname = data.get('pname')
-    message_sname = data.get('sname')
-    if request.method == 'POST':
-        controle = False
-        chatobj = Message(message_id, message_moment, message_content, message_pname)
-        Rchatobj = Retrieve(message_id, message_sname)
-        controle = message_data_access.add_message(chatobj)
-        if controle == True:
-            controle = message_data_access.add_message2(Rchatobj)
-            return jsonify(chatobj.to_dct(), Rchatobj.to_dct())
-        else:
-            return "Message failed to store"
-
-    elif request.method == 'GET':
-        obj = message_data_access.get_chatbox(message_pname)
-        return jsonify(obj)
+    #test voor chatbox (onderstaande 2 lijnen mag weg)
+    print(data)
+    return jsonify("Updated chatbox")
+    # message_id = data.get('id')
+    # message_moment = data.get('moment')
+    # message_content = data.get('content')
+    # message_pname = data.get('pname')
+    # message_sname = data.get('sname')
+    # if request.method == 'POST':
+    #     controle = False
+    #     chatobj = Message(message_id, message_moment, message_content, message_pname)
+    #     Rchatobj = Retrieve(message_id, message_sname)
+    #     controle = message_data_access.add_message(chatobj)
+    #     if controle == True:
+    #         controle = message_data_access.add_message2(Rchatobj)
+    #         return jsonify(chatobj.to_dct(), Rchatobj.to_dct())
+    #     else:
+    #         return "Message failed to store"
+    #
+    # elif request.method == 'GET':
+    #     obj = message_data_access.get_chatbox(message_pname)
+    #     return jsonify(obj)
 
 
 @app.route('/resources/<int:id>', methods=['GET'])
@@ -98,16 +101,27 @@ def get_grid():
 def get_buildings():
     pass
 
+################  SocialBox  ################
+@app.route('/createClan', methods=['POST'])
+def createClan():
+    clan = request.json
+    print(clan)
+    return jsonify({'CreateClan': True})
+@app.route('/joinClan', methods=['POST'])
+def joinClan():
+    clan = request.json
+    print(clan)
+    return jsonify({'JoinClan': True})
+@app.route('/friendRequests', methods=['GET'])
+def friendRequests():
+    return jsonify({'FriendRequests': True})
+@app.route('/searchPerson', methods=['POST'])
+def searchPerson():
+    name = request.json
+    print(name)
+    return jsonify({'SearchPerson': True})
 
-@app.route('/test')
-def test():
-    return jsonify({'kaas': "k"})
-
-@app.route('/test2', methods=['POST'])
-def test2():
-    data = request.json
-    print(data)
-    return jsonify({'Chat': True})
+#############################################
 
 # -login
 # messages laatste tien en update naar mate aantal
