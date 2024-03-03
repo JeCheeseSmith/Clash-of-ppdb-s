@@ -1,4 +1,4 @@
-import soldier
+from src.dataAcces.soldier import *
 from src.database import *
 
 

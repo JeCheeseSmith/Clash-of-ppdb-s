@@ -55,7 +55,6 @@ class MessageDataAccess:
         name_exists = cursor.fetchone()[0]
 
         if name_exists:
-            # Retrieve the last 10 messages sent by the provided name
             query_messages = """
                     SELECT id, moment, content, pname
                     FROM message
@@ -65,6 +64,7 @@ class MessageDataAccess:
                 """
             cursor.execute(query_messages, (pname,))
             messages = cursor.fetchall()
+
             return messages
         else:
             return None
