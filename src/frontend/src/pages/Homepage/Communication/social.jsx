@@ -111,6 +111,8 @@ function CreateClanPage()
 {
     const [clanName, setClanName] = useState("");
     const [clanDescription, setClanDescription] = useState("");
+    const [clanStatus,setClanStatus] = useState("")
+    const [clanLeader, setClanLeader] = useState("watson")
     const handleclanName = (e) =>
     {
         setClanName(e.target.value);
@@ -119,9 +121,17 @@ function CreateClanPage()
     {
         setClanDescription(e.target.value);
     };
+    const handleClanStatus = (e) =>
+    {
+        setClanStatus(e.target.value);
+    };
+    const handleclanLeader= (e) =>
+    {
+        setClanLeader(e.target.value);
+    };
     const handleButtonClick = () =>
     {
-        SocialBoxData({Name:clanName, Description:clanDescription}, "/joinClan");
+        SocialBoxData({name:clanName, description:clanDescription,status:clanStatus, pname: clanLeader}, "/createClan");
     };
 
     return (

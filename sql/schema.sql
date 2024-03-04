@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS admin(
 
 CREATE TABLE IF NOT EXISTS clan(
     name VARCHAR PRIMARY KEY,
-    pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE, -- Leader Relation
+    pname VARCHAR NOT NULL UNIQUE REFERENCES player(name) ON DELETE CASCADE, -- Leader Relation
     status VARCHAR,
     description TEXT
 );

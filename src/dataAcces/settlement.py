@@ -1,5 +1,3 @@
-import package
-from src.database import *
 
 
 class Settlement:
