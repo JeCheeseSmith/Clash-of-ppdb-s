@@ -1,6 +1,3 @@
-from src.dataAcces.soldier import *
-from src.database import *
-
 
 class Package:
     def __init__(self, args):
