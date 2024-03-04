@@ -1,69 +1,215 @@
-# TUTORIAL Len Feremans, Sandy Moens and Joey De Pauw
-# see tutor https://code.tutsplus.com/tutorials/creating-a-web-app-from-scratch-using-python-flask-and-mysql--cms-22972
-import mimetypes
-mimetypes.add_type('application/javascript', '.js')
-mimetypes.add_type('text/javascript', '.js')
-mimetypes.add_type('text/css', '.css')
-from flask import Flask,send_from_directory
+from src.dataAcces.player import *
+from src.dataAcces.content import *
+from src.dataAcces.achievement import *
+from src.dataAcces.building import *
+from src.dataAcces.package import *
+from src.dataAcces.settlement import *
+from src.dataAcces.soldier import *
+from src.dataAcces.transfer import *
+from src.dataAcces.clan import *
+from src.database import *
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from flask.templating import render_template
-from flask import request, session, jsonify
-import os
-
-from config import config_data
-from player import *
 
 # INITIALIZE SINGLETON SERVICES
-app = Flask('Travisia',static_folder='frontend/dist/static',template_folder='frontend/dist')
-app.secret_key = '*^*(*&)(*)(*afafafaSDD47j\3yX R~X@H!jmM]Lwf/,?KT'
-app_data = dict()
-app_data['app_name'] = config_data['app_name']
-connection = DBConnection(dbname=config_data['dbname'], dbuser=config_data['dbuser'],password="password")
-
-
-player_data_access = PlayerDataAccess(connection)
-
+app = Flask('Travisia', static_folder='frontend/dist/static', template_folder='frontend/dist')
+connection = DBConnection()
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
+CORS(app)
+
+player_data_access = PlayerDataAccess(connection)  # Run on the same connection to minimise usage / # of connections
+content_data_access = ContentDataAccess(connection)
+clan_data_acces = ClanDataAccess(connection)
+# package_data_acces =
+
+
+@app.route('/Signin', methods=['POST'])
+def add_player():
+    data = request.json
+    player_name = data.get('name')
+    player_password = data.get('password')
+    controle = False
+    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
+                       logout=None)
+    controle = player_data_access.add_user(playerobj)
+    if controle:
+        return jsonify(playerobj.to_dct())
+    else:
+        return jsonify("Failed signup")
 
 
 @app.route('/login', methods=['GET'])
 def get_login():
-    objects = player_data_access.get_quotes()
-    # Translate to json
-    return jsonify([obj.to_dct() for obj in objects])
+    data = request.json
+    player_name = data.get('name')
+    player_password = data.get('password')
+    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
+                       logout=None)
+    controle = False
+    controle = player_data_access.get_login(playerobj)
 
-#@app.route('/quotes', methods=['POST'])
-#def add_quote():
-    # Text value of <input type="text" id="text"> was posted by form.submit
-#    quote_text = request.form.get('text')
-#    quote_author = request.form.get('author')
-    # Insert this value into table Quote(ID,TEXT)
-#    quote_obj = User(iden=None, text=quote_text, author=quote_author)
-#    print('Adding {}'.format(quote_obj.to_dct()))
-#    quote_obj = quote_data_access.add_quote(quote_obj)
-#    return jsonify(quote_obj.to_dct())
+    if controle:
+        return "Login successful"
+    else:
+        return "Login Failed"
 
 
-# VIEW
-#@app.route("/")
-#def serve():
-#    return send_from_directory(app.static_folder,'index.html')
+@app.route('/chat', methods=['POST', 'GET'])
+def update_chatbox():
+    data = request.json
+    # test voor chatbox (onderstaande 2 lijnen mag weg)
+    print(data)
+    return jsonify("Updated chatbox")
+    # message_id = data.get('id')
+    # message_moment = data.get('moment')
+    # message_content = data.get('content')
+    # message_pname = data.get('pname')
+    # message_sname = data.get('sname')
+    # if request.method == 'POST':
+    #     controle = False
+    #     chatobj = Message(message_id, message_moment, message_content, message_pname)
+    #     Rchatobj = Retrieve(message_id, message_sname)
+    #     controle = message_data_access.add_message(chatobj)
+    #     if controle == True:
+    #         controle = message_data_access.add_message2(Rchatobj)
+    #         return jsonify(chatobj.to_dct(), Rchatobj.to_dct())
+    #     else:
+    #         return "Message failed to store"
+    #
+    # elif request.method == 'GET':
+    #     obj = message_data_access.get_chatbox(message_pname)
+    #     return jsonify(obj)
 
+
+@app.route('/resources/<int:id>', methods=['GET'])
+def get_resources():
+    """
+    Function to retrieve current amount of resources of a settlement
+    :return:
+    """
+    # User -> Settlement -> Package
+    # package
+
+    pass
+
+
+@app.route('/grid', methods=['GET'])
+def get_grid():
+    pass
+
+
+@app.route('/buildings', methods=['GET'])
+def get_buildings():
+    pass
+
+
+@app.route('/createClan', methods=['POST'])
+def createClan():
+    """
+    API Endpoint to create a new Clan
+
+    JSON Input Format
+    {
+    'name': <string> | The name of th e clan
+    'pname': <string> | Clan Leader name (Player Entity)
+    'description': <string> | Info about the clan
+    'status': <string> | Current Clan status - Oneliner
+    }
+
+    JSON Output Format:
+    {
+    'succes': <bool> | State of request
+    }
+    """
+    data = request.json
+    succes = clan_data_acces.add_clan(
+        Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
+    return jsonify({'succes': succes})
+
+
+@app.route('/joinClan', methods=['POST'])
+def joinClan():
+    """
+    Make a request to join the Clan; sends a message to the Clan Leader too
+
+    JSON Input Format:
+
+    {
+    'cname': <string>,
+    'sender': <string>
+    }
+
+    JSON Output Format:
+
+    {
+    'succes': <bool> | State of request
+    'message': <string> | Standard reply
+    }
+    """
+    data = request.json
+
+    request = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
+    cname = data.get('cname') # Name of the clan
+    succes = clan_data_acces.sendRequest(request, cname)
+
+    return jsonify({'succes': succes, 'message': "Your request has been send. Please await further correspondence!"})
+
+
+@app.route('/searchClan', methods=['POST'])
+def searchClan():
+    """
+    Search for a particular clan and retrieve its information
+
+    JSON Input Format
+    {
+    'name': <string> | Clan name
+    }
+
+    JSON Output Format
+    {
+    'succes': <bool> | Status
+    'name': <string> | Clan Name
+    'pname': <string> | Clan Leader name (Player Entity)
+    'description': <string> | Info about the clan
+    'status': <string> | Current Clan status - Oneliner
+    }
+    """
+
+    data = request.json
+    clan = clan_data_acces.get_clan(Clan(data.get('name'), None, None, None))
+    dct = clan.to_dct()
+
+    if clan.status == "Clan doesn't exists":
+        dct["succes"] = False
+    else:
+        dct["succes"] = True
+
+    return jsonify(dct)
+
+
+@app.route('/friendRequests', methods=['GET'])
+def friendRequests():
+    return jsonify({'FriendRequests': True})
+
+
+@app.route('/searchPerson', methods=['POST'])
+def searchPlayer():
+    name = request.json
+    print(name)
+    return jsonify({'SearchPerson': True})
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
+    """
+    Standard catch_all to serve each file
+    :param path:
+    :return:
+    """
     return render_template("index.html")
 
-# Route for seeing a data
-@app.route('/data')
-def get_time():
-    # Returning an api for showing in  reactjs
-    return {
-        'Name': "geek",
-        "Age": "22",
-        "programming": "python"
-    }
 
 # RUN DEV SERVER
 if __name__ == "__main__":

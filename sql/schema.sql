@@ -33,19 +33,23 @@ CREATE TABLE IF NOT EXISTS player(
     gems BIGINT,
     xp BIGINT,
     level INT,
-    logout TIMESTAMP -- Last time a user logged out at this time
+    logout TIMESTAMP -- Last time a player logged out at this time
 );
 
-CREATE TABLE IF NOT EXISTS message(
+CREATE TABLE IF NOT EXISTS content(
     id SERIAL PRIMARY KEY,
     moment TIMESTAMP NOT NULL,
     content TEXT NOT NULL,
     pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE SET NULL -- Send Relation
 );
 
+CREATE TABLE IF NOT EXISTS message(
+    id SERIAL PRIMARY KEY REFERENCES content(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS request(
-    id SERIAL PRIMARY KEY REFERENCES message(id) ON DELETE CASCADE,
-    accept BOOL NOT NULL
+    id SERIAL PRIMARY KEY REFERENCES content(id) ON DELETE CASCADE,
+    accept BOOL
 );
 
 CREATE TABLE IF NOT EXISTS transferRequest(
@@ -57,13 +61,17 @@ CREATE TABLE IF NOT EXISTS clanRequest(
     id SERIAL PRIMARY KEY REFERENCES request(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS friendRequest(
+    id SERIAL PRIMARY KEY REFERENCES request(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS admin(
     name VARCHAR PRIMARY KEY REFERENCES player(name) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS guild(
+CREATE TABLE IF NOT EXISTS clan(
     name VARCHAR PRIMARY KEY,
-    pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE, -- Leader Relation
+    pname VARCHAR NOT NULL UNIQUE REFERENCES player(name) ON DELETE CASCADE, -- Leader Relation
     status VARCHAR,
     description TEXT
 );
@@ -123,20 +131,20 @@ CREATE TABLE IF NOT EXISTS friend(
 
 CREATE TABLE IF NOT EXISTS member(
     pname VARCHAR  REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    gname VARCHAR REFERENCES guild(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (pname,gname)
+    cname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (pname,cname)
 );
 
 CREATE TABLE IF NOT EXISTS retrieved(
-    mid SERIAL REFERENCES message(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    mid SERIAL REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
     pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (mid,pname)
 );
 
 CREATE TABLE IF NOT EXISTS shared(
-    mid SERIAL REFERENCES message(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    gname VARCHAR REFERENCES guild(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (mid,gname)
+    mid SERIAL REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    cname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (mid,cname)
 );
 
 CREATE TABLE IF NOT EXISTS intercept(
@@ -182,6 +190,8 @@ CREATE TABLE IF NOT EXISTS achieved(
 );
 
 INSERT INTO player(name,password) VALUES('watson','1234');
+INSERT INTO player(name,password) VALUES('jonas','1234');
+INSERT INTO player(name,password) VALUES('abu','1234');
 INSERT INTO player(name,password) VALUES('admin','1234');
 
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','0','0');
@@ -202,6 +212,8 @@ INSERT INTO buildable(name,type,function,cost,drawback) VALUES('ArcherTower','de
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('LookoutTower','defense','1,1*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('BlackSmith','defense','1,1*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Tavern','defense','1,1*x',1,1);
+
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('empty','decoration','1,1*x',1,1);
 
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1);

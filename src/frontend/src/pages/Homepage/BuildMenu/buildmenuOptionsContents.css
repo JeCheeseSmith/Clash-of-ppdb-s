@@ -1,0 +1,25 @@
+.buildoptions-container{
+    position: absolute;
+    z-index: 5000;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+}
+
+.options-content{
+    background-color: #1f1a18;
+    border: 2px solid #ffd700;
+    height: 300px;
+    width: 90%;
+    border-radius: 10px;
+    margin-top: 2px;
+}
+
+.buildoptions-links {
+  list-style: none;
+  display: flex;
+}
+
+.buildoptions-links li {
+  margin-right: 6rem; /* Increase the right margin to create larger spaces */
+}
