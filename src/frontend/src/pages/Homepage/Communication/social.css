@@ -27,10 +27,14 @@
     transition: 0.5s ; /* Slide animation */
 }
 
-.box-container{
-    margin: 80px;
-    margin-left: 500px;
+.box-container {
+    position: absolute;
+    left: 500px; /* Adjust this value as needed */
+    top: 80px; /* Adjust this value as needed */
+    width: 1300px;
+    z-index: 9999; /* Ensure it appears above other elements */
 }
+
 
 .navbar {
     padding: 20px;
@@ -55,15 +59,6 @@
 
 .navbar-links li {
   margin-right: 6rem; /* Increase the right margin to create larger spaces */
-}
-
-.navbar-links li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.navbar-links li a:hover {
-  text-decoration: underline;
 }
 
 .socialOption{
