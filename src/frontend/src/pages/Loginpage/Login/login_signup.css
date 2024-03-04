@@ -2,14 +2,13 @@
 
 .login-form {
   max-width: 350px; /* Form size */
-  margin: 250px auto; /* Horizontal */
-  margin-top: 40px; /* Horizontal */
+  margin: 250px auto;
+  margin-top: 40px;
   padding: 40px;
   background-color: #e0d8c3;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow for depth */
-  font-family: 'MedievalSharp', cursive; /* Lettertype */
-  font-size: 20px; /* Letter size */
+  border-radius: 8px; /* edges */
+  font-family: 'MedievalSharp', cursive;
+  font-size: 20px;
   font-weight: bold;
 }
 
@@ -90,7 +89,7 @@
 }
 
 .signup {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 .save-button {

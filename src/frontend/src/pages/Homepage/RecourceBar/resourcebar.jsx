@@ -12,15 +12,19 @@ function ResourceBar() {
         <div className="resourceBar">
             <div className="resourceSection">
                 <img src={woodLog} alt="Wood" className="resourceIcon"/>
+                <span className="resourceCount">5000</span> {/* Dit is het nieuwe element */}
             </div>
             <div className="resourceSection">
                 <img src={stone} alt="Stone" className="resourceIcon"/>
+                <span className="resourceCount">5000</span> {/* Dit is het nieuwe element */}
             </div>
             <div className="resourceSection">
                 <img src={metal} alt="Metal" className="resourceIcon"/>
+                <span className="resourceCount">5000</span> {/* Dit is het nieuwe element */}
             </div>
             <div className="resourceSection">
                 <img src={food} alt="Food" className="resourceIcon"/>
+                <span className="resourceCount">5000</span> {/* Dit is het nieuwe element */}
             </div>
         </div>
     );
