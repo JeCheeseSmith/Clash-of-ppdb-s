@@ -2,9 +2,10 @@ from flask import Flask
 from flask import request, jsonify
 from src.dataAcces.player import *
 from src.dataAcces.content import *
+from src.dataAcces.clan import *
 from flask.templating import render_template
 from database import *
-import dataAcces
+
 from flask import Flask, jsonify
 from flask_cors import CORS
 
@@ -17,7 +18,7 @@ CORS(app)
 
 player_data_access = PlayerDataAccess(connection)  # Run on the same connection to minimise usage / # of connections
 message_data_access = ContentDataAccess(connection)
-
+clan_data_acces = ClanDataAccess(connection)
 
 # package_data_acces =
 
@@ -104,8 +105,10 @@ def get_buildings():
 ################  SocialBox  ################
 @app.route('/createClan', methods=['POST'])
 def createClan():
-    clan = request.json
-    print(clan)
+    data = request.json
+
+    Clan(data.get("Name"),data.get("Leader"),data.get("Description"),data.get("Status"))
+
     return jsonify({'CreateClan': True})
 
 @app.route('/joinClan', methods=['POST'])
@@ -119,7 +122,7 @@ def friendRequests():
     return jsonify({'FriendRequests': True})
 
 @app.route('/searchPerson', methods=['POST'])
-def searchPerson():
+def searchPlayer():
     name = request.json
     print(name)
     return jsonify({'SearchPerson': True})

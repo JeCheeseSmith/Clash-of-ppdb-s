@@ -4,6 +4,19 @@ import React, { useState, useEffect } from 'react';
 
 function RegistrationPage() {
 
+    const [name, setName] = useState('Kars');
+    const [password, setPassword] = useState('hallo');
+
+    const dataToSend = { username: name, password: password };
+
+    fetch('http://127.0.0.1:5000/test2', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)
+    });
+
     return (
         // Make a form
         <div className="login-container">
