@@ -13,7 +13,7 @@
 
 ## How to start?
 
-> This guide Assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL installed. Optionally, like we did, you can retrieve your free SSL Certificate using Certbot. 
+> This guide assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL installed. Optionally, like we did, you can retrieve your free SSL Certificate using Certbot. 
 > > Don't forget to clone this repository!
 
 #### 1. Install necessary dependencies
@@ -62,7 +62,7 @@ cd src/
 python3 app.py
 ```
 
-### Setup the React.js frontend
+### Set up the React.js frontend
 
 #### A. Install Node.js & npm
 ```bash
