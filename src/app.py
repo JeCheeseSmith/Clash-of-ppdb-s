@@ -1,7 +1,12 @@
-from flask import Flask
-from flask import request, jsonify
+from flask import request
 from src.dataAcces.player import *
 from src.dataAcces.content import *
+from src.dataAcces.achievement import *
+from src.dataAcces.building import *
+from src.dataAcces.package import *
+from src.dataAcces.settlement import *
+from src.dataAcces.soldier import *
+from src.dataAcces.transfer import *
 from src.dataAcces.clan import *
 from flask.templating import render_template
 from database import *
@@ -19,6 +24,7 @@ CORS(app)
 player_data_access = PlayerDataAccess(connection)  # Run on the same connection to minimise usage / # of connections
 message_data_access = ContentDataAccess(connection)
 clan_data_acces = ClanDataAccess(connection)
+
 
 # package_data_acces =
 
@@ -57,7 +63,7 @@ def get_login():
 @app.route('/chat', methods=['POST', 'GET'])
 def update_chatbox():
     data = request.json
-    #test voor chatbox (onderstaande 2 lijnen mag weg)
+    # test voor chatbox (onderstaande 2 lijnen mag weg)
     print(data)
     return jsonify("Updated chatbox")
     # message_id = data.get('id')
@@ -102,16 +108,17 @@ def get_grid():
 def get_buildings():
     pass
 
+
 ################  SocialBox  ################
 @app.route('/createClan', methods=['POST'])
 def createClan():
     data = request.json
 
-    Clan(data.get("Name"),data.get("Leader"),data.get("Description"),data.get("Status"))
+    Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status"))
     clan_data_acces
 
-
     return jsonify({'CreateClan': True})
+
 
 @app.route('/joinClan', methods=['POST'])
 def joinClan():
@@ -119,15 +126,18 @@ def joinClan():
     print(clan)
     return jsonify({'JoinClan': True})
 
+
 @app.route('/friendRequests', methods=['GET'])
 def friendRequests():
     return jsonify({'FriendRequests': True})
+
 
 @app.route('/searchPerson', methods=['POST'])
 def searchPlayer():
     name = request.json
     print(name)
     return jsonify({'SearchPerson': True})
+
 
 #############################################
 
