@@ -108,6 +108,8 @@ def createClan():
     data = request.json
 
     Clan(data.get("Name"),data.get("Leader"),data.get("Description"),data.get("Status"))
+    clan_data_acces
+
 
     return jsonify({'CreateClan': True})
 

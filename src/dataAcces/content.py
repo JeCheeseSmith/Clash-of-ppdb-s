@@ -1,4 +1,3 @@
-from src.database import *
 
 
 class Content:
@@ -10,6 +9,14 @@ class Content:
 
     def to_dct(self):
         return {'id': self.id, 'moment': self.moment, 'content': self.content, 'sender': self.sender}
+
+class Request(Content):
+    def __init__(self,id, moment, content, sender, accept):
+        super(Content, self).__init__(id, moment, content, sender)
+        self.accept = accept
+
+    def to_dct(self):
+        return {'id': self.id, 'moment': self.moment, 'content': self.content, 'sender': self.sender, 'accept': self.accept}
 
 
 class Retrieve:
