@@ -234,4 +234,3 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3);
-

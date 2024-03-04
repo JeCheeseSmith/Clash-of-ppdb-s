@@ -200,14 +200,6 @@ def searchPlayer():
     print(name)
     return jsonify({'SearchPerson': True})
 
-
-#############################################
-
-# -login
-# messages laatste tien en update naar mate aantal
-# clanrequest
-# clan aanmaken
-
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
