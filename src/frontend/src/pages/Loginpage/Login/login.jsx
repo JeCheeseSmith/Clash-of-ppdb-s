@@ -31,7 +31,7 @@ function LoginPage() {
                   {/* When you click on the Label "Password", the input box is selected */}
                   <input
                       id="password"
-                      type="password"
+                      type="text"
                   />
               </div>
               {/* Login button */}
