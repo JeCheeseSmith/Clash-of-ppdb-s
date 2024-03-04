@@ -16,3 +16,9 @@ class Settlement:
 class SettlementDataAcces:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
+
+    def initialise(self):
+
+        return None
+        return Settlement
+        pass

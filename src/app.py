@@ -25,13 +25,11 @@ clan_data_acces = ClanDataAccess(connection)
 # package_data_acces =
 
 
-@app.route('/Signin', methods=['POST'])
+@app.route('/signin', methods=['POST'])
 def add_player():
     data = request.json
-    player_name = data.get('name')
-    player_password = data.get('password')
     controle = False
-    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
+    playerobj = Player(name=data.get('name'), password=data.get('password'), avatar=None, gems=0, xp=0, level=0,
                        logout=None)
     controle = player_data_access.add_user(playerobj)
     if controle:
@@ -83,7 +81,7 @@ def update_chatbox():
     #     return jsonify(obj)
 
 
-@app.route('/resources/<int:id>', methods=['GET'])
+@app.route('/resources', methods=['GET'])
 def get_resources():
     """
     Function to retrieve current amount of resources of a settlement
@@ -126,6 +124,7 @@ def createClan():
     data = request.json
     succes = clan_data_acces.add_clan(
         Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
+
     return jsonify({'succes': succes})
 
 

@@ -1,3 +1,4 @@
+from src.dataAcces.settlement import *
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout):
         self.name = name
@@ -28,9 +29,16 @@ class PlayerDataAccess:
     def add_user(self, obj):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO player(name,password) VALUES(%s,%s)', (obj.name, obj.password,))
+            cursor.execute('INSERT INTO player(name,password,xp,gems,level,avatar,logout) VALUES(%s,%s,%s,%s,%s,%s,now())', (obj.name, obj.password,obj.xp,obj.gems,obj.level,obj.avatar))
             self.dbconnect.commit()
             return True
         except:
             self.dbconnect.rollback()
             return False
+
+    def initialise(self):
+        """
+        Creates a startUp Settlement for a new user!
+        :return:
+        """
+        pass
