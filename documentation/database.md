@@ -4,6 +4,7 @@
 
 We would like to store the majority of our information in the database. This allows us to shut down the activity of a specific user totally when the user is not playing. 
 
+Some notes: 
 1. Each Clan Request is a message and has a status. It is created by a NonMember and SendTo the ClanLeader and so on shared with the Guild.
 2. Transfer Request is created by a friended Member (incl. Guild), send to another person.
 3. An Update/Report should be created by the system/admin user.

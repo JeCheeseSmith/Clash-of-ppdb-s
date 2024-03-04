@@ -196,6 +196,8 @@ INSERT INTO player(name,password) VALUES('admin','1234');
 
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','0','0');
 
+-- Insert all preset Buildings
+
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('WoodcuttersCamp','production','200*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Quarry','production','200*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('SteelMine','production','20+(25*x)',1,1);
@@ -214,6 +216,8 @@ INSERT INTO buildable(name,type,function,cost,drawback) VALUES('BlackSmith','def
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Tavern','defense','1,1*x',1,1);
 
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('empty','decoration','1,1*x',1,1);
+
+-- Insert all preset soldiers
 
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1);

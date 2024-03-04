@@ -36,3 +36,4 @@
 1. Database tables are lowercase (single) words
 2. Database table entities are lowercase (single) words
 3. If Database table expresses a relation, referencing towards another table, the first letter from the referred table is added to the word. e.g. id becomes sid if it refers to a settlement id.
+4. In the backend & APIs, the same name & identifiers are (mostly) used to ease references. 
