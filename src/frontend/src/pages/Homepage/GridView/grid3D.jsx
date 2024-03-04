@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
@@ -6,27 +6,20 @@ import House from "./models/House.jsx";
 
 function Grid()
 {
-    const gridSize = 30;
-    const grid = [];
-    for (let i = 0; i < gridSize; i++)
-    {
-        const row = [];
-        for (let j = 0; j < gridSize; j++)
-        {
-            row.push(0);
-        }
-        grid.push(row);
-    }
+    const gridSize = 40;
+    // State variable to hold the coordinates of the house
+    const [housePosition, setHousePosition] = useState({location:[4, 3], type:"house"}); // Initial position
 
     const renderCell = (rowIndex, colIndex) =>
     {
-        if (rowIndex >= 1 && rowIndex <= 4 && colIndex >= 2 && colIndex <= 5)
+        if (rowIndex === housePosition.location[0] && colIndex === housePosition.location[1])
         {
-            const centerX = (2 + 5) / 2;
-            const centerY = (1 + 4) / 2;
+            // Calculate the center position of the cell
+            const centerX = colIndex + 0.5;
+            const centerY = rowIndex + 0.5;
             return (
-                <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 7, centerY - gridSize / 2]}>
-                    <House/>
+                <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
+                    <House />
                 </mesh>
             );
         }
@@ -34,8 +27,8 @@ function Grid()
         {
             return (
                 <gridHelper key={`${rowIndex}-${colIndex}`}
-                            position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
-                            args={[1, 1]}
+                    position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
+                    args={[1, 1]}
                 />
             );
         }
@@ -44,15 +37,28 @@ function Grid()
     return (
         <Suspense fallback={null}>
             <Canvas camera={{ position: [40, 35, 60] }} className={"grid"}>
-                <directionalLight/>
-                <ambientLight/>
-                <pointLight/>
-                <spotLight/>
-                <hemisphereLight/>
-                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={30} minDistance={15} />
+                <directionalLight />
+                <ambientLight />
+                <pointLight />
+                <spotLight />
+                <hemisphereLight />
+                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={35} minDistance={0} />
                 {
-                    grid.map((row, rowIndex) => (
-                    row.map((cell, colIndex) => renderCell(rowIndex, colIndex))))
+                    (() =>
+                        {
+                            const renderedCells = [];
+                            for (let i = 0; i < gridSize; i++)
+                            {
+                                const renderedRow = [];
+                                for (let j = 0; j < gridSize; j++)
+                                {
+                                    renderedRow.push(renderCell(i, j));
+                                }
+                                renderedCells.push(renderedRow);
+                            }
+                            return renderedCells;
+                        }
+                    )()
                 }
             </Canvas>
         </Suspense>

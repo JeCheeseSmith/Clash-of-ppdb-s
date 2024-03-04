@@ -81,18 +81,18 @@ function BuildOptions({ menuVisible, setMenuVisible})
 
 function Type1()
 {
-  const handleClick = (imageNumber) =>
+  const handleClick = (type) =>
   {
-      console.log(`Image ${imageNumber} clicked`);
+      console.log(`${type} clicked`);
   };
 
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={castleIcon1} alt="Image 1" className="small-image" onClick={() => handleClick(1)} />
-        <img src={castleIcon1} alt="Image 2" className="small-image" onClick={() => handleClick(2)} />
-        <img src={castleIcon1} alt="Image 3" className="small-image" onClick={() => handleClick(3)} />
-        <img src={castleIcon1} alt="Image 3" className="small-image" onClick={() => handleClick(3)} />
+        <img src={castleIcon1} alt="Image 1" className="small-image" onClick={() => handleClick("House")} />
+        <img src={castleIcon1} alt="Image 2" className="small-image" onClick={() => handleClick("House")} />
+        <img src={castleIcon1} alt="Image 3" className="small-image" onClick={() => handleClick("House")} />
+        <img src={castleIcon1} alt="Image 3" className="small-image" onClick={() => handleClick("House")} />
       </div>
     </div>
   );

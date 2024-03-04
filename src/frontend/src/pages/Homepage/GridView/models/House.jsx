@@ -14,7 +14,7 @@ function House(props) {
   const { nodes, materials } = useGLTF(houseObject);
   return (
     <group {...props} dispose={null}>
-      <group scale={0.01}>
+      <group scale={0.003}>
         <mesh
           castShadow
           receiveShadow
