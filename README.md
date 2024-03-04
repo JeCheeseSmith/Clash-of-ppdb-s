@@ -62,8 +62,7 @@ cd src/
 python3 app.py
 ```
 
-### Setup the React.js frontend development
-> Currently, this is not properly linked with the backend build!
+### Setup the React.js frontend
 
 #### A. Install Node.js & npm
 ```bash
@@ -72,12 +71,15 @@ sudo apt install nodejs
 sudo apt install npm
 sudo npm install -g n
 sudo n lts
-npm install
-npm run dev
-npm run build
+sudo npm install
+sudo npm run build
 ```
 
-### You can continue this tutorial to set this up on a server from here.
+#### B. Install packages & Build the files using vite
+```bash
+sudo npm install
+sudo npm run build
+```
 
 #### 5. Create user to run application
 ```bash
