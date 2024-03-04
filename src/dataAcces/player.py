@@ -9,7 +9,7 @@ class Player:
         self.logout = logout
 
     def to_dct(self):
-        return {'name': self.name, 'password': self.password}
+        return {'name': self.name, 'password': self.password,'avatar': self.avatar, 'gems': self.gems, 'xp': self.xp, 'level': self.level, 'logout': self.logout}
 
 
 class PlayerDataAccess:

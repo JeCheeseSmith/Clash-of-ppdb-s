@@ -2,14 +2,14 @@ from src.database import *
 
 
 class Content:
-    def __init__(self, id, moment, content, pname):
+    def __init__(self, id, moment, content, sender):
         self.id = id
         self.moment = moment
         self.content = content
-        self.pname = pname
+        self.sender = sender
 
     def to_dct(self):
-        return {'id': self.id, 'moment': self.moment}
+        return {'id': self.id, 'moment': self.moment, 'content': self.content, 'sender': self.sender}
 
 
 class Retrieve:
@@ -18,7 +18,7 @@ class Retrieve:
         self.sname = sname
 
     def to_dct(self):
-        return {'id': self.id, 'naam': self.sname}
+        return {'id': self.id, 'sname': self.sname}
 
 
 class ContentDataAccess:

@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS player(
     gems BIGINT,
     xp BIGINT,
     level INT,
-    logout TIMESTAMP -- Last time a user logged out at this time
+    logout TIMESTAMP -- Last time a player logged out at this time
 );
 
 CREATE TABLE IF NOT EXISTS content(
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS admin(
     name VARCHAR PRIMARY KEY REFERENCES player(name) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS guild(
+CREATE TABLE IF NOT EXISTS clan(
     name VARCHAR PRIMARY KEY,
     pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE, -- Leader Relation
     status VARCHAR,
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS friend(
 
 CREATE TABLE IF NOT EXISTS member(
     pname VARCHAR  REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    gname VARCHAR REFERENCES guild(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    gname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (pname,gname)
 );
 
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS retrieved(
 
 CREATE TABLE IF NOT EXISTS shared(
     mid SERIAL REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    gname VARCHAR REFERENCES guild(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    gname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (mid,gname)
 );
 

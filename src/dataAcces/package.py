@@ -12,9 +12,6 @@ class Package:
         self.gems = args[5]
         self.xp = args[6]
 
-    def __init__(self):
-        pass
-
     def to_dct(self):
         return dict(id=self.id, stone=self.stone, wood=self.wood, steel=self.steel, food=self.food, gems=self.gems,
                     xp=self.xp)
