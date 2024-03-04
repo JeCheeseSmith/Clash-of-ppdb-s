@@ -21,7 +21,6 @@ function Grid()
     {
         if (rowIndex >= 1 && rowIndex <= 4 && colIndex >= 2 && colIndex <= 5)
         {
-            // Calculate the center position of the 4x4 region
             const centerX = (2 + 5) / 2;
             const centerY = (1 + 4) / 2;
             return (

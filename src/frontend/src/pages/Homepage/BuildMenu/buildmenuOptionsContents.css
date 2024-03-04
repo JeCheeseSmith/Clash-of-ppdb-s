@@ -28,16 +28,6 @@
   overflow-x: auto;
 }
 
-/* Hide scrollbar by default */
-.type-container::-webkit-scrollbar {
-  display: none;
-}
-
-/* Show scrollbar on hover */
-.type-container:hover::-webkit-scrollbar {
-  display: block;
-}
-
 /* Customize scrollbar */
 .type-container::-webkit-scrollbar {
   width: 10px; /* Set the width of the scrollbar */
