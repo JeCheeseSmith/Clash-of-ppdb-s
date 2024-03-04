@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './buildmenu.css'
 import './buildmenuOptionsContents.css'
+import castleIcon1 from '../../../assets/castle-icon.png';
 function BuildMenu()
 {
     const [menuVisible, setMenuVisible] = useState(false); // State variable to track build menu visibility
@@ -19,42 +20,47 @@ function BuildMenu()
                 <div className="image-container"></div>
             </button>
             <div>
-                <BuildOptions menuVisible={menuVisible}/>
+                <BuildOptions menuVisible={menuVisible} setMenuVisible={setMenuVisible}/>
             </div>
         </div>
     );
 }
 
-function BuildOptions({ menuVisible })
+function BuildOptions({ menuVisible, setMenuVisible})
 {
     const [currentPage, setCurrentPage] = useState('Type1');
     const handleButtonClick = (pageName) =>
     {
         setCurrentPage(pageName);
     };
+    const handleCloseButton = () =>
+    {
+        setMenuVisible(false);
+    };
     return (
       <div className="buildoptions-container">
+          <button className={`closeMenu ${menuVisible ? 'visible' : 'hidden'}`} onClick={handleCloseButton}>close</button>
           {menuVisible && (
               <nav className="options-content">
                   <ul className="buildoptions-links">
                       <li>
-                          <button onClick={() => handleButtonClick('Type1')} className={"type"}>
-                              Type1
+                          <button onClick={() => handleButtonClick('Type1')} className={"type-button"}>
+                              Army
                           </button>
                       </li>
                       <li>
-                          <button onClick={() => handleButtonClick('Type2')} className={"type"}>
-                              Type2
+                          <button onClick={() => handleButtonClick('Type2')} className={"type-button"}>
+                              Defences
                           </button>
                       </li>
                       <li>
-                          <button onClick={() => handleButtonClick('Type3')} className={"type"}>
-                              Type3
+                          <button onClick={() => handleButtonClick('Type3')} className={"type-button"}>
+                              Traps
                           </button>
                       </li>
                       <li>
-                          <button onClick={() => handleButtonClick('Type4')} className={"type"}>
-                              Type4
+                          <button onClick={() => handleButtonClick('Type4')} className={"type-button"}>
+                              Decorations
                           </button>
                       </li>
                   </ul>
@@ -73,33 +79,67 @@ function BuildOptions({ menuVisible })
     );
 }
 
-function Type1() {
-    return (
-        <div className={"Type1"}>
+function Type1()
+{
+  const handleClick = (imageNumber) =>
+  {
+      console.log(`Image ${imageNumber} clicked`);
+  };
 
-        </div>
-    )
+  return (
+    <div className="type-container">
+      <div className="image-scroll-container">
+        <img src={castleIcon1} alt="Image 1" className="small-image" onClick={() => handleClick(1)} />
+        <img src={castleIcon1} alt="Image 2" className="small-image" onClick={() => handleClick(2)} />
+        <img src={castleIcon1} alt="Image 3" className="small-image" onClick={() => handleClick(3)} />
+        <img src={castleIcon1} alt="Image 3" className="small-image" onClick={() => handleClick(3)} />
+      </div>
+    </div>
+  );
 }
-function Type2() {
-    return (
-        <div className={"Type2"}>
 
-        </div>
-    )
+function Type2()
+{
+  return (
+    <div className="type-container">
+      <div className="image-scroll-container">
+        <img src={castleIcon1} alt="Image 4" className="small-image"/>
+        <img src={castleIcon1} alt="Image 5" className="small-image"/>
+      </div>
+    </div>
+  );
 }
-function Type3() {
-    return (
-        <div className={"Type3"}>
 
-        </div>
-    )
+function Type3()
+{
+  return (
+    <div className="type-container">
+      <div className="image-scroll-container">
+        <img src={castleIcon1} alt="Image 7" className="small-image"/>
+        <img src={castleIcon1} alt="Image 8" className="small-image"/>
+        <img src={castleIcon1} alt="Image 9" className="small-image"/>
+      </div>
+    </div>
+  );
 }
-function Type4() {
-    return (
-        <div className={"Type4"}>
 
-        </div>
-    )
+function Type4()
+{
+  return (
+    <div className="type-container">
+      <div className="image-scroll-container">
+        <img src={castleIcon1} alt="Image 10" className="small-image"/>
+        <img src={castleIcon1} alt="Image 11" className="small-image"/>
+        <img src={castleIcon1} alt="Image 12" className="small-image"/>
+        <img src={castleIcon1} alt="Image 12" className="small-image"/>
+        <img src={castleIcon1} alt="Image 12" className="small-image"/>
+        <img src={castleIcon1} alt="Image 12" className="small-image"/>
+        <img src={castleIcon1} alt="Image 12" className="small-image"/>
+        <img src={castleIcon1} alt="Image 12" className="small-image"/>
+        <img src={castleIcon1} alt="Image 12" className="small-image"/>
+      </div>
+    </div>
+  );
 }
 
 export default BuildMenu;

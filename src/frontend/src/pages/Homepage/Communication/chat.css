@@ -31,7 +31,7 @@
 
 .chat-container.hidden {
     left: -500px; /* Slide out when hidden */
-  }
+}
 
 .message-display {
     flex-grow: 1;
