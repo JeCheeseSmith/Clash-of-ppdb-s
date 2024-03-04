@@ -1,11 +1,29 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./social.css"
 import "./socialOptionContents.css"
 import buttonSocial from '../../../assets/Menu Selection Sound Effect.mp3';
 import buttonOption from '../../../assets/socialOptionSound.mp3';
 
+const SocialBoxData = async (data, endpoint) =>
+{
+    await fetch('http://127.0.0.1:5000'+endpoint, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+};
+
 function SocialBox() {
   const [socialVisible, setSocialVisible] = useState(false);
+
+  
   const toggleSocialVisibility = () => {
     setSocialVisible(!socialVisible);
   };
@@ -89,27 +107,63 @@ function Navbar({ socialVisible }) {
   );
 }
 
-// Example page components
-function CreateClanPage() {
-  return (
-      <div className={"create-clan"}>
-          <input className={"nameClan"} placeholder={"Name"} />
-          <select className={"clanStatus"} aria-placeholder={"status"} defaultValue="Status">
-              <option value="option1">Online</option>
-              <option value="option2">Offline</option>
-              <option value="option3">Currently Building</option>
-          </select>
-          <textarea className={"descriptionClan"} placeholder={"Description"}/>
-          <button className={"create-clan-button"}>Create Clan</button>
-      </div>
-  )
+function CreateClanPage()
+{
+    const [clanName, setClanName] = useState("");
+    const [clanDescription, setClanDescription] = useState("");
+    const [clanStatus,setClanStatus] = useState("")
+    const [clanLeader, setClanLeader] = useState("watson")
+    const handleclanName = (e) =>
+    {
+        setClanName(e.target.value);
+    };
+    const handleclanDescription = (e) =>
+    {
+        setClanDescription(e.target.value);
+    };
+    const handleClanStatus = (e) =>
+    {
+        setClanStatus(e.target.value);
+    };
+    const handleclanLeader= (e) =>
+    {
+        setClanLeader(e.target.value);
+    };
+    const handleButtonClick = () =>
+    {
+        SocialBoxData({name:clanName, description:clanDescription,status:clanStatus, pname: clanLeader}, "/createClan");
+    };
+
+    return (
+        <div className={"create-clan"}>
+            <input value={clanName} onChange={handleclanName} className={"nameClan"} placeholder={"Name"} />
+            <select className={"clanStatus"} aria-placeholder={"status"} defaultValue="Status">
+                <option value="option1">Online</option>
+                <option value="option2">Offline</option>
+                <option value="option3">Currently Building</option>
+            </select>
+            <textarea value={clanDescription} onChange={handleclanDescription} className={"descriptionClan"} placeholder={"Description"}/>
+            {/* Attach handleCreateClan function to onClick event of the button */}
+            <button className={"create-clan-button"} onClick={handleButtonClick} >Create Clan</button>
+        </div>
+    );
 }
 
 function JoinClanPage() {
+    
+    const [clan, setClan] = useState("");
+    const handleInputChange = (e) =>
+    {
+        setClan(e.target.value);
+    };
+    const handleButtonClick = () =>
+    {
+        SocialBoxData(clan, "/joinClan");
+    };
     return (
         <div className={"create-clan"}>
-          <input className={"nameClan"} placeholder={"Search Clan Name..."}/>
-          <button className={"join-clan-button"}>Search Clan</button>
+          <input value={clan} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Clan Name..."}/>
+          <button className={"join-clan-button"} onClick={handleButtonClick} >Search Clan</button>
         </div>
     )
 }
@@ -122,11 +176,22 @@ function FriendRequestsPage() {
     )
 }
 
-function SearchPersonPage() {
+function SearchPersonPage()
+{
+    const [person, setPerson] = useState("");
+
+    const handleInputChange = (e) =>
+    {
+        setPerson(e.target.value);
+    };
+    const handleButtonClick = () =>
+    {
+        SocialBoxData(person, "/searchPerson");
+    };
     return (
         <div className={"create-clan"}>
-          <input className={"nameClan"} placeholder={"Search Name..."}/>
-          <button className={"join-clan-button"}>Search Person</button>
+          <input value={person} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Name..."}/>
+          <button className={"join-clan-button"} onClick={handleButtonClick} >Search Person</button>
         </div>
     )
 }

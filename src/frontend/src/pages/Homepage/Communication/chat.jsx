@@ -1,5 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import './chat.css'; // CSS file for styling
+
+const SendMassege = async (massege) =>
+{
+    await fetch('http://127.0.0.1:5000/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(massege)
+    })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+};
 
 function ChatBox() {
   const [messages, setMessages] = useState([{ senderName: '', message: 'Welcome to Chat!' }]); // Initialize messages
@@ -7,6 +23,7 @@ function ChatBox() {
 
   const handleMessageSubmit = (message, senderName) => {
     setMessages([...messages, { senderName, message }]);
+    SendMassege({senderName,message})
   };
 
   const toggleChatVisibility = () =>

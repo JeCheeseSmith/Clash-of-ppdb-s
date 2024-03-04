@@ -1,0 +1,26 @@
+
+.resourceBar {
+  display: flex;
+  justify-content: center; /* Verdeelt de ruimte gelijk tussen de items */
+  align-items: center; /* Centreert items verticaal */
+  padding: 10px; /* Voegt wat ruimte binnen de balk toe */
+  background-color: #add8e6;  background-size: cover; /* Zorgt ervoor da  t de textuur de hele balk bedekt */
+  width: 25%; /* of een ander percentage of vaste waarde naar keuze */
+  /* Voeg hier eventuele andere stijlen toe */
+    margin: 0 auto; /* Dit centreert de balk horizontaal */
+  border-radius: 10px;
+  top: 0; /* Zet de balk tegen de bovenkant */
+  border: 2px solid black; /* Voegt een zwarte rand toe aan de onderkant */
+}
+
+.resourceSection {
+  flex: 1; /* Zorgt ervoor dat elke sectie flexibel groeit */
+  text-align: center; /* Centreert de afbeeldingen */
+  /* Voeg hier eventuele andere stijlen toe */
+}
+
+.resourceIcon {
+  width: 50px; /* Stel een vaste breedte in voor de iconen */
+  height: auto; /* Behoud de aspect ratio */
+  /* Voeg hier eventuele andere stijlen toe */
+}

@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import MainPage from './pages/Homepage/mainpage'
+import LoginMainPage from "./pages/Loginpage/loginMainPage.jsx";
+import RegistrationPage from "./pages/Loginpage/SignUp/signUp.jsx";
+import MainPage from "./pages/Homepage/mainpage.jsx";
+
 function App() {
-    document
-    return (
+  return (
     <>
       <div>
           <MainPage/>
       </div>
     </>
-    )
+  )
 }
 
 export default App

@@ -1,0 +1,14 @@
+
+.background {
+  position: fixed; /* Positioneer de container vast aan de viewport */
+  left: 0; /* Lijn uit aan de linkerzijde van de viewport */
+  bottom: 0; /* Lijn uit aan de onderzijde van de viewport */
+  width: 100vw; /* Zet breedte gelijk aan viewport breedte */
+  height: 100vh; /* Zet hoogte gelijk aan viewport hoogte */
+  overflow: hidden; /* Verberg overflow van de afbeelding */
+  background-image: url('./assets/background.png'); /* Stel de achtergrondafbeelding in */
+  background-size: cover; /* Bedek de container terwijl verhoudingen behouden blijven */
+  background-repeat: no-repeat; /* Herhaal de achtergrond niet */
+  background-position: right top;
+}
+
