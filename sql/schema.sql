@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS message(
 
 CREATE TABLE IF NOT EXISTS request(
     id SERIAL PRIMARY KEY REFERENCES content(id) ON DELETE CASCADE,
-    accept BOOL NOT NULL
+    accept BOOL
 );
 
 CREATE TABLE IF NOT EXISTS transferRequest(
@@ -131,8 +131,8 @@ CREATE TABLE IF NOT EXISTS friend(
 
 CREATE TABLE IF NOT EXISTS member(
     pname VARCHAR  REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    gname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (pname,gname)
+    cname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (pname,cname)
 );
 
 CREATE TABLE IF NOT EXISTS retrieved(
@@ -143,8 +143,8 @@ CREATE TABLE IF NOT EXISTS retrieved(
 
 CREATE TABLE IF NOT EXISTS shared(
     mid SERIAL REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    gname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (mid,gname)
+    cname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (mid,cname)
 );
 
 CREATE TABLE IF NOT EXISTS intercept(
@@ -235,6 +235,3 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3);
 
-INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),'May I join? :) ','watson');
-INSERT INTO request(id,accept) VALUES (1,false);
-INSERT INTO clanrequest(id) VALUES (1);
