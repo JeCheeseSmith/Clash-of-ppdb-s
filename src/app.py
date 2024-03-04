@@ -6,8 +6,8 @@ from dataAcces.package import *
 from dataAcces.settlement import *
 from dataAcces.soldier import *
 from dataAcces.transfer import *
-from src.dataAcces.clan import *
-from src.database import *
+from dataAcces.clan import *
+from database import *
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask.templating import render_template
