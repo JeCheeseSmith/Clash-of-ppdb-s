@@ -16,7 +16,8 @@ class ClanDataAccess:
     def add_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO clan(name,pname,status,description) VALUES(%s,%s,%s,%s)', (obj.name, obj.leader,obj.description,obj.status,))
+            cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
+            cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s)', (obj.name, cursor.fetchone()[0],obj.description,obj.status,))
             self.dbconnect.commit()
             return True
         except:

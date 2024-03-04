@@ -113,9 +113,8 @@ def get_buildings():
 @app.route('/createClan', methods=['POST'])
 def createClan():
     data = request.json
-
-    Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status"))
-    clan_data_acces
+    clan_data_acces.add_clan(Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
+    print(data)
 
     return jsonify({'CreateClan': True})
 
