@@ -217,6 +217,16 @@ def sendfriendrequest():
     else:
         return jsonify({'FriendRequest': controle})
 
+@app.route('/getfriendrequest', methods=['GET'])
+def getfriendrequest():
+    data = request.json
+    name = data.get('name')
+    obj = friend_data_access.get_Friendrequest(name)
+    return jsonify(obj)
+
+
+
+
 
 
 
