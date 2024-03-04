@@ -17,9 +17,27 @@ class ClanDataAccess:
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
-            cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s)', (obj.name, cursor.fetchone()[0],obj.description,obj.status,))
+            cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s)',
+                           (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
             self.dbconnect.commit()
             return True
         except:
             self.dbconnect.rollback()
             return False
+
+    def get_clan(self, obj):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;', (obj.name,)) # Get the data from the clan with this name
+        result = cursor.fetchone()
+
+        if result:  # If there is a clan with this name
+            obj.pname = result[0]
+            obj.status = result[1]
+            obj.description = result[2]
+        else:
+            obj.leader = "Not found"
+            obj.status = "Clan doesn't exists"
+            obj.description = "The clan you we're trying to find with name: " + obj.name + ("doesn't exists yet. Maybe "
+                                                                                            "you want to create your "
+                                                                                            "own clan instead?")
+        return obj

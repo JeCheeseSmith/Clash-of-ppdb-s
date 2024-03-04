@@ -211,6 +211,8 @@ INSERT INTO buildable(name,type,function,cost,drawback) VALUES('LookoutTower','d
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('BlackSmith','defense','1,1*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Tavern','defense','1,1*x',1,1);
 
+INSERT INTO buildable(name,type,function,cost,drawback) VALUES('empty','decoration','1,1*x',1,1);
+
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('OrderKnight','HeavyInfantry',45,25,5,4,1,1);

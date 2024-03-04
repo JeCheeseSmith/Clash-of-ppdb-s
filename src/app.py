@@ -113,17 +113,30 @@ def get_buildings():
 @app.route('/createClan', methods=['POST'])
 def createClan():
     data = request.json
-    clan_data_acces.add_clan(Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
-    print(data)
-
-    return jsonify({'CreateClan': True})
+    succes = clan_data_acces.add_clan(
+        Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
+    return jsonify({'createClan': succes})
 
 
 @app.route('/joinClan', methods=['POST'])
 def joinClan():
     clan = request.json
     print(clan)
-    return jsonify({'JoinClan': True})
+    return jsonify({'joinClan': True})
+
+
+@app.route('/searchClan', methods=['POST'])
+def searchClan():
+    data = request.json
+    clan = clan_data_acces.get_clan(Clan(data.get('name'), None, None, None))
+    dct = clan.to_dct()
+
+    if clan.status == "Clan doesn't exists":
+        dct["searchClan"] = False
+    else:
+        dct["searchClan"] = True
+
+    return jsonify(dct)
 
 
 @app.route('/friendRequests', methods=['GET'])
