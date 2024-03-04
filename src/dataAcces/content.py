@@ -43,10 +43,10 @@ class ContentDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def SEND_message(self,obj):
+    def add_message(self,obj):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(obj.id, obj.moment, obj.content, obj.pname,))
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(obj.content, obj.sender,))
             cursor.execute('INSERT INTO message(id) VALUES (DEFAULT);')
             self.dbconnect.commit()
             return True

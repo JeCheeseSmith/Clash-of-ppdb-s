@@ -209,9 +209,11 @@ def sendfriendrequest():
     message_content = data.get('content')
     message_pname = data.get('pname')
     message_sname = data.get('sname')
+    print(message_sname)
     message = Content(message_id, message_moment, message_content, message_pname)
     controle=False
     controle=friend_data_access.send_Friendrequest(message,message_sname)
+
     if controle==True:
         return jsonify({'FriendRequest':controle})
     else:

@@ -38,10 +38,16 @@ class FriendDataAccess:
     def send_Friendrequest(self,request,sname):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(request.content, request.sender))
+            print("a")
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(request.content, request.sender,))
+            print("b")
             cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
+            print("c")
             cursor.execute('INSERT INTO friendrequest(id) VALUES (DEFAULT);')
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);',sname)
+            print("d")
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', sname)
+            #DEZE WORDT NIET GEDAAN VRAAG VOOR KARS!!
+            print("e")
             return True
         except:
             self.dbconnect.rollback()
