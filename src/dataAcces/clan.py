@@ -1,3 +1,6 @@
+from src.dataAcces.content import *
+
+
 class Clan:
     def __init__(self, name, pname, description, status):
         self.name = name
@@ -17,7 +20,7 @@ class ClanDataAccess:
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
-            cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s)',
+            cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
                            (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
             self.dbconnect.commit()
             return True
@@ -27,7 +30,8 @@ class ClanDataAccess:
 
     def get_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;', (obj.name,)) # Get the data from the clan with this name
+        cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;',
+                       (obj.name,))  # Get the data from the clan with this name
         result = cursor.fetchone()
 
         if result:  # If there is a clan with this name
@@ -41,3 +45,23 @@ class ClanDataAccess:
                                                                                             "you want to create your "
                                                                                             "own clan instead?")
         return obj
+
+    def sendRequest(self, request, cname):
+        cursor = self.dbconnect.get_cursor()
+
+        try:
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
+                           (request.content, request.sender))
+            cursor.execute(
+                'INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
+            cursor.execute('INSERT INTO clanrequest(id) VALUES (DEFAULT);')
+
+            # Find the clanLeader and send him the Request
+            cursor.execute('SELECT pname FROM clan WHERE name=%s;', cname)
+            clanLeader = cursor.fetchone()
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', clanLeader)
+            return True
+        except:
+            self.dbconnect.rollback()
+
+            return False

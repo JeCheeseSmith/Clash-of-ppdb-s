@@ -1,4 +1,3 @@
-from flask import request
 from src.dataAcces.player import *
 from src.dataAcces.content import *
 from src.dataAcces.achievement import *
@@ -8,11 +7,10 @@ from src.dataAcces.settlement import *
 from src.dataAcces.soldier import *
 from src.dataAcces.transfer import *
 from src.dataAcces.clan import *
-from flask.templating import render_template
-from database import *
-
-from flask import Flask, jsonify
+from src.database import *
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+from flask.templating import render_template
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask('Travisia', static_folder='frontend/dist/static', template_folder='frontend/dist')
@@ -22,10 +20,8 @@ HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
 CORS(app)
 
 player_data_access = PlayerDataAccess(connection)  # Run on the same connection to minimise usage / # of connections
-message_data_access = ContentDataAccess(connection)
+content_data_access = ContentDataAccess(connection)
 clan_data_acces = ClanDataAccess(connection)
-
-
 # package_data_acces =
 
 
@@ -109,32 +105,86 @@ def get_buildings():
     pass
 
 
-################  SocialBox  ################
 @app.route('/createClan', methods=['POST'])
 def createClan():
+    """
+    API Endpoint to create a new Clan
+
+    JSON Input Format
+    {
+    'name': <string> | The name of th e clan
+    'pname': <string> | Clan Leader name (Player Entity)
+    'description': <string> | Info about the clan
+    'status': <string> | Current Clan status - Oneliner
+    }
+
+    JSON Output Format:
+    {
+    'succes': <bool> | State of request
+    }
+    """
     data = request.json
     succes = clan_data_acces.add_clan(
         Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
-    return jsonify({'createClan': succes})
+    return jsonify({'succes': succes})
 
 
 @app.route('/joinClan', methods=['POST'])
 def joinClan():
-    clan = request.json
-    print(clan)
-    return jsonify({'joinClan': True})
+    """
+    Make a request to join the Clan; sends a message to the Clan Leader too
+
+    JSON Input Format:
+
+    {
+    'cname': <string>,
+    'sender': <string>
+    }
+
+    JSON Output Format:
+
+    {
+    'succes': <bool> | State of request
+    'message': <string> | Standard reply
+    }
+    """
+    data = request.json
+
+    request = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
+    cname = data.get('cname') # Name of the clan
+    succes = clan_data_acces.sendRequest(request, cname)
+
+    return jsonify({'succes': succes, 'message': "Your request has been send. Please await further correspondence!"})
 
 
 @app.route('/searchClan', methods=['POST'])
 def searchClan():
+    """
+    Search for a particular clan and retrieve its information
+
+    JSON Input Format
+    {
+    'name': <string> | Clan name
+    }
+
+    JSON Output Format
+    {
+    'succes': <bool> | Status
+    'name': <string> | Clan Name
+    'pname': <string> | Clan Leader name (Player Entity)
+    'description': <string> | Info about the clan
+    'status': <string> | Current Clan status - Oneliner
+    }
+    """
+
     data = request.json
     clan = clan_data_acces.get_clan(Clan(data.get('name'), None, None, None))
     dct = clan.to_dct()
 
     if clan.status == "Clan doesn't exists":
-        dct["searchClan"] = False
+        dct["succes"] = False
     else:
-        dct["searchClan"] = True
+        dct["succes"] = True
 
     return jsonify(dct)
 
@@ -161,6 +211,11 @@ def searchPlayer():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
+    """
+    Standard catch_all to serve each file
+    :param path:
+    :return:
+    """
     return render_template("index.html")
 
 
