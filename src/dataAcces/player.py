@@ -1,4 +1,6 @@
 from src.dataAcces.settlement import *
+
+from src.dataAcces.content import *
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout):
         self.name = name
@@ -11,6 +13,7 @@ class Player:
 
     def to_dct(self):
         return {'name': self.name, 'password': self.password,'avatar': self.avatar, 'gems': self.gems, 'xp': self.xp, 'level': self.level, 'logout': self.logout}
+
 
 
 class PlayerDataAccess:
@@ -42,3 +45,13 @@ class PlayerDataAccess:
         :return:
         """
         pass
+
+
+    def search_player(self,name):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT EXISTS(SELECT 1 FROM player WHERE name = %s)", (name,))
+        Pname = cursor.fetchone()[0]
+        if Pname:
+            return True
+        else:
+            return False
