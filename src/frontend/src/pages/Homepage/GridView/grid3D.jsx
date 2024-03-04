@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
+import House from "./models/House.jsx";
 
 function Grid()
 {
@@ -25,8 +26,7 @@ function Grid()
             const centerY = (1 + 4) / 2;
             return (
                 <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 7, centerY - gridSize / 2]}>
-                    <boxGeometry args={[4, 2, 4]} />
-                    <meshBasicMaterial color="green" />
+                    <House/>
                 </mesh>
             );
         }
@@ -42,15 +42,20 @@ function Grid()
     };
 
     return (
-        <Canvas camera={{ position: [40, 35, 60] }} className={"grid"}>
-            <ambientLight />
-            <pointLight position={[10, 10, 10]} />
-            <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={30} minDistance={15} />
-            {
-                grid.map((row, rowIndex) => (
-                row.map((cell, colIndex) => renderCell(rowIndex, colIndex))))
-            }
-        </Canvas>
+        <Suspense fallback={null}>
+            <Canvas camera={{ position: [40, 35, 60] }} className={"grid"}>
+                <directionalLight/>
+                <ambientLight/>
+                <pointLight/>
+                <spotLight/>
+                <hemisphereLight/>
+                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={30} minDistance={15} />
+                {
+                    grid.map((row, rowIndex) => (
+                    row.map((cell, colIndex) => renderCell(rowIndex, colIndex))))
+                }
+            </Canvas>
+        </Suspense>
     );
 }
 
