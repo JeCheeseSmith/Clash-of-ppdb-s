@@ -190,6 +190,8 @@ CREATE TABLE IF NOT EXISTS achieved(
 );
 
 INSERT INTO player(name,password) VALUES('watson','1234');
+INSERT INTO player(name,password) VALUES('jonas','1234');
+INSERT INTO player(name,password) VALUES('abu','1234');
 INSERT INTO player(name,password) VALUES('admin','1234');
 
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','0','0');
@@ -232,3 +234,7 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3);
+
+INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),'May I join? :) ','watson');
+INSERT INTO request(id,accept) VALUES (1,false);
+INSERT INTO clanrequest(id) VALUES (1);
