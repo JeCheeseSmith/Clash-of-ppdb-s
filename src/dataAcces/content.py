@@ -1,5 +1,4 @@
 
-
 class Content:
     def __init__(self, id, moment, content, sender):
         self.id = id
@@ -11,7 +10,7 @@ class Content:
         return {'id': self.id, 'moment': self.moment, 'content': self.content, 'sender': self.sender}
 
 class Request(Content):
-    def __init__(self,id, moment, content, sender, accept):
+    def __init__(self ,id, moment, content, sender, accept):
         super(Content, self).__init__(id, moment, content, sender)
         self.accept = accept
 
@@ -26,6 +25,18 @@ class Retrieve:
 
     def to_dct(self):
         return {'id': self.id, 'sname': self.sname}
+
+class ClanRequestDataAccess:
+    def __init__(self, dbconnect):
+        self.dbconnect = dbconnect
+
+class TransferRequestDataAccess:
+    def __init__(self, dbconnect):
+        self.dbconnect = dbconnect
+
+class FriendRequestDataAccess:
+    def __init__(self, dbconnect):
+        self.dbconnect = dbconnect
 
 
 class ContentDataAccess:
@@ -57,7 +68,7 @@ class ContentDataAccess:
 
     def get_chatbox(self, pname):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT EXISTS(SELECT 1 FROM message WHERE pname = %s)",(pname,))
+        cursor.execute("SELECT EXISTS(SELECT 1 FROM message WHERE pname = %s)" ,(pname,))
         name = cursor.fetchone()[0]
         print(name)
 
@@ -70,14 +81,14 @@ class ContentDataAccess:
                     LIMIT 10
                 """
             cursor.execute(messages, (pname,))
-            messages=cursor.fetchall()
-            chatbox=[]
+            messages =cursor.fetchall()
+            chatbox =[]
             for message in messages:
-                message_dict={
-                    "id":message[0],
-                    "moment":str(message[1]),
-                    "content":message[2],
-                    "pname":message[3]
+                message_dict ={
+                    "id" :message[0],
+                    "moment" :str(message[1]),
+                    "content" :message[2],
+                    "pname" :message[3]
                 }
                 chatbox.append(message_dict)
                 return chatbox
