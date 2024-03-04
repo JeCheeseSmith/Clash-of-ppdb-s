@@ -1,21 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './buildmenu.css'
-
-import buttonOption from "../../../assets/socialOptionSound.mp3";
-
+import './buildmenuOptionsContents.css'
 function BuildMenu()
 {
     const [menuVisible, setMenuVisible] = useState(false); // State variable to track build menu visibility
-    const [buildOptions, setBuildOptions] = useState([]); // Initialize buildOptions
     const toggleMenuVisibility = () =>
     {
         setMenuVisible(!menuVisible);
     };
-
     return (
         <div>
-            <button onClick={toggleMenuVisibility}
-                    className={`toggle-menu-button ${menuVisible ? 'visible' : 'hidden'}`}>
+            <button onClick={toggleMenuVisibility} className={`toggle-menu-button ${menuVisible ? 'visible' : 'hidden'}`}>
                 <div>
                     <span className="build">Build</span>
                     <br/>
@@ -23,25 +18,24 @@ function BuildMenu()
                 </div>
                 <div className="image-container"></div>
             </button>
-            <div className="options-container">
+            <div>
                 <BuildOptions menuVisible={menuVisible}/>
             </div>
         </div>
     );
 }
 
-function BuildOptions({ menuVisible }) {
+function BuildOptions({ menuVisible })
+{
     const [currentPage, setCurrentPage] = useState('Type1');
-
     const handleButtonClick = (pageName) =>
     {
         setCurrentPage(pageName);
     };
-
     return (
       <div className="buildoptions-container">
           {menuVisible && (
-              <nav className="page-content">
+              <nav className="options-content">
                   <ul className="buildoptions-links">
                       <li>
                           <button onClick={() => handleButtonClick('Type1')} className={"type"}>

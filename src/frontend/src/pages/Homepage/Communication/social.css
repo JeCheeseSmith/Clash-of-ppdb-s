@@ -61,15 +61,6 @@
   margin-right: 6rem; /* Increase the right margin to create larger spaces */
 }
 
-.navbar-links li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-.navbar-links li a:hover {
-  text-decoration: underline;
-}
-
 .socialOption{
     background-color: rgba(84, 51, 6, 0.95);
     color: white;
