@@ -1,8 +1,7 @@
 from src.database import *
 
 
-
-class Message:
+class Content:
     def __init__(self, id, moment, content, pname):
         self.id = id
         self.moment = moment
@@ -22,7 +21,7 @@ class Retrieve:
         return {'id': self.id, 'naam': self.sname}
 
 
-class MessageDataAccess:
+class ContentDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 

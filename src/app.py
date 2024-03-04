@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, jsonify
 from src.dataAcces.player import *
-from src.dataAcces.message import *
+from src.dataAcces.content import *
 from flask.templating import render_template
 from database import *
 import dataAcces
@@ -16,7 +16,7 @@ HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
 CORS(app)
 
 player_data_access = PlayerDataAccess(connection)  # Run on the same connection to minimise usage / # of connections
-message_data_access = MessageDataAccess(connection)
+message_data_access = ContentDataAccess(connection)
 
 
 # package_data_acces =
@@ -107,14 +107,17 @@ def createClan():
     clan = request.json
     print(clan)
     return jsonify({'CreateClan': True})
+
 @app.route('/joinClan', methods=['POST'])
 def joinClan():
     clan = request.json
     print(clan)
     return jsonify({'JoinClan': True})
+
 @app.route('/friendRequests', methods=['GET'])
 def friendRequests():
     return jsonify({'FriendRequests': True})
+
 @app.route('/searchPerson', methods=['POST'])
 def searchPerson():
     name = request.json
