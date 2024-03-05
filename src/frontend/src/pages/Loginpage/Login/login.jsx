@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function LoginPage() {
 
     let navigate = useNavigate();
-    // Handles the navigation from sign-up button to sign-up page
+    // Handles the navigation from login page to sign-up page
     function handleSignUpClick() {
         navigate('/signup');
     }
