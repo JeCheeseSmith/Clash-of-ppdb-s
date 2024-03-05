@@ -306,8 +306,6 @@ def send_friend_request():
                'message': <string> | Standard reply
                }
 
-
-
                """
     data = request.json
     message_id = data.get('id')
@@ -326,11 +324,10 @@ def send_friend_request():
 @app.route('/getfriendrequests', methods=['GET'])
 def get_friend_requests():
     """
-
              API request to get friend requests from the player
 
 
-               JSON Input Format(GET):
+               JSON Input Format:
 
                {
                'pname': <string>
@@ -343,6 +340,42 @@ def get_friend_requests():
     pname = data.get('pname')
     obj = friend_data_access.get_Friendrequest(pname)
     return jsonify(obj)
+
+
+@app.route('/acceptfriendrequests', methods=['POST'])
+def accept_friend_requests():
+    """
+                   POST: API request to accept or decline a friend request of another player
+
+                   JSON Input Format:
+
+                   {
+                   'state': <string>
+                   'pname': <string>
+                   'sname': <string>
+                   }
+
+                   JSON Output Format:
+
+                   {
+                   'success': <bool> | State of Accepting
+                   'message': <string> | Standard reply
+                   }
+
+                   """
+    data = request.json
+    pname = data.get('pname')
+    sname = data.get('sname')
+    state = data.get('state')
+    Controle = False
+    Controle = friend_data_access.accept_Friendrequest(state,pname,sname)
+    if Controle:
+        #De andere player moet ook een melding krijgen!!!
+        return jsonify({'success': Controle, 'message': "accepted"})
+    else:
+        #De andere player moet ook een melding krijgen!!!
+        return jsonify({'success': Controle, 'message': "not accepted"})
+
 
 
 

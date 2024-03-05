@@ -11,6 +11,20 @@ class FriendDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
+    def accept_Friendrequest(self,State,pname,sname):
+        cursor = self.dbconnect.get_cursor()
+        if State==True:
+            try:
+                cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);',(pname,sname,))
+                self.dbconnect.commit()
+                return True
+            except Exception as e:
+                print("Error:", e)
+                self.dbconnect.rollback()
+                return False
+        else:
+            return False
+
     def get_Friendrequest(self,pname):
         cursor = self.dbconnect.get_cursor()
 
