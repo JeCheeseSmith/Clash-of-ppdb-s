@@ -29,35 +29,98 @@ friend_data_access = FriendDataAccess(connection)
 
 @app.route('/signin', methods=['POST'])
 def add_player():
+    """
+        API request to sign in as a new player with a unique name and password
+
+        JSON Input Format:
+
+        {
+        'name': <string>,
+        'password': <string>
+        }
+
+        JSON Output Format:
+
+        {
+        'success': <bool> | State of Signrequest
+        'message': <string> | Standard reply
+        }
+        """
     data = request.json
-    controle = False
-    playerobj = Player(name=data.get('name'), password=data.get('password'), avatar=None, gems=0, xp=0, level=0,
-                       logout=None)
-    controle = player_data_access.add_user(playerobj)
-    if controle:
-        return jsonify(playerobj.to_dct())
+    name = data.get('name')
+    password = data.get('password')
+    Controle = False
+    Player_obj = Player(name=name, password=password, avatar=None, gems=0, xp=0, level=0,logout=None)
+    Controle = player_data_access.add_user(Player_obj)
+    if Controle:
+        return jsonify({'success':Controle, 'message': "Signed in successful"})
     else:
-        return jsonify("Failed signup")
+        return jsonify({'success':Controle, 'message': "Signed in failed"})
 
 
 @app.route('/login', methods=['GET'])
 def get_login():
+    """
+            API request to log in as a player with a unique name and password
+
+            JSON Input Format:
+
+            {
+            'name': <string>,
+            'password': <string>
+            }
+
+            JSON Output Format:
+
+            {
+            'success': <bool> | State of Loginrequest
+            'message': <string> | Standard reply
+            }
+            """
     data = request.json
     player_name = data.get('name')
     player_password = data.get('password')
-    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
-                       logout=None)
-    controle = False
-    controle = player_data_access.get_login(playerobj)
-
-    if controle:
-        return "Login successful"
+    Player_obj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,logout=None)
+    Controle = False
+    Controle = player_data_access.get_login(Player_obj)
+    if Controle:
+        return jsonify({'success':Controle, 'message':"Login successful"})
     else:
-        return "Login Failed"
+        return jsonify({'success':Controle, 'message':"Login failed"})
 
 
 @app.route('/chat', methods=['POST', 'GET'])
-def update_chatbox():
+def update_chat():
+    """
+           POST: API request to send a message to another player
+           GET: API request to get messages from the player
+
+           JSON Input Format(POST):
+
+           {
+           'id': <int>,
+           'momemt': <string>
+           'content': <string>
+           'pname': <string>
+           'sname': <string>
+           }
+
+           JSON Input Format(GET):
+
+           {
+           'pname': <string>
+           }
+
+           JSON Output Format(POST):
+
+           {
+           'success': <bool> | State of Send of the message
+           'message': <string> | Standard reply
+           }
+
+           Output Format(GET): List with messages returned in json format
+
+           """
     data = request.json
     message_id = data.get('id')
     message_moment = data.get('moment')
@@ -65,15 +128,16 @@ def update_chatbox():
     message_pname = data.get('pname')
     message_sname = data.get('sname')
     if request.method == 'POST':
-         controle = False
-         chatobj = Content(message_id, message_moment, message_content, message_pname)
-         Rchatobj = Retrieve(message_id, message_sname)
-         controle = content_data_access.add_message(chatobj)
-         if controle == True:
-             controle = content_data_access.add_message2(Rchatobj)
-             return jsonify(chatobj.to_dct(), Rchatobj.to_dct())
+         Controle = False
+         Chat_obj = Content(message_id, message_moment, message_content, message_pname)
+         Rchat_obj = Retrieve(message_id, message_sname)
+         Controle = content_data_access.add_message(Chat_obj)
+         if Controle:
+             Controle = content_data_access.add_message2(Rchat_obj)
+             return jsonify({'success': Controle, 'message': "message send successful"})
          else:
-             return "Message failed to store"
+             return jsonify({'success': Controle, 'message': "Failed to send message"})
+
 
     elif request.method == 'GET':
         obj = content_data_access.get_chatbox(message_pname)
@@ -194,36 +258,90 @@ def friendRequests():
 
 
 @app.route('/searchPerson', methods=['POST'])
-def searchPlayer():
+def search_player():
+    """
+            API request to search a player that plays the game
+
+            JSON Input Format:
+
+            {
+            'pname': <string>
+            }
+
+            JSON Output Format:
+
+            {
+            'success': <bool> | State of Search of the player
+            'message': <string> | Standard reply
+            }
+            """
     data = request.json
-    name = data.get('name')
-    cotrole=False
-    controle=player_data_access.search_player(name)
-    return jsonify({'SearchPerson': controle})
+    name = data.get('pname')
+    Cotrole=False
+    Controle=player_data_access.search_player(name)
+    if Controle:
+        return jsonify({'success': Controle, 'message': "Player exists"})
+    else:
+        return jsonify({'success': Controle, 'message': "Player doesn't exists"})
 
 @app.route('/sendfriendrequest', methods=['POST'])
-def sendfriendrequest():
+def send_friend_request():
+    """
+               POST: API request to send a friend request to another player
+
+               JSON Input Format:
+
+               {
+               'id': <int>,
+               'momemt': <string>
+               'content': <string>
+               'pname': <string>
+               'sname': <string>
+               }
+
+               JSON Output Format:
+
+               {
+               'success': <bool> | State of Send of the friend request
+               'message': <string> | Standard reply
+               }
+
+
+
+               """
     data = request.json
     message_id = data.get('id')
     message_moment = data.get('moment')
     message_content = data.get('content')
     message_pname = data.get('pname')
     message_sname = data.get('sname')
-    print(message_sname)
-    message = Content(message_id, message_moment, message_content, message_pname)
-    controle=False
-    controle=friend_data_access.send_Friendrequest(message,message_sname)
-
-    if controle==True:
-        return jsonify({'FriendRequest':controle})
+    Friend_request = Content(message_id, message_moment, message_content, message_pname)
+    Controle=False
+    Controle=friend_data_access.send_Friendrequest(Friend_request,message_sname)
+    if Controle:
+        return jsonify({'success': Controle, 'message': "Friend request is send"})
     else:
-        return jsonify({'FriendRequest': controle})
+        return jsonify({'success': Controle, 'message': "Friend request isn't send"})
 
-@app.route('/getfriendrequest', methods=['GET'])
-def getfriendrequest():
+@app.route('/getfriendrequests', methods=['GET'])
+def get_friend_requests():
+    """
+
+             API request to get friend requests from the player
+
+
+               JSON Input Format(GET):
+
+               {
+               'pname': <string>
+               }
+
+               Output Format: List with friend requests returned in json format
+
+               """
     data = request.json
-    name = data.get('name')
-    obj = friend_data_access.get_Friendrequest(name)
+    pname = data.get('pname')
+    obj = friend_data_access.get_Friendrequest(pname)
     return jsonify(obj)
 
 
