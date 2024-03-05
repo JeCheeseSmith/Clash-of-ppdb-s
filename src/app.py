@@ -28,6 +28,32 @@ clan_data_acces = ClanDataAccess(connection)
 friend_data_access = FriendDataAccess(connection)
 # package_data_acces =
 
+@app.route('/joinClan', methods=['POST'])
+def joinClan():
+    """
+    Make a request to join the Clan; sends a message to the Clan Leader too
+
+    JSON Input Format:
+
+    {
+    'cname': <string>,
+    'sender': <string>
+    }
+
+    JSON Output Format:
+
+    {
+    'succes': <bool> | State of request
+    'message': <string> | Standard reply
+    }
+    """
+    data = request.json
+
+    temp = RequestTravisia(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
+    cname = data.get('cname')  # Name of the clan
+    succes = clan_data_acces.sendRequest(temp, cname)
+
+    return jsonify({'succes': succes, 'message': "Your request has been send. Please await further correspondence!"})
 
 @app.route('/signin', methods=['POST'])
 def add_player():
@@ -129,35 +155,6 @@ def createClan():
 
     return jsonify({'succes': succes})
 
-
-@app.route('/joinClan', methods=['POST'])
-def joinClan():
-    """
-    Make a request to join the Clan; sends a message to the Clan Leader too
-
-    JSON Input Format:
-
-    {
-    'cname': <string>,
-    'sender': <string>
-    }
-
-    JSON Output Format:
-
-    {
-    'succes': <bool> | State of request
-    'message': <string> | Standard reply
-    }
-    """
-    data = Request.json
-
-    request = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
-    cname = data.get('cname') # Name of the clan
-    succes = clan_data_acces.sendRequest(request, cname)
-
-    return jsonify({'succes': succes, 'message': "Your request has been send. Please await further correspondence!"})
-
-
 @app.route('/searchClan', methods=['POST'])
 def searchClan():
     """
@@ -213,7 +210,7 @@ def sendfriendrequest():
     message_sname = data.get('sname')
     print(message_sname)
 
-    message = Request(message_id, message_moment, message_content, message_pname,False)
+    message = RequestTravisia(message_id, message_moment, message_content, message_pname, False)
 
     controle=False
     controle=friend_data_access.send_Friendrequest(message,message_sname)
@@ -229,12 +226,6 @@ def getfriendrequest():
     name = data.get('name')
     obj = friend_data_access.get_Friendrequest(name)
     return jsonify(obj)
-
-
-
-
-
-
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

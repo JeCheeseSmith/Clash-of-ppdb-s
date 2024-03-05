@@ -38,7 +38,7 @@ class ClanDataAccess:
         else:
             obj.leader = "Not found"
             obj.status = "Clan doesn't exists"
-            obj.description = "The clan you we're trying to find with name: " + obj.name + ("doesn't exists yet. Maybe "
+            obj.description = "The clan you we're trying to find with name: " + obj.name + (" doesn't exists yet. Maybe "
                                                                                             "you want to create your "
                                                                                             "own clan instead?")
         return obj

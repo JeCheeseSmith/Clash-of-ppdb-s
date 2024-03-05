@@ -47,10 +47,13 @@ class FriendDataAccess:
             cursor.execute('INSERT INTO friendrequest(id) VALUES (DEFAULT);')
             print("d")
             print(sname)
-            cursor.execute('SELECT name FROM player WHERE name=%s;', sname)
+            # cursor.execute('SELECT name FROM player WHERE name=%s;', sname,)
+            # receiver = cursor.fetchone()
+            # print('t')
+            # print(receiver[0])
 
             print('t')
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', sname)
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT);')
 
             #DEZE WORDT NIET GEDAAN VRAAG VOOR KARS!!
 

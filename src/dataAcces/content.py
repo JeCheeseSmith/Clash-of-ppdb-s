@@ -9,7 +9,7 @@ class Content:
         return {'id': self.id, 'moment': self.moment, 'content': self.content, 'pname': self.pname}
 
 
-class Request(Content):
+class RequestTravisia(Content):
     def __init__(self, id, moment, content, pname, accept):
         super().__init__(id, moment, content, pname)
         self.accept = accept
