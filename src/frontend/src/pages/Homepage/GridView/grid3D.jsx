@@ -50,7 +50,7 @@ function Grid()
                 <pointLight />
                 <spotLight />
                 <hemisphereLight />
-                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={500} minDistance={0} />
+                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={42} minDistance={0} />
                 {
                     (() =>
                         {

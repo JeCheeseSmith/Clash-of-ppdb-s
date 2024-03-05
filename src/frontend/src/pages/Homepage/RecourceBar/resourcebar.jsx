@@ -1,9 +1,9 @@
 import React from 'react'; // Importing React library
 import './resourcebar.css'
-import woodLog from '/home/raadin/Documents/Clash-of-ppdb-s/src/frontend/src/assets/wood.png';
-import stone from '/home/raadin/Documents/Clash-of-ppdb-s/src/frontend/src/assets/stone.png';
-import metal from '/home/raadin/Documents/Clash-of-ppdb-s/src/frontend/src/assets/metal.png';
-import food from '/home/raadin/Documents/Clash-of-ppdb-s/src/frontend/src/assets/food.png';
+import woodLog from '../../../assets/wood.png';
+import stone from '../../../assets/stone.png';
+import metal from '../../../assets/metal.png';
+import food from '../../../assets/food.png';
 
 // Code for resource-bar
 function ResourceBar() {

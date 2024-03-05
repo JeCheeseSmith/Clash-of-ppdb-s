@@ -11,6 +11,10 @@ function LoginPage() {
         navigate('/signup');
     }
 
+    function handleLoginClick() {
+        navigate('/MainPage');
+    }
+
   return (
       // Makes a form
       <div className="login-container">
@@ -31,11 +35,11 @@ function LoginPage() {
                   {/* When you click on the Label "Password", the input box is selected */}
                   <input
                       id="password"
-                      type="text"
+                      type="password"
                   />
               </div>
               {/* Login button */}
-              <button className="login-button">Login</button>
+              <button className="login-button" onClick={handleLoginClick}>Login</button>
               {/* Sign-up button */}
               <button className="signup-button" onClick={handleSignUpClick}>Sign Up</button>
           </form>

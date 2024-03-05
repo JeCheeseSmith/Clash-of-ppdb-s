@@ -1,7 +1,14 @@
-import React from 'react'; // Importing React library
+import React from 'react';
+import {useNavigate} from "react-router-dom"; // Importing React library
 
 // Code for signing up
 function RegistrationPage() {
+
+    let navigate = useNavigate();
+    // Handles the navigation from login page to sign-up page
+    function handleSaveClick() {
+        navigate('/MainPage');
+    }
 
     return (
         // Makes a form
@@ -23,11 +30,11 @@ function RegistrationPage() {
               {/* When you click on the Label "Password", the input box is selected*/}
               <input
                   id="password"
-                  type="text"
+                  type="password"
               />
             </div>
             {/* Save button */}
-            <button className="login-button"> Save</button>
+            <button className="login-button" onClick={handleSaveClick}>Make Account</button>
           </form>
         </div>
     );
