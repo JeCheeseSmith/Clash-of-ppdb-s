@@ -4,6 +4,7 @@ import "./socialOptionContents.css"
 import "./socialData.css"
 import buttonSocial from '../../../assets/Menu Selection Sound Effect.mp3';
 import buttonOption from '../../../assets/socialOptionSound.mp3';
+import clanPicture from '../../../assets/clanPicture.jpg';
 
 /**
  * Sends data to a specified endpoint using a POST request.
@@ -201,19 +202,32 @@ function JoinClanPage() {
         <div className={"create-clan"}>
             <input value={clan} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Clan Name..."}/>
             <button className={"join-clan-button"} onClick={handleButtonClick} >Search Clan</button>
-            {succes && <ClanInformation name={name} description={description} status={status} pname={pname}/>}
+            {succes && <ClanInformation name={name} description={description} status={status} pname={pname} success={succes}/>}
         </div>
     )
 }
 
-function ClanInformation({name, description, status, pname})
-{
+function ClanInformation({name, description, status, pname, success}) {
     return(
-        <div className={"clanInformation"}>
-            {name}, {description}, {status}, {pname}
+        <div className={"clan-info-button"}>
+            <div className={"clan-container"}>
+                <div className={"main-info"}>
+                    <img src={clanPicture} alt={"clanPicture"} className={"clanPicture"}/> <br/>
+                    <div className={"name-pname"}>
+                        <div className={"name"}>{name}</div>
+                        <div className={"pname"}>{success} Clan Leader: {pname}</div>
+                    </div>
+                </div>
+                <div className={"extra-info"}>
+                    <div className={"status"}>{status}</div>
+                    <div className={"description"}>{description}</div>
+                </div>
+            </div>
+            <button className={"clan-request-button"}>Send Request</button>
         </div>
     )
 }
+
 
 function FriendRequestsPage() {
     return (
@@ -223,22 +237,19 @@ function FriendRequestsPage() {
     )
 }
 
-function SearchPersonPage()
-{
+function SearchPersonPage() {
     const [person, setPerson] = useState("");
 
-    const handleInputChange = (e) =>
-    {
+    const handleInputChange = (e) => {
         setPerson(e.target.value);
     };
-    const handleButtonClick = () =>
-    {
+    const handleButtonClick = () => {
         SocialBoxData(person, "/searchPerson");
     };
     return (
         <div className={"create-clan"}>
-          <input value={person} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Name..."}/>
-          <button className={"search-friend-button"} onClick={handleButtonClick} >Search Person</button>
+            <input value={person} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Name..."}/>
+            <button className={"search-friend-button"} onClick={handleButtonClick} >Search Person</button>
         </div>
     )
 }
