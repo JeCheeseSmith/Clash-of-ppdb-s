@@ -10,6 +10,11 @@ function Grid()
     // State variable to hold the coordinates of the house
     const [housePosition, setHousePosition] = useState({location:[4, 3], type:"house"}); // Initial position
 
+    const handleCellClick = (rowIndex, colIndex) =>
+    {
+        setHousePosition({location:[rowIndex, colIndex], type: "house"})
+    };
+
     const renderCell = (rowIndex, colIndex) =>
     {
         if (rowIndex === housePosition.location[0] && colIndex === housePosition.location[1])
@@ -18,7 +23,9 @@ function Grid()
             const centerX = colIndex + 0.5;
             const centerY = rowIndex + 0.5;
             return (
-                <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
+                <mesh key={`${rowIndex}-${colIndex}`}
+                      position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}
+                >
                     <House />
                 </mesh>
             );
@@ -27,8 +34,9 @@ function Grid()
         {
             return (
                 <gridHelper key={`${rowIndex}-${colIndex}`}
-                    position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
-                    args={[1, 1]}
+                            position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
+                            args={[1, 1]}
+                            onClick={() => handleCellClick(rowIndex, colIndex)}
                 />
             );
         }
@@ -42,7 +50,7 @@ function Grid()
                 <pointLight />
                 <spotLight />
                 <hemisphereLight />
-                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={35} minDistance={0} />
+                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={40} minDistance={0} />
                 {
                     (() =>
                         {
