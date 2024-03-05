@@ -1,3 +1,14 @@
+from src.dataAcces.player import *
+from src.dataAcces.content import *
+from src.dataAcces.achievement import *
+from src.dataAcces.building import *
+from src.dataAcces.package import *
+from src.dataAcces.settlement import *
+from src.dataAcces.soldier import *
+from src.dataAcces.transfer import *
+from src.dataAcces.friend import *
+from src.dataAcces.clan import *
+from src.database import *
 from dataAcces.player import *
 from dataAcces.content import *
 from dataAcces.achievement import *
@@ -22,16 +33,15 @@ CORS(app)
 player_data_access = PlayerDataAccess(connection)  # Run on the same connection to minimise usage / # of connections
 content_data_access = ContentDataAccess(connection)
 clan_data_acces = ClanDataAccess(connection)
+friend_data_access = FriendDataAccess(connection)
 # package_data_acces =
 
 
-@app.route('/Signin', methods=['POST'])
+@app.route('/signin', methods=['POST'])
 def add_player():
     data = request.json
-    player_name = data.get('name')
-    player_password = data.get('password')
     controle = False
-    playerobj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
+    playerobj = Player(name=data.get('name'), password=data.get('password'), avatar=None, gems=0, xp=0, level=0,
                        logout=None)
     controle = player_data_access.add_user(playerobj)
     if controle:
@@ -59,31 +69,29 @@ def get_login():
 @app.route('/chat', methods=['POST', 'GET'])
 def update_chatbox():
     data = request.json
-    # test voor chatbox (onderstaande 2 lijnen mag weg)
-    print(data)
-    return jsonify("Updated chatbox")
-    # message_id = data.get('id')
-    # message_moment = data.get('moment')
-    # message_content = data.get('content')
-    # message_pname = data.get('pname')
-    # message_sname = data.get('sname')
-    # if request.method == 'POST':
-    #     controle = False
-    #     chatobj = Message(message_id, message_moment, message_content, message_pname)
-    #     Rchatobj = Retrieve(message_id, message_sname)
-    #     controle = message_data_access.add_message(chatobj)
-    #     if controle == True:
-    #         controle = message_data_access.add_message2(Rchatobj)
-    #         return jsonify(chatobj.to_dct(), Rchatobj.to_dct())
-    #     else:
-    #         return "Message failed to store"
-    #
-    # elif request.method == 'GET':
-    #     obj = message_data_access.get_chatbox(message_pname)
-    #     return jsonify(obj)
+    message_id = data.get('id')
+    message_moment = data.get('moment')
+    message_content = data.get('content')
+    message_pname = data.get('pname')
+    message_sname = data.get('sname')
+    if request.method == 'POST':
+         controle = False
+         chatobj = Content(message_id, message_moment, message_content, message_pname)
+         Rchatobj = Retrieve(message_id, message_sname)
+         controle = content_data_access.add_message(chatobj)
+         if controle == True:
+             controle = content_data_access.add_message2(Rchatobj)
+             return jsonify(chatobj.to_dct(), Rchatobj.to_dct())
+         else:
+             return "Message failed to store"
+
+    elif request.method == 'GET':
+        obj = content_data_access.get_chatbox(message_pname)
+        return jsonify(obj)
 
 
-@app.route('/resources/<int:id>', methods=['GET'])
+
+@app.route('/resources', methods=['GET'])
 def get_resources():
     """
     Function to retrieve current amount of resources of a settlement
@@ -126,6 +134,7 @@ def createClan():
     data = request.json
     succes = clan_data_acces.add_clan(
         Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
+
     return jsonify({'succes': succes})
 
 
@@ -148,7 +157,7 @@ def joinClan():
     'message': <string> | Standard reply
     }
     """
-    data = request.json
+    data = Request.json
 
     request = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
     cname = data.get('cname') # Name of the clan
@@ -196,9 +205,42 @@ def friendRequests():
 
 @app.route('/searchPerson', methods=['POST'])
 def searchPlayer():
-    name = request.json
-    print(name)
-    return jsonify({'SearchPerson': True})
+    data = request.json
+    name = data.get('name')
+    cotrole=False
+    controle=player_data_access.search_player(name)
+    return jsonify({'SearchPerson': controle})
+
+@app.route('/sendfriendrequest', methods=['POST'])
+def sendfriendrequest():
+    data = request.json
+    message_id = data.get('id')
+    message_moment = data.get('moment')
+    message_content = data.get('content')
+    message_pname = data.get('pname')
+    message_sname = data.get('sname')
+    print(message_sname)
+    message = Content(message_id, message_moment, message_content, message_pname)
+    controle=False
+    controle=friend_data_access.send_Friendrequest(message,message_sname)
+
+    if controle==True:
+        return jsonify({'FriendRequest':controle})
+    else:
+        return jsonify({'FriendRequest': controle})
+
+@app.route('/getfriendrequest', methods=['GET'])
+def getfriendrequest():
+    data = request.json
+    name = data.get('name')
+    obj = friend_data_access.get_Friendrequest(name)
+    return jsonify(obj)
+
+
+
+
+
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
