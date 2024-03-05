@@ -1,4 +1,6 @@
 
+Also see stats.odt / https://docs.google.com/document/d/1NPCh-eCaVWMZpIOB37ut8xCqsfIeD3AStPSm6Jjfyx4/edit#heading=h.mlj3clo6yci5
+
 ### Buildings
 
 Initial build time for all buildings is 10 seconds unless otherwise stated
