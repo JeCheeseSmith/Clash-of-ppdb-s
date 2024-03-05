@@ -40,22 +40,22 @@ class FriendDataAccess:
         try:
             print("a")
             print(request.to_dct())
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(request.content, request.pname))
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(request.content, request.pname,))
             print("b")
             cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
             print("c")
             cursor.execute('INSERT INTO friendrequest(id) VALUES (DEFAULT);')
             print("d")
             print(sname)
-            # cursor.execute('SELECT name FROM player WHERE name=%s;', sname,)
-            # receiver = cursor.fetchone()
-            # print('t')
-            # print(receiver[0])
 
+            cursor.execute('SELECT name FROM player WHERE name=%s;', (sname,) )
+            receiver = cursor.fetchone()
+            print(receiver)
             print('t')
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT);')
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);' , receiver)
 
             #DEZE WORDT NIET GEDAAN VRAAG VOOR KARS!!
+            self.dbconnect.commit()
 
             print("e")
             return True
