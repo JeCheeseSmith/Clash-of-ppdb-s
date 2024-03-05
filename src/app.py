@@ -203,14 +203,12 @@ def searchPlayer():
 @app.route('/sendfriendrequest', methods=['POST'])
 def sendfriendrequest():
     data = request.json
-    message_id = data.get('id')
-    message_moment = data.get('moment')
     message_content = data.get('content')
     message_pname = data.get('pname')
     message_sname = data.get('sname')
     print(message_sname)
 
-    message = RequestTravisia(message_id, message_moment, message_content, message_pname, False)
+    message = RequestTravisia(None, None, message_content, message_pname, False)
 
     controle=False
     controle=friend_data_access.send_Friendrequest(message,message_sname)

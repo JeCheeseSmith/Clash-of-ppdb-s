@@ -18,7 +18,7 @@ class ClanDataAccess:
         try: # Insert Clan Object into the Database
             cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
             cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
-                           (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
+                           (obj.name, cursor.fetchone()[0], obj.description, obj.status))
             self.dbconnect.commit()
             return True
         except:
@@ -47,15 +47,16 @@ class ClanDataAccess:
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
-                           (request.content, request.sender))
+                           (request.content, request.pname))
             cursor.execute(
                 'INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
             cursor.execute('INSERT INTO clanrequest(id) VALUES (DEFAULT);')
 
             # Find the clanLeader and send him the Request
-            cursor.execute('SELECT pname FROM clan WHERE name=%s;', cname)
+            cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,) )
             clanLeader = cursor.fetchone()
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', clanLeader)
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', (clanLeader,))
+            self.dbconnect.commit()
             return True
         except:
             self.dbconnect.rollback()
