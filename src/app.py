@@ -1,14 +1,6 @@
-from src.dataAcces.player import *
-from src.dataAcces.content import *
-from src.dataAcces.achievement import *
-from src.dataAcces.building import *
-from src.dataAcces.package import *
-from src.dataAcces.settlement import *
-from src.dataAcces.soldier import *
-from src.dataAcces.transfer import *
-from src.dataAcces.friend import *
-from src.dataAcces.clan import *
-from src.database import *
+from dataAcces.friend import *
+from dataAcces.clan import *
+from database import *
 from dataAcces.player import *
 from dataAcces.content import *
 from dataAcces.achievement import *
@@ -133,7 +125,7 @@ def createClan():
     """
     data = request.json
     succes = clan_data_acces.add_clan(
-        Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
+    Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
 
     return jsonify({'succes': succes})
 
@@ -220,14 +212,16 @@ def sendfriendrequest():
     message_pname = data.get('pname')
     message_sname = data.get('sname')
     print(message_sname)
-    message = Content(message_id, message_moment, message_content, message_pname)
+
+    message = Request(message_id, message_moment, message_content, message_pname,False)
+
     controle=False
     controle=friend_data_access.send_Friendrequest(message,message_sname)
 
     if controle==True:
         return jsonify({'FriendRequest':controle})
     else:
-        return jsonify({'FriendRequest': controle})
+        return jsonify({'FriendRequest':controle})
 
 @app.route('/getfriendrequest', methods=['GET'])
 def getfriendrequest():
