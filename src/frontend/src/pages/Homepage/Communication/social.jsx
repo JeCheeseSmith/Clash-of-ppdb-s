@@ -163,11 +163,7 @@ function CreateClanPage()
     return (
         <div className={"create-clan"}>
             <input value={clanName} onChange={handleclanName} className={"nameClan"} placeholder={"Name"} />
-            <select className={"clanStatus"} aria-placeholder={"status"} defaultValue="Status">
-                <option value="option1">Online</option>
-                <option value="option2">Offline</option>
-                <option value="option3">Currently Building</option>
-            </select>
+            <input className={"clanStatus"} placeholder={"status"}/>
             <textarea value={clanDescription} onChange={handleclanDescription} className={"descriptionClan"} placeholder={"Description"}/>
             {/* Attach handleCreateClan function to onClick event of the button */}
             <button className={"create-clan-button"} onClick={handleButtonClick} >Create Clan</button>
@@ -217,7 +213,7 @@ function SearchPersonPage()
     return (
         <div className={"create-clan"}>
           <input value={person} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Name..."}/>
-          <button className={"join-clan-button"} onClick={handleButtonClick} >Search Person</button>
+          <button className={"search-friend-button"} onClick={handleButtonClick} >Search Person</button>
         </div>
     )
 }

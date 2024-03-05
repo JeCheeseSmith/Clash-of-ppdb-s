@@ -1,5 +1,5 @@
 .navbar-container{
-    width: 60%;
+    width: 70%;
 }
 
 .page-content{
@@ -55,7 +55,7 @@
     font-family: "Fira Code", cursive;
     color: white;
     padding: 23px;
-    margin-left: 60px; /* Adjusted margin-left */
+    margin-left: 100px; /* Adjusted margin-left */
     border-radius: 20px;
     position: relative;
     bottom: 30px;
@@ -66,6 +66,7 @@
 .clanStatus{
     width: 25%;
     margin: 20px;
+    padding: 10px;
     font-size: 15px;
     font-family: "Fira Code", serif;
     border-radius: 10px;
@@ -86,7 +87,7 @@
     top:2px;
     right: 20px;
     padding: 10px;
-    margin-left: 60px; /* Adjusted margin-left */
+    margin-left: 100px; /* Adjusted margin-left */
     border-radius: 20px;
     position: relative;
     bottom: 30px;
@@ -99,4 +100,18 @@
     color: white;
     font-family: "Fira Code", serif;
     font-size: 50px;
+}
+
+.search-friend-button {
+    background-color: green;
+    font-family: "Fira Code", cursive;
+    color: white;
+    top:2px;
+    right: 20px;
+    padding: 10px;
+    margin-left: 100px; /* Adjusted margin-left */
+    border-radius: 20px;
+    position: relative;
+    bottom: 30px;
+    font-size: 18px;
 }
