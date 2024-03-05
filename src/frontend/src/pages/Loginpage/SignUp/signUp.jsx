@@ -1,46 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react'; // Importing React library
 
 // Code for signing up
-
 function RegistrationPage() {
 
-    const [name, setName] = useState('Kars');
-    const [password, setPassword] = useState('hallo');
-
-    const dataToSend = { username: name, password: password };
-
-    fetch('http://127.0.0.1:5000/test2', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(dataToSend)
-    });
-
     return (
-        // Make a form
+        // Makes a form
         <div className="login-container">
-            <h1 className="gametitle">TRAVISIA</h1>
-            <h2 className="subtitle">FALLEN EMPIRE</h2>
-            <form className="login-form">
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                    />
-                </div>
-                <button className="save-button"> Save</button>
-            </form>
+          <h1 className="gametitle">TRAVISIA</h1>
+          <h2 className="subtitle">FALLEN EMPIRE</h2>
+          <form className="login-form">
+            <div>
+              {/* <div> groupes the label and input together on one line */}
+              <label htmlFor="username">Username:</label>
+              {/* When you click on the Label "Username", the input box is selected */}
+              <input
+                  id="username"
+                  type="text"
+              />
+            </div>
+            <div>
+              <label htmlFor="password">Password:</label>
+              {/* When you click on the Label "Password", the input box is selected*/}
+              <input
+                  id="password"
+                  type="text"
+              />
+            </div>
+            {/* Save button */}
+            <button className="login-button"> Save</button>
+          </form>
         </div>
     );
 }

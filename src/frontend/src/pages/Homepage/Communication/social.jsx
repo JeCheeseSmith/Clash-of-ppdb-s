@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import "./social.css"
 import "./socialOptionContents.css"
 import buttonSocial from '../../../assets/Menu Selection Sound Effect.mp3';
@@ -33,7 +33,6 @@ function SocialBox() {
     sound.currentTime = 0.315;
     sound.play();
   };
-
 
   return (
       <div>

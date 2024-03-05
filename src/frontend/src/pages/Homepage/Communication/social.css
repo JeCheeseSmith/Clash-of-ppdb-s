@@ -31,7 +31,7 @@
     position: absolute;
     left: 500px; /* Adjust this value as needed */
     top: 80px; /* Adjust this value as needed */
-    width: 1300px;
+    width: 1350px;
     z-index: 9999; /* Ensure it appears above other elements */
 }
 
