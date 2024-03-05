@@ -16,6 +16,7 @@ git clone git@github.com:JeCheeseSmith/Clash-of-ppdb-s.git
 
 2. Create a script, called "script.sh", with the contents:
 
+> This script fetches the latest branch from the repo and (re)installs any needed python packages.
 ```
 #!/bin/bash
 
@@ -28,7 +29,7 @@ source env/bin/activate
 pip3 install -r requirements.txt
 ```
 
-3. Call the script frequently using CRON (user: app)
+3. Call the script frequently using CRON (user: app). It also logs towards the "syslog" under the name "ppdb"
 
 ```
 */5 * * * * /home/app/script.sh 2>&1 | logger -t ppdb
