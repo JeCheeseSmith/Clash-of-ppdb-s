@@ -4,6 +4,13 @@ import "./socialOptionContents.css"
 import buttonSocial from '../../../assets/Menu Selection Sound Effect.mp3';
 import buttonOption from '../../../assets/socialOptionSound.mp3';
 
+/**
+ * Sends data to a specified endpoint using a POST request.
+ *
+ * @param {Object} data - The data to be sent.
+ * @param {string} endpoint - The endpoint to which the data is sent.
+ * @returns {Promise<void>} - A Promise that resolves when the data is sent.
+ */
 const SocialBoxData = async (data, endpoint) =>
 {
     await fetch('http://127.0.0.1:5000'+endpoint, {
@@ -20,6 +27,11 @@ const SocialBoxData = async (data, endpoint) =>
         });
 };
 
+/**
+ * React component representing a social box.
+ *
+ * @returns {JSX.Element} - The JSX element representing the social box.
+ */
 function SocialBox() {
   const [socialVisible, setSocialVisible] = useState(false);
 
@@ -44,6 +56,14 @@ function SocialBox() {
 }
 export default SocialBox;
 
+
+/**
+ * Renders the box containing social options.
+ *
+ * @param {boolean} socialVisible - Determines whether the social options are visible.
+ * @returns {JSX.Element} - The JSX element representing the box containing social options.
+ */
+
 function Box({socialVisible}){
     return(
         <div className="box-container">
@@ -52,6 +72,13 @@ function Box({socialVisible}){
     )
 }
 
+
+/**
+ * Renders the navbar with social options.
+ *
+ * @param {boolean} socialVisible - Determines whether the social options are visible.
+ * @returns {JSX.Element} - The JSX element representing the navbar with social options.
+ */
 function Navbar({ socialVisible }) {
   const [currentPage, setCurrentPage] = useState('createClan');
 

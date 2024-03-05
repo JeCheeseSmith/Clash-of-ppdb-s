@@ -4,6 +4,11 @@ import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
 import House from "./models/House.jsx";
 
+/**
+ * A 3D grid component with interactive cells and a house.
+ * @component
+ * @return {JSX.Element} A React JSX Element representing the 3D grid.
+ */
 function Grid()
 {
     const gridSize = 40;
