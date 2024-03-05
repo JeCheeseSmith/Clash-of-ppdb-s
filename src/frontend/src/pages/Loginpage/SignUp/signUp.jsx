@@ -4,18 +4,17 @@ import React from 'react'; // Importing React library
 function RegistrationPage() {
 
     return (
-        // Make a form
+        // Makes a form
         <div className="login-container">
           <h1 className="gametitle">TRAVISIA</h1>
           <h2 className="subtitle">FALLEN EMPIRE</h2>
           <form className="login-form">
             <div>
-              {/* <div> groupes the label and input together on one line*/}
+              {/* <div> groupes the label and input together on one line */}
               <label htmlFor="username">Username:</label>
-              {/* When you click on the Label "Username", the input box is selected*/}
+              {/* When you click on the Label "Username", the input box is selected */}
               <input
                   id="username"
-                  name="username"
                   type="text"
               />
             </div>
@@ -24,11 +23,11 @@ function RegistrationPage() {
               {/* When you click on the Label "Password", the input box is selected*/}
               <input
                   id="password"
-                  name="username"
-                  type="password"
+                  type="text"
               />
             </div>
-            <button className="save-button"> Save</button>
+            {/* Save button */}
+            <button className="login-button"> Save</button>
           </form>
         </div>
     );
