@@ -1,8 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
 import './chat.css'; // CSS file for styling
 
+
+/**
+ * SendMessage function.
+ * Sends a message to a specified endpoint using a POST request.
+ * @param {Object} message - The message object to be sent.
+ */
+
 const SendMassege = async (massege) =>
 {
+    // Sends a message to the specified endpoint using a POST request
     await fetch('http://127.0.0.1:5000/chat', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -17,6 +25,13 @@ const SendMassege = async (massege) =>
         });
 };
 
+/**
+ * @brief Represents a chat box component with message display and input functionality.
+ *
+ * This component allows users to exchange messages in a chat interface.
+ *
+ * @returns {JSX.Element} JSX representation of the ChatBox component.
+ */
 function ChatBox() {
   const [messages, setMessages] = useState([{ senderName: '', message: 'Welcome to Chat!' }]); // Initialize messages
   const [chatVisible, setChatVisible] = useState(false); // State variable to track chat visibility
@@ -45,6 +60,17 @@ function ChatBox() {
   );
 }
 
+/**
+ * @brief Component to display messages in a chat interface.
+ *
+ * This component renders a list of messages in a chat interface.
+ * It automatically scrolls to the bottom when new messages are added.
+ *
+ * @param {Object} props - Properties passed to the component.
+ * @param {Array} props.messages - Array of message objects to be displayed.
+ * @returns {JSX.Element} JSX representation of the MessageDisplay component.
+ */
+
 function MessageDisplay({ messages }) {
   const messageDisplayRef = useRef(null);
 
@@ -66,6 +92,17 @@ function MessageDisplay({ messages }) {
     </div>
   );
 }
+
+/**
+ * @brief Component for entering and submitting messages in a chat interface.
+ *
+ * This component provides an input field for users to type and submit messages.
+ * It triggers the onSubmit function when the Enter key is pressed.
+ *
+ * @param {Object} props - Properties passed to the component.
+ * @param {Function} props.onSubmit - Function to handle message submission.
+ * @returns {JSX.Element} JSX representation of the MessageInput component.
+ */
 
 function MessageInput({ onSubmit }) {
   const [message, setMessage] = useState('');
