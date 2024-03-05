@@ -1,0 +1,102 @@
+.navbar-container{
+    width: 60%;
+}
+
+.page-content{
+    background-color: #1f1a18;
+    border: 2px solid #ffd700;
+    height: 500px;
+    border-radius: 10px;
+    margin-top: 2px;
+}
+
+.create-clan{
+    margin: 20px;
+}
+
+.nameClan{
+    width: 57.8%;
+    margin: 20px;
+    padding: 20px;
+    font-size: 20px;
+    font-family: "Fira Code", serif;
+    border-radius: 10px;
+    border: 3px solid #484f48;
+    color: #ffffff;
+    background-image: linear-gradient(to right, rgb(115, 62, 0), rgb(229, 168, 0));
+}
+
+.nameClan::placeholder{
+    color: #a18c82;
+}
+
+.descriptionClan{
+    margin-top: 10px;
+    margin-left: 20px;
+    padding-left: 21px;
+    padding-top: 17px;
+    padding-bottom: 23px;
+    font-size: 20px;
+    resize: none;
+    width: 60%;
+    height: 250px;
+    border-radius: 10px;
+    border: 3px solid #484f48;
+    color: white;
+    background-image: linear-gradient(to right, rgb(115, 62, 0), rgb(229, 168, 0));
+}
+
+.descriptionClan::placeholder{
+    color: #a18c82;
+}
+
+.create-clan-button {
+    background-color: green;
+    font-family: "Fira Code", cursive;
+    color: white;
+    padding: 23px;
+    margin-left: 60px; /* Adjusted margin-left */
+    border-radius: 20px;
+    position: relative;
+    bottom: 30px;
+    font-size: 18px;
+}
+
+
+.clanStatus{
+    width: 25%;
+    margin: 20px;
+    font-size: 15px;
+    font-family: "Fira Code", serif;
+    border-radius: 10px;
+    border: 3px solid #484f48;
+    color: #ffffff;
+    background-image: linear-gradient(to right, rgb(115, 62, 0), rgb(229, 168, 0));
+}
+
+.clanStatus option {
+    background-color: #ab8340; /* Change this to the desired background color */
+    color: black; /* Change this to the desired text color */
+}
+
+.join-clan-button {
+    background-color: green;
+    font-family: "Fira Code", cursive;
+    color: white;
+    top:2px;
+    right: 20px;
+    padding: 10px;
+    margin-left: 60px; /* Adjusted margin-left */
+    border-radius: 20px;
+    position: relative;
+    bottom: 30px;
+    font-size: 18px;
+}
+
+.friend-requests {
+    text-align: center;
+    margin-top: 25%;
+    color: white;
+    font-family: "Fira Code", serif;
+    font-size: 50px;
+}

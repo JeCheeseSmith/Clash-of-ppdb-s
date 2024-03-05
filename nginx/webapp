@@ -2,6 +2,7 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
+    #Specifies the location of the SSL certificate retrieved by certbot
     ssl_certificate /etc/letsencrypt/live/team8.ua-ppdb.me/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/team8.ua-ppdb.me/privkey.pem;
 
@@ -9,6 +10,6 @@ server {
 
     location / {
         include proxy_params;
-        proxy_pass http://unix:/home/app/Clash-of-ppdb-s/src/backend/webapp.sock;
+        proxy_pass http://unix:/home/app/Clash-of-ppdb-s/src/webapp.sock;
     }
 }

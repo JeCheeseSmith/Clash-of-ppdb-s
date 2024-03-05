@@ -1,6 +1,0 @@
---- Run this script to drop alle tables, DELETES ALL DATA FROM YOUR DATABASE!!
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
-
-CREATE ROLE app WITH LOGIN CREATEDB;
-CREATE DATABASE ppdb OWNER app;
