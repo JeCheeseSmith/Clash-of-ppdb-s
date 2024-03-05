@@ -13,12 +13,14 @@ class FriendDataAccess:
 
     def get_Friendrequest(self,pname):
         cursor = self.dbconnect.get_cursor()
+
+        #Retrieved content en niet message of request morgen oplossen
         call = '''
                     SELECT * 
                     FROM friendrequest 
                     WHERE id IN (
-                        SELECT id 
-                        FROM content 
+                        SELECT mid 
+                        FROM retrieved
                         WHERE pname = %s
                     );
                 '''
@@ -26,6 +28,7 @@ class FriendDataAccess:
         friend_request = cursor.fetchall()
         friends = []
         for friend in friends:
+            print(friend[1])
             message_dict = {
                 "id": friend[0],
                 "accept": friend[1],
@@ -38,17 +41,15 @@ class FriendDataAccess:
     def send_Friendrequest(self,request,sname):
         cursor = self.dbconnect.get_cursor()
         try:
-            print("a")
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(request.content, request.sender,))
-            print("b")
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES (DEFAULT,now(),%s,%s);',(request.content, request.sender,))
             cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
-            print("c")
             cursor.execute('INSERT INTO friendrequest(id) VALUES (DEFAULT);')
-            print("d")
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', sname)
-            #DEZE WORDT NIET GEDAAN VRAAG VOOR KARS!!
-            print("e")
+            cursor.execute('SELECT name FROM player WHERE name=%s;', (sname,))
+            receiver = cursor.fetchone()
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', receiver)
+            self.dbconnect.commit()
             return True
-        except:
+        except Exception as e:
+            print("Error:",e)
             self.dbconnect.rollback()
             return False
