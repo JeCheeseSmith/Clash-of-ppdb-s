@@ -4,6 +4,7 @@ import Chat from './Communication/chat';
 import SocialBox from "./Communication/social.jsx";
 import Grid from "./GridView/grid3D.jsx";
 import Buildmenu from "./BuildMenu/buildmenu.jsx";
+import ResourceBar from "./RecourceBar/resourcebar.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -17,6 +18,7 @@ function MainPage()
           <SocialBox/>
           <Buildmenu/>
           <Grid/>
+          <ResourceBar/>
       </div>
   );
 }

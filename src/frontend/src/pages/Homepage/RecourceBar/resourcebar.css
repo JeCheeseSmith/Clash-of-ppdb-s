@@ -1,26 +1,36 @@
-
 .resourceBar {
   display: flex;
-  justify-content: center; /* Verdeelt de ruimte gelijk tussen de items */
-  align-items: center; /* Centreert items verticaal */
-  padding: 10px; /* Voegt wat ruimte binnen de balk toe */
-  background-color: #add8e6;  background-size: cover; /* Zorgt ervoor da  t de textuur de hele balk bedekt */
-  width: 25%; /* of een ander percentage of vaste waarde naar keuze */
-  /* Voeg hier eventuele andere stijlen toe */
-    margin: 0 auto; /* Dit centreert de balk horizontaal */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-image: linear-gradient(to right, rgb(96, 53, 4), rgb(154, 93, 44), #673909);
+  background-size: cover;
+  width: 25%;
+  margin: 0 auto;
   border-radius: 10px;
-  top: 0; /* Zet de balk tegen de bovenkant */
-  border: 2px solid black; /* Voegt een zwarte rand toe aan de onderkant */
+  top: 0;
+  border: 3px solid #593811;
 }
 
 .resourceSection {
-  flex: 1; /* Zorgt ervoor dat elke sectie flexibel groeit */
-  text-align: center; /* Centreert de afbeeldingen */
-  /* Voeg hier eventuele andere stijlen toe */
+  flex: 1;
+  text-align: center;
 }
 
 .resourceIcon {
-  width: 50px; /* Stel een vaste breedte in voor de iconen */
-  height: auto; /* Behoud de aspect ratio */
-  /* Voeg hier eventuele andere stijlen toe */
+  width: 50px;
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.resourceCount {
+  margin-left: 8px;
+}
+
+.resourceIcon:hover {
+  transform: scale(1.4);
+  cursor: pointer;
 }
