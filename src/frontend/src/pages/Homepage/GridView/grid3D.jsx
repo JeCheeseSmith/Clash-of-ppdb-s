@@ -3,9 +3,10 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
 import House from "./models/House.jsx";
+import Bush from "./models/Bush.jsx";
 
 /**
- * A 3D grid component with interactive cells and a house.
+ * A 3D grid component with interactive cells and objects.
  * @component
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
@@ -14,7 +15,6 @@ function Grid()
     const gridSize = 40;
     // State variable to hold the coordinates of the house
     const [housePosition, setHousePosition] = useState({location:[4, 3], type:"house"}); // Initial position
-
     const handleCellClick = (rowIndex, colIndex) =>
     {
         setHousePosition({location:[rowIndex, colIndex], type: "house"})
@@ -31,12 +31,29 @@ function Grid()
                 <mesh key={`${rowIndex}-${colIndex}`}
                       position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}
                 >
-                    <House />
+                    <House/>
                 </mesh>
             );
         }
-        else
+        else if (rowIndex === 0 || rowIndex === gridSize-1 || colIndex === 0 || colIndex === gridSize-1)
         {
+            // Calculate the center position of the cell
+            const centerX = colIndex;
+            const centerY = rowIndex;
+            return (
+                <>
+                    <mesh key={`${rowIndex}-${colIndex}`}
+                          position={[centerX - gridSize / 2, 6.5, centerY - gridSize / 2 + 0.5]}
+                    >
+                        <Bush/>
+                    </mesh>
+                    <gridHelper key={`${rowIndex}-${colIndex}`}
+                                position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
+                                args={[1, 1]}
+                    />
+                </>
+            );
+        } else {
             return (
                 <gridHelper key={`${rowIndex}-${colIndex}`}
                             position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
