@@ -4,6 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
 import House from "./models/House.jsx";
 import Bush from "./models/Bush.jsx";
+import CraftsMan from "./models/CraftsMan.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -53,7 +54,9 @@ function Grid()
                     />
                 </>
             );
-        } else {
+        }
+        else
+        {
             return (
                 <gridHelper key={`${rowIndex}-${colIndex}`}
                             position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
