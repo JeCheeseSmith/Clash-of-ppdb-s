@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
 import "./social.css"
 import "./socialOptionContents.css"
-import "./socialData.css"
-import buttonSocial from '../../../assets/Menu Selection Sound Effect.mp3';
-import buttonOption from '../../../assets/socialOptionSound.mp3';
-import clanPicture from '../../../assets/clanPicture.jpg';
+import buttonSocial from '../../../../assets/Menu Selection Sound Effect.mp3';
+import buttonOption from '../../../../assets/socialOptionSound.mp3';
+import ClanInformation from "./data/clanInfo.jsx";
 
 /**
  * Sends data to a specified endpoint using a POST request.
@@ -203,27 +202,6 @@ function JoinClanPage() {
             <input value={clan} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Clan Name..."}/>
             <button className={"join-clan-button"} onClick={handleButtonClick} >Search Clan</button>
             {succes && <ClanInformation name={name} description={description} status={status} pname={pname} success={succes}/>}
-        </div>
-    )
-}
-
-function ClanInformation({name, description, status, pname, success}) {
-    return(
-        <div className={"clan-info-button"}>
-            <div className={"clan-container"}>
-                <div className={"main-info"}>
-                    <img src={clanPicture} alt={"clanPicture"} className={"clanPicture"}/> <br/>
-                    <div className={"name-pname"}>
-                        <div className={"name"}>{name}</div>
-                        <div className={"pname"}>{success} Clan Leader: {pname}</div>
-                    </div>
-                </div>
-                <div className={"extra-info"}>
-                    <div className={"status"}>{status}</div>
-                    <div className={"description"}>{description}</div>
-                </div>
-            </div>
-            <button className={"clan-request-button"}>Send Request</button>
         </div>
     )
 }
