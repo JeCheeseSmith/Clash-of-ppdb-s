@@ -15,7 +15,7 @@ import ClanInformation from "./data/clanInfo.jsx";
 const SocialBoxData = async (data, endpoint) =>
 {
     let returnData;
-    await fetch('http://127.0.0.1:5000'+endpoint, {
+    await fetch('https://team8.ua-ppdb.me/'+endpoint, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
