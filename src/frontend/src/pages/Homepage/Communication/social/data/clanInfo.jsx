@@ -1,32 +1,8 @@
 import React, {useEffect, useState} from 'react';
+import POST from "../../../../../api/POST.jsx";
 import "./clanInfo.css"
 import clanPicture from "../../../../../assets/clanPicture.jpg";
 import notFound from "../../../../../assets/groupnotfound.png";
-
-/**
- * Sends data to a specified endpoint using a POST request.
- *
- * @param {Object} data - The data to be sent.
- * @param {string} endpoint - The endpoint to which the data is sent.
- * @returns {Promise<void>} - A Promise that resolves when the data is sent.
- */
-const SocialBoxData = async (data, endpoint) =>
-{
-    let returnData;
-    await fetch('http://127.0.0.1:5000'+endpoint, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    })
-        .then(res => res.json())
-        .then(data => {
-            returnData = data;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    return returnData
-};
 
 /**
  * Represents a component for displaying information about a clan.
@@ -45,7 +21,7 @@ function ClanInformation({name, description, status, pname, succes})
     const [succesRequest, setSuccesRequest] = useState(false)
     const handleRequestbutton = async () =>
     {
-        const requestMassage = await SocialBoxData({'cname': name, 'sender': "abu"}, "/joinClan")
+        const requestMassage = await POST({'cname': name, 'sender': "abu"}, "/joinClan")
         setMassage(requestMassage.message)
         setSuccesRequest(requestMassage.succes)
     }

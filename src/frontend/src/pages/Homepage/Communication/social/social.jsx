@@ -1,34 +1,10 @@
 import React, {useState} from 'react';
+import POST from "../../../../api/POST.jsx";
 import "./social.css"
 import "./socialOptionContents.css"
 import buttonSocial from '../../../../assets/Menu Selection Sound Effect.mp3';
 import buttonOption from '../../../../assets/socialOptionSound.mp3';
 import ClanInformation from "./data/clanInfo.jsx";
-
-/**
- * Sends data to a specified endpoint using a POST request.
- *
- * @param {Object} data - The data to be sent.
- * @param {string} endpoint - The endpoint to which the data is sent.
- * @returns {Promise<void>} - A Promise that resolves when the data is sent.
- */
-const SocialBoxData = async (data, endpoint) =>
-{
-    let returnData;
-    await fetch('http://127.0.0.1:5000'+endpoint, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    })
-        .then(res => res.json())
-        .then(data => {
-            returnData = data;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    return returnData
-};
 
 /**
  * React component representing a social box.
@@ -160,7 +136,7 @@ function CreateClanPage()
     };
     const handleButtonClick = () =>
     {
-        SocialBoxData({name:clanName, description:clanDescription,status:clanStatus, pname: clanLeader}, "/createClan");
+        POST({name:clanName, description:clanDescription,status:clanStatus, pname: clanLeader}, "/createClan");
     };
 
     return (
@@ -188,7 +164,7 @@ function JoinClanPage()
     };
     const handleButtonClick = async () =>
     {
-        const data = await SocialBoxData({name: clan}, "/searchClan");
+        const data = await POST({name: clan}, "/searchClan");
         setName(data.name)
         setDescription(data.description)
         setStatus(data.status)
@@ -221,8 +197,10 @@ function SearchPersonPage() {
     const handleInputChange = (e) => {
         setPerson(e.target.value);
     };
-    const handleButtonClick = () => {
-        SocialBoxData(person, "/searchPerson");
+    const handleButtonClick = async () =>
+    {
+        const data = await POST(person, "/searchPerson");
+        console.log(data)
     };
     return (
         <div className={"create-clan"}>
