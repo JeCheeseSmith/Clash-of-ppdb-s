@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import "./clanInfo.css"
 import clanPicture from "../../../../../assets/clanPicture.jpg";
+import notFound from "../../../../../assets/groupnotfound.png";
 
 /**
  * Represents a component for displaying information about a clan.
@@ -18,10 +19,15 @@ function ClanInformation({name, description, status, pname, success}) {
         <div className={"clan-info-button"}>
             <div className={"clan-container"}>
                 <div className={"main-info"}>
-                    <img src={clanPicture} alt={"clanPicture"} className={"clanPicture"}/> <br/>
-                    <div className={"name-pname"}>
+                    {
+                        success ?
+                        <img src={clanPicture} alt={"clanPicture"} className={"clanPicture"}/>
+                        :
+                        <img src={notFound} alt={"clanPicture"} className={"clanPicture"}/>
+                    }
+                        <div className={"name-pname"}>
                         <div className={"name"}>{name}</div>
-                        <div className={"pname"}>{success} Clan Leader: {pname}</div>
+                        {success && <div className={"pname"}>Clan Leader: {pname}</div>}
                     </div>
                 </div>
                 <div className={"extra-info"}>

@@ -173,14 +173,15 @@ function CreateClanPage()
     );
 }
 
-function JoinClanPage() {
-    
+function JoinClanPage()
+{
     const [clan, setClan] = useState("");
-    const [succes, setSucces] = useState(false);
+    const [clicked, setClicked] = useState(false);
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [status, setStatus] = useState("")
     const [pname, setPname] = useState("")
+    const [succes, setSucces] = useState(false)
     const handleInputChange = (e) =>
     {
         setClan(e.target.value);
@@ -192,16 +193,14 @@ function JoinClanPage() {
         setDescription(data.description)
         setStatus(data.status)
         setPname(data.pname)
-        if (data.succes)
-        {
-            setSucces(true)
-        }
+        setSucces(data.succes)
+        setClicked(true)
     };
     return (
         <div className={"create-clan"}>
             <input value={clan} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Clan Name..."}/>
             <button className={"join-clan-button"} onClick={handleButtonClick} >Search Clan</button>
-            {succes && <ClanInformation name={name} description={description} status={status} pname={pname} success={succes}/>}
+            {clicked && <ClanInformation name={name} description={description} status={status} pname={pname} success={succes}/>}
         </div>
     )
 }
