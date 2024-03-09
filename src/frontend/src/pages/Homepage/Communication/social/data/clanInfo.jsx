@@ -1,7 +1,32 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "./clanInfo.css"
 import clanPicture from "../../../../../assets/clanPicture.jpg";
 import notFound from "../../../../../assets/groupnotfound.png";
+
+/**
+ * Sends data to a specified endpoint using a POST request.
+ *
+ * @param {Object} data - The data to be sent.
+ * @param {string} endpoint - The endpoint to which the data is sent.
+ * @returns {Promise<void>} - A Promise that resolves when the data is sent.
+ */
+const SocialBoxData = async (data, endpoint) =>
+{
+    let returnData;
+    await fetch('http://127.0.0.1:5000'+endpoint, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+    })
+        .then(res => res.json())
+        .then(data => {
+            returnData = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    return returnData
+};
 
 /**
  * Represents a component for displaying information about a clan.
@@ -14,30 +39,53 @@ import notFound from "../../../../../assets/groupnotfound.png";
  * @returns {JSX.Element} - A React JSX element representing the clan information component.
  */
 
-function ClanInformation({name, description, status, pname, success}) {
+function ClanInformation({name, description, status, pname, succes})
+{
+    const [massage, setMassage] = useState("")
+    const [succesRequest, setSuccesRequest] = useState(false)
+    const handleRequestbutton = async () =>
+    {
+        const requestMassage = await SocialBoxData({'cname': name, 'sender': "abu"}, "/joinClan")
+        setMassage(requestMassage.message)
+        setSuccesRequest(requestMassage.succes)
+    }
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setSuccesRequest(false);
+        }, 4000);
+
+        // Clear the timeout when the component unmounts or when succesRequest changes
+        return () => clearTimeout(timeout);
+    }, [succesRequest]);
+
     return(
         <div className={"clan-info-button"}>
             <div className={"clan-container"}>
                 <div className={"main-info"}>
-                    {
-                        success ?
-                        <img src={clanPicture} alt={"clanPicture"} className={"clanPicture"}/>
-                        :
-                        <img src={notFound} alt={"clanPicture"} className={"clanPicture"}/>
-                    }
+                        <img src={succes ? clanPicture : notFound} alt={"clanPicture"} className={"clanPicture"}/>
                         <div className={"name-pname"}>
-                        <div className={"name"}>{name}</div>
-                        {success && <div className={"pname"}>Clan Leader: {pname}</div>}
-                    </div>
+                            <div className={"name"}>{name}</div>
+                            {succes && <div className={"pname"}>Clan Leader: {pname}</div>}
+                        </div>
                 </div>
                 <div className={"extra-info"}>
                     <div className={"status"}>{status}</div>
                     <div className={"description"}>{description}</div>
                 </div>
             </div>
-            <button className={"clan-request-button"}>Send Request</button>
+            {succes && <button className={"clan-request-button"} onClick={handleRequestbutton}>Send Request</button>}
+            {succesRequest && <RequestMassagePopUp massage={massage}/>}
         </div>
     )
+}
+function RequestMassagePopUp({ massage })
+{
+    return (
+        <div className="popup-message">
+            {massage}
+        </div>
+    );
 }
 
 export default ClanInformation;

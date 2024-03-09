@@ -111,7 +111,7 @@ function Navbar({ socialVisible }) {
                           </button>
                       </li>
                       <li>
-                          <button onClick={() => handleButtonClick('friendRequests')} className={"socialOption"}>Friend
+                          <button onClick={() => handleButtonClick('requests')} className={"socialOption"}>General
                               Requests
                           </button>
                       </li>
@@ -128,7 +128,7 @@ function Navbar({ socialVisible }) {
                   {/* Render different pages based on currentPage state */}
                   {currentPage === 'createClan' && <CreateClanPage/>}
                   {currentPage === 'joinClan' && <JoinClanPage/>}
-                  {currentPage === 'friendRequests' && <FriendRequestsPage/>}
+                  {currentPage === 'requests' && <RequestsPage/>}
                   {currentPage === 'searchPerson' && <SearchPersonPage/>}
               </div>
           )}
@@ -200,16 +200,17 @@ function JoinClanPage()
         <div className={"create-clan"}>
             <input value={clan} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Clan Name..."}/>
             <button className={"join-clan-button"} onClick={handleButtonClick} >Search Clan</button>
-            {clicked && <ClanInformation name={name} description={description} status={status} pname={pname} success={succes}/>}
+            {clicked && <ClanInformation name={name} description={description} status={status} pname={pname} succes={succes}/>}
         </div>
     )
 }
 
 
-function FriendRequestsPage() {
+function RequestsPage()
+{
     return (
-        <div className={"friend-requests"}>
-            No Friend Requests :(
+        <div className={"requests"}>
+            No Requests :(
         </div>
     )
 }

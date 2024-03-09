@@ -49,9 +49,9 @@ def joinClan():
     """
     data = request.json
 
-    temp = RequestTravisia(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
+    crequest = RequestTravisia(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
     cname = data.get('cname')  # Name of the clan
-    succes = clan_data_acces.sendRequest(temp, cname)
+    succes = clan_data_acces.sendRequest(crequest, cname)
 
     return jsonify({'succes': succes, 'message': "Your request has been send. Please await further correspondence!"})
 
