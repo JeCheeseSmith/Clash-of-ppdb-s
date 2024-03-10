@@ -9,10 +9,6 @@
     font-size: 70px; /* Adjust the font size as needed */
   }
 
-.message-display::-webkit-scrollbar {
-    display: none;
-  }
-
 .chat-container {
     position: fixed;
     bottom: 80px;
@@ -43,6 +39,10 @@
     background-color: rgb(33, 29, 29);
     border-radius: 13px;
     border: 4px solid #5b1b1b;
+}
+
+.message-display::-webkit-scrollbar {
+    display: none;
   }
 
 .message {

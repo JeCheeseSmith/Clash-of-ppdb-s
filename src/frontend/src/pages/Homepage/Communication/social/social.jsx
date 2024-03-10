@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import POST from "../../../../api/POST.jsx";
 import "./social.css"
 import "./socialOptionContents.css"
@@ -11,10 +11,9 @@ import ClanInformation from "./data/clanInfo.jsx";
  *
  * @returns {JSX.Element} - The JSX element representing the social box.
  */
-function SocialBox() {
+function SocialBox()
+{
   const [socialVisible, setSocialVisible] = useState(false);
-
-  
   const toggleSocialVisibility = () => {
     setSocialVisible(!socialVisible);
   };
@@ -43,7 +42,8 @@ export default SocialBox;
  * @returns {JSX.Element} - The JSX element representing the box containing social options.
  */
 
-function Box({socialVisible}){
+function Box({socialVisible})
+{
     return(
         <div className="box-container">
             <Navbar socialVisible={socialVisible}/>
@@ -58,58 +58,62 @@ function Box({socialVisible}){
  * @param {boolean} socialVisible - Determines whether the social options are visible.
  * @returns {JSX.Element} - The JSX element representing the navbar with social options.
  */
-function Navbar({ socialVisible }) {
-  const [currentPage, setCurrentPage] = useState('createClan');
+function Navbar({ socialVisible })
+{
+    const [currentPage, setCurrentPage] = useState('createClan');
 
-  const playOption = () => {
-    const sound = new Audio(buttonOption);
-    sound.currentTime = 0.5;
-    sound.play();
-  };
+    const playOption = () => {
+      const sound = new Audio(buttonOption);
+      sound.currentTime = 0.5;
+      sound.play();
+    };
 
-  const handleButtonClick = (pageName) => {
-    setCurrentPage(pageName);
-    playOption();
-  };
+    const handleButtonClick = (pageName) => {
+      setCurrentPage(pageName);
+      playOption();
+    };
 
-  return (
-      <div className="navbar-container">
-          {socialVisible && (
-              <nav className="navbar visible">
-                  <ul className="navbar-links">
-                      <li>
-                          <button onClick={() => handleButtonClick('createClan')} className={"socialOption"}>Create
-                              Clan
-                          </button>
-                      </li>
-                      <li>
-                          <button onClick={() => handleButtonClick('joinClan')} className={"socialOption"}>Join Clan
-                          </button>
-                      </li>
-                      <li>
-                          <button onClick={() => handleButtonClick('requests')} className={"socialOption"}>General
-                              Requests
-                          </button>
-                      </li>
-                      <li>
-                          <button onClick={() => handleButtonClick('searchPerson')} className={"socialOption"}>Search
-                              Person
-                          </button>
-                      </li>
-                  </ul>
-              </nav>
-          )}
-          {socialVisible && currentPage && (
-              <div className="page-content">
-                  {/* Render different pages based on currentPage state */}
-                  {currentPage === 'createClan' && <CreateClanPage/>}
-                  {currentPage === 'joinClan' && <JoinClanPage/>}
-                  {currentPage === 'requests' && <RequestsPage/>}
-                  {currentPage === 'searchPerson' && <SearchPersonPage/>}
-              </div>
-          )}
-      </div>
-  );
+    const [requests, setRequests] = useState([]);
+
+    const sendData = async () =>
+    {
+        handleButtonClick('requests');
+        const data = await POST({ 'player': "watson" }, "/getclanrequest");
+        // Update the state using setRequests instead of pushing directly into the array
+        setRequests([...requests, { sendername: data.sendername, moment: data.moment, content: data.content }]);
+    }
+
+    return (
+        <div className="navbar-container">
+            {socialVisible && (
+                <nav className="navbar visible">
+                    <ul className="navbar-links">
+                        <li>
+                            <button onClick={() => handleButtonClick('createClan')} className={"socialOption"}>Create Clan</button>
+                        </li>
+                        <li>
+                            <button onClick={() => handleButtonClick('joinClan')} className={"socialOption"}>Join Clan</button>
+                        </li>
+                        <li>
+                            <button onClick={() => sendData()} className={"socialOption"}>General Requests</button>
+                        </li>
+                        <li>
+                            <button onClick={() => handleButtonClick('searchPerson')} className={"socialOption"}>Search Person</button>
+                        </li>
+                    </ul>
+                </nav>
+            )}
+            {socialVisible && currentPage && (
+                <div className="page-content">
+                    {/* Render different pages based on currentPage state */}
+                    {currentPage === 'createClan' && <CreateClanPage/>}
+                    {currentPage === 'joinClan' && <JoinClanPage/>}
+                    {currentPage === 'requests' && <RequestsPage requests={requests}/>}
+                    {currentPage === 'searchPerson' && <SearchPersonPage/>}
+                </div>
+            )}
+        </div>
+    );
 }
 
 function CreateClanPage()
@@ -181,15 +185,28 @@ function JoinClanPage()
     )
 }
 
-
-function RequestsPage()
-{
+/*
+TODO:
+    voor request moet je niet zo werken (op button klikken en daarna pas request krijgen),
+    maar elke keer een array van requests fetchen als backend iets nieuws returnt samen met
+    de vorige requests
+*/
+function RequestsPage({ requests }) {
     return (
-        <div className={"requests"}>
-            No Requests :(
+        <div className="requests-container">
+            <div>
+                {
+                    requests.map((request, index) => (
+                        <div key={index}>
+                            <div className={"requests"}>{request.content}, {request.sendername}, {request.moment}</div>
+                        </div>
+                    ))
+                }
+            </div>
         </div>
-    )
+    );
 }
+
 
 function SearchPersonPage() {
     const [person, setPerson] = useState("");

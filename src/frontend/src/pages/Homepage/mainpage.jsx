@@ -12,15 +12,15 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
  */
 function MainPage()
 {
-  return (
-      <div className="background"> {/* Container for the background image */}
-          <Chat/>
-          <SocialBox/>
-          <Buildmenu/>
-          <Grid/>
-          <ResourceBar/>
-      </div>
-  );
+    return (
+        <div className="background"> {/* Container for the background image */}
+            <Chat/>
+            <SocialBox/>
+            <Buildmenu/>
+            <Grid/>
+            <ResourceBar/>
+        </div>
+    );
 }
 
 export default MainPage; // Exporting the MainPage component

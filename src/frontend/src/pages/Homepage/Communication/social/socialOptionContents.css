@@ -94,12 +94,20 @@
     font-size: 18px;
 }
 
+.requests-container {
+    height: 490px; /* Set your desired height */
+    overflow-y: auto; /* Add a scrollbar when content overflows */
+}
+
 .requests {
-    text-align: center;
-    margin-top: 25%;
-    color: white;
-    font-family: "Fira Code", serif;
-    font-size: 50px;
+    font-size: large;
+    font-family: italic, sans-serif;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 20px;
+    color: rgb(0, 0, 0);
+    background-image: linear-gradient(to right, rgb(164, 85, 14), rgb(86, 76, 59));
 }
 
 .search-friend-button {
