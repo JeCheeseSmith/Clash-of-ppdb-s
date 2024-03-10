@@ -29,27 +29,31 @@ class FriendDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         #Retrieved content en niet message of request morgen oplossen
-        call = '''
-                    SELECT * 
-                    FROM friendrequest 
-                    WHERE id IN (
-                        SELECT mid 
-                        FROM retrieved
-                        WHERE pname = %s
-                    );
-                '''
+        call = """
+                            SELECT *
+                            FROM friendRequest 
+                            INNER JOIN content ON friendrequest.id = content.id
+                            WHERE friendrequest.id IN (     
+                                SELECT mid
+                                FROM retrieved
+                                WHERE pname = %s
+                            );
+                            """
         cursor.execute(call, (pname,))
         friend_request = cursor.fetchall()
         friends = []
-        for friend in friends:
-            print(friend[1])
+        for friend in friend_request:
             message_dict = {
                 "id": friend[0],
-                "accept": friend[1],
+                "moment": str(friend[1]),
+                "content": friend[2],
+                "pname": friend[3]
             }
             friends.append(message_dict)
         return friends
-
+# RETRIEVED MESSAGES WITH SNAME
+# GET ALL ID
+#
 
 
     def send_Friendrequest(self,request,sname):
