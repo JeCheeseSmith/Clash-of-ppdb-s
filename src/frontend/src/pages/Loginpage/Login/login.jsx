@@ -1,9 +1,23 @@
-import React from 'react'; // Importing React library
+import React, { useState} from 'react'; // Importing React library
 import './login_signup.css';
 import { useNavigate } from 'react-router-dom';
 
 // Code for login page
 function LoginPage() {
+
+    // State for username & password
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    // Handler for username change
+    function handleUsernameChange(event) {
+        setUsername(event.target.value);
+    }
+
+    // Handler for password change
+    function handlePasswordChange(event) {
+        setPassword(event.target.value);
+    }
 
     let navigate = useNavigate();
     // Handles the navigation from login page to sign-up page
@@ -11,7 +25,9 @@ function LoginPage() {
         navigate('/signup');
     }
 
+    // Handles the navigation from login page to mainpage
     function handleLoginClick() {
+        console.log('Inloggegevens', { username, password });
         navigate('/MainPage');
     }
 
@@ -28,6 +44,8 @@ function LoginPage() {
                   <input
                       id="username"
                       type="text"
+                      value={username}
+                      onChange={handleUsernameChange}
                   />
               </div>
               <div>
@@ -36,6 +54,8 @@ function LoginPage() {
                   <input
                       id="password"
                       type="password"
+                      value={password}
+                      onChange={handlePasswordChange}
                   />
               </div>
               {/* Login button */}
