@@ -197,7 +197,7 @@ def searchPlayer():
     data = request.json
     name = data.get('name')
     cotrole=False
-    controle=player_data_access.search_player(name)
+    controle = player_data_access.search_player(name)
     return jsonify({'SearchPerson': controle})
 
 @app.route('/sendfriendrequest', methods=['POST'])

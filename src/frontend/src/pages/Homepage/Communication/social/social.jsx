@@ -199,7 +199,7 @@ function SearchPersonPage() {
     };
     const handleButtonClick = async () =>
     {
-        const data = await POST(person, "/searchPerson");
+        const data = await POST({'name':person}, "/searchPerson");
         console.log(data)
     };
     return (
