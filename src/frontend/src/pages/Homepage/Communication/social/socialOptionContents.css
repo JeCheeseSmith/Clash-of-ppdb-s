@@ -99,7 +99,8 @@
     overflow-y: auto; /* Add a scrollbar when content overflows */
 }
 
-.requests {
+.request {
+    display: flex;
     font-size: large;
     font-family: italic, sans-serif;
     justify-content: space-between;
@@ -108,6 +109,40 @@
     border-radius: 20px;
     color: rgb(0, 0, 0);
     background-image: linear-gradient(to right, rgb(164, 85, 14), rgb(86, 76, 59));
+}
+
+.avatar-sendername{
+    display: flex;
+    flex-direction: column;
+}
+
+.avatar{
+    height: 50px;
+    width: 50px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.sendername{
+    margin: 10px;
+}
+
+.content{
+    margin: 10px;
+}
+
+.moment{
+    margin: 10px;
+}
+
+.request-accept{
+    background-color: green;
+    margin: 10px;
+}
+
+.request-decline{
+    background-color: red;
+    margin: 10px;
 }
 
 .search-friend-button {

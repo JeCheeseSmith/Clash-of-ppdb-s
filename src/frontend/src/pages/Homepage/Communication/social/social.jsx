@@ -4,6 +4,7 @@ import "./social.css"
 import "./socialOptionContents.css"
 import buttonSocial from '../../../../assets/Menu Selection Sound Effect.mp3';
 import buttonOption from '../../../../assets/socialOptionSound.mp3';
+import sendername from '../../../../assets/clanPicture.jpg'
 import ClanInformation from "./data/clanInfo.jsx";
 
 /**
@@ -194,15 +195,20 @@ TODO:
 function RequestsPage({ requests }) {
     return (
         <div className="requests-container">
-            <div>
-                {
-                    requests.map((request, index) => (
-                        <div key={index}>
-                            <div className={"requests"}>{request.content}, {request.sendername}, {request.moment}</div>
+            {
+                requests.map(request => (
+                    <div className={"request"}>
+                        <div className={"avatar-sendername"}>
+                            <img src={sendername} className={"avatar"}/>
+                            <div className={"sendername"}>{request.sendername}</div>
                         </div>
-                    ))
-                }
-            </div>
+                        <div className={"content"}>{request.content}</div>
+                        <div className={"moment"}>{request.moment}</div>
+                        <button className={"request-accept"}>Accept</button>
+                        <button className={"request-decline"}>Decline</button>
+                    </div>
+                ))
+            }
         </div>
     );
 }
