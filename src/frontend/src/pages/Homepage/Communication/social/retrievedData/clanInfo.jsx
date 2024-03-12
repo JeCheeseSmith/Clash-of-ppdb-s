@@ -3,6 +3,7 @@ import POST from "../../../../../api/POST.jsx";
 import "./clanInfo.css"
 import clanPicture from "../../../../../assets/clanPicture.jpg";
 import notFound from "../../../../../assets/groupnotfound.png";
+import DisplayAvatarName from "../../../../../avatarWithName/avatarWithName.jsx";
 
 /**
  * Represents a component for displaying information about a clan.
@@ -15,7 +16,7 @@ import notFound from "../../../../../assets/groupnotfound.png";
  * @returns {JSX.Element} - A React JSX element representing the clan information component.
  */
 
-function ClanInformation({name, description, status, pname, succes})
+function ClanInformation({name, description, status, pname, succesClanSearch})
 {
     const [massage, setMassage] = useState("")
     const [succesRequest, setSuccesRequest] = useState(false)
@@ -38,19 +39,13 @@ function ClanInformation({name, description, status, pname, succes})
     return(
         <div className={"clan-infowithbutton"}>
             <div className={"clan-container"}>
-                <div className={"main-info"}>
-                        <img src={succes ? clanPicture : notFound} alt={"clanPicture"} className={"clanPicture"}/>
-                        <div className={"name-pname"}>
-                            <div className={"name"}>{name}</div>
-                            {succes && <div className={"pname"}>Clan Leader: {pname}</div>}
-                        </div>
-                </div>
-                <div className={"extra-info"}>
+                <DisplayAvatarName type={"clan-search"} name={name} pname={pname} succesClanSearch={succesClanSearch}/>
+                <div className={"status-description"}>
                     <div className={"status"}>{status}</div>
                     <div className={"description"}>{description}</div>
                 </div>
             </div>
-            {succes && <button className={"clan-request-button"} onClick={handleRequestbutton}>Send Request</button>}
+            {succesClanSearch && <button className={"clan-request-button"} onClick={handleRequestbutton}>Send Request</button>}
             {succesRequest && <RequestMassagePopUp massage={massage}/>}
         </div>
     )

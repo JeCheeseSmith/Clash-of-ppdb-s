@@ -3,6 +3,7 @@ import POST from "../../../../../api/POST.jsx";
 import "./personInfo.css"
 import clanPicture from "../../../../../assets/clanPicture.jpg";
 import notFound from "../../../../../assets/groupnotfound.png";
+import DisplayAvatarName from "../../../../../avatarWithName/avatarWithName.jsx";
 
 /**
  * Represents a component for displaying information about a clan.
@@ -37,10 +38,7 @@ function PersonInformation({name, succes})
 
     return(
         <div className={"player-info-request"}>
-            <div className={"avatar-name"}>
-                <img src={clanPicture} alt={"clanPicture"} className={"avatar"}/>
-                <div className={"name"}>name</div>
-            </div>
+            <DisplayAvatarName type={"player-search"} name={name}/>
             <button className={"friend-request-button"}>Send Friend Request</button>
         </div>
     )

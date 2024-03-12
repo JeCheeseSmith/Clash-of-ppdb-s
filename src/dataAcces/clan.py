@@ -28,7 +28,7 @@ class ClanDataAccess:
     def get_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;',
-                       (obj.name,))  # Get the data from the clan with this name
+                       (obj.name,))  # Get the retrievedData from the clan with this name
         result = cursor.fetchone()
 
         if result:  # If there is a clan with this name

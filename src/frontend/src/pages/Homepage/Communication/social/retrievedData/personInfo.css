@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
-
 .player-info-request{
     display: flex;
     flex-direction: row;
@@ -10,18 +9,6 @@
     border-radius: 20px;
     background-image: linear-gradient(to right, rgb(164, 85, 14), rgb(86, 76, 59));
 }
-
-.avatar-name{
-    display: flex;
-}
-
-.name{
-    font-family: 'Anton', sans-serif;
-    margin-top: 10px;
-    margin-left: 20px;
-    color: #ffffff;
-}
-
 
 /* CSS */
 .friend-request-button {

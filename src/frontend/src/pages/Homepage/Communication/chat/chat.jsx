@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import POST from "../../../../api/POST.jsx";
-import './chat.css'; // CSS file for styling
+import './chat.css';
+import CommunicationButton from "../communication.jsx"; // CSS file for styling
 
 
 /**
@@ -17,25 +18,22 @@ function ChatBox()
 
     const handleMessageSubmit = (message, senderName) =>
     {
-      setMessages([...messages, { senderName, message }]);
-      POST({senderName,message}, "/chat")
+        setMessages([...messages, { senderName, message }]);
     };
 
     const toggleChatVisibility = () =>
     {
-      setChatVisible(!chatVisible);
+        setChatVisible(!chatVisible);
     };
 
     return (
       <div>
-        <button onClick={toggleChatVisibility} className={`toggle-chat-button ${chatVisible ? 'visible' : 'hidden'}`}>
-          {chatVisible ? 'chat' : 'chat'}
-        </button>
-        <div className={`chat-container ${chatVisible ? 'visible' : 'hidden'}`}>
-          <h1 className="chat-title">CHAT</h1>
-          <MessageDisplay messages={messages} />
-          <MessageInput onSubmit={handleMessageSubmit} />
-        </div>
+          <CommunicationButton type={"chat"} buttonFunction={toggleChatVisibility} visible={chatVisible}/>
+          <div className={`chat-container ${chatVisible ? 'visible' : 'hidden'}`}>
+             <h1 className="chat-title">CHAT</h1>
+             <MessageDisplay messages={messages} />
+             <MessageInput onSubmit={handleMessageSubmit} />
+          </div>
       </div>
     );
 }

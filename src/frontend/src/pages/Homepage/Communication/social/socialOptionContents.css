@@ -112,24 +112,6 @@
     background-image: linear-gradient(to right, rgb(164, 85, 14), rgb(86, 76, 59));
 }
 
-.avatar-sendername {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center items horizontally */
-}
-
-.avatar {
-    height: 60px;
-    width: 50px;
-    border-radius: 10px;
-}
-
-.sendername {
-    margin-top: 5px;
-    color: #101b4d;
-    font-family: 'Anton', cursive;
-}
-
 .content {
     margin-top: auto; /* Pushes content to the bottom */
     margin-bottom: auto; /* Pushes content to the top */

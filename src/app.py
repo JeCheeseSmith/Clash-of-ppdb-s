@@ -189,7 +189,7 @@ def joinClan():
 @app.route('/getclanrequest', methods=['POST'])
 def getclanrequest():
     return jsonify({'succes': True, # found something: succes = True
-                    'sendername': "raadin",
+                    'sendername': "abu",
                     'content': "Dear High Magistrate of 'Clan Name', may I join your alliance?"})
 
 
