@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
 .toggle-social-button {
     position: fixed;
     bottom: 30%;
@@ -37,15 +39,11 @@
 
 
 .navbar {
-    padding: 20px;
-    padding-left: 7%;
-    font-size: large;
+    padding: 20px 20px 20px 4%;
     border: 2px solid #ffd700; /* Golden border color */
     border-radius: 10px; /* Match border-radius of message box */
     background-color: #b26616;
     color: white;
-    opacity: 0;
-    transition: opacity 0.1s ease;
 }
 
 .visible {
@@ -61,11 +59,37 @@
   margin-right: 6rem; /* Increase the right margin to create larger spaces */
 }
 
-.socialOption{
-    background-color: rgba(84, 51, 6, 0.95);
-    color: white;
-    font-size: large;
-    border-radius: 15px;
-    padding: 15px;
+.socialOption {
+    background-color: #8B4513;
+    color: #fff;
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #CD853F;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+.socialOption:hover {
+    background-color: #A0522D;
+    border-color: #A0522D;
+}
+
+.socialOption:focus {
+    outline: none;
+    background-color: #A0522D;
+    border-color: #A0522D;
+    box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.4);
+}
+
+
+
+
+
+
 

@@ -6,6 +6,7 @@ import buttonSocial from '../../../../assets/Menu Selection Sound Effect.mp3';
 import buttonOption from '../../../../assets/socialOptionSound.mp3';
 import sendername from '../../../../assets/clanPicture.jpg'
 import ClanInformation from "./data/clanInfo.jsx";
+import PersonInformation from "./data/personInfo.jsx";
 
 /**
  * React component representing a social box.
@@ -75,13 +76,12 @@ function Navbar({ socialVisible })
     };
 
     const [requests, setRequests] = useState([]);
-
     const sendData = async () =>
     {
         handleButtonClick('requests');
         const data = await POST({ 'player': "watson" }, "/getclanrequest");
         // Update the state using setRequests instead of pushing directly into the array
-        setRequests([...requests, { sendername: data.sendername, moment: data.moment, content: data.content }]);
+        setRequests([{sendername: data.sendername, content: data.content }]);
     }
 
     return (
@@ -139,15 +139,19 @@ function CreateClanPage()
     {
         setClanLeader(e.target.value);
     };
-    const handleButtonClick = () =>
-    {
-        POST({name:clanName, description:clanDescription,status:clanStatus, pname: clanLeader}, "/createClan");
+    const handleButtonClick = async () => {
+        const data = await POST({
+            name: clanName,
+            description: clanDescription,
+            status: clanStatus,
+            pname: clanLeader
+        }, "/createClan");
     };
 
     return (
-        <div className={"create-clan"}>
-            <input value={clanName} onChange={handleclanName} className={"nameClan"} placeholder={"Name"} />
-            <input value={clanStatus} onChange={handleClanStatus} className={"clanStatus"} placeholder={"status"}/>
+        <div className={"social-primair-input"}>
+            <input value={clanName} onChange={handleclanName} className={"search-name"} placeholder={"Name"} />
+            <input value={clanStatus} onChange={handleClanStatus} className={"clanStatus"} placeholder={"clan chant"}/>
             <textarea value={clanDescription} onChange={handleclanDescription} className={"descriptionClan"} placeholder={"Description"}/>
             <button className={"create-clan-button"} onClick={handleButtonClick} >Create Clan</button>
         </div>
@@ -178,20 +182,15 @@ function JoinClanPage()
         setClicked(true)
     };
     return (
-        <div className={"create-clan"}>
-            <input value={clan} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Clan Name..."}/>
+        <div className={"social-primair-input"}>
+            <input value={clan} onChange={handleInputChange} className={"search-name"} placeholder={"Search Clan Name..."}/>
             <button className={"join-clan-button"} onClick={handleButtonClick} >Search Clan</button>
             {clicked && <ClanInformation name={name} description={description} status={status} pname={pname} succes={succes}/>}
         </div>
     )
 }
 
-/*
-TODO:
-    voor request moet je niet zo werken (op button klikken en daarna pas request krijgen),
-    maar elke keer een array van requests fetchen als backend iets nieuws returnt samen met
-    de vorige requests
-*/
+
 function RequestsPage({ requests }) {
     return (
         <div className="requests-container">
@@ -203,7 +202,6 @@ function RequestsPage({ requests }) {
                             <div className={"sendername"}>{request.sendername}</div>
                         </div>
                         <div className={"content"}>{request.content}</div>
-                        <div className={"moment"}>{request.moment}</div>
                         <button className={"request-accept"}>Accept</button>
                         <button className={"request-decline"}>Decline</button>
                     </div>
@@ -216,6 +214,7 @@ function RequestsPage({ requests }) {
 
 function SearchPersonPage() {
     const [person, setPerson] = useState("");
+    const [clicked, setClicked] = useState(false);
 
     const handleInputChange = (e) => {
         setPerson(e.target.value);
@@ -223,12 +222,13 @@ function SearchPersonPage() {
     const handleButtonClick = async () =>
     {
         const data = await POST({'name':person}, "/searchPerson");
-        console.log(data)
+        setClicked(true)
     };
     return (
-        <div className={"create-clan"}>
-            <input value={person} onChange={handleInputChange} className={"nameClan"} placeholder={"Search Name..."}/>
-            <button className={"search-friend-button"} onClick={handleButtonClick} >Search Person</button>
+        <div className={"social-primair-input"}>
+            <input value={person} onChange={handleInputChange} className={"search-name"} placeholder={"Search Name..."}/>
+            <button className={"search-friend-button"} onClick={handleButtonClick}>Search Person</button>
+            <PersonInformation/>
         </div>
     )
 }

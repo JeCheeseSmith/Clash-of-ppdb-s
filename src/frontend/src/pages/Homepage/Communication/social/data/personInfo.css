@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+
+.player-info-request{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 20px;
+    background-image: linear-gradient(to right, rgb(164, 85, 14), rgb(86, 76, 59));
+}
+
+.avatar-name{
+    display: flex;
+}
+
+.name{
+    font-family: 'Anton', sans-serif;
+    margin-top: 10px;
+    margin-left: 20px;
+    color: #ffffff;
+}
+
+
+/* CSS */
+.friend-request-button {
+    background-color: green;
+    border: 0;
+    border-radius: 12px;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: 'Anton', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 2.5;
+    outline: transparent;
+    padding: 0 1rem;
+    text-align: center;
+    text-decoration: none;
+    transition: box-shadow .2s ease-in-out;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+}
+
+.friend-request-button:not([disabled]):hover {
+    box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+    background-color: transparent;
+}

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import POST from "../../../../../api/POST.jsx";
-import "./clanInfo.css"
+import "./personInfo.css"
 import clanPicture from "../../../../../assets/clanPicture.jpg";
 import notFound from "../../../../../assets/groupnotfound.png";
 
@@ -15,13 +15,13 @@ import notFound from "../../../../../assets/groupnotfound.png";
  * @returns {JSX.Element} - A React JSX element representing the clan information component.
  */
 
-function ClanInformation({name, description, status, pname, succes})
+function PersonInformation({name, succes})
 {
     const [massage, setMassage] = useState("")
     const [succesRequest, setSuccesRequest] = useState(false)
     const handleRequestbutton = async () =>
     {
-        const requestMassage = await POST({'cname': name, 'sender': "abu"}, "/joinClan")
+        const requestMassage = await POST({'cname': name, 'sender': "abu"}, "/sendfriendrequest")
         setMassage(requestMassage.message)
         setSuccesRequest(requestMassage.succes)
     }
@@ -36,27 +36,17 @@ function ClanInformation({name, description, status, pname, succes})
     }, [succesRequest]);
 
     return(
-        <div className={"clan-infowithbutton"}>
-            <div className={"clan-container"}>
-                <div className={"main-info"}>
-                        <img src={succes ? clanPicture : notFound} alt={"clanPicture"} className={"clanPicture"}/>
-                        <div className={"name-pname"}>
-                            <div className={"name"}>{name}</div>
-                            {succes && <div className={"pname"}>Clan Leader: {pname}</div>}
-                        </div>
-                </div>
-                <div className={"extra-info"}>
-                    <div className={"status"}>{status}</div>
-                    <div className={"description"}>{description}</div>
-                </div>
+        <div className={"player-info-request"}>
+            <div className={"avatar-name"}>
+                <img src={clanPicture} alt={"clanPicture"} className={"avatar"}/>
+                <div className={"name"}>name</div>
             </div>
-            {succes && <button className={"clan-request-button"} onClick={handleRequestbutton}>Send Request</button>}
-            {succesRequest && <RequestMassagePopUp massage={massage}/>}
+            <button className={"friend-request-button"}>Send Friend Request</button>
         </div>
     )
 }
-function RequestMassagePopUp({ massage })
-{
+
+function RequestMassagePopUp({massage}) {
     return (
         <div className="popup-message">
             {massage}
@@ -64,4 +54,4 @@ function RequestMassagePopUp({ massage })
     );
 }
 
-export default ClanInformation;
+export default PersonInformation;
