@@ -243,7 +243,6 @@ def searchClan():
     'status': <string> | Current Clan status - Oneliner
     }
     """
-
     data = request.json
     clan = clan_data_acces.get_clan(Clan(data.get('name'), None, None, None))
     dct = clan.to_dct()
@@ -252,13 +251,7 @@ def searchClan():
         dct["succes"] = False
     else:
         dct["succes"] = True
-
     return jsonify(dct)
-
-
-@app.route('/friendRequests', methods=['GET'])
-def friendRequests():
-    return jsonify({'FriendRequests': True})
 
 
 @app.route('/searchPerson', methods=['POST'])
@@ -287,6 +280,10 @@ def search_player():
         return jsonify({'success': Controle, 'message': "Player exists"})
     else:
         return jsonify({'success': Controle, 'message': "Player doesn't exists"})
+
+@app.route('/friendRequests', methods=['GET'])
+def friendRequests():
+    return jsonify({'FriendRequests': True})
 
 
 @app.route('/sendfriendrequest', methods=['POST'])
