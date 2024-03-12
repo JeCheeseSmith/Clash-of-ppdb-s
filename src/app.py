@@ -52,7 +52,7 @@ def add_player():
     password = data.get('password')
     Controle = False
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
-    Controle = player_data_access.add_user(Player_obj)
+    Controle = player_data_access.add_user(Player_obj,settlement_data_acces)
     if Controle:
         return jsonify({'success': Controle, 'message': "Signed in successful"})
     else:
@@ -146,7 +146,7 @@ def update_chat():
         return jsonify(obj)
 
 
-@app.route('/resources', methods=['GET'])
+@app.route('/resources', methods=['POST'])
 def get_resources():
     """
     Function to retrieve current amount of resources of a settlement
@@ -154,12 +154,13 @@ def get_resources():
 
     JSON Input Format
     {
-    'id': <INT> | ID of the Settlement
+    'id': <INT> | Name of the Settlement
     }
    """
-
-    pass
-
+    data = request.json
+    id = data.get('id')
+    packageDict = settlement_data_acces.getResources(Settlement(id))
+    return jsonify(packageDict)
 
 @app.route('/grid', methods=['GET'])
 def get_grid():

@@ -200,10 +200,10 @@ INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',1,1,1,'watson');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',1,3,2,'jonas');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',3,1,3,'abu');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',3,3,4,'admin');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',0,0,1,'watson');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',2,0,2,'jonas');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,3,'abu');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,4,'admin');
 
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('WoodcuttersCamp','production','200*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Quarry','production','200*x',1,1);
@@ -243,3 +243,4 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3);
+

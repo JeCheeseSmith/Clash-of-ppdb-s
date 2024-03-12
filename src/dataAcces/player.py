@@ -32,7 +32,7 @@ class PlayerDataAccess:
         else:
             return False
 
-    def add_user(self, obj):
+    def add_user(self, obj, settlement_data_acces):
         """
         Initialise all standard data for the user.
         - Create a player in the database
@@ -40,8 +40,9 @@ class PlayerDataAccess:
         - Send a welcome message to the user
         :return:
         """
-        cursor = self.dbconnect.get_cursor()
         try:
+            cursor = self.dbconnect.get_cursor()
+
             # Create the player
             cursor.execute(
                 'INSERT INTO player(name,password,xp,gems,level,avatar,logout) VALUES(%s,%s,%s,%s,%s,%s,now())',
@@ -50,10 +51,13 @@ class PlayerDataAccess:
             # Create a package for the settlement
             cursor.execute('INSERT INTO package(stone,wood,steel,food) VALUES(%s,%s,%s,%s)',
                            (500, 500, 500, 500))  # All resource are initialised at the maximum
-
             # Create a settlement & link the package
+            cursor.execute('SELECT max(id) FROM package;')
+            pid = cursor.fetchone()
+            location = settlement_data_acces.getNewCoordinate()
+
             cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES(%s,%s,%s,%s,%s)',
-                           (obj.name + " Castle", 0, 0,))
+                           (obj.name + " Castle", location[0], location[1], pid, obj.name))
 
             # Send a message to the user from the system
             # TODO: Call message send here
