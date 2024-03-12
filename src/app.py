@@ -30,22 +30,22 @@ friend_data_access = FriendDataAccess(connection)
 @app.route('/signin', methods=['POST'])
 def add_player():
     """
-        API request to sign in as a new player with a unique name and password
+    API request to sign in as a new player with a unique name and password
 
-        JSON Input Format:
+    JSON Input Format:
 
-        {
-        'name': <string>,
-        'password': <string>
-        }
+    {
+    'name': <string>,
+    'password': <string>
+    }
 
-        JSON Output Format:
+    JSON Output Format:
 
-        {
-        'success': <bool> | State of Signrequest
-        'message': <string> | Standard reply
-        }
-        """
+    {
+    'success': <bool> | State of Signrequest
+    'message': <string> | Standard reply
+    }
+    """
     data = request.json
     name = data.get('name')
     password = data.get('password')
@@ -61,22 +61,22 @@ def add_player():
 @app.route('/login', methods=['GET'])
 def get_login():
     """
-            API request to log in as a player with a unique name and password
+    API request to log in as a player with a unique name and password
 
-            JSON Input Format:
+    JSON Input Format:
 
-            {
-            'name': <string>,
-            'password': <string>
-            }
+    {
+    'name': <string>,
+    'password': <string>
+    }
 
-            JSON Output Format:
+    JSON Output Format:
 
-            {
-            'success': <bool> | State of Loginrequest
-            'message': <string> | Standard reply
-            }
-            """
+    {
+    'success': <bool> | State of Loginrequest
+    'message': <string> | Standard reply
+    }
+    """
     data = request.json
     player_name = data.get('name')
     player_password = data.get('password')
@@ -92,35 +92,35 @@ def get_login():
 @app.route('/chat', methods=['POST', 'GET'])
 def update_chat():
     """
-           POST: API request to send a message to another player
-           GET: API request to get messages from the player
+    POST: API request to send a message to another player
+    GET: API request to get messages from the player
 
-           JSON Input Format(POST):
+    JSON Input Format(POST):
 
-           {
-           'id': <int>,
-           'momemt': <string>
-           'content': <string>
-           'pname': <string>
-           'sname': <string>
-           }
+    {
+    'id': <int>,
+    'momemt': <string>
+    'content': <string>
+    'pname': <string>
+    'sname': <string>
+    }
 
-           JSON Input Format(GET):
+    JSON Input Format(GET):
 
-           {
-           'pname': <string>
-           }
+    {
+    'pname': <string>
+    }
 
-           JSON Output Format(POST):
+    JSON Output Format(POST):
 
-           {
-           'success': <bool> | State of Send of the message
-           'message': <string> | Standard reply
-           }
+    {
+    'success': <bool> | State of Send of the message
+    'message': <string> | Standard reply
+    }
 
-           Output Format(GET): List with messages returned in json format
+    Output Format(GET): List with messages returned in json format
 
-           """
+    """
     data = request.json
     message_id = data.get('id')
     message_moment = data.get('moment')
