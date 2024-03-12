@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS player(
     gems BIGINT,
     xp BIGINT,
     level INT,
-    logout TIMESTAMP -- Last time a player logged out at this time
+    logout TIMESTAMP, -- Last time a player logged out at this time
+    pid SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Holds Relation
 );
 
 CREATE TABLE IF NOT EXISTS content(
