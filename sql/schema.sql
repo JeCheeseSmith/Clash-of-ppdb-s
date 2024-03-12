@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS soldier(
 );
 
 CREATE TABLE IF NOT EXISTS package(
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     stone BIGINT,
     wood BIGINT,
     steel BIGINT,
@@ -34,36 +34,36 @@ CREATE TABLE IF NOT EXISTS player(
     xp BIGINT,
     level INT,
     logout TIMESTAMP, -- Last time a player logged out at this time
-    pid SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Holds Relation
+    pid INT REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Holds Relation
 );
 
 CREATE TABLE IF NOT EXISTS content(
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     moment TIMESTAMP NOT NULL,
     content TEXT NOT NULL,
     pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE SET NULL -- Send Relation
 );
 
 CREATE TABLE IF NOT EXISTS message(
-    id SERIAL PRIMARY KEY REFERENCES content(id) ON DELETE CASCADE
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY REFERENCES content(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS request(
-    id SERIAL PRIMARY KEY REFERENCES content(id) ON DELETE CASCADE,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY REFERENCES content(id) ON DELETE CASCADE,
     accept BOOL
 );
 
 CREATE TABLE IF NOT EXISTS transferRequest(
-    rid SERIAL PRIMARY KEY REFERENCES request(id) ON DELETE CASCADE,
-    pid SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE
+    rid INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY REFERENCES request(id) ON DELETE CASCADE,
+    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS clanRequest(
-    id SERIAL PRIMARY KEY REFERENCES request(id) ON DELETE CASCADE ON UPDATE CASCADE
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY REFERENCES request(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS friendRequest(
-    id SERIAL PRIMARY KEY REFERENCES request(id) ON DELETE CASCADE ON UPDATE CASCADE
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY REFERENCES request(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS admin(
@@ -78,18 +78,19 @@ CREATE TABLE IF NOT EXISTS clan(
 );
 
 CREATE TABLE IF NOT EXISTS settlement(
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR UNIQUE NOT NULL,
-    mapX INT UNIQUE NOT NULL, -- Coordinate on the map
-    mapY INT UNIQUE NOT NULL,
-    pid SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Has Relation: Resources currently in the settlement
+    mapX INT NOT NULL, -- Coordinate on the map
+    mapY INT NOT NULL,
+    UNIQUE (mapX,mapY), -- There cannot be settlements with the same coordinates
+    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Has Relation: Resources currently in the settlement
     pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE -- Owns Relation
 );
 
 CREATE TABLE IF NOT EXISTS achievement(
     name VARCHAR PRIMARY KEY,
     task TEXT NOT NULL, -- Description of the tasks to do
-    pid SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
+    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
 );
 
 CREATE TABLE IF NOT EXISTS quest(
@@ -98,29 +99,29 @@ CREATE TABLE IF NOT EXISTS quest(
 );
 
 CREATE TABLE IF NOT EXISTS transfer(
-    id SERIAL PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     speed INT,
-    sidto SERIAL NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- To Relation
+    sidto INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- To Relation
     discovered BOOL NOT NULL,
-    sidfrom SERIAL NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- From Relation
-    pid SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
+    sidfrom INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- From Relation
+    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
 );
 
 CREATE TABLE IF NOT EXISTS buildable(
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
     function TEXT NOT NULL, -- The mathematical function to evaluate the resource function with
-    cost SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Costs Relation
-    drawback SERIAL NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Drawback Relation
+    cost INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Costs Relation
+    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Drawback Relation
 );
 
 CREATE TABLE IF NOT EXISTS building(
-    id SERIAL,
+    id INT,
     name VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT NOT NULL,
     gridX INT UNIQUE NOT NULL, -- Coordinate on the grid
     gridY INT UNIQUE NOT NULL,
-    sid SERIAL NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
+    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
     PRIMARY KEY (id,name)
 );
 
@@ -137,25 +138,25 @@ CREATE TABLE IF NOT EXISTS member(
 );
 
 CREATE TABLE IF NOT EXISTS retrieved(
-    mid SERIAL REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    mid INT REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
     pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (mid,pname)
 );
 
 CREATE TABLE IF NOT EXISTS shared(
-    mid SERIAL REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    mid INT REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
     cname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (mid,cname)
 );
 
 CREATE TABLE IF NOT EXISTS intercept(
-    tid1 SERIAL REFERENCES transfer(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    tid2 SERIAL REFERENCES transfer(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    tid1 INT REFERENCES transfer(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    tid2 INT REFERENCES transfer(id) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY(tid1,tid2)
 );
 
 CREATE TABLE IF NOT EXISTS troops(
-    pid SERIAL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    pid INT REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE,
     sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     amount INT NOT NULL,
     transferable BOOL NOT NULL,
@@ -165,21 +166,21 @@ CREATE TABLE IF NOT EXISTS troops(
 
 CREATE TABLE IF NOT EXISTS unlockedBuildable(
     bname VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    sid SERIAL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
     PRIMARY KEY (bname,sid)
 );
 
 CREATE TABLE IF NOT EXISTS unlockedsoldier(
     sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    sid SERIAL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
     PRIMARY KEY (sid,sname)
 );
 
 CREATE TABLE IF NOT EXISTS wheelofFortune(
     pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    pid SERIAL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    pid INT REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (pid,pname)
 );
 
@@ -190,12 +191,25 @@ CREATE TABLE IF NOT EXISTS achieved(
     PRIMARY KEY (pname,aname)
 );
 
-INSERT INTO player(name,password) VALUES('watson','1234');
-INSERT INTO player(name,password) VALUES('jonas','1234');
-INSERT INTO player(name,password) VALUES('abu','1234');
-INSERT INTO player(name,password) VALUES('admin','1234');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','50','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','50','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','50','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','50','0');
 
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','0','0');
+INSERT INTO player(name,password,pid) VALUES('watson','1234',1);
+INSERT INTO player(name,password,pid) VALUES('jonas','1234',2);
+INSERT INTO player(name,password,pid) VALUES('abu','1234',3);
+INSERT INTO player(name,password,pid) VALUES('admin','1234',4);
+
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',1,1,5,'watson');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',1,3,6,'jonas');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',3,1,7,'abu');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',3,3,8,'admin');
 
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('WoodcuttersCamp','production','200*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Quarry','production','200*x',1,1);
