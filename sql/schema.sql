@@ -33,8 +33,7 @@ CREATE TABLE IF NOT EXISTS player(
     gems BIGINT,
     xp BIGINT,
     level INT,
-    logout TIMESTAMP, -- Last time a player logged out at this time
-    pid INT REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Holds Relation
+    logout TIMESTAMP -- Last time a player logged out at this time
 );
 
 CREATE TABLE IF NOT EXISTS content(
@@ -191,25 +190,20 @@ CREATE TABLE IF NOT EXISTS achieved(
     PRIMARY KEY (pname,aname)
 );
 
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','50','0');
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','50','0');
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','50','0');
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('0','0','0','0','50','0');
-
-INSERT INTO player(name,password,pid) VALUES('watson','1234',1);
-INSERT INTO player(name,password,pid) VALUES('jonas','1234',2);
-INSERT INTO player(name,password,pid) VALUES('abu','1234',3);
-INSERT INTO player(name,password,pid) VALUES('admin','1234',4);
+INSERT INTO player(name,password) VALUES('watson','1234');
+INSERT INTO player(name,password) VALUES('jonas','1234');
+INSERT INTO player(name,password) VALUES('abu','1234');
+INSERT INTO player(name,password) VALUES('admin','1234');
 
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',1,1,5,'watson');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',1,3,6,'jonas');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',3,1,7,'abu');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',3,3,8,'admin');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',1,1,1,'watson');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',1,3,2,'jonas');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',3,1,3,'abu');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',3,3,4,'admin');
 
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('WoodcuttersCamp','production','200*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Quarry','production','200*x',1,1);
