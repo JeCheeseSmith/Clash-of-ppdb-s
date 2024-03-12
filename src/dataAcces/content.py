@@ -43,44 +43,43 @@ class ContentDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def add_message(self,obj):
+    def add_message(self,obj,sname):
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(obj.content, obj.sender,))
+            print("euue")
             cursor.execute('INSERT INTO message(id) VALUES (DEFAULT);')
+            cursor.execute('SELECT name FROM player WHERE name=%s;', (sname,))
+            receiver = cursor.fetchone()
+            print(receiver)
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', (receiver[0],))
+            print("nietd")
             self.dbconnect.commit()
             return True
-        except:
-            print("hallo")
+        except Exception as e:
+            print("Error:", e)
             self.dbconnect.rollback()
             return False
 
-    def add_message2(self, obj):
-        cursor = self.dbconnect.get_cursor()
-        try:
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES(%s,%s)', (obj.id, obj.sname))
-            self.dbconnect.commit()
-            return True
-        except:
-            print("hallo")
-            self.dbconnect.rollback()
-            return False
 
-    def get_chatbox(self, pname):
+    def get_chatbox(self, Pname,Sname):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT EXISTS(SELECT 1 FROM content WHERE pname = %s)" ,(pname,))
+        cursor.execute("SELECT EXISTS(SELECT 1 FROM content WHERE pname = %s)" ,(Pname,))
         name = cursor.fetchone()[0]
         print(name)
 
         if name:
             messages = """
-                    SELECT id, moment, content, pname
-                    FROM content
-                    WHERE pname = %s
-                    ORDER BY moment DESC
-                    LIMIT 10
+                    SELECT *
+                    FROM message
+                    INNER JOIN content ON message.id = content.id and content.pname=%s
+                    WHERE message.id IN (     
+                            SELECT mid
+                            FROM retrieved
+                            WHERE pname = %s
+                        );
                 """
-            cursor.execute(messages, (pname,))
+            cursor.execute(messages, (Pname,Sname,))
             messages =cursor.fetchall()
             chatbox =[]
             for message in messages:

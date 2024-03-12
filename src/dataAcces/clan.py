@@ -43,28 +43,26 @@ class ClanDataAccess:
                                                                                             "own clan instead?")
         return obj
 
-    def sendRequest(self, request, cname):
+
+    def sendRequest(self,request,cname):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
-                           (request.content, request.sender,))
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES (DEFAULT,now(),%s,%s);',(request.content, request.sender,))
             cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
             cursor.execute('INSERT INTO clanrequest(id) VALUES (DEFAULT);')
-            print("sksk")
-            print(cname)
-            # Find the clanLeader and send him the Request
             cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,))
-
-            print("madinn")
-            clanLeader = cursor.fetchone()
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', clanLeader)
+            receiver = cursor.fetchone()
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', receiver)
+            self.dbconnect.commit()
             return True
         except Exception as e:
-            print("Error:", e)
+            print("Error:",e)
             self.dbconnect.rollback()
             return False
 
-    def get_Friendrequest(self,pname):
+
+
+    def get_clanrequest(self,pname):
         cursor = self.dbconnect.get_cursor()
 
         #Retrieved content en niet message of request morgen oplossen
