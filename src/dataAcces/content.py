@@ -11,7 +11,7 @@ class Content:
 
 class Request(Content):
     def __init__(self ,id, moment, content, sender, accept):
-        super(Content, self).__init__(id, moment, content, sender)
+        super().__init__(id, moment, content, sender)
         self.accept = accept
 
     def to_dct(self):

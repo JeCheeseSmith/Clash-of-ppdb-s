@@ -211,11 +211,11 @@ def joinClan():
     'message': <string> | Standard reply
     }
     """
-    data = Request.json
+    data = request.json
 
-    request = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
-    cname = data.get('cname') # Name of the clan
-    succes = clan_data_acces.sendRequest(request, cname)
+    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),None)
+    cname = data.get("cname") # Name of the clan
+    succes = clan_data_acces.sendRequest(rhequest, cname)
 
     return jsonify({'succes': succes, 'message': "Your request has been send. Please await further correspondence!"})
 
@@ -321,8 +321,8 @@ def send_friend_request():
     else:
         return jsonify({'success': Controle, 'message': "Friend request isn't send"})
 
-@app.route('/getfriendrequests', methods=['GET'])
-def get_friend_requests():
+@app.route('/getgeneralrequests', methods=['POST'])
+def get_general_requests():
     """
              API request to get friend requests from the player
 
@@ -338,11 +338,19 @@ def get_friend_requests():
                """
     data = request.json
     pname = data.get('pname')
-    obj = friend_data_access.get_Friendrequest(pname)
-    return jsonify(obj)
+    Friendrequests= friend_data_access.get_Friendrequest(pname)
+    Clanrequests= clan_data_acces.get_Friendrequest(pname)
+    Generalrequest= Friendrequests + Clanrequests
+
+    # Sort merged list based on the moment
+    Generalrequest = sorted(Generalrequest, key=lambda x: x['moment'])
+    return jsonify(Generalrequest)
+
+#combine friend and clan reequest
+#
 
 
-@app.route('/acceptfriendrequests', methods=['POST'])
+@app.route('/accept_requests', methods=['POST'])
 def accept_friend_requests():
     """
                    POST: API request to accept or decline a friend request of another player

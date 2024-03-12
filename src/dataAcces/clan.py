@@ -47,16 +47,46 @@ class ClanDataAccess:
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
-                           (request.content, request.sender))
-            cursor.execute(
-                'INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
+                           (request.content, request.sender,))
+            cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
             cursor.execute('INSERT INTO clanrequest(id) VALUES (DEFAULT);')
-
+            print("sksk")
+            print(cname)
             # Find the clanLeader and send him the Request
-            cursor.execute('SELECT pname FROM clan WHERE name=%s;', cname)
+            cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,))
+
+            print("madinn")
             clanLeader = cursor.fetchone()
             cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', clanLeader)
             return True
-        except:
+        except Exception as e:
+            print("Error:", e)
             self.dbconnect.rollback()
             return False
+
+    def get_Friendrequest(self,pname):
+        cursor = self.dbconnect.get_cursor()
+
+        #Retrieved content en niet message of request morgen oplossen
+        call = """
+                            SELECT *
+                            FROM clanrequest 
+                            INNER JOIN content ON clanrequest.id = content.id
+                            WHERE clanrequest.id IN (     
+                                SELECT mid
+                                FROM retrieved
+                                WHERE pname = %s
+                            );
+                            """
+        cursor.execute(call, (pname,))
+        friend_request = cursor.fetchall()
+        friends = []
+        for friend in friend_request:
+            message_dict = {
+                "id": friend[0],
+                "moment": str(friend[1]),
+                "content": friend[2],
+                "pname": friend[3]
+            }
+            friends.append(message_dict)
+        return friends
