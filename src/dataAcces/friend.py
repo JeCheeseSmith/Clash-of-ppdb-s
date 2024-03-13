@@ -65,7 +65,7 @@ class FriendDataAccess:
                 """
         cursor.execute(query, (pname, request.sender, request.sender, pname))
         a = cursor.fetchone()
-        if a!=None:
+        if a is not None:
             return False
 
         try:
