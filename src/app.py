@@ -372,6 +372,50 @@ def accept_general_requests():
             Controle = content_data_access.add_message(message1, sname)
             return jsonify({"success": Controle, "message": "not accepted"})
 
+@app.route("/unfriend", methods=["POST"])
+def removeFriend():
+    """
+    POST: API request to remove someone as friend
+
+    JSON Input Format:
+    {
+    "pname": <string> | Person who you're friend with
+    "sname": <string> | Person who gives the command to remove friend
+    }
+
+    JSON Output Format:
+    {
+    "success": <bool> | State of succes
+    }
+    """
+
+@app.route("/getFriends", methods=["GET"])
+def getFriends():
+    """
+    POST: API request get al friends from someone
+
+    JSON Input Format:
+    {
+    "name": <string> | Person from who we will retrieve all friends
+    }
+
+    JSON Output Format:
+    List of friends
+    """
+
+@app.route("/leaveClan", methods=["POST"])
+def leaveClan():
+    """
+    POST: API request to leave the Clan and potentially delete the clan if no members are left anymore (It might also change clan ownership)
+
+    JSON Input Format:
+    {
+    "name": <string> | Person who leaves the clan
+    }
+
+    JSON Output Format:
+    List of friends
+    """
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
