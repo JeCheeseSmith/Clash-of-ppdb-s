@@ -33,7 +33,6 @@ function LoginPage() {
         if (data.succes) {
             navigate('/MainPage', { state: { username } });
         }
-
     }
 
   return (

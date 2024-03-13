@@ -4,6 +4,7 @@ import POST from "../../../../api/POST.jsx";
 import ClanInformation from "./retrievedData/clanInfo.jsx";
 import PersonInformation from "./retrievedData/personInfo.jsx";
 import DisplayAvatarName from "../../../../avatarWithName/avatarWithName.jsx";
+import {useLocation} from "react-router-dom";
 
 function SocialOption({pageName, requests})
 {
@@ -21,10 +22,11 @@ export default SocialOption;
 
 function CreateClanPage()
 {
+    const location = useLocation();
+    const clanLeader = location.state.username || {};
     const [clanName, setClanName] = useState("");
     const [clanDescription, setClanDescription] = useState("");
     const [clanStatus,setClanStatus] = useState("")
-    const [clanLeader, setClanLeader] = useState("watson")
     const handleclanName = (e) =>
     {
         setClanName(e.target.value);
@@ -37,11 +39,8 @@ function CreateClanPage()
     {
         setClanStatus(e.target.value);
     };
-    const handleclanLeader= (e) =>
+    const handleButtonClick = async () =>
     {
-        setClanLeader(e.target.value);
-    };
-    const handleButtonClick = async () => {
         const data = await POST({
             name: clanName,
             description: clanDescription,
@@ -93,7 +92,8 @@ function JoinClanPage()
 }
 
 
-function RequestsPage({ requests }) {
+function RequestsPage({ requests })
+{
     return (
         <div className="requests-container">
             {
@@ -111,7 +111,8 @@ function RequestsPage({ requests }) {
 }
 
 
-function SearchPersonPage() {
+function SearchPersonPage()
+{
     const [person, setPerson] = useState("");
     const [clicked, setClicked] = useState(false);
 

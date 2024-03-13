@@ -13,24 +13,26 @@ import CommunicationButton from "../communication.jsx";
  */
 function SocialBox()
 {
-  const [socialVisible, setSocialVisible] = useState(false);
-  const toggleSocialVisibility = () => {
-    setSocialVisible(!socialVisible);
-  };
+    const [socialVisible, setSocialVisible] = useState(false);
+    const toggleSocialVisibility = () =>
+    {
+        setSocialVisible(!socialVisible);
+    };
 
-  const playSocial = () => {
-    const sound = new Audio(buttonSocial);
-    sound.currentTime = 0.315;
-    sound.play();
-  };
+    const playSocial = () =>
+    {
+        const sound = new Audio(buttonSocial);
+        sound.currentTime = 0.315;
+        sound.play();
+    };
 
-  return (
-      <div>
-          <CommunicationButton type={"social"} buttonFunction={toggleSocialVisibility} buttonAudio={playSocial}/>
-          <div className="social-container"></div>
-          <Box socialVisible={socialVisible}/>
-      </div>
-  );
+    return (
+        <div>
+            <CommunicationButton type={"social"} buttonFunction={toggleSocialVisibility} buttonAudio={playSocial}/>
+            <div className="social-container"></div>
+            <Box socialVisible={socialVisible}/>
+        </div>
+    );
 }
 export default SocialBox;
 

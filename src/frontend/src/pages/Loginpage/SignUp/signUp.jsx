@@ -24,7 +24,7 @@ function RegistrationPage() {
     const handleSaveClick= async () => {
         const data = await POST({name:username, password: password}, "/signin");
         if (data.succes) {
-            navigate('/MainPage');
+            navigate('/MainPage', { state: { username } });
         }
     }
 
