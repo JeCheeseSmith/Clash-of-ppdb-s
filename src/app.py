@@ -34,14 +34,12 @@ def add_player():
     API request to sign up as a new player with a unique name and password
 
     JSON Input Format:
-
     {
     "name": <string>,
     "password": <string>
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Signrequest
     "message": <string> | Standard reply
@@ -67,14 +65,12 @@ def get_login():
     API request to log in as a player with a unique name and password
 
     JSON Input Format:
-
     {
     "name": <string>,
     "password": <string>
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Loginrequest
     "message": <string> | Standard reply
@@ -100,30 +96,27 @@ def update_chat():
     POST: API request to send a message to another player
     GET: API request to get messages from the player
 
-    JSON Input Format(POST):
-
+    JSON Input Format (POST):
     {
     "content": <string> | Actual text in the message
     "pname": <string> | Player name of the receiver
     "sname": <string> | Player name of the sender
     }
 
-    JSON Input Format(GET):
-
+    JSON Input Format (GET):
     {
     "pname": <string> | Player name of current logged in user
     "sname": <string> | Player name of the person you're chatting with
     }
 
-    JSON Output Format(POST):
-
+    JSON Output Format (POST):
     {
     "success": <bool> | State of Send of the message
     "message": <string> | Standard reply
     }
 
-    Output Format(GET): List with messages returned in json format, ordered by moment
-
+    JSON Output Format (GET):
+    List with messages returned in json format, ordered by moment
     """
     data = request.json
     message_pname = data.get("pname")
@@ -200,14 +193,12 @@ def joinClan():
     Make a request to join the Clan; sends a message to the Clan Leader too
 
     JSON Input Format:
-
     {
-    "cname": <string>,
-    "sender": <string>
+    "cname": <string> | Name of the clan
+    "sender": <string> | Person who wishes to join the clan
     }
 
     JSON Output Format:
-
     {
     "succes": <bool> | State of request
     "message": <string> | Standard reply
@@ -259,13 +250,11 @@ def search_player():
     API request to search a player that plays the game
 
     JSON Input Format:
-
     {
     "pname": <string>
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Search of the player
     "message": <string> | Standard reply
@@ -279,8 +268,6 @@ def search_player():
         return jsonify({"success": Controle, "message": "Player exists"})
     else:
         return jsonify({"success": Controle, "message": "Player doesn't exists"})
-
-
 
 
 @app.route("/sendfriendrequest", methods=["POST"])
@@ -313,16 +300,15 @@ def send_friend_request():
 @app.route("/getgeneralrequests", methods=["POST"])
 def get_general_requests():
     """
-    API request to get friend requests from the player
-
+    API request to get requests to a player
 
     JSON Input Format:
-
     {
-    "pname": <string>
+    "pname": <string> | Name of the player to which the request are send
     }
 
-    Output Format: List with friend requests returned in json format
+    JSON Output Format
+    List with requests returned in json format
     """
     data = request.json
     pname = data.get("pname")
@@ -335,16 +321,12 @@ def get_general_requests():
     return jsonify(Generalrequest)
 
 
-
-
-
 @app.route("/acceptgeneralrequests", methods=["POST"])
 def accept_general_requests():
     """
     POST: API request to accept or decline a friend request of another player
 
     JSON Input Format:
-
     {
     "state": <string>
     "pname": <string>
@@ -352,7 +334,6 @@ def accept_general_requests():
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Accepting
     "message": <string> | Standard reply
@@ -399,8 +380,6 @@ def accept_general_requests():
 def catch_all(path):
     """
     Standard catch_all to serve each file
-    :param path:
-    :return:
     """
     return render_template("index.html")
 
