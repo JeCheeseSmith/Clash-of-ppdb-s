@@ -49,10 +49,8 @@ def add_player():
     data = request.json
     name = data.get("name")
     password = data.get("password")
-    Controle = False
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     Controle = player_data_access.add_user(Player_obj, settlement_data_acces)
-    print(Controle)
     if Controle[0]:
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
     else:
@@ -350,23 +348,21 @@ def accept_general_requests():
     state = data.get("state")
     id = data.get("id")
 
-    Hoofdcontrole=[False,False]
-    Friendstatus=False
-    Clanstatus=False
-    Hoofdcontrole=friend_data_access.accept_Friendrequest(state,id,pname,sname)
-    Friendstatus=Hoofdcontrole[0]
+    if content_data_access.isFriendRequest(id):
+        Controle = friend_data_access.accept_Friendrequest(state, id, pname, sname)
 
-    if Friendstatus==True:
-        if Hoofdcontrole[1]==True:
+        print(state)
+
+        if state:
             message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
             Controle = content_data_access.add_message(message1, sname)
             return jsonify({"success": Controle, "message": "accepted"})
         else:
             message1 = Content(None, None, "Your request is denied by " + pname, "admin")
             Controle = content_data_access.add_message(message1, sname)
-            return jsonify({"success": Controle, "message": "not accepted"})
+            return jsonify({"success": Controle, "message": "rejected"})
 
-    else:
+    elif content_data_access.isClanRequest(id):
         Hoofdcontrole=clan_data_acces.accept_clanrequest(state,id,pname,sname)
         Clanstatus=Hoofdcontrole[0]
         if Clanstatus == True:
