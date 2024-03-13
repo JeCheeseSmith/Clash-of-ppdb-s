@@ -285,3 +285,9 @@ INSERT INTO content(moment,content,pname) VALUES (now(),'Wanna be my friend budd
 INSERT INTO retrieved(mid, pname) VALUES (4,'abu');
 INSERT INTO request(id,accept) VALUES (4,NULL);
 INSERT INTO friendRequest(id) VALUES (4);
+
+-- Create extra clanrequests who should get deleted too when one is accepted
+INSERT INTO content(moment,content,pname) VALUES (now(),'May I join your clan??','salah');
+INSERT INTO retrieved(mid, pname) VALUES (5,'abu');
+INSERT INTO request(id,accept) VALUES (5,NULL);
+INSERT INTO clanrequest(id) VALUES (5);

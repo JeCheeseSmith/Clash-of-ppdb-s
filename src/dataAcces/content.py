@@ -50,13 +50,13 @@ class ContentDataAccess:
     def isFriendRequest(self, id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT EXISTS( SELECT * FROM friendrequest WHERE id =%s);', (id,))
-        result = cursor.fetchone()
+        result = cursor.fetchone()[0]
         return result
 
     def isClanRequest(self, id):
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT EXISTS( SELECT * FROM clanrequest WHERE id =%s);', (id,))
-        result = cursor.fetchone()
+        result = cursor.fetchone()[0]
         return result
 
     def add_message(self, obj, pname):

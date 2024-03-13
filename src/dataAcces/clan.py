@@ -98,7 +98,7 @@ class ClanDataAccess:
 
         try:
             # Insert the content
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
+            cursor.execute('INSERT INTO content(moment,content,pname) VALUES(now(),%s,%s);',
                            (request.content, request.sender,))
 
             # Retrieve the latest ID to use as Foreign Key
@@ -122,25 +122,44 @@ class ClanDataAccess:
             self.dbconnect.rollback()
             return False
 
-
-    def accept_clanrequest(self,State,Id,pname,cname):
+    def accept_clanrequest(self,State,id,pname, sname):
+        """
+        Accept a clan request and remove it from the database
+        Also remove all other clan requests from this person
+        :param State: State of acceptance
+        :param id: ID of the message
+        :param pname: Name of the clanleader
+        :param sname: Name of the request sender
+        :return:
+        """
         try:
             cursor = self.dbconnect.get_cursor()
+            oldRequests = [(id,)] # Preset list
+
+            # Retrieve the clan name based on the pname/clanleader
+            cursor.execute('SELECT name FROM clan WHERE clan.pname=%s;', (pname,))
+            cname = cursor.fetchone()
 
             if State:
-                cursor.execute('INSERT INTO member(pname,cname) VALUES (%s,%s);', (pname, cname,))
+                print('a')
+                cursor.execute('INSERT INTO member(pname,cname) VALUES (%s,%s);', (sname, cname,))
 
-            cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
-            cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
-            cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
-            cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+                # When accepted; make sure to delete other old requests too
+                cursor.execute('SELECT id FROM clanrequest NATURAL JOIN content WHERE content.pname=%s;', (sname,))
+                oldRequests = cursor.fetchall()
+                oldRequests.append(id)
+
+            # Remove each old request
+            for rid in oldRequests:
+                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM request WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM content WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (rid,))
+
             self.dbconnect.commit()
             return True
-        except:
+
+        except Exception as e:
+            print("Error:", e)
+            self.dbconnect.rollback()
             return False
-
-
-
-
-
-
