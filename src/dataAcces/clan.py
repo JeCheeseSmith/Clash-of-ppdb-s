@@ -141,7 +141,6 @@ class ClanDataAccess:
             cname = cursor.fetchone()
 
             if State:
-                print('a')
                 cursor.execute('INSERT INTO member(pname,cname) VALUES (%s,%s);', (sname, cname,))
 
                 # When accepted; make sure to delete other old requests too
