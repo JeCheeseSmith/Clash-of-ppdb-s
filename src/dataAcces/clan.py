@@ -58,17 +58,17 @@ class ClanDataAccess:
                             );
                             """
         cursor.execute(call, (pname,))
-        friend_request = cursor.fetchall()
-        friends = []
-        for friend in friend_request:
+        clan_request = cursor.fetchall()
+        clans = []
+        for  clan in clan_request:
             message_dict = {
-                "id": friend[0],
-                "moment": friend[2],
-                "content": friend[3],
-                "pname": friend[4]
+                "id": clan[0],
+                "moment": clan[2],
+                "content": clan[3],
+                "pname":  clan[4]
             }
-            friends.append(message_dict)
-        return friends
+            clans.append(message_dict)
+        return clans
 
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
@@ -97,6 +97,31 @@ class ClanDataAccess:
             print("Error:", e)
             self.dbconnect.rollback()
             return False
+
+
+    def accept_clanrequest(self,State,Id,pname,cname):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute("SELECT EXISTS(SELECT 1 FROM clanrequest WHERE id = %s)", (Id,))
+        id = cursor.fetchone()[0]
+        if id:
+            if State == True:
+                cursor.execute('INSERT INTO member(pname,cname) VALUES (%s,%s);', (pname, cname,))
+
+                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
+                cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
+                cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
+                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+                return (True,True)
+            else:
+                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
+                cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
+                cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
+                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+                return (True,False)
+
+        else:
+            return (False,False)
+
 
 
 

@@ -160,7 +160,6 @@ def get_resources():
     packageDict = settlement_data_acces.getResources(Settlement(id))
     return jsonify(packageDict)
 
-
 @app.route("/grid", methods=["GET"])
 def get_grid():
     pass
@@ -277,9 +276,11 @@ def search_player():
     Cotrole = False
     Controle = player_data_access.search_player(name)
     if Controle:
-        return jsonify({"success": Controle})
+        return jsonify({"success": Controle, "message": "Player exists"})
     else:
-        return jsonify({"success": Controle})
+        return jsonify({"success": Controle, "message": "Player doesn't exists"})
+
+
 
 
 @app.route("/sendfriendrequest", methods=["POST"])
@@ -342,8 +343,11 @@ def get_general_requests():
     return jsonify(Generalrequest)
 
 
-@app.route("/accept_requests", methods=["POST"])
-def accept_friend_requests():
+
+
+
+@app.route("/acceptgeneralrequests", methods=["POST"])
+def accept_general_requests():
     """
     POST: API request to accept or decline a friend request of another player
 
@@ -366,16 +370,36 @@ def accept_friend_requests():
     pname = data.get("pname")
     sname = data.get("sname")
     state = data.get("state")
-    Controle = False
-    Controle = friend_data_access.accept_Friendrequest(state, pname, sname)
-    if Controle:
-        message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
-        Controle = content_data_access.add_message(message1, sname)
-        return jsonify({"success": Controle, "message": "accepted"})
+    id = data.get("id")
+
+    Hoofdcontrole=[False,False]
+    Friendstatus=False
+    Clanstatus=False
+    Hoofdcontrole=friend_data_access.accept_Friendrequest(state,id,pname,sname)
+    Friendstatus=Hoofdcontrole[0]
+
+    if Friendstatus==True:
+        if Hoofdcontrole[1]==True:
+            message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
+            Controle = content_data_access.add_message(message1, sname)
+            return jsonify({"success": Controle, "message": "accepted"})
+        else:
+            message1 = Content(None, None, "Your request is denied by " + pname, "admin")
+            Controle = content_data_access.add_message(message1, sname)
+            return jsonify({"success": Controle, "message": "not accepted"})
+
     else:
-        message1 = Content(None, None, "Your request is denied by " + pname, "admin")
-        Controle = content_data_access.add_message(message1, sname)
-        return jsonify({"success": Controle, "message": "not accepted"})
+        Hoofdcontrole=clan_data_acces.accept_clanrequest(state,id,pname,sname)
+        Clanstatus=Hoofdcontrole[0]
+        if Clanstatus == True:
+            if Hoofdcontrole[1] == True:
+                message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
+                Controle = content_data_access.add_message(message1, sname)
+                return jsonify({"success": Controle, "message": "accepted"})
+            else:
+                message1 = Content(None, None, "Your request is denied by " + pname, "admin")
+                Controle = content_data_access.add_message(message1, sname)
+                return jsonify({"success": Controle, "message": "not accepted"})
 
 
 @app.route("/", defaults={"path": ""})

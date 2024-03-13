@@ -1,3 +1,4 @@
+
 class Content:
     def __init__(self, id, moment, content, sender):
         self.id = id
@@ -7,7 +8,6 @@ class Content:
 
     def to_dct(self):
         return {'id': self.id, 'moment': self.moment, 'content': self.content, 'sender': self.sender}
-
 
 class Request(Content):
     def __init__(self, id, moment, content, sender, accept):
@@ -27,16 +27,13 @@ class Retrieve:
     def to_dct(self):
         return {'id': self.id, 'sname': self.sname}
 
-
 class ClanRequestDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-
 class TransferRequestDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
-
 
 class FriendRequestDataAccess:
     def __init__(self, dbconnect):
@@ -111,4 +108,6 @@ class ContentDataAccess:
             c = Content(message[0], str(message[2]), message[3], message[4])
             chatbox[c.moment]=c.to_dct()
 
-        return chatbox
+        all_messages = chatbox + chatbox2
+        all_messages = sorted(all_messages, key=lambda x: x['moment'])
+        return all_messages
