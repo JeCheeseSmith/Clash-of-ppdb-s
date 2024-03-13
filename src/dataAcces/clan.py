@@ -72,6 +72,25 @@ class ClanDataAccess:
 
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
+
+        # Check if they're not already in a clan
+        queryCheck = """
+                    SELECT EXISTS(
+                    SELECT EXISTS(SELECT *
+                    FROM member
+                    WHERE pname='abu')
+                        
+                    UNION ALL
+                        
+                    SELECT EXISTS(
+                    SELECT *
+                    FROM clan
+                    WHERE pname='abu')
+                    );
+                    """
+        if queryCheck:
+            return False
+
         try:
             # Insert the content
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
