@@ -28,7 +28,7 @@ settlement_data_acces = SettlementDataAcces(connection)
 package_data_acces = PackageDataAccess(connection)
 
 
-@app.route("/signin", methods=["POST"])
+@app.route("/signup", methods=["POST"])
 def add_player():
     """
     API request to sign up as a new player with a unique name and password
@@ -49,10 +49,8 @@ def add_player():
     data = request.json
     name = data.get("name")
     password = data.get("password")
-    Controle = False
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     Controle = player_data_access.add_user(Player_obj, settlement_data_acces)
-    print(Controle)
     if Controle[0]:
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
     else:
