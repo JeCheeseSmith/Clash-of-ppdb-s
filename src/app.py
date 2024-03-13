@@ -34,14 +34,12 @@ def add_player():
     API request to sign up as a new player with a unique name and password
 
     JSON Input Format:
-
     {
-    "name": <string>,
-    "password": <string>
+    "name": <string> | Username
+    "password": <string> | Password
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Signrequest
     "message": <string> | Standard reply
@@ -53,7 +51,7 @@ def add_player():
     password = data.get("password")
     Controle = False
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
-    Controle = player_data_access.add_user(Player_obj,settlement_data_acces)
+    Controle = player_data_access.add_user(Player_obj, settlement_data_acces)
     print(Controle)
     if Controle[0]:
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
@@ -67,14 +65,12 @@ def get_login():
     API request to log in as a player with a unique name and password
 
     JSON Input Format:
-
     {
-    "name": <string>,
-    "password": <string>
+    "name": <string> | Username
+    "password": <string> | Password
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Loginrequest
     "message": <string> | Standard reply
@@ -100,49 +96,43 @@ def update_chat():
     POST: API request to send a message to another player
     GET: API request to get messages from the player
 
-    JSON Input Format(POST):
-
+    JSON Input Format (POST):
     {
-    "id": <int>,
-    "momemt": <string>
-    "content": <string>
-    "pname": <string>
-    "sname": <string>
+    "content": <string> | Actual text in the message
+    "pname": <string> | Player name of the receiver
+    "sname": <string> | Player name of the sender
     }
 
-    JSON Input Format(GET):
-
+    JSON Input Format (GET):
     {
-    "pname": <string>
+    "pname": <string> | Player name of current logged in user
+    "sname": <string> | Player name of the person you're chatting with
     }
 
-    JSON Output Format(POST):
-
+    JSON Output Format (POST):
     {
     "success": <bool> | State of Send of the message
     "message": <string> | Standard reply
     }
 
-    Output Format(GET): List with messages returned in json format
-
+    JSON Output Format (GET):
+    List with messages returned in json format, ordered by moment
     """
     data = request.json
-    message_content = data.get("content")
     message_pname = data.get("pname")
     message_sname = data.get("sname")
+
     if request.method == "POST":
+        message_content = data.get("content")
         Controle = False
-        Chat_obj = Content(None, None, message_content, message_pname)
-        Controle = content_data_access.add_message(Chat_obj,message_sname)
+        Chat_obj = Content(None, None, message_content, message_sname)
+        Controle = content_data_access.add_message(Chat_obj, message_pname)
         if Controle:
             return jsonify({"success": Controle, "message": "message send successful"})
         else:
             return jsonify({"success": Controle, "message": "Failed to send message"})
-
-
-    elif request.method == "GET":
-        print("tets")
-        obj = content_data_access.get_chatbox(message_pname,message_sname)
+    else:  # request.method == "GET":
+        obj = content_data_access.get_chatbox(message_pname, message_sname)
         return jsonify(obj)
 
 
@@ -202,14 +192,12 @@ def joinClan():
     Make a request to join the Clan; sends a message to the Clan Leader too
 
     JSON Input Format:
-
     {
-    "cname": <string>,
-    "sender": <string>
+    "cname": <string> | Name of the clan
+    "sender": <string> | Person who wishes to join the clan
     }
 
     JSON Output Format:
-
     {
     "succes": <bool> | State of request
     "message": <string> | Standard reply
@@ -223,6 +211,7 @@ def joinClan():
     succes = clan_data_acces.sendRequest(rhequest, cname)
 
     return jsonify({"succes": succes, "message": "Your request has been send. Please await further correspondence!"})
+
 
 
 @app.route("/searchClan", methods=["POST"])
@@ -261,13 +250,11 @@ def search_player():
     API request to search a player that plays the game
 
     JSON Input Format:
-
     {
     "pname": <string>
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Search of the player
     "message": <string> | Standard reply
@@ -283,37 +270,27 @@ def search_player():
         return jsonify({"success": Controle, "message": "Player doesn't exists"})
 
 
-
-
 @app.route("/sendfriendrequest", methods=["POST"])
 def send_friend_request():
     """
     POST: API request to send a friend request to another player
 
     JSON Input Format:
-
     {
-    "moment": <string>
-    "content": <string>
-    "pname": <string>
-    "sname": <string>
+    "content": <string> | Actual text
+    "pname": <string> | Receiver
+    "sname": <string> | Sender
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Send of the friend request
     "message": <string> | Standard reply
     }
     """
     data = request.json
-    message_content = data.get("content")
-    message_pname = data.get("pname")
-    message_sname = data.get("sname")
-    Friend_request = Content(None, None, message_content, message_pname)
-    Controle = False
-    print("hallo")
-    Controle = friend_data_access.send_Friendrequest(Friend_request, message_sname)
+    Friend_request = Content(None, None, data.get("content"), data.get("sname"))
+    Controle = friend_data_access.send_Friendrequest(Friend_request, data.get("pname"))
     if Controle:
         return jsonify({"success": Controle, "message": "Friend request is send"})
     else:
@@ -323,16 +300,15 @@ def send_friend_request():
 @app.route("/getgeneralrequests", methods=["POST"])
 def get_general_requests():
     """
-    API request to get friend requests from the player
-
+    API request to get requests to a player
 
     JSON Input Format:
-
     {
-    "pname": <string>
+    "pname": <string> | Name of the player to which the request are send
     }
 
-    Output Format: List with friend requests returned in json format
+    JSON Output Format
+    List with requests returned in json format
     """
     data = request.json
     pname = data.get("pname")
@@ -345,16 +321,12 @@ def get_general_requests():
     return jsonify(Generalrequest)
 
 
-
-
-
-@app.route("/accept_requests", methods=["POST"])
-def accept_friend_requests():
+@app.route("/acceptgeneralrequests", methods=["POST"])
+def accept_general_requests():
     """
     POST: API request to accept or decline a friend request of another player
 
     JSON Input Format:
-
     {
     "state": <string>
     "pname": <string>
@@ -362,7 +334,6 @@ def accept_friend_requests():
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Accepting
     "message": <string> | Standard reply
@@ -372,16 +343,36 @@ def accept_friend_requests():
     pname = data.get("pname")
     sname = data.get("sname")
     state = data.get("state")
-    Controle = False
-    Controle = friend_data_access.accept_Friendrequest(state, pname, sname)
-    if Controle:
-        message1= Content(None, None,"Your request is accepted by "+pname,"admin")
-        Controle= content_data_access.add_message(message1,sname)
-        return jsonify({"success": Controle, "message": "accepted"})
+    id = data.get("id")
+
+    Hoofdcontrole=[False,False]
+    Friendstatus=False
+    Clanstatus=False
+    Hoofdcontrole=friend_data_access.accept_Friendrequest(state,id,pname,sname)
+    Friendstatus=Hoofdcontrole[0]
+
+    if Friendstatus==True:
+        if Hoofdcontrole[1]==True:
+            message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
+            Controle = content_data_access.add_message(message1, sname)
+            return jsonify({"success": Controle, "message": "accepted"})
+        else:
+            message1 = Content(None, None, "Your request is denied by " + pname, "admin")
+            Controle = content_data_access.add_message(message1, sname)
+            return jsonify({"success": Controle, "message": "not accepted"})
+
     else:
-        message1 = Content(None, None, "Your request is denied by " + pname, "admin")
-        Controle = content_data_access.add_message(message1, sname)
-        return jsonify({"success": Controle, "message": "not accepted"})
+        Hoofdcontrole=clan_data_acces.accept_clanrequest(state,id,pname,sname)
+        Clanstatus=Hoofdcontrole[0]
+        if Clanstatus == True:
+            if Hoofdcontrole[1] == True:
+                message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
+                Controle = content_data_access.add_message(message1, sname)
+                return jsonify({"success": Controle, "message": "accepted"})
+            else:
+                message1 = Content(None, None, "Your request is denied by " + pname, "admin")
+                Controle = content_data_access.add_message(message1, sname)
+                return jsonify({"success": Controle, "message": "not accepted"})
 
 
 @app.route("/", defaults={"path": ""})
@@ -389,8 +380,6 @@ def accept_friend_requests():
 def catch_all(path):
     """
     Standard catch_all to serve each file
-    :param path:
-    :return:
     """
     return render_template("index.html")
 
