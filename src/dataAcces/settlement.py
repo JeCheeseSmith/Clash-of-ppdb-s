@@ -17,7 +17,7 @@ class Settlement:
 class SettlementDataAcces:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
-        self.latestMap = (2, 2)
+        self.latestMap = (2, 4)
 
     def getResources(self, obj):
         """

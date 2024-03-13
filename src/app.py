@@ -45,6 +45,7 @@ def add_player():
     {
     "success": <bool> | State of Signrequest
     "message": <string> | Standard reply
+    "sid": <INT> | ID of the home settlement
     }
     """
     data = request.json
@@ -53,10 +54,11 @@ def add_player():
     Controle = False
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     Controle = player_data_access.add_user(Player_obj,settlement_data_acces)
-    if Controle:
-        return jsonify({"success": Controle, "message": "Signed in successful"})
+    print(Controle)
+    if Controle[0]:
+        return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
     else:
-        return jsonify({"success": Controle, "message": "Signed in failed"})
+        return jsonify({"success": Controle[0], "message": "Signed in failed", "sid": Controle[1]})
 
 
 @app.route("/login", methods=["GET"])
@@ -76,6 +78,7 @@ def get_login():
     {
     "success": <bool> | State of Loginrequest
     "message": <string> | Standard reply
+    "sid": <INT> | ID of the home settlement
     }
     """
     data = request.json
@@ -151,7 +154,7 @@ def get_resources():
 
     JSON Input Format
     {
-    "id": <INT> | Name of the Settlement
+    "id": <INT> | ID of the Settlement
     }
    """
     data = request.json

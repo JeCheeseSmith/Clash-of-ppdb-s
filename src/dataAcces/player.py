@@ -45,28 +45,38 @@ class PlayerDataAccess:
 
             # Create the player
             cursor.execute(
-                'INSERT INTO player(name,password,xp,gems,level,avatar,logout) VALUES(%s,%s,%s,%s,%s,%s,now())',
+                'INSERT INTO player(name,password,xp,gems,level,avatar,logout) VALUES(%s,%s,%s,%s,%s,%s,now());',
                 (obj.name, obj.password, obj.xp, obj.gems, obj.level, obj.avatar))
+            print('a')
 
             # Create a package for the settlement
-            cursor.execute('INSERT INTO package(stone,wood,steel,food) VALUES(%s,%s,%s,%s)',
+            cursor.execute('INSERT INTO package(stone,wood,steel,food) VALUES(%s,%s,%s,%s);',
                            (500, 500, 500, 500))  # All resource are initialised at the maximum
+            print('b')
+
             # Create a settlement & link the package
             cursor.execute('SELECT max(id) FROM package;')
             pid = cursor.fetchone()
+            print('c')
             location = settlement_data_acces.getNewCoordinate()
-
-            cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES(%s,%s,%s,%s,%s)',
+            print('d')
+            print(location)
+            cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES(%s,%s,%s,%s,%s);',
                            (obj.name + " Castle", location[0], location[1], pid, obj.name))
+
+            print('t')
+            # Get the settlement ID
+            cursor.execute('SELECT max(id) FROM settlement;')
+            sid = cursor.fetchone()[0]
 
             # Send a message to the user from the system
             # TODO: Call message send here
 
             self.dbconnect.commit()
-            return True
+            return True, sid
         except:
             self.dbconnect.rollback()
-            return False
+            return False, None
 
     def search_player(self, name):
         cursor = self.dbconnect.get_cursor()
