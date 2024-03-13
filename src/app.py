@@ -382,6 +382,11 @@ def removeFriend():
     "pname": <string> | Person who you're friend with
     "sname": <string> | Person who gives the command to remove friend
     }
+
+    JSON Output Format:
+    {
+    "succes": <BOOL> | Request status
+    }
     """
     data = request.json
     status = friend_data_access.removeFriend(data.get("pname"), data.get("sname"))
@@ -405,7 +410,7 @@ def getFriends():
 @app.route("/leaveClan", methods=["POST"])
 def leaveClan():
     """
-    POST: API request to leave the Clan and potentially delete the clan if no members are left anymore (It might also change clan ownership)
+    POST: API request to leave the Clan
 
     JSON Input Format:
     {
@@ -413,8 +418,33 @@ def leaveClan():
     }
 
     JSON Output Format:
-    List of friends
+    {
+    "succes": <BOOL> | Request status
+    }
     """
+    data = request.json
+    succes = clan_data_acces.leaveClan(data.get('name'))
+    return jsonify({"succes": succes})
+
+@app.route("/deleteClan", methods=["POST"])
+def deleteClan():
+    """
+    POST: API request to delete a Clan and all associated data
+
+    JSON Input Format:
+    {
+    "pname": <string> | Clan leader
+    "cname": <string> | Clan name
+    }
+
+    JSON Output Format:
+    {
+    "succes": <BOOL> | Request status
+    }
+    """
+    data = request.json
+    succes = clan_data_acces.deleteClan(data.get('cname'), data.get('pname'))
+    return jsonify({"succes": succes})
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")

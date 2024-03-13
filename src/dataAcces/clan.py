@@ -160,3 +160,46 @@ class ClanDataAccess:
             print("Error:", e)
             self.dbconnect.rollback()
             return False
+
+    def leaveClan(self,name):
+        try:
+            cursor = self.dbconnect.get_cursor()
+
+            # Remove the membership
+            cursor.execute('DELETE FROM member WHERE pname=%s;', (name,))
+            self.dbconnect.commit()
+            return True
+        except:
+            self.dbconnect.rollback()
+            return False
+
+    def deleteClan(self,cname,lname):
+        """
+        Deletes all members & leader & clanRequests of the clan
+        :param cname: Clan name
+        :param lname: Clan leader name
+        :return:
+        """
+        try:
+            cursor = self.dbconnect.get_cursor()
+
+            # Delete the clan
+            cursor.execute('DELETE FROM clan WHERE name=%s;', (cname,))
+
+            # Delete the members
+            cursor.execute('DELETE FROM member WHERE cname=%s;', (cname,))
+
+            # Remove each now 'old' request towards the Clan
+            cursor.execute('SELECT id FROM clanrequest NATURAL JOIN retrieved WHERE retrieved.pname=%s;', (lname,))
+            oldRequests = cursor.fetchall()
+            for rid in oldRequests:
+                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM request WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM content WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (rid,))
+
+            self.dbconnect.commit()
+            return True
+        except:
+            self.dbconnect.rollback()
+            return False
