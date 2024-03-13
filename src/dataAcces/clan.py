@@ -46,18 +46,25 @@ class ClanDataAccess:
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
         try:
+            # Insert the content
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
                            (request.content, request.sender,))
-            cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
-            cursor.execute('INSERT INTO clanrequest(id) VALUES (DEFAULT);')
-            print("sksk")
-            print(cname)
+
+            # Retrieve the latest ID to use as Foreign Key
+            cursor.execute('SELECT max(id) FROM content;')
+            rid = cursor.fetchone()
+
+            # Create a request and its specialization
+            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);', (rid,))  # Set first as NULL, True = Accepted, False = Rejected request
+            cursor.execute('INSERT INTO clanrequest(id) VALUES (%s);', (rid,))
+
             # Find the clanLeader and send him the Request
             cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,))
-
-            print("madinn")
             clanLeader = cursor.fetchone()
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', clanLeader)
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (rid,clanLeader) )
+
+            # Commit to database
+            self.dbconnect.commit()
             return True
         except Exception as e:
             print("Error:", e)
