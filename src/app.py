@@ -331,9 +331,9 @@ def accept_general_requests():
     JSON Input Format:
     {
     "id": <INT> | ID of the request
-    "state": <string>
-    "pname": <string>
-    "sname": <string>
+    "state": <string> | True = Accepted the request
+    "pname": <string> | Receiver of the request; thus the person deciding about the request
+    "sname": <string> | Request sender
     }
 
     JSON Output Format:
@@ -351,8 +351,6 @@ def accept_general_requests():
     if content_data_access.isFriendRequest(id):
         Controle = friend_data_access.accept_Friendrequest(state, id, pname, sname)
 
-        print(state)
-
         if state:
             message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
             Controle = content_data_access.add_message(message1, sname)
@@ -363,17 +361,16 @@ def accept_general_requests():
             return jsonify({"success": Controle, "message": "rejected"})
 
     elif content_data_access.isClanRequest(id):
-        Hoofdcontrole=clan_data_acces.accept_clanrequest(state,id,pname,sname)
-        Clanstatus=Hoofdcontrole[0]
-        if Clanstatus == True:
-            if Hoofdcontrole[1] == True:
-                message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
-                Controle = content_data_access.add_message(message1, sname)
-                return jsonify({"success": Controle, "message": "accepted"})
-            else:
-                message1 = Content(None, None, "Your request is denied by " + pname, "admin")
-                Controle = content_data_access.add_message(message1, sname)
-                return jsonify({"success": Controle, "message": "not accepted"})
+        Controle = clan_data_acces.accept_clanrequest(state,id,pname,sname)
+
+        if state:
+            message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
+            Controle = content_data_access.add_message(message1, sname)
+            return jsonify({"success": Controle, "message": "accepted"})
+        else:
+            message1 = Content(None, None, "Your request is denied by " + pname, "admin")
+            Controle = content_data_access.add_message(message1, sname)
+            return jsonify({"success": Controle, "message": "not accepted"})
 
 
 @app.route("/", defaults={"path": ""})

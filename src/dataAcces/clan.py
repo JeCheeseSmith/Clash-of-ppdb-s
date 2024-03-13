@@ -15,7 +15,7 @@ class ClanDataAccess:
 
     def add_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
-        try:  # Insert Clan Object into the Database
+        try: # Insert Clan Object into the Database
             cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
             cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
                            (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
@@ -43,10 +43,10 @@ class ClanDataAccess:
                                                                                             "own clan instead?")
         return obj
 
-    def get_clanrequest(self, pname):
+    def get_clanrequest(self,pname):
         cursor = self.dbconnect.get_cursor()
 
-        # Retrieved content en niet message of request morgen oplossen
+        #Retrieved content en niet message of request morgen oplossen
         call = """
                             SELECT *
                             FROM clanrequest 
@@ -60,12 +60,12 @@ class ClanDataAccess:
         cursor.execute(call, (pname,))
         clan_request = cursor.fetchall()
         clans = []
-        for clan in clan_request:
+        for  clan in clan_request:
             message_dict = {
                 "id": clan[0],
                 "moment": clan[2],
                 "content": clan[3],
-                "pname": clan[4]
+                "pname":  clan[4]
             }
             clans.append(message_dict)
         return clans
@@ -73,7 +73,7 @@ class ClanDataAccess:
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
 
-        print(request.sender, cname)
+        print(request.sender,cname)
 
         # Check if they're not already in a clan
         queryCheck = """
@@ -81,16 +81,16 @@ class ClanDataAccess:
                     SELECT EXISTS(SELECT *
                     FROM member
                     WHERE pname=%s)
-
+                        
                     UNION
-
+                        
                     SELECT EXISTS(
                     SELECT *
                     FROM clan
                     WHERE pname=%s)
                     );
                     """
-        cursor.execute(queryCheck, (request.sender, request.sender))
+        cursor.execute(queryCheck, (request.sender,request.sender))
         queryCheck = cursor.fetchone()[0]
 
         if queryCheck:
@@ -106,14 +106,13 @@ class ClanDataAccess:
             rid = cursor.fetchone()
 
             # Create a request and its specialization
-            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);',
-                           (rid,))  # Set first as NULL, True = Accepted, False = Rejected request
+            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);', (rid,))  # Set first as NULL, True = Accepted, False = Rejected request
             cursor.execute('INSERT INTO clanrequest(id) VALUES (%s);', (rid,))
 
             # Find the clanLeader and send him the Request
             cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,))
             clanLeader = cursor.fetchone()
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (rid, clanLeader))
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (rid,clanLeader) )
 
             # Commit to database
             self.dbconnect.commit()
@@ -123,28 +122,24 @@ class ClanDataAccess:
             self.dbconnect.rollback()
             return False
 
-    def accept_clanrequest(self, State, Id, pname, cname):
-        cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT EXISTS(SELECT 1 FROM clanrequest WHERE id = %s)", (Id,))
-        id = cursor.fetchone()[0]
-        if id:
-            if State == True:
+
+    def accept_clanrequest(self,State,Id,pname,cname):
+        try:
+            cursor = self.dbconnect.get_cursor()
+
+            if State:
                 cursor.execute('INSERT INTO member(pname,cname) VALUES (%s,%s);', (pname, cname,))
 
-                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
-                return (True, True)
-            else:
-                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
-                return (True, False)
+            cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+            self.dbconnect.commit()
+            return True
+        except:
+            return False
 
-        else:
-            return (False, False)
+
 
 
 
