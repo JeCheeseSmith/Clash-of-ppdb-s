@@ -68,6 +68,10 @@ class FriendDataAccess:
         if a is not None:
             return False
 
+        # You can't befriend yourself
+        if pname == request.sender:
+            return False
+
         try:
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES (DEFAULT,now(),%s,%s);',
                            (request.content, request.sender,))

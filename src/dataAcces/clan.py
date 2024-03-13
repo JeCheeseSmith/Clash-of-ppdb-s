@@ -73,9 +73,7 @@ class ClanDataAccess:
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
 
-        print(request.sender,cname)
-
-        # Check if they're not already in a clan
+        # Check if they're not already in a clan (Member or Leader)
         queryCheck = """
                     SELECT (
                     SELECT EXISTS(SELECT *
