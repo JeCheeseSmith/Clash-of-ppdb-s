@@ -63,12 +63,13 @@ def add_player():
                        logout=None)
     controle = player_data_access.add_user(playerobj)
     if controle:
-        return jsonify(playerobj.to_dct())
+        return jsonify({'succes': True})
+
     else:
-        return jsonify("Failed signup")
+        return jsonify({'succes': False})
 
 
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def get_login():
     data = request.json
     player_name = data.get('name')
@@ -79,9 +80,10 @@ def get_login():
     controle = player_data_access.get_login(playerobj)
 
     if controle:
-        return "Login successful"
+        return jsonify({'succes': True})
+
     else:
-        return "Login Failed"
+        return jsonify({'succes': False})
 
 
 @app.route('/chat', methods=['POST', 'GET'])
