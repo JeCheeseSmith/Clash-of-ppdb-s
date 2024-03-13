@@ -47,13 +47,12 @@ class ContentDataAccess:
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',(obj.content, obj.sender,))
-            print("euue")
-            cursor.execute('INSERT INTO message(id) VALUES (DEFAULT);')
+            cursor.execute('SELECT max(id) FROM content;')
+            Rid = cursor.fetchone()
+            cursor.execute('INSERT INTO message(id) VALUES (%s);',Rid)
             cursor.execute('SELECT name FROM player WHERE name=%s;', (sname,))
             receiver = cursor.fetchone()
-            print(receiver)
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', (receiver[0],))
-            print("nietd")
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (Rid,receiver[0],))
             self.dbconnect.commit()
             return True
         except Exception as e:
@@ -64,32 +63,51 @@ class ContentDataAccess:
 
     def get_chatbox(self, Pname,Sname):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT EXISTS(SELECT 1 FROM content WHERE pname = %s)" ,(Pname,))
-        name = cursor.fetchone()[0]
-        print(name)
-
-        if name:
-            messages = """
+        message1 = """
                     SELECT *
                     FROM message
-                    INNER JOIN content ON message.id = content.id and content.pname=%s
+                    INNER JOIN content ON message.id = content.id and content.pname=%s 
                     WHERE message.id IN (     
                             SELECT mid
                             FROM retrieved
-                            WHERE pname = %s
+                            WHERE pname = %s   
                         );
                 """
-            cursor.execute(messages, (Pname,Sname,))
-            messages =cursor.fetchall()
-            chatbox =[]
-            for message in messages:
-                message_dict ={
-                    "id" :message[0],
-                    "moment" :str(message[1]),
-                    "content" :message[2],
-                    "pname" :message[3]
-                }
-                chatbox.append(message_dict)
-                return chatbox
-        else:
-            return None
+        cursor.execute(message1, (Sname,Pname,))
+        print("wacht")
+        messages =cursor.fetchall()
+        chatbox =[]
+        for message in messages:
+            message_dict ={
+                "id" :message[0],
+                "moment" :str(message[1]),
+                "content" :message[2],
+                "pname" :message[3]
+            }
+            chatbox.append(message_dict)
+
+        message2 = """
+                                SELECT *
+                                FROM message
+                                INNER JOIN content ON message.id = content.id and content.pname=%s 
+                                WHERE message.id IN (     
+                                        SELECT mid
+                                        FROM retrieved
+                                        WHERE pname = %s   
+                                    );
+                            """
+        cursor.execute(messages, (Pname, Sname,))
+        print("wacht")
+        messageZ = cursor.fetchall()
+        chatbox2 = []
+        for message in messageZ:
+            message_dict = {
+                "id": message[0],
+                "moment": str(message[1]),
+                "content": message[2],
+                "pname": message[3]
+            }
+            chatbox2.append(message_dict)
+
+        return chatbox
+
