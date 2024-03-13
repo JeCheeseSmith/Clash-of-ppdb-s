@@ -5,6 +5,7 @@ import buttonSocial from '../../../../assets/Menu Selection Sound Effect.mp3';
 import buttonOption from '../../../../assets/socialOptionSound.mp3';
 import SocialOption from "./socialOptionContents.jsx";
 import CommunicationButton from "../communication.jsx";
+import {useLocation} from "react-router-dom";
 
 /**
  * React component representing a social box.
@@ -63,6 +64,8 @@ function Box({socialVisible})
 function Navbar({ socialVisible })
 {
     const [currentPage, setCurrentPage] = useState('createClan');
+    const location = useLocation();
+    const pname = location.state.username || {};
 
     const playOption = () => {
       const sound = new Audio(buttonOption);
@@ -79,8 +82,9 @@ function Navbar({ socialVisible })
     const sendData = async () =>
     {
         handleButtonClick('requests');
-        const data = await POST({'player': "watson"}, "/getclanrequest");
-        setRequests([{sendername: data.sendername, content: data.content }]);
+        const data = await POST({'pname': pname}, "/getgeneralrequests");
+        setRequests(data);
+        console.log(requests)
     }
 
     return (

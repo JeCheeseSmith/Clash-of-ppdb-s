@@ -99,7 +99,7 @@ function RequestsPage({ requests })
             {
                 requests.map(request => (
                     <div className={"request"}>
-                        <DisplayAvatarName type={"player-request"} name={request.sendername}/>
+                        <DisplayAvatarName type={"player-request"} name={request.pname}/>
                         <div className={"content"}>{request.content}</div>
                         <button className={"request-accept"}>Accept</button>
                         <button className={"request-decline"}>Decline</button>

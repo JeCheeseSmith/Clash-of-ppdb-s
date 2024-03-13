@@ -4,6 +4,7 @@ import "./personInfo.css"
 import clanPicture from "../../../../../assets/clanPicture.jpg";
 import notFound from "../../../../../assets/groupnotfound.png";
 import DisplayAvatarName from "../../../../../avatarWithName/avatarWithName.jsx";
+import {useLocation} from "react-router-dom";
 
 /**
  * Represents a component for displaying information about a clan.
@@ -20,9 +21,11 @@ function PersonInformation({name, succes})
 {
     const [massage, setMassage] = useState("")
     const [succesRequest, setSuccesRequest] = useState(false)
+    const location = useLocation();
+    const sender = location.state.username || {};
     const handleRequestbutton = async () =>
     {
-        const requestMassage = await POST({'cname': name, 'sender': "abu"}, "/sendfriendrequest")
+        const requestMassage = await POST({'cname': name, 'sender': sender}, "/sendfriendrequest")
         setMassage(requestMassage.message)
         setSuccesRequest(requestMassage.succes)
     }
