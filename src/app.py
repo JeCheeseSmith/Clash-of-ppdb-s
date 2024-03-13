@@ -138,6 +138,7 @@ def update_chat():
 
 
     elif request.method == 'GET':
+        print("tets")
         obj = content_data_access.get_chatbox(message_pname,message_sname)
         return jsonify(obj)
 
@@ -304,13 +305,12 @@ def send_friend_request():
     }
     """
     data = request.json
-    message_id = data.get('id')
-    message_moment = data.get('moment')
     message_content = data.get('content')
     message_pname = data.get('pname')
     message_sname = data.get('sname')
-    Friend_request = Content(message_id, message_moment, message_content, message_pname)
+    Friend_request = Content(None, None, message_content, message_pname)
     Controle = False
+    print("hallo")
     Controle = friend_data_access.send_Friendrequest(Friend_request, message_sname)
     if Controle:
         return jsonify({'success': Controle, 'message': "Friend request is send"})
@@ -335,7 +335,7 @@ def get_general_requests():
     data = request.json
     pname = data.get('pname')
     Friendrequests = friend_data_access.get_Friendrequest(pname)
-    Clanrequests = clan_data_acces.get_Friendrequest(pname)
+    Clanrequests = clan_data_acces.get_clanrequest(pname)
     Generalrequest = Friendrequests + Clanrequests
 
     # Sort merged list based on the moment

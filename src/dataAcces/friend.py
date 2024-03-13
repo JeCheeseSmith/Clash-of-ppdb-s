@@ -32,7 +32,7 @@ class FriendDataAccess:
         call = """
                             SELECT *
                             FROM friendRequest 
-                            INNER JOIN content ON friendrequest.id = content.id and content.pname=pname
+                            INNER JOIN content ON friendrequest.id = content.id 
                             WHERE friendrequest.id IN (     
                                 SELECT mid
                                 FROM retrieved
@@ -44,10 +44,9 @@ class FriendDataAccess:
         friends = []
         for friend in friend_request:
             message_dict = {
-                "id": friend[0],
-                "moment": str(friend[1]),
-                "content": friend[2],
-                "pname": friend[3]
+                "moment": friend[2],
+                "content": friend[3],
+                "pname": friend[4]
             }
             friends.append(message_dict)
         return friends
@@ -58,13 +57,16 @@ class FriendDataAccess:
 
     def send_Friendrequest(self,request,sname):
         cursor = self.dbconnect.get_cursor()
+
         try:
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES (DEFAULT,now(),%s,%s);',(request.content, request.sender,))
-            cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
-            cursor.execute('INSERT INTO friendrequest(id) VALUES (DEFAULT);')
+            cursor.execute('SELECT max(id) FROM content;')
+            Rid=cursor.fetchone()
+            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);',(Rid,))  # Set first as NULL, True = Accepted, False = Rejected request
+            cursor.execute('INSERT INTO friendrequest(id) VALUES (%s);',Rid)
             cursor.execute('SELECT name FROM player WHERE name=%s;', (sname,))
             receiver = cursor.fetchone()
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', receiver)
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (Rid,receiver))
             self.dbconnect.commit()
             return True
         except Exception as e:

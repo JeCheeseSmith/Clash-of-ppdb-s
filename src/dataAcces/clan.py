@@ -43,6 +43,32 @@ class ClanDataAccess:
                                                                                             "own clan instead?")
         return obj
 
+    def get_clanrequest(self,pname):
+        cursor = self.dbconnect.get_cursor()
+
+        #Retrieved content en niet message of request morgen oplossen
+        call = """
+                            SELECT *
+                            FROM clanrequest 
+                            INNER JOIN content ON clanrequest.id = content.id
+                            WHERE clanrequest.id IN (     
+                                SELECT mid
+                                FROM retrieved
+                                WHERE pname = %s
+                            );
+                            """
+        cursor.execute(call, (pname,))
+        friend_request = cursor.fetchall()
+        friends = []
+        for friend in friend_request:
+            message_dict = {
+                "moment": friend[2],
+                "content": friend[3],
+                "pname": friend[4]
+            }
+            friends.append(message_dict)
+        return friends
+
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
         try:
@@ -73,29 +99,3 @@ class ClanDataAccess:
 
 
 
-    def get_clanrequest(self,pname):
-        cursor = self.dbconnect.get_cursor()
-
-        #Retrieved content en niet message of request morgen oplossen
-        call = """
-                            SELECT *
-                            FROM clanrequest 
-                            INNER JOIN content ON clanrequest.id = content.id
-                            WHERE clanrequest.id IN (     
-                                SELECT mid
-                                FROM retrieved
-                                WHERE pname = %s
-                            );
-                            """
-        cursor.execute(call, (pname,))
-        friend_request = cursor.fetchall()
-        friends = []
-        for friend in friend_request:
-            message_dict = {
-                "id": friend[0],
-                "moment": str(friend[1]),
-                "content": friend[2],
-                "pname": friend[3]
-            }
-            friends.append(message_dict)
-        return friends
