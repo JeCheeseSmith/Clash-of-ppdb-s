@@ -1,4 +1,3 @@
-
 class Content:
     def __init__(self, id, moment, content, sender):
         self.id = id
@@ -8,6 +7,7 @@ class Content:
 
     def to_dct(self):
         return {'id': self.id, 'moment': self.moment, 'content': self.content, 'sender': self.sender}
+
 
 class Request(Content):
     def __init__(self, id, moment, content, sender, accept):
@@ -27,13 +27,16 @@ class Retrieve:
     def to_dct(self):
         return {'id': self.id, 'sname': self.sname}
 
+
 class ClanRequestDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
+
 class TransferRequestDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
+
 
 class FriendRequestDataAccess:
     def __init__(self, dbconnect):
@@ -43,6 +46,18 @@ class FriendRequestDataAccess:
 class ContentDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
+
+    def isFriendRequest(self, id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT EXISTS( SELECT * FROM friendrequest WHERE id =%s);', (id,))
+        result = cursor.fetchone()
+        return result
+
+    def isClanRequest(self, id):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT EXISTS( SELECT * FROM clanrequest WHERE id =%s);', (id,))
+        result = cursor.fetchone()
+        return result
 
     def add_message(self, obj, pname):
         try:
@@ -67,10 +82,10 @@ class ContentDataAccess:
             return False
 
     def get_chatbox(self, Pname, Sname):
-        chatbox = [] # Last 10 messages
+        chatbox = []  # Last 10 messages
         cursor = self.dbconnect.get_cursor()
 
-         # Select messages from sname to pname
+        # Select messages from sname to pname
         message1 = """
                             SELECT *
                             FROM message

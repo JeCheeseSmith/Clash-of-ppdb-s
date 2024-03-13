@@ -11,32 +11,18 @@ class FriendDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def accept_Friendrequest(self, State, Id, pname, sname):
-        cursor = self.dbconnect.get_cursor()
+    def accept_Friendrequest(self, State, id, pname, sname):
         try:
-            print("tets")
-            # cursor.execute('SELECT EXISTS(SELECT 1 FROM friendRequest WHERE id = %s);', (Id,))
-            print("printµµµ")
-            id = cursor.fetchone()[0]
-            if id:
-                if State == True:
-                    cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);', (pname, sname,))
-                    cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
-                    cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
-                    cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
-                    cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+            cursor = self.dbconnect.get_cursor()
+            if State:
+                cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);', (pname, sname,))
 
-                    return [True, True]
-                else:
-                    cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
-                    cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
-                    cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
-                    cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
-                    return [True, False]
-
-            else:
-                return [False, False]
-
+            cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+            self.dbconnect.commit()
+            return True
         except Exception as e:
             print("Error:", e)
             self.dbconnect.rollback()
