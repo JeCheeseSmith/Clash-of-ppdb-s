@@ -78,16 +78,18 @@ class ClanDataAccess:
                     SELECT EXISTS(
                     SELECT EXISTS(SELECT *
                     FROM member
-                    WHERE pname='abu')
+                    WHERE pname=%s)
                         
                     UNION ALL
                         
                     SELECT EXISTS(
                     SELECT *
                     FROM clan
-                    WHERE pname='abu')
+                    WHERE pname=%s)
                     );
                     """
+        cursor.execute(queryCheck, (request.sender,request.sender))
+        queryCheck = cursor.fetchone()
         if queryCheck:
             return False
 

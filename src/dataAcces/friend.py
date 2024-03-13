@@ -64,7 +64,7 @@ class FriendDataAccess:
                     OR (pname1 = %s AND pname2 = %s);
                 """
         cursor.execute(query, (pname, request.sender, request.sender, pname))
-        a = cursor.fetchone
+        a = cursor.fetchone()
         if a!=None:
             return False
 
