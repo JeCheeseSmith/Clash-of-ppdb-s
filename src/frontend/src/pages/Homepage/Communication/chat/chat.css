@@ -1,3 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+.chat-container {
+    position: absolute;
+    bottom: 80px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    height: 800px;
+    width: 500px; /* Adjusted width */
+    transition: left 0.5s ease; /* Slide animation */
+}
+
+.chat-container.visible {
+    left: 20px; /* Slide in when visible */
+}
+
+.chat-container.hidden {
+    left: -500px; /* Slide out when hidden */
+}
+
 .chat-title {
     text-align: center;
     margin-bottom: 10px; /* Add some space between the title and the message display */
@@ -7,33 +28,12 @@
     padding-bottom: 35px;
     border-radius: 20px;
     font-size: 70px; /* Adjust the font size as needed */
-  }
-
-.chat-container {
-    position: fixed;
-    bottom: 80px;
-    left: -500px; /* Start off screen */
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    height: 800px;
-    width: 500px; /* Adjusted width */
-    transition: left 0.5s ease; /* Slide animation */
-  }
-
-.chat-container.visible {
-    left: 20px; /* Slide in when visible */
-  }
-
-.chat-container.hidden {
-    left: -500px; /* Slide out when hidden */
 }
 
 .message-display {
     flex-grow: 1;
     overflow-y: auto;
-    padding: 10px;
-    padding-right: 20px;
+    padding: 10px 10px 10px 10px;
     margin-top: -5px;
     margin-bottom: 5px; /* Add margin to the bottom */
     background-color: rgb(33, 29, 29);
@@ -47,14 +47,14 @@
 
 .message {
     display: flex;
-    font-size: large;
-    font-family: italic, sans-serif;
+    font-size: 20px;
+    font-family: 'MedievalSharp', cursive;
     justify-content: space-between;
     margin-bottom: 10px;
     padding: 20px;
     border-radius: 20px;
     color: rgb(0, 0, 0);
-    background-image: linear-gradient(to right, rgb(0, 172, 206), rgb(229, 168, 0));
+    background-image: linear-gradient(to right, rgb(255, 117, 0), rgb(255, 183, 0));
 }
 
 
@@ -64,13 +64,14 @@
 
 .message-input {
     padding: 20px;
-    font-size: large;
+    font-size: 20px;
+    font-family: 'MedievalSharp', sans-serif;
     border: none; /* Remove border to match message box */
     border-radius: 20px; /* Match border-radius of message box */
     width: calc(100% - 40px); /* Adjusted width to account for padding */
-    background-image: linear-gradient(to right, rgb(93, 0, 242), rgb(249, 0, 220));
+    background-image: linear-gradient(to right, #b26616, #b26616, rgba(84, 51, 6, 0.95));
     color: white;
-  }
+}
 
 .message-input::placeholder {
   color: rgb(205, 205, 205);
