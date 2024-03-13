@@ -331,9 +331,9 @@ def accept_general_requests():
     JSON Input Format:
     {
     "id": <INT> | ID of the request
-    "state": <string>
-    "pname": <string>
-    "sname": <string>
+    "state": <string> | True = Accepted the request
+    "pname": <string> | Receiver of the request; thus the person deciding about the request
+    "sname": <string> | Request sender
     }
 
     JSON Output Format:

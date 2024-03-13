@@ -134,6 +134,7 @@ class ClanDataAccess:
             cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
             cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
             cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+            self.dbconnect.commit()
             return True
         except:
             return False
