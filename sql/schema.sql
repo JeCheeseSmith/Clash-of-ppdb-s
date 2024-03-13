@@ -249,11 +249,16 @@ INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 
 INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',0,0,2,'watson');
 INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',2,0,3,'jonas');
 INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,4,'abu');
 INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,5,'admin');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('raadin Castle',4,2,6,'raadin');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('salah Castle',2,4,7,'salah');
+
 
 -- Create a clan
 INSERT INTO clan(name,pname,status,description) VALUES ('Clan of lord Abu', 'abu', 'Building History', 'We are a clan consisting of powerful members. We stand for power!');
