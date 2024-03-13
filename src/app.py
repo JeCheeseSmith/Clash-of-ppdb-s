@@ -35,8 +35,8 @@ def add_player():
 
     JSON Input Format:
     {
-    "name": <string>,
-    "password": <string>
+    "name": <string> | Username
+    "password": <string> | Password
     }
 
     JSON Output Format:
@@ -66,8 +66,8 @@ def get_login():
 
     JSON Input Format:
     {
-    "name": <string>,
-    "password": <string>
+    "name": <string> | Username
+    "password": <string> | Password
     }
 
     JSON Output Format:
@@ -131,7 +131,6 @@ def update_chat():
             return jsonify({"success": Controle, "message": "message send successful"})
         else:
             return jsonify({"success": Controle, "message": "Failed to send message"})
-
     else:  # request.method == "GET":
         obj = content_data_access.get_chatbox(message_pname, message_sname)
         return jsonify(obj)
