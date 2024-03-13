@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import POST from "../../../api/POST.jsx"; // Importing React library
@@ -23,7 +24,7 @@ function RegistrationPage() {
     // Handles the navigation from login page to sign-up page
     const handleSaveClick= async () => {
         const data = await POST({name:username, password: password}, "/signin");
-        if (data.succes) {
+        if (data.success) {
             navigate('/MainPage', { state: { username } });
         }
     }

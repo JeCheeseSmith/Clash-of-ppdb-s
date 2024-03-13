@@ -30,7 +30,7 @@ function LoginPage() {
     const handleLoginClick = async () => {
         const data = await POST({name:username, password: password}, "/login");
         console.log(data);
-        if (data.succes) {
+        if (data.success) {
             navigate('/MainPage', { state: { username } });
         }
     }
