@@ -382,12 +382,11 @@ def removeFriend():
     "pname": <string> | Person who you're friend with
     "sname": <string> | Person who gives the command to remove friend
     }
-
-    JSON Output Format:
-    {
-    "success": <bool> | State of succes
-    }
     """
+    data = request.json
+    status = friend_data_access.removeFriend(data.get("pname"), data.get("sname"))
+    return jsonify({"success": status})
+
 
 @app.route("/getFriends", methods=["GET"])
 def getFriends():

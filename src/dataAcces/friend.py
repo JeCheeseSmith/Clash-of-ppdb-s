@@ -89,3 +89,14 @@ class FriendDataAccess:
             print("Error:", e)
             self.dbconnect.rollback()
             return False
+
+    def removeFriend(self, pname, sname):
+        try:
+            cursor = self.dbconnect.get_cursor()
+            # Delete the friendship :'(
+            cursor.execute('DELETE FROM friend where (pname2=%s and pname1=%s) OR (pname2=%s and pname1=%s);', (pname, sname, sname, pname))
+            self.dbconnect.commit()
+            return True
+        except:
+            self.dbconnect.rollback()
+            return False
