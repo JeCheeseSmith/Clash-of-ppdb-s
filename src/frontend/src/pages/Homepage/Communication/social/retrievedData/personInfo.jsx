@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import POST from "../../../../../api/POST.jsx";
 import "./personInfo.css"
-import clanPicture from "../../../../../assets/clanPicture.jpg";
-import notFound from "../../../../../assets/groupnotfound.png";
 import DisplayAvatarName from "../../../../../avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
 
@@ -17,7 +15,7 @@ import {useLocation} from "react-router-dom";
  * @returns {JSX.Element} - A React JSX element representing the clan information component.
  */
 
-function PersonInformation({name, succes})
+function PersonInformation({name, succesPersonSearch})
 {
     const [massage, setMassage] = useState("")
     const [succesRequest, setSuccesRequest] = useState(false)
@@ -25,9 +23,9 @@ function PersonInformation({name, succes})
     const sender = location.state.username || {};
     const handleRequestbutton = async () =>
     {
-        const requestMassage = await POST({'cname': name, 'sender': sender}, "/sendfriendrequest")
+        const requestMassage = await POST({'pname': name, 'sname': sender}, "/sendfriendrequest")
         setMassage(requestMassage.message)
-        setSuccesRequest(requestMassage.succes)
+        setSuccesRequest(requestMassage.success)
     }
 
     useEffect(() => {
@@ -42,7 +40,8 @@ function PersonInformation({name, succes})
     return(
         <div className={"player-info-request"}>
             <DisplayAvatarName type={"player-search"} name={name}/>
-            <button className={"friend-request-button"}>Send Friend Request</button>
+            <button className={"friend-request-button"} onClick={handleRequestbutton}>Send Friend Request</button>
+            {succesRequest && <RequestMassagePopUp massage={massage}/>}
         </div>
     )
 }

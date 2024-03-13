@@ -1,5 +1,5 @@
 /**
- * Sends data to a specified endpoint using a POST request and Receiving back data.
+ * Sends data to a specified endpoint using a GET request and Receiving back data.
  *
  * @param {Object} data - The data to be sent.
  * @param {string} endpoint - The endpoint to which the data is sent.
@@ -7,11 +7,11 @@
  */
 const local = "http://127.0.0.1:5000"
 const remote = "https://team8.ua-ppdb.me/"
-const POST = async (data, endpoint) =>
+const GET = async (data, endpoint) =>
 {
     let returnData;
     await fetch(local+endpoint, {
-        method: 'POST',
+        method: 'GET',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
     })
@@ -26,4 +26,4 @@ const POST = async (data, endpoint) =>
     return returnData
 };
 
-export default POST;
+export default GET;

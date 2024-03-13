@@ -114,21 +114,26 @@ function RequestsPage({ requests })
 function SearchPersonPage()
 {
     const [person, setPerson] = useState("");
-    const [clicked, setClicked] = useState(false);
-
+    const [success, setSuccess] = useState(false);
+    const [searchPerson, setSearchPerson] = useState("")
     const handleInputChange = (e) => {
         setPerson(e.target.value);
     };
     const handleButtonClick = async () =>
     {
-        const data = await POST({'name':person}, "/searchPerson");
-        setClicked(true)
+        const data = await POST({'pname':person}, "/searchPerson");
+        setSuccess(data.success)
+        setSearchPerson(person)
     };
     return (
         <div className={"social-primair-input"}>
             <input value={person} onChange={handleInputChange} className={"search-name"} placeholder={"Search Name..."}/>
             <button className={"search-friend-button"} onClick={handleButtonClick}>Search Person</button>
-            {clicked && <PersonInformation name={"tempname"}/>}
+            {success ?
+                <PersonInformation name={searchPerson} succesPersonSearch={success}/>
+                :
+                <div className={"search-friend-NotFound"}>PLAYER DOES NOT EXISTS</div>
+            }
         </div>
     )
 }
