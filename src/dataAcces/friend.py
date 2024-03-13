@@ -1,3 +1,4 @@
+
 class Friend:
     def __init__(self, pname1, pname2):
         self.pname1 = pname1
@@ -11,24 +12,41 @@ class FriendDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def accept_Friendrequest(self,State,pname,sname):
+    def accept_Friendrequest(self,State,Id,pname,sname):
         cursor = self.dbconnect.get_cursor()
-        if State==True:
-            try:
-                cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);',(pname,sname,))
-                self.dbconnect.commit()
-                return True
-            except Exception as e:
-                print("Error:", e)
-                self.dbconnect.rollback()
-                return False
-        else:
+        try:
+            print("tets")
+            #cursor.execute('SELECT EXISTS(SELECT 1 FROM friendRequest WHERE id = %s);', (Id,))
+            print("printµµµ")
+            id = cursor.fetchone()[0]
+            if id:
+                if State == True:
+                    cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);', (pname, sname,))
+                    cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
+                    cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
+                    cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
+                    cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+
+                    return [True, True]
+                else:
+                    cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
+                    cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
+                    cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
+                    cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+                    return [True, False]
+
+            else:
+                return [False, False]
+
+        except Exception as e:
+            print("Error:",e)
+            self.dbconnect.rollback()
             return False
+
 
     def get_Friendrequest(self,pname):
         cursor = self.dbconnect.get_cursor()
 
-        #Retrieved content en niet message of request morgen oplossen
         call = """
                             SELECT *
                             FROM friendRequest 
@@ -38,7 +56,7 @@ class FriendDataAccess:
                                 FROM retrieved
                                 WHERE pname = %s
                             );
-                            """
+                """
         cursor.execute(call, (pname,))
         friend_request = cursor.fetchall()
         friends = []
@@ -51,9 +69,7 @@ class FriendDataAccess:
             }
             friends.append(message_dict)
         return friends
-# RETRIEVED MESSAGES WITH SNAME
-# GET ALL ID
-#
+
 
 
     def send_Friendrequest(self,request,sname):
@@ -63,7 +79,7 @@ class FriendDataAccess:
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES (DEFAULT,now(),%s,%s);',(request.content, request.sender,))
             cursor.execute('SELECT max(id) FROM content;')
             Rid=cursor.fetchone()
-            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);',(Rid,))  # Set first as NULL, True = Accepted, False = Rejected request
+            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);',(Rid,))
             cursor.execute('INSERT INTO friendrequest(id) VALUES (%s);',Rid)
             cursor.execute('SELECT name FROM player WHERE name=%s;', (sname,))
             receiver = cursor.fetchone()

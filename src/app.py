@@ -45,7 +45,6 @@ def add_player():
     {
     "success": <bool> | State of Signrequest
     "message": <string> | Standard reply
-    "sid": <INT> | ID of the home settlement
     }
     """
     data = request.json
@@ -54,14 +53,13 @@ def add_player():
     Controle = False
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     Controle = player_data_access.add_user(Player_obj,settlement_data_acces)
-    print(Controle)
-    if Controle[0]:
-        return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
+    if Controle:
+        return jsonify({"success": Controle, "message": "Signed in successful"})
     else:
-        return jsonify({"success": Controle[0], "message": "Signed in failed", "sid": Controle[1]})
+        return jsonify({"success": Controle, "message": "Signed in failed"})
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["GET"])
 def get_login():
     """
     API request to log in as a player with a unique name and password
@@ -78,14 +76,13 @@ def get_login():
     {
     "success": <bool> | State of Loginrequest
     "message": <string> | Standard reply
-    "sid": <INT> | ID of the home settlement
     }
     """
     data = request.json
     player_name = data.get("name")
     player_password = data.get("password")
     Player_obj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
-                        logout=None, pid=None)
+                        logout=None)
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
@@ -103,15 +100,17 @@ def update_chat():
     JSON Input Format(POST):
 
     {
-    "content": <string> | Actual text in the message
-    "pname": <string> | Player name of the receiver
-    "sname": <string> | Player name of the sender
+    "id": <int>,
+    "momemt": <string>
+    "content": <string>
+    "pname": <string>
+    "sname": <string>
     }
 
     JSON Input Format(GET):
 
     {
-    "pname": <string> | Player name of the receiver
+    "pname": <string>
     }
 
     JSON Output Format(POST):
@@ -137,9 +136,10 @@ def update_chat():
         else:
             return jsonify({"success": Controle, "message": "Failed to send message"})
 
+
     elif request.method == "GET":
         print("tets")
-        obj = content_data_access.get_chatbox(message_pname)
+        obj = content_data_access.get_chatbox(message_pname,message_sname)
         return jsonify(obj)
 
 
@@ -151,7 +151,7 @@ def get_resources():
 
     JSON Input Format
     {
-    "id": <INT> | ID of the Settlement
+    "id": <INT> | Name of the Settlement
     }
    """
     data = request.json
@@ -275,9 +275,11 @@ def search_player():
     Cotrole = False
     Controle = player_data_access.search_player(name)
     if Controle:
-        return jsonify({"success": Controle})
+        return jsonify({"success": Controle, "message": "Player exists"})
     else:
-        return jsonify({"success": Controle})
+        return jsonify({"success": Controle, "message": "Player doesn't exists"})
+
+
 
 
 @app.route("/sendfriendrequest", methods=["POST"])
@@ -339,8 +341,12 @@ def get_general_requests():
     Generalrequest = sorted(Generalrequest, key=lambda x: x["moment"])
     return jsonify(Generalrequest)
 
-@app.route("/accept_requests", methods=["POST"])
-def accept_friend_requests():
+
+
+
+
+@app.route("/acceptgeneralrequests", methods=["POST"])
+def accept_general_requests():
     """
     POST: API request to accept or decline a friend request of another player
 
@@ -363,16 +369,36 @@ def accept_friend_requests():
     pname = data.get("pname")
     sname = data.get("sname")
     state = data.get("state")
-    Controle = False
-    Controle = friend_data_access.accept_Friendrequest(state, pname, sname)
-    if Controle:
-        message1= Content(None, None,"Your request is accepted by "+pname,"admin")
-        Controle= content_data_access.add_message(message1,sname)
-        return jsonify({"success": Controle, "message": "accepted"})
+    id = data.get("id")
+
+    Hoofdcontrole=[False,False]
+    Friendstatus=False
+    Clanstatus=False
+    Hoofdcontrole=friend_data_access.accept_Friendrequest(state,id,pname,sname)
+    Friendstatus=Hoofdcontrole[0]
+
+    if Friendstatus==True:
+        if Hoofdcontrole[1]==True:
+            message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
+            Controle = content_data_access.add_message(message1, sname)
+            return jsonify({"success": Controle, "message": "accepted"})
+        else:
+            message1 = Content(None, None, "Your request is denied by " + pname, "admin")
+            Controle = content_data_access.add_message(message1, sname)
+            return jsonify({"success": Controle, "message": "not accepted"})
+
     else:
-        message1 = Content(None, None, "Your request is denied by " + pname, "admin")
-        Controle = content_data_access.add_message(message1, sname)
-        return jsonify({"success": Controle, "message": "not accepted"})
+        Hoofdcontrole=clan_data_acces.accept_clanrequest(state,id,pname,sname)
+        Clanstatus=Hoofdcontrole[0]
+        if Clanstatus == True:
+            if Hoofdcontrole[1] == True:
+                message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
+                Controle = content_data_access.add_message(message1, sname)
+                return jsonify({"success": Controle, "message": "accepted"})
+            else:
+                message1 = Content(None, None, "Your request is denied by " + pname, "admin")
+                Controle = content_data_access.add_message(message1, sname)
+                return jsonify({"success": Controle, "message": "not accepted"})
 
 
 @app.route("/", defaults={"path": ""})

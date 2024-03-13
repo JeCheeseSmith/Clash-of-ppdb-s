@@ -61,7 +61,7 @@ class ContentDataAccess:
             return False
 
 
-    def get_chatbox(self, Pname,Sname):
+    def get_chatbox(self, pname,sname):
         cursor = self.dbconnect.get_cursor()
         message1 = """
                     SELECT *
@@ -73,16 +73,14 @@ class ContentDataAccess:
                             WHERE pname = %s   
                         );
                 """
-        cursor.execute(message1, (Sname,Pname,))
-        print("wacht")
+        cursor.execute(message1, (sname,pname,))
         messages =cursor.fetchall()
         chatbox =[]
         for message in messages:
             message_dict ={
-                "id" :message[0],
-                "moment" :str(message[1]),
-                "content" :message[2],
-                "pname" :message[3]
+                "moment": message[2],
+                "content": message[3],
+                "pname": message[4]
             }
             chatbox.append(message_dict)
 
@@ -96,18 +94,18 @@ class ContentDataAccess:
                                         WHERE pname = %s   
                                     );
                             """
-        cursor.execute(messages, (Pname, Sname,))
-        print("wacht")
-        messageZ = cursor.fetchall()
+        cursor.execute(message2, (pname, sname,))
+        messages2 = cursor.fetchall()
         chatbox2 = []
-        for message in messageZ:
+        for message in messages2:
             message_dict = {
-                "id": message[0],
-                "moment": str(message[1]),
-                "content": message[2],
-                "pname": message[3]
+                "moment": message[2],
+                "content": message[3],
+                "pname": message[4]
             }
             chatbox2.append(message_dict)
 
-        return chatbox
+        all_messages = chatbox + chatbox2
+        all_messages = sorted(all_messages, key=lambda x: x['moment'])
+        return all_messages
 
