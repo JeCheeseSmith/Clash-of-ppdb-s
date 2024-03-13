@@ -28,7 +28,7 @@ settlement_data_acces = SettlementDataAcces(connection)
 package_data_acces = PackageDataAccess(connection)
 
 
-@app.route("/signin", methods=["POST"])
+@app.route("/signup", methods=["POST"])
 def add_player():
     """
     API request to sign up as a new player with a unique name and password

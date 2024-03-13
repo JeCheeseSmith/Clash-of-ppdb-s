@@ -26,7 +26,7 @@ function RegistrationPage() {
     let navigate = useNavigate();
     // Handles the navigation from login page to sign-up page
     const handleSaveClick = async () => {
-      const data = await POST({ name: username, password: password }, "/login");
+      const data = await POST({ name: username, password: password }, "/signup");
       console.log(data);
       if (!data.success) {
         navigate('/MainPage', { state: { username } });
