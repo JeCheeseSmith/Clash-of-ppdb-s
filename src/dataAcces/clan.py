@@ -73,14 +73,16 @@ class ClanDataAccess:
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
 
+        print(request.sender,cname)
+
         # Check if they're not already in a clan
         queryCheck = """
-                    SELECT EXISTS(
+                    SELECT (
                     SELECT EXISTS(SELECT *
                     FROM member
                     WHERE pname=%s)
                         
-                    UNION ALL
+                    UNION
                         
                     SELECT EXISTS(
                     SELECT *
@@ -89,7 +91,8 @@ class ClanDataAccess:
                     );
                     """
         cursor.execute(queryCheck, (request.sender,request.sender))
-        queryCheck = cursor.fetchone()
+        queryCheck = cursor.fetchone()[0]
+
         if queryCheck:
             return False
 
