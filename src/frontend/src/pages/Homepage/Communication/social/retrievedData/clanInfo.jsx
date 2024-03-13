@@ -50,6 +50,7 @@ function ClanInformation({name, description, status, pname, succesClanSearch})
             </div>
             {succesClanSearch && <button className={"clan-request-button"} onClick={handleRequestbutton}>Send Request</button>}
             {succesRequest && <RequestMassagePopUp massage={massage}/>}
+            {!succesRequest && <RequestMassagePopUp massage={massage}/>}
         </div>
     )
 }

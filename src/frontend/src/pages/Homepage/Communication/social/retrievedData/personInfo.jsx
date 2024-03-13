@@ -26,6 +26,9 @@ function PersonInformation({name, succesPersonSearch})
         const requestMassage = await POST({'pname': name, 'sname': sender, 'content': "Care to be allies, noble adventurer?"}, "/sendfriendrequest")
         setMassage(requestMassage.message)
         setSuccesRequest(requestMassage.success)
+        console.log(massage)
+        console.log(succesRequest)
+        console.log(sender)
     }
 
     useEffect(() => {
@@ -42,6 +45,7 @@ function PersonInformation({name, succesPersonSearch})
             <DisplayAvatarName type={"player-search"} name={name}/>
             <button className={"friend-request-button"} onClick={handleRequestbutton}>Send Friend Request</button>
             {succesRequest && <RequestMassagePopUp massage={massage}/>}
+            {!succesRequest && <RequestMassagePopUp massage={massage}/>}
         </div>
     )
 }
