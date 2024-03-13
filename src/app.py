@@ -53,7 +53,7 @@ def add_player():
     password = data.get("password")
     Controle = False
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
-    Controle = player_data_access.add_user(Player_obj,settlement_data_acces)
+    Controle = player_data_access.add_user(Player_obj, settlement_data_acces)
     print(Controle)
     if Controle[0]:
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
@@ -111,7 +111,8 @@ def update_chat():
     JSON Input Format(GET):
 
     {
-    "pname": <string> | Player name of the receiver
+    "pname": <string> | Player name of current logged in user
+    "sname": <string> | Player name of the person you're chatting with
     }
 
     JSON Output Format(POST):
@@ -121,25 +122,25 @@ def update_chat():
     "message": <string> | Standard reply
     }
 
-    Output Format(GET): List with messages returned in json format
+    Output Format(GET): List with messages returned in json format, ordered by moment
 
     """
     data = request.json
-    message_content = data.get("content")
     message_pname = data.get("pname")
     message_sname = data.get("sname")
+
     if request.method == "POST":
+        message_content = data.get("content")
         Controle = False
-        Chat_obj = Content(None, None, message_content, message_pname)
-        Controle = content_data_access.add_message(Chat_obj,message_sname)
+        Chat_obj = Content(None, None, message_content, message_sname)
+        Controle = content_data_access.add_message(Chat_obj, message_pname)
         if Controle:
             return jsonify({"success": Controle, "message": "message send successful"})
         else:
             return jsonify({"success": Controle, "message": "Failed to send message"})
 
-    elif request.method == "GET":
-        print("tets")
-        obj = content_data_access.get_chatbox(message_pname)
+    else:  # request.method == "GET":
+        obj = content_data_access.get_chatbox(message_pname, message_sname)
         return jsonify(obj)
 
 
@@ -158,6 +159,7 @@ def get_resources():
     id = data.get("id")
     packageDict = settlement_data_acces.getResources(Settlement(id))
     return jsonify(packageDict)
+
 
 @app.route("/grid", methods=["GET"])
 def get_grid():
@@ -290,8 +292,8 @@ def send_friend_request():
     {
     "moment": <string>
     "content": <string>
-    "pname": <string>
-    "sname": <string>
+    "pname": <string> | Pname ontvanger
+    "sname": <string> | Sender
     }
 
     JSON Output Format:
@@ -339,6 +341,7 @@ def get_general_requests():
     Generalrequest = sorted(Generalrequest, key=lambda x: x["moment"])
     return jsonify(Generalrequest)
 
+
 @app.route("/accept_requests", methods=["POST"])
 def accept_friend_requests():
     """
@@ -366,8 +369,8 @@ def accept_friend_requests():
     Controle = False
     Controle = friend_data_access.accept_Friendrequest(state, pname, sname)
     if Controle:
-        message1= Content(None, None,"Your request is accepted by "+pname,"admin")
-        Controle= content_data_access.add_message(message1,sname)
+        message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
+        Controle = content_data_access.add_message(message1, sname)
         return jsonify({"success": Controle, "message": "accepted"})
     else:
         message1 = Content(None, None, "Your request is denied by " + pname, "admin")
