@@ -1,18 +1,39 @@
 
+# Technical Report
+
 This document will explain how our game works. New players are encouraged to read through this if they are not familiar with the genre of game or if they have question about certain game mechanics.
 This explanation is divided into 4 parts: Account management & logging in, Social systems, City management and attack/defending.  
 ## Making an account | Logging in
 
-While visiting the game site you will be prompted to sign into your account to play the game. If you already have an account you just need to fill in your username and password and click 'login'.
+#### Signup
 
-If you don't have an account you will have to click 'Sign Up' and choose a username and password, fill in the respective fields and then click 'Make Account'. You will now have successfully created a new account. The username and password you chose for your new account will now be your login credentials for the new account.
+When hitting signup on the frontend, a POST Request is send to "/signin" on which an API function is called in app.py:  `def add_player()`  
+  
+This function extracts the data from the provided JSON into a Player Object. Using the player_data_acces, the functionality towards the backend is called: `def add_user(self, obj)`  
+  
+This function creates a user and inserts it into the database. Then it setups the initial settlement by inserting a package with basic resources and settlement into the database.  
+Also, a welcome message is generated.
+
+#### Login
+
+When hitting login on the frontend, a GET Request is send to "/login" on which an API function is called in app.py:  `def get_login()`  
+  
+This function extracts the data from the provided JSON into a Player Object. Using the player_data_acces, the functionality towards the backend is called: `def get_login(self, obj)`  
+
+This function checks if the provided name and password matches an account.
+If it finds an account it returns true.
+
 ## Social systems
 
-Our game has two different kinds of social functions in the form of friends and clans.
+#### Friends
 
-You can send friend requests to other players which when accepted will make you two friends. Friendship has benefits such being able to chat with that player.
-To send a friend request press the 'social' icon and navigate to the tab 'Search person' in this tab you will be able to send friend requests.
-To accept friend requests navigate to the tab friend requests instead.
+When sending a friend request on the frontend, a POST request is send to '/sendfriendrequest' on which an API function in app.py: `def sendfriendrequest()`
+
+This function extracts the data from the provided JSON into a message object. Using the friend_data_access, a backend function `Friendrequest(self, request, sname)` is called using this message object and sname from the JSON file.
+
+This function inserts a friendrequest into the database.
+
+#### Clans
 
 Clans can be created by players in the 'create clan' tab or joined in the 'Join clan' tab.
 Being in a clan with other players makes you able to chat or exchange resources with these other players. In addition players in the same clan cannot attack each other and are able to help other players of their clan. 
