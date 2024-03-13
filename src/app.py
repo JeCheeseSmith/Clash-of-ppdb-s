@@ -61,7 +61,7 @@ def add_player():
         return jsonify({"success": Controle[0], "message": "Signed in failed", "sid": Controle[1]})
 
 
-@app.route("/login", methods=["GET"])
+@app.route("/login", methods=["POST"])
 def get_login():
     """
     API request to log in as a player with a unique name and password
@@ -103,17 +103,15 @@ def update_chat():
     JSON Input Format(POST):
 
     {
-    "id": <int>,
-    "momemt": <string>
-    "content": <string>
-    "pname": <string>
-    "sname": <string>
+    "content": <string> | Actual text in the message
+    "pname": <string> | Player name of the receiver
+    "sname": <string> | Player name of the sender
     }
 
     JSON Input Format(GET):
 
     {
-    "pname": <string>
+    "pname": <string> | Player name of the receiver
     }
 
     JSON Output Format(POST):
@@ -139,10 +137,9 @@ def update_chat():
         else:
             return jsonify({"success": Controle, "message": "Failed to send message"})
 
-
     elif request.method == "GET":
         print("tets")
-        obj = content_data_access.get_chatbox(message_pname,message_sname)
+        obj = content_data_access.get_chatbox(message_pname)
         return jsonify(obj)
 
 
@@ -283,8 +280,6 @@ def search_player():
         return jsonify({"success": Controle, "message": "Player doesn't exists"})
 
 
-
-
 @app.route("/sendfriendrequest", methods=["POST"])
 def send_friend_request():
     """
@@ -343,10 +338,6 @@ def get_general_requests():
     # Sort merged list based on the moment
     Generalrequest = sorted(Generalrequest, key=lambda x: x["moment"])
     return jsonify(Generalrequest)
-
-
-
-
 
 @app.route("/accept_requests", methods=["POST"])
 def accept_friend_requests():
