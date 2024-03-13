@@ -290,7 +290,6 @@ def send_friend_request():
     JSON Input Format:
 
     {
-    'id': <int>,
     'moment': <string>
     'content': <string>
     'pname': <string>
