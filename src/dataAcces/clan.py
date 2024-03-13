@@ -124,27 +124,21 @@ class ClanDataAccess:
 
 
     def accept_clanrequest(self,State,Id,pname,cname):
-        cursor = self.dbconnect.get_cursor()
-        cursor.execute("SELECT EXISTS(SELECT 1 FROM clanrequest WHERE id = %s)", (Id,))
-        id = cursor.fetchone()[0]
-        if id:
-            if State == True:
+        try:
+            cursor = self.dbconnect.get_cursor()
+
+            if State:
                 cursor.execute('INSERT INTO member(pname,cname) VALUES (%s,%s);', (pname, cname,))
 
-                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
-                return (True,True)
-            else:
-                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
-                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
-                return (True,False)
+            cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
+            cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+            return True
+        except:
+            return False
 
-        else:
-            return (False,False)
+
 
 
 
