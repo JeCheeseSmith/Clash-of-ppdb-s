@@ -29,14 +29,12 @@ class PlayerDataAccess:
         Controle = cursor.fetchone()
 
         if Controle:
-
-            # # Get the settlement ID
-            # cursor.execute('SELECT max(id) FROM settlement;')
-            # sid = cursor.fetchone()[0]
-
-            return True
+            # Get the settlement ID
+            cursor.execute('SELECT min(id) FROM settlement WHERE settlement.pname=%s;', (obj.name,))
+            sid = cursor.fetchone()[0]
+            return True, sid
         else:
-            return False
+            return False, None
 
     def add_user(self, obj, settlement_data_acces):
         """
