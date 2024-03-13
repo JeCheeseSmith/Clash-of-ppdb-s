@@ -28,33 +28,6 @@ clan_data_acces = ClanDataAccess(connection)
 friend_data_access = FriendDataAccess(connection)
 # package_data_acces =
 
-@app.route('/joinClan', methods=['POST'])
-def joinClan():
-    """
-    Make a request to join the Clan; sends a message to the Clan Leader too
-
-    JSON Input Format:
-
-    {
-    'cname': <string>,
-    'sender': <string>
-    }
-
-    JSON Output Format:
-
-    {
-    'succes': <bool> | State of request
-    'message': <string> | Standard reply
-    }
-    """
-    data = request.json
-
-    temp = RequestTravisia(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
-    cname = data.get('cname')  # Name of the clan
-    succes = clan_data_acces.sendRequest(temp, cname)
-
-    return jsonify({'succes': succes, 'message': "Your request has been send. Please await further correspondence!"})
-
 @app.route('/signin', methods=['POST'])
 def add_player():
     data = request.json
@@ -186,18 +159,45 @@ def searchClan():
 
     return jsonify(dct)
 
+@app.route('/joinClan', methods=['POST'])
+def joinClan():
+    """
+    Make a request to join the Clan; sends a message to the Clan Leader too
 
-@app.route('/friendRequests', methods=['GET'])
-def friendRequests():
-    return jsonify({'FriendRequests': True})
+    JSON Input Format:
+
+    {
+    'cname': <string>,
+    'sender': <string>
+    }
+
+    JSON Output Format:
+
+    {
+    'succes': <bool> | State of request
+    'message': <string> | Standard reply
+    }
+    """
+    data = request.json
+
+    crequest = RequestTravisia(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"), None)
+    cname = data.get('cname')  # Name of the clan
+    succes = clan_data_acces.sendRequest(crequest, cname)
+
+    return jsonify({'succes': succes, 'message': "Your request has been send. Please await further correspondence!"})
+
+@app.route('/getclanrequest', methods=['POST'])
+def getclanrequest():
+    return jsonify({'succes': True, # found something: succes = True
+                    'sendername': "abu",
+                    'content': "Dear High Magistrate of 'Clan Name', may I join your alliance?"})
 
 
 @app.route('/searchPerson', methods=['POST'])
 def searchPlayer():
     data = request.json
     name = data.get('name')
-    cotrole=False
-    controle=player_data_access.search_player(name)
+    controle = player_data_access.search_player(name)
     return jsonify({'SearchPerson': controle})
 
 @app.route('/sendfriendrequest', methods=['POST'])

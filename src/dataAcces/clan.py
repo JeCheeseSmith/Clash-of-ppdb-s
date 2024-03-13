@@ -28,7 +28,7 @@ class ClanDataAccess:
     def get_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;',
-                       (obj.name,))  # Get the data from the clan with this name
+                       (obj.name,))  # Get the retrievedData from the clan with this name
         result = cursor.fetchone()
 
         if result:  # If there is a clan with this name
@@ -38,7 +38,7 @@ class ClanDataAccess:
         else:
             obj.leader = "Not found"
             obj.status = "Clan doesn't exists"
-            obj.description = "The clan you we're trying to find with name: " + obj.name + (" doesn't exists yet. Maybe "
+            obj.description = "The clan you we're trying to find with name: " + obj.name + (", doesn't exists yet. Maybe "
                                                                                             "you want to create your "
                                                                                             "own clan instead?")
         return obj
@@ -46,14 +46,13 @@ class ClanDataAccess:
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
         try:
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
-                           (request.content, request.pname))
-            cursor.execute(
-                'INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
+            # Register the request
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);', (request.content, request.pname))
+            cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
             cursor.execute('INSERT INTO clanrequest(id) VALUES (DEFAULT);')
 
             # Find the clanLeader and send him the Request
-            cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,) )
+            cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,))
             clanLeader = cursor.fetchone()
             cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', (clanLeader,))
             self.dbconnect.commit()

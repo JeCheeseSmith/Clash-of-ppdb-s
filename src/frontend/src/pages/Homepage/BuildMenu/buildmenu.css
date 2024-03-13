@@ -10,7 +10,8 @@
     padding: 10px 25px 10px 25px; /* Adjust padding as needed */
     font-size: 50px;
     border-radius: 20px;
-    font-family: "Fira Code", system-ui;
+    font-family: "Anton", cursive;
+    letter-spacing: 1px;
 }
 
 .image-container {
