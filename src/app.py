@@ -213,6 +213,7 @@ def joinClan():
     return jsonify({"succes": succes, "message": "Your request has been send. Please await further correspondence!"})
 
 
+
 @app.route("/searchClan", methods=["POST"])
 def searchClan():
     """
