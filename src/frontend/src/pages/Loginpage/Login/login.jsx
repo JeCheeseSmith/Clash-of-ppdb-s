@@ -2,7 +2,7 @@ import React, { useState} from 'react'; // Importing React library
 import './login_signup.css';
 import { useNavigate } from 'react-router-dom';
 import POST from "../../../api/POST.jsx";
-import { AiOutlineExclamationCircle } from 'react-icons/ai'; // Zorg dat je react-icons hebt geïnstalleerd
+import { AiOutlineExclamationCircle } from 'react-icons/ai';
 
 // Code for login page
 function LoginPage() {
