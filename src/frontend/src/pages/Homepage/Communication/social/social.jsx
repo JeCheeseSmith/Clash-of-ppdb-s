@@ -84,7 +84,6 @@ function Navbar({ socialVisible })
         handleButtonClick('requests');
         const data = await POST({'pname': pname}, "/getgeneralrequests");
         setRequests(data);
-        console.log(requests)
     }
 
     return (
@@ -109,7 +108,7 @@ function Navbar({ socialVisible })
             )}
             {
                 socialVisible && currentPage &&
-                (<SocialOption pageName={currentPage} requests={requests}/>)
+                (<SocialOption pageName={currentPage} requests={requests} sendData={sendData}/>)
             }
         </div>
     );
