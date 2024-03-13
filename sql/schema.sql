@@ -191,20 +191,10 @@ CREATE TABLE IF NOT EXISTS achieved(
     PRIMARY KEY (pname,aname)
 );
 
-INSERT INTO player(name,password) VALUES('watson','1234');
-INSERT INTO player(name,password) VALUES('jonas','1234');
-INSERT INTO player(name,password) VALUES('abu','1234');
-INSERT INTO player(name,password) VALUES('admin','1234');
-
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+-- Preset resources
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',0,0,1,'watson');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',2,0,2,'jonas');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,3,'abu');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,4,'admin');
+-- Insert standard buildings
 
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('WoodcuttersCamp','production','200*x',1,1);
 INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Quarry','production','200*x',1,1);
@@ -244,3 +234,45 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3);
+
+
+-- Insert Simulation Data
+
+INSERT INTO player(name,password) VALUES('watson','1234');
+INSERT INTO player(name,password) VALUES('jonas','1234');
+INSERT INTO player(name,password) VALUES('abu','1234');
+INSERT INTO player(name,password) VALUES('admin','1234');
+INSERT INTO player(name,password) VALUES('raadin','1234');
+INSERT INTO player(name,password) VALUES('salah','1234');
+
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
+
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',0,0,2,'watson');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',2,0,3,'jonas');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,4,'abu');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,5,'admin');
+
+-- Create a clan
+INSERT INTO clan(name,pname,status,description) VALUES ('Clan of lord Abu', 'abu', 'Building History', 'We are a clan consisting of powerful members. We stand for power!');
+-- Have friends
+INSERT INTO friend(pname1, pname2) VALUES ('abu','watson');
+
+-- Display messages
+INSERT INTO content(moment,content,pname) VALUES (now(),'Hi!','watson');
+INSERT INTO retrieved(mid, pname) VALUES (1,'abu');
+INSERT INTO message(id) VALUES (1);
+
+-- Show a clan request
+INSERT INTO content(moment,content,pname) VALUES (now(),'May I join your clan??','salah');
+INSERT INTO retrieved(mid, pname) VALUES (2,'abu');
+INSERT INTO request(id,accept) VALUES (2,NULL);
+INSERT INTO clanrequest(id) VALUES (2);
+
+-- Show a friend request
+INSERT INTO content(moment,content,pname) VALUES (now(),'Wanna be my friend buddy?','jonas');
+INSERT INTO retrieved(mid, pname) VALUES (3,'abu');
+INSERT INTO request(id,accept) VALUES (3,NULL);
+INSERT INTO friendRequest(id) VALUES (3);
