@@ -23,7 +23,7 @@ function PersonInformation({name, succesPersonSearch})
     const sender = location.state.username || {};
     const handleRequestbutton = async () =>
     {
-        const requestMassage = await POST({'pname': name, 'sname': sender}, "/sendfriendrequest")
+        const requestMassage = await POST({'pname': name, 'sname': sender, 'content': "Wanna be friends?"}, "/sendfriendrequest")
         setMassage(requestMassage.message)
         setSuccesRequest(requestMassage.success)
     }
