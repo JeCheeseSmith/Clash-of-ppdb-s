@@ -1,4 +1,3 @@
-
 class Friend:
     def __init__(self, pname1, pname2):
         self.pname1 = pname1
@@ -12,11 +11,11 @@ class FriendDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def accept_Friendrequest(self,State,Id,pname,sname):
+    def accept_Friendrequest(self, State, Id, pname, sname):
         cursor = self.dbconnect.get_cursor()
         try:
             print("tets")
-            #cursor.execute('SELECT EXISTS(SELECT 1 FROM friendRequest WHERE id = %s);', (Id,))
+            # cursor.execute('SELECT EXISTS(SELECT 1 FROM friendRequest WHERE id = %s);', (Id,))
             print("printµµµ")
             id = cursor.fetchone()[0]
             if id:
@@ -39,12 +38,11 @@ class FriendDataAccess:
                 return [False, False]
 
         except Exception as e:
-            print("Error:",e)
+            print("Error:", e)
             self.dbconnect.rollback()
             return False
 
-
-    def get_Friendrequest(self,pname):
+    def get_Friendrequest(self, pname):
         cursor = self.dbconnect.get_cursor()
 
         call = """
@@ -70,23 +68,23 @@ class FriendDataAccess:
             friends.append(message_dict)
         return friends
 
-
-
-    def send_Friendrequest(self,request,sname):
-        cursor = self.dbconnect.get_cursor()
-
+    def send_Friendrequest(self, request, pname):
         try:
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES (DEFAULT,now(),%s,%s);',(request.content, request.sender,))
+            cursor = self.dbconnect.get_cursor()
+
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES (DEFAULT,now(),%s,%s);',
+                           (request.content, request.sender,))
+
             cursor.execute('SELECT max(id) FROM content;')
-            Rid=cursor.fetchone()
-            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);',(Rid,))
-            cursor.execute('INSERT INTO friendrequest(id) VALUES (%s);',Rid)
-            cursor.execute('SELECT name FROM player WHERE name=%s;', (sname,))
-            receiver = cursor.fetchone()
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (Rid,receiver))
+            Rid = cursor.fetchone()
+
+            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);', (Rid,))
+            cursor.execute('INSERT INTO friendrequest(id) VALUES (%s);', (Rid,))
+
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (Rid, pname))
             self.dbconnect.commit()
             return True
         except Exception as e:
-            print("Error:",e)
+            print("Error:", e)
             self.dbconnect.rollback()
             return False

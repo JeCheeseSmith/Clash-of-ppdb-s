@@ -289,29 +289,21 @@ def send_friend_request():
     POST: API request to send a friend request to another player
 
     JSON Input Format:
-
     {
-    "moment": <string>
-    "content": <string>
-    "pname": <string> | Pname ontvanger
+    "content": <string> | Actual text
+    "pname": <string> | Receiver
     "sname": <string> | Sender
     }
 
     JSON Output Format:
-
     {
     "success": <bool> | State of Send of the friend request
     "message": <string> | Standard reply
     }
     """
     data = request.json
-    message_content = data.get("content")
-    message_pname = data.get("pname")
-    message_sname = data.get("sname")
-    Friend_request = Content(None, None, message_content, message_pname)
-    Controle = False
-    print("hallo")
-    Controle = friend_data_access.send_Friendrequest(Friend_request, message_sname)
+    Friend_request = Content(None, None, data.get("content"), data.get("sname"))
+    Controle = friend_data_access.send_Friendrequest(Friend_request, data.get("pname"))
     if Controle:
         return jsonify({"success": Controle, "message": "Friend request is send"})
     else:
