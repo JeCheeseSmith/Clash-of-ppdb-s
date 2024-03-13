@@ -18,7 +18,7 @@ class ClanDataAccess:
         try: # Insert Clan Object into the Database
             cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
             cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
-                           (obj.name, cursor.fetchone()[0], obj.description, obj.status))
+                           (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
             self.dbconnect.commit()
             return True
         except:
@@ -28,7 +28,7 @@ class ClanDataAccess:
     def get_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;',
-                       (obj.name,))  # Get the retrievedData from the clan with this name
+                       (obj.name,))  # Get the data from the clan with this name
         result = cursor.fetchone()
 
         if result:  # If there is a clan with this name
@@ -38,25 +38,64 @@ class ClanDataAccess:
         else:
             obj.leader = "Not found"
             obj.status = "Clan doesn't exists"
-            obj.description = "The clan you we're trying to find with name: " + obj.name + (", doesn't exists yet. Maybe "
+            obj.description = "The clan you we're trying to find with name: " + obj.name + ("doesn't exists yet. Maybe "
                                                                                             "you want to create your "
                                                                                             "own clan instead?")
         return obj
 
+    def get_clanrequest(self,pname):
+        cursor = self.dbconnect.get_cursor()
+
+        #Retrieved content en niet message of request morgen oplossen
+        call = """
+                            SELECT *
+                            FROM clanrequest 
+                            INNER JOIN content ON clanrequest.id = content.id
+                            WHERE clanrequest.id IN (     
+                                SELECT mid
+                                FROM retrieved
+                                WHERE pname = %s
+                            );
+                            """
+        cursor.execute(call, (pname,))
+        friend_request = cursor.fetchall()
+        friends = []
+        for friend in friend_request:
+            message_dict = {
+                "moment": friend[2],
+                "content": friend[3],
+                "pname": friend[4]
+            }
+            friends.append(message_dict)
+        return friends
+
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
         try:
-            # Register the request
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);', (request.content, request.pname))
-            cursor.execute('INSERT INTO request(id,accept) VALUES (DEFAULT,NULL);')  # Set first as NULL, True = Accepted, False = Rejected request
-            cursor.execute('INSERT INTO clanrequest(id) VALUES (DEFAULT);')
+            # Insert the content
+            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
+                           (request.content, request.sender,))
+
+            # Retrieve the latest ID to use as Foreign Key
+            cursor.execute('SELECT max(id) FROM content;')
+            rid = cursor.fetchone()
+
+            # Create a request and its specialization
+            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);', (rid,))  # Set first as NULL, True = Accepted, False = Rejected request
+            cursor.execute('INSERT INTO clanrequest(id) VALUES (%s);', (rid,))
 
             # Find the clanLeader and send him the Request
             cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,))
             clanLeader = cursor.fetchone()
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (DEFAULT,%s);', (clanLeader,))
+            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (rid,clanLeader) )
+
+            # Commit to database
             self.dbconnect.commit()
             return True
-        except:
+        except Exception as e:
+            print("Error:", e)
             self.dbconnect.rollback()
             return False
+
+
+

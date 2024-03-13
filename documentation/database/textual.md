@@ -1,5 +1,5 @@
-# Game Mechanics
-> A detailed description of the current mechanics used in the game. Make sure to refer to the database, since this is used as starting point. It also provides a more textual explanation of the database
+# Database
+> A textual description of the database implementation, referring to game mechanics. Make sure to refer to the other database documentation too!
 
 ### General
 
