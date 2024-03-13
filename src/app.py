@@ -85,7 +85,7 @@ def get_login():
     player_name = data.get("name")
     player_password = data.get("password")
     Player_obj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
-                        logout=None)
+                        logout=None, pid=None)
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
