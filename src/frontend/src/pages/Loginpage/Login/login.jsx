@@ -1,9 +1,24 @@
-import React from 'react'; // Importing React library
+import React, { useState} from 'react'; // Importing React library
 import './login_signup.css';
 import { useNavigate } from 'react-router-dom';
+import POST from "../../../api/POST.jsx";
 
 // Code for login page
 function LoginPage() {
+
+    // State for username & password
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    // Handler for username change
+    function handleUsernameChange(event) {
+        setUsername(event.target.value);
+    }
+
+    // Handler for password change
+    function handlePasswordChange(event) {
+        setPassword(event.target.value);
+    }
 
     let navigate = useNavigate();
     // Handles the navigation from login page to sign-up page
@@ -11,8 +26,14 @@ function LoginPage() {
         navigate('/signup');
     }
 
-    function handleLoginClick() {
-        navigate('/MainPage');
+    // Handles the navigation from login page to mainpage
+    const handleLoginClick = async () => {
+        const data = await POST({name:username, password: password}, "/login");
+        console.log(data);
+        if (data.succes) {
+            navigate('/MainPage', { state: { username } });
+        }
+
     }
 
   return (
@@ -20,7 +41,7 @@ function LoginPage() {
       <div className="login-container">
           <h1 className="gametitle">TRAVISIA</h1>
           <h2 className="subtitle">FALLEN EMPIRE</h2>
-          <form className="login-form">
+          <div className="login-form">
               <div>
                   {/* <div> groupes the label and input together on one line */}
                   <label htmlFor="username">Username:</label>
@@ -28,6 +49,8 @@ function LoginPage() {
                   <input
                       id="username"
                       type="text"
+                      value={username}
+                      onChange={handleUsernameChange}
                   />
               </div>
               <div>
@@ -36,13 +59,15 @@ function LoginPage() {
                   <input
                       id="password"
                       type="password"
+                      value={password}
+                      onChange={handlePasswordChange}
                   />
               </div>
               {/* Login button */}
               <button className="login-button" onClick={handleLoginClick}>Login</button>
               {/* Sign-up button */}
               <button className="signup-button" onClick={handleSignUpClick}>Sign Up</button>
-          </form>
+          </div>
       </div>
   );
 }

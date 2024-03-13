@@ -5,6 +5,7 @@ import SocialBox from "./Communication/social/social.jsx";
 import Grid from "./GridView/grid3D.jsx";
 import Buildmenu from "./BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
+import Map from "./Map/map.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -12,15 +13,16 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
  */
 function MainPage()
 {
-    return (
-        <div className="background"> {/* Container for the background image */}
-            <Chat/>
-            <SocialBox/>
-            <Buildmenu/>
-            <Grid/>
-            <ResourceBar/>
-        </div>
-    );
+  return (
+      <div className="background"> {/* Container for the background image */}
+          <Chat/>
+          <SocialBox/>
+          <Buildmenu/>
+          <Grid/>
+          <ResourceBar/>
+          {/*<Map/>*/}
+      </div>
+  );
 }
 
 export default MainPage; // Exporting the MainPage component
