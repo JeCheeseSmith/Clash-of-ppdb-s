@@ -118,8 +118,9 @@ CREATE TABLE IF NOT EXISTS building(
     id INT,
     name VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT NOT NULL,
-    gridX INT UNIQUE NOT NULL, -- Coordinate on the grid
-    gridY INT UNIQUE NOT NULL,
+    gridX INT NOT NULL, -- Coordinate on the grid
+    gridY INT NOT NULL,
+    UNIQUE (gridX,gridY),
     sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
     PRIMARY KEY (id,name)
 );
