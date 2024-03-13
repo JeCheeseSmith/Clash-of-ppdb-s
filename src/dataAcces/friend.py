@@ -69,9 +69,20 @@ class FriendDataAccess:
         return friends
 
     def send_Friendrequest(self, request, pname):
-        try:
-            cursor = self.dbconnect.get_cursor()
+        cursor = self.dbconnect.get_cursor()
 
+        # Check if they're not already friends
+        query = """SELECT *
+                    FROM friend
+                    WHERE (pname1 = %s AND pname2 = %s)
+                    OR (pname1 = %s AND pname2 = %s);
+                """
+        cursor.execute(query, (pname, request.sender, request.sender, pname))
+        a = cursor.fetchone
+        if a!=None:
+            return False
+
+        try:
             cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES (DEFAULT,now(),%s,%s);',
                            (request.content, request.sender,))
 

@@ -210,8 +210,12 @@ def joinClan():
     cname = data.get("cname")  # Name of the clan
     succes = clan_data_acces.sendRequest(rhequest, cname)
 
-    return jsonify({"succes": succes, "message": "Your request has been send. Please await further correspondence!"})
+    if succes:
+        message = "Your request has been send. Please await further correspondence!"
+    else:
+        message = "You can't join a clan if you're already in one!"
 
+    return jsonify({"succes": succes, "message": message})
 
 
 @app.route("/searchClan", methods=["POST"])
