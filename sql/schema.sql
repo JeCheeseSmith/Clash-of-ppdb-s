@@ -274,14 +274,18 @@ INSERT INTO content(moment,content,pname) VALUES (now(),'Hi!','watson');
 INSERT INTO retrieved(mid, pname) VALUES (1,'abu');
 INSERT INTO message(id) VALUES (1);
 
+INSERT INTO content(moment,content,pname) VALUES ( (now()+INTERVAL '1 second'),'Hello there watson!','abu');
+INSERT INTO retrieved(mid, pname) VALUES (2,'watson');
+INSERT INTO message(id) VALUES (2);
+
 -- Show a clan request
 INSERT INTO content(moment,content,pname) VALUES (now(),'May I join your clan??','salah');
-INSERT INTO retrieved(mid, pname) VALUES (2,'abu');
-INSERT INTO request(id,accept) VALUES (2,NULL);
-INSERT INTO clanrequest(id) VALUES (2);
+INSERT INTO retrieved(mid, pname) VALUES (3,'abu');
+INSERT INTO request(id,accept) VALUES (3,NULL);
+INSERT INTO clanrequest(id) VALUES (3);
 
 -- Show a friend request
 INSERT INTO content(moment,content,pname) VALUES (now(),'Wanna be my friend buddy?','jonas');
-INSERT INTO retrieved(mid, pname) VALUES (3,'abu');
-INSERT INTO request(id,accept) VALUES (3,NULL);
-INSERT INTO friendRequest(id) VALUES (3);
+INSERT INTO retrieved(mid, pname) VALUES (4,'abu');
+INSERT INTO request(id,accept) VALUES (4,NULL);
+INSERT INTO friendRequest(id) VALUES (4);
