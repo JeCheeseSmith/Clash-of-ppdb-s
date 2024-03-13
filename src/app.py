@@ -59,7 +59,7 @@ def add_player():
         return jsonify({'success': Controle, 'message': "Signed in failed"})
 
 
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def get_login():
     """
     API request to log in as a player with a unique name and password
@@ -82,7 +82,7 @@ def get_login():
     player_name = data.get('name')
     player_password = data.get('password')
     Player_obj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
-                        logout=None)
+                        logout=None, pid=None)
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
