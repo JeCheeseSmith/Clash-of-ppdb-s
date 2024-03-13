@@ -71,7 +71,9 @@ class ClanDataAccess:
             self.dbconnect.rollback()
             return False
 
-    def get_Friendrequest(self,pname):
+
+
+    def get_clanrequest(self,pname):
         cursor = self.dbconnect.get_cursor()
 
         #Retrieved content en niet message of request morgen oplossen

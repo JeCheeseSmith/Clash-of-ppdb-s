@@ -32,7 +32,7 @@ class FriendDataAccess:
         call = """
                             SELECT *
                             FROM friendRequest 
-                            INNER JOIN content ON friendrequest.id = content.id
+                            INNER JOIN content ON friendrequest.id = content.id and content.pname=pname
                             WHERE friendrequest.id IN (     
                                 SELECT mid
                                 FROM retrieved
