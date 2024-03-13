@@ -62,6 +62,7 @@ class ClanDataAccess:
         friends = []
         for friend in friend_request:
             message_dict = {
+                "id": friend[0],
                 "moment": friend[2],
                 "content": friend[3],
                 "pname": friend[4]
