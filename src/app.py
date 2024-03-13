@@ -275,9 +275,9 @@ def search_player():
     Cotrole = False
     Controle = player_data_access.search_player(name)
     if Controle:
-        return jsonify({"success": Controle, "message": "Player exists"})
+        return jsonify({"success": Controle})
     else:
-        return jsonify({"success": Controle, "message": "Player doesn't exists"})
+        return jsonify({"success": Controle})
 
 
 @app.route("/sendfriendrequest", methods=["POST"])
