@@ -67,7 +67,7 @@ class ContentDataAccess:
             return False
 
     def get_chatbox(self, Pname, Sname):
-        chatbox = {} # Last 10 messages
+        chatbox = [] # Last 10 messages
         cursor = self.dbconnect.get_cursor()
 
          # Select messages from sname to pname
@@ -87,7 +87,7 @@ class ContentDataAccess:
 
         for message in messages:
             c = Content(message[0], str(message[2]), message[3], message[4])
-            chatbox[c.moment]=c.to_dct()
+            chatbox.append(c.to_dct())
 
         # Select messages from pname to sname
         message2 = """
@@ -106,8 +106,6 @@ class ContentDataAccess:
         messages = cursor.fetchall()
         for message in messages:
             c = Content(message[0], str(message[2]), message[3], message[4])
-            chatbox[c.moment]=c.to_dct()
+            chatbox.append(c.to_dct())
 
-        all_messages = chatbox + chatbox2
-        all_messages = sorted(all_messages, key=lambda x: x['moment'])
-        return all_messages
+        return sorted(chatbox, key=lambda x: x['moment'])
