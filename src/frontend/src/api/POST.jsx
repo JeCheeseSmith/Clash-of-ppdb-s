@@ -10,7 +10,7 @@ const remote = "https://team8.ua-ppdb.me/"
 const POST = async (data, endpoint) =>
 {
     let returnData;
-    await fetch(local+endpoint, {
+    await fetch(remote+endpoint, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)

@@ -10,7 +10,7 @@ const remote = "https://team8.ua-ppdb.me/"
 const GET = async (data, endpoint) =>
 {
     let returnData;
-    await fetch(local+endpoint, {
+    await fetch(remote+endpoint, {
         method: 'GET',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
