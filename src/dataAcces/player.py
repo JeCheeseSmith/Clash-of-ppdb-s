@@ -1,8 +1,3 @@
-from src.dataAcces.settlement import *
-
-from src.dataAcces.content import *
-
-
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout, pid):
         self.name = name

@@ -1,4 +1,3 @@
-
 class Package:
     def __init__(self, args):
         self.id = args[0]
