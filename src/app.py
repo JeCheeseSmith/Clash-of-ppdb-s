@@ -3,8 +3,8 @@ from dataAcces.content import *
 from dataAcces.achievement import *
 from dataAcces.building import *
 from dataAcces.package import *
-from dataAcces.settlement import *
-from dataAcces.soldier import *
+from .dataAcces.settlement import *
+from .dataAcces.soldier import *
 from dataAcces.transfer import *
 from dataAcces.friend import *
 from dataAcces.clan import *
