@@ -52,6 +52,7 @@ def add_player():
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     Controle = player_data_access.add_user(Player_obj, settlement_data_acces)
     if Controle[0]:
+        friend_data_access.add_admin(name)
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Signed in failed", "sid": Controle[1]})
@@ -406,6 +407,10 @@ def getFriends():
     JSON Output Format:
     List of friends
     """
+    data = request.json
+    pname = data.get("pname")
+    status = friend_data_access.get_friend(pname)
+    return jsonify(status)
 
 @app.route("/leaveClan", methods=["POST"])
 def leaveClan():

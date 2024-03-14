@@ -16,7 +16,6 @@ class FriendDataAccess:
             cursor = self.dbconnect.get_cursor()
             if State:
                 cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);', (pname, sname,))
-
             cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
             cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
             cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
@@ -100,3 +99,34 @@ class FriendDataAccess:
         except:
             self.dbconnect.rollback()
             return False
+
+
+    def get_friend(self,pname):
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('SELECT pname2 FROM friend WHERE pname1 = %s UNION SELECT pname1 FROM friend WHERE pname2 = %s;',(pname, pname,))
+            friends=cursor.fetchall()
+            all_friends=[]
+            for friend in friends:
+                message_dict={
+                    "pname":friend[0]
+                }
+                all_friends.append(message_dict)
+            return all_friends
+        except Exception as e:
+            print("Error:", e)
+            self.dbconnect.rollback()
+            return False
+
+    def add_admin(self,pname):
+        print(pname)
+        cursor = self.dbconnect.get_cursor()
+        try:
+            cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);', (pname,"admin",))
+            print("test")
+        except Exception as e:
+            print("Error:", e)
+            self.dbconnect.rollback()
+            return False
+
+

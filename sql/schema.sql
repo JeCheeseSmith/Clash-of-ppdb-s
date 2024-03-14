@@ -264,6 +264,7 @@ INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('salah Castle',2,4,7,'sa
 INSERT INTO clan(name,pname,status,description) VALUES ('Clan of lord Abu', 'abu', 'Building History', 'We are a clan consisting of powerful members. We stand for power!');
 -- Have friends
 INSERT INTO friend(pname1, pname2) VALUES ('abu','watson');
+INSERT INTO friend(pname1, pname2) VALUES ('jonas','abu');
 
 -- Display messages
 INSERT INTO content(moment,content,pname) VALUES (now(),'Hi!','watson');
@@ -291,3 +292,5 @@ INSERT INTO content(moment,content,pname) VALUES (now(),'May I join your clan??'
 INSERT INTO retrieved(mid, pname) VALUES (5,'abu');
 INSERT INTO request(id,accept) VALUES (5,NULL);
 INSERT INTO clanrequest(id) VALUES (5);
+
+
