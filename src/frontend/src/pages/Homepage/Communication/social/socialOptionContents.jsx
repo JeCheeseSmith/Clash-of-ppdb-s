@@ -6,13 +6,13 @@ import PersonInformation from "./retrievedData/personInfo.jsx";
 import DisplayAvatarName from "../../../../avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
 
-function SocialOption({pageName, requests})
+function SocialOption({pageName, requests, sendData})
 {
     return(
         <div className="page-content">
             {pageName === 'createClan' && <CreateClanPage/>}
             {pageName === 'joinClan' && <JoinClanPage/>}
-            {pageName === 'requests' && <RequestsPage requests={requests}/>}
+            {pageName === 'requests' && <RequestsPage requests={requests} sendDate={sendData}/>}
             {pageName === 'searchPerson' && <SearchPersonPage/>}
         </div>
     )
@@ -92,8 +92,21 @@ function JoinClanPage()
 }
 
 
-function RequestsPage({ requests })
+function RequestsPage({requests, sendDate})
 {
+    const location = useLocation();
+    const sname = location.state.username || {};
+    const acceptationButton = async (request, state) =>
+    {
+        const accept = await POST({
+            'id': request.id,
+            "state": state,
+            "pname": request.pname,
+            "sname": sname
+        }, "/acceptgeneralrequests")
+        sendDate();
+    }
+
     return (
         <div className="requests-container">
             {
@@ -101,8 +114,8 @@ function RequestsPage({ requests })
                     <div className={"request"}>
                         <DisplayAvatarName type={"player-request"} name={request.pname}/>
                         <div className={"content"}>{request.content}</div>
-                        <button className={"request-accept"}>Accept</button>
-                        <button className={"request-decline"}>Decline</button>
+                        <button className={"request-accept"} onClick={() => acceptationButton(request, true)}>Accept</button>
+                        <button className={"request-decline"} onClick={() => acceptationButton(request, false)}>Decline</button>
                     </div>
                 ))
             }
