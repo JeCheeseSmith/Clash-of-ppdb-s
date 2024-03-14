@@ -5,6 +5,7 @@ import SocialBox from "./Communication/social/social.jsx";
 import Grid from "./GridView/grid3D.jsx";
 import Buildmenu from "./BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
+import Map from "./Map/map.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -19,6 +20,7 @@ function MainPage()
           <Buildmenu/>
           <Grid/>
           <ResourceBar/>
+          {/*<Map/>*/}
       </div>
   );
 }

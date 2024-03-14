@@ -1,0 +1,64 @@
+.toggle-chat-button {
+    position: absolute;
+    bottom: 50%;
+    transform: translateY(-50%);
+    height: 70px;
+    width: 50px;
+    z-index: 10000;
+    padding: 2px;
+    background-color: #262826;
+    font-family: "Fira Code", italic, serif;
+    border: 4px solid #5b1b1b;
+    border-bottom-right-radius: 25px; /* Adjust this value to control the roundness */
+    border-top-right-radius: 25px; /* Adjust this value to control the roundness */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: left 0.5s ease;
+}
+
+.toggle-chat-button.visible {
+    left: 516px; /* Slide in when visible */
+}
+
+.toggle-chat-button.hidden {
+    left: 0cm; /* Slide out when hidden */
+}
+
+.toggle-chat-button:hover {
+    background-color: #d96b00;
+    transition: 0.5s ; /* Slide animation */
+}
+
+.toggle-social-button {
+    position: fixed;
+    bottom: 30%;
+    transform: translateY(-50%);
+    height: 70px;
+    width: 55px;
+    z-index: 1; /* Decreased z-index to bring it down in the background */
+    padding: 0px;
+    background-color: #262826;
+    font-family: "Fira Code", italic, serif;
+    border: 4px solid #bb4f00;
+    border-bottom-right-radius: 25px; /* Adjust this value to control the roundness */
+    border-top-right-radius: 25px; /* Adjust this value to control the roundness */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: left 0.5s ease;
+}
+
+
+.toggle-social-button:hover {
+    background-color: #d96b00;
+    transition: 0.5s ; /* Slide animation */
+}

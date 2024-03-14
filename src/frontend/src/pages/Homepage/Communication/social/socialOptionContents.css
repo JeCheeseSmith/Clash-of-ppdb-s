@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 .navbar-container{
     width: 70%;
 }
@@ -10,23 +11,23 @@
     margin-top: 2px;
 }
 
-.create-clan{
+.social-primair-input{
     margin: 20px;
 }
 
-.nameClan{
+.search-name{
     width: 57.8%;
     margin: 20px;
     padding: 20px;
     font-size: 20px;
-    font-family: "Fira Code", serif;
+    font-family: 'Anton', cursive;
     border-radius: 10px;
     border: 3px solid #484f48;
     color: #ffffff;
     background-image: linear-gradient(to right, rgb(115, 62, 0), rgb(229, 168, 0));
 }
 
-.nameClan::placeholder{
+.search-name::placeholder{
     color: #a18c82;
 }
 
@@ -52,7 +53,7 @@
 
 .create-clan-button {
     background-color: green;
-    font-family: "Fira Code", cursive;
+    font-family: 'Anton', cursive;
     color: white;
     padding: 23px;
     margin-left: 100px; /* Adjusted margin-left */
@@ -68,7 +69,7 @@
     margin: 20px;
     padding: 10px;
     font-size: 15px;
-    font-family: "Fira Code", serif;
+    font-family: 'Anton', cursive;
     border-radius: 10px;
     border: 3px solid #484f48;
     color: #ffffff;
@@ -82,7 +83,7 @@
 
 .join-clan-button {
     background-color: green;
-    font-family: "Fira Code", cursive;
+    font-family: 'Anton', cursive;
     color: white;
     top:2px;
     right: 20px;
@@ -94,17 +95,64 @@
     font-size: 18px;
 }
 
-.friend-requests {
-    text-align: center;
-    margin-top: 25%;
-    color: white;
-    font-family: "Fira Code", serif;
-    font-size: 50px;
+.requests-container {
+    height: 490px; /* Set your desired height */
+    overflow-y: auto; /* Add a scrollbar when content overflows */
 }
+
+.request {
+    display: flex;
+    font-size: large;
+    font-family: italic, sans-serif;
+    justify-content: space-between;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 20px;
+    color: rgb(0, 0, 0);
+    background-image: linear-gradient(to right, rgb(164, 85, 14), rgb(86, 76, 59));
+}
+
+.content {
+    margin-top: auto; /* Pushes content to the bottom */
+    margin-bottom: auto; /* Pushes content to the top */
+    margin-left: 8px;
+    text-align: center; /* Center align content */
+    color: #69e57d;
+    font-family: 'Anton', cursive; /* Importing Google Font 'Press Start 2P' */
+    font-size: 22px; /* Adjust font size as needed */
+    line-height: 2; /* Adjust line height for spacing between lines */
+}
+
+
+.request-accept,
+.request-decline {
+    background-color: transparent;
+    border: 2px solid transparent;
+    color: white;
+    font-family: 'Anton', cursive;
+    font-size: 15px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    margin: 10px;
+}
+.request-accept:hover,
+.request-decline:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+.request-accept {
+    background-color: #01b201;
+}
+.request-decline {
+    background-color: #a11616;
+}
+
 
 .search-friend-button {
     background-color: green;
-    font-family: "Fira Code", cursive;
+    font-family: 'Anton', cursive;
     color: white;
     top:2px;
     right: 20px;
@@ -115,3 +163,17 @@
     bottom: 30px;
     font-size: 18px;
 }
+
+.search-friend-NotFound {
+    font-size: 24px;
+    color: #ff0000; /* Red color for alert */
+    text-align: center;
+    padding: 40px;
+    background-color: #000; /* Black background for ominous effect */
+    border: 4px solid #ff0000; /* Thick red border to draw attention */
+    border-radius: 15px;
+    margin-top: 50px;
+    box-shadow: 0px 0px 20px 2px #ff0000; /* Shadow effect for depth */
+}
+
+
