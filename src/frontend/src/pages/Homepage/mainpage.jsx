@@ -5,6 +5,7 @@ import SocialBox from "./Communication/social/social.jsx";
 import Grid from "./GridView/grid3D.jsx";
 import Buildmenu from "./BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
+import LogOut from "./LogOut/logout.jsx";
 import Map from "./Map/map.jsx";
 
 /**
@@ -16,10 +17,12 @@ function MainPage()
   return (
       <div className="background"> {/* Container for the background image */}
           <Chat/>
+          <LogOut/>
           <SocialBox/>
           <Buildmenu/>
           <Grid/>
           <ResourceBar/>
+
           {/*<Map/>*/}
       </div>
   );
