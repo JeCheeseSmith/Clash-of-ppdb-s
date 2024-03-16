@@ -26,9 +26,6 @@ function PersonInformation({name, succesPersonSearch})
         const requestMassage = await POST({'pname': name, 'sname': sender, 'content': "Care to be allies, noble adventurer?"}, "/sendfriendrequest")
         setMassage(requestMassage.message)
         setSuccesRequest(requestMassage.success)
-        console.log(massage)
-        console.log(succesRequest)
-        console.log(sender)
     }
 
     useEffect(() => {

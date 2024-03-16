@@ -1,4 +1,4 @@
-from src.dataAcces.package import *
+from .package import *
 
 
 class Settlement:
