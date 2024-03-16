@@ -204,10 +204,10 @@ def joinClan():
     """
     data = request.json
 
-    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),
-                       None)
+    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),None)
     cname = data.get("cname")  # Name of the clan
     succes = clan_data_acces.sendRequest(rhequest, cname)
+    print("test",succes)
 
     if succes:
         message = "Your request has been send. Please await further correspondence!"
