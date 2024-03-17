@@ -10,7 +10,7 @@ Production:
 
 Defense:
 
-[Stables]()
+[Stables](https://sketchfab.com/3d-models/horse-stable-c510f246b5b44027b4fa52f44982aa73)
 
 [ArcherTower](https://sketchfab.com/3d-models/viking-watch-tower-5cd42c3ef75748e0b57f25247f073d53)
 
