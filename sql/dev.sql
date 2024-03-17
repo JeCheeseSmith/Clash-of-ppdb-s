@@ -169,7 +169,6 @@ CREATE TABLE IF NOT EXISTS unlockedBuildable(
     bname VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
-    maxNumber INT,
     PRIMARY KEY (bname,sid)
 );
 
@@ -177,7 +176,6 @@ CREATE TABLE IF NOT EXISTS unlockedsoldier(
     sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
-    maxNumber INT,
     PRIMARY KEY (sid,sname)
 );
 
@@ -261,43 +259,3 @@ INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,4,'abu'
 INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,5,'admin');
 INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('raadin Castle',4,2,6,'raadin');
 INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('salah Castle',2,4,7,'salah');
-
-
--- Create a clan
-INSERT INTO clan(name,pname,status,description) VALUES ('Clan of lord Abu', 'abu', 'Building History', 'We are a clan consisting of powerful members. We stand for power!');
--- Have friends
-INSERT INTO friend(pname1, pname2) VALUES ('abu','watson');
-INSERT INTO friend(pname1, pname2) VALUES ('admin','watson');
-INSERT INTO friend(pname1, pname2) VALUES ('admin','jonas');
-INSERT INTO friend(pname1, pname2) VALUES ('admin','abu');
-INSERT INTO friend(pname1, pname2) VALUES ('admin','raadin');
-INSERT INTO friend(pname1, pname2) VALUES ('admin','salah');
-
--- Display messages
-INSERT INTO content(moment,content,pname) VALUES (now(),'Hi!','watson');
-INSERT INTO retrieved(mid, pname) VALUES (1,'abu');
-INSERT INTO message(id) VALUES (1);
-
-INSERT INTO content(moment,content,pname) VALUES ( (now()+INTERVAL '1 second'),'Hello there watson!','abu');
-INSERT INTO retrieved(mid, pname) VALUES (2,'watson');
-INSERT INTO message(id) VALUES (2);
-
--- Show a clan request
-INSERT INTO content(moment,content,pname) VALUES (now(),'May I join your clan??','salah');
-INSERT INTO retrieved(mid, pname) VALUES (3,'abu');
-INSERT INTO request(id,accept) VALUES (3,NULL);
-INSERT INTO clanrequest(id) VALUES (3);
-
--- Show a friend request
-INSERT INTO content(moment,content,pname) VALUES (now(),'Wanna be my friend buddy?','jonas');
-INSERT INTO retrieved(mid, pname) VALUES (4,'abu');
-INSERT INTO request(id,accept) VALUES (4,NULL);
-INSERT INTO friendRequest(id) VALUES (4);
-
--- Create extra clanrequests who should get deleted too when one is accepted
-INSERT INTO content(moment,content,pname) VALUES (now(),'May I join your clan??','salah');
-INSERT INTO retrieved(mid, pname) VALUES (5,'abu');
-INSERT INTO request(id,accept) VALUES (5,NULL);
-INSERT INTO clanrequest(id) VALUES (5);
-
-
