@@ -2,11 +2,11 @@
 
 .chat-container {
     position: absolute;
-    bottom: 80px;
+    bottom: 40px;
     z-index: 10000;
     display: flex;
     flex-direction: column;
-    height: 800px;
+    height: 825px;
     width: 500px; /* Adjusted width */
     transition: left 0.5s ease; /* Slide animation */
 }

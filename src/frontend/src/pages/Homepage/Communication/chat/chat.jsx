@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from 'react';
-import POST from "../../../../../api/POST.jsx";
+import POST from "../../../../api/POST.jsx";
 import './chat.css';
-import CommunicationButton from "../../communication.jsx"; // CSS file for styling
+import CommunicationButton from "../communication.jsx";
+import ChatIcons from "./chatIcons/chatIcons.jsx"; // CSS file for styling
 
 
 /**
@@ -27,14 +28,15 @@ function ChatBox()
     };
 
     return (
-      <div>
-          <CommunicationButton type={"chat"} buttonFunction={toggleChatVisibility} visible={chatVisible}/>
-          <div className={`chat-container ${chatVisible ? 'visible' : 'hidden'}`}>
-             <h1 className="chat-title">CHAT</h1>
-             <MessageDisplay messages={messages} />
-             <MessageInput onSubmit={handleMessageSubmit} />
-          </div>
-      </div>
+        <div>
+            <CommunicationButton type={"chat"} buttonFunction={toggleChatVisibility} visible={chatVisible}/>
+            <div className={`chat-container ${chatVisible ? 'visible' : 'hidden'}`}>
+                <h1 className="chat-title">CHAT</h1>
+                <MessageDisplay messages={messages} />
+                <MessageInput onSubmit={handleMessageSubmit} />
+                <ChatIcons/>
+            </div>
+        </div>
     );
 }
 
