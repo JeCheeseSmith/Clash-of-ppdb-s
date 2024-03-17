@@ -34,7 +34,7 @@ function ChatBox()
                 <h1 className="chat-title">CHAT</h1>
                 <MessageDisplay messages={messages} />
                 <MessageInput onSubmit={handleMessageSubmit} />
-                <ChatIcons/>
+                <ChatIcons updateMessages={setMessages}/>
             </div>
         </div>
     );

@@ -2,11 +2,9 @@
 
 .chat-container {
     position: absolute;
-    bottom: 40px;
     z-index: 10000;
     display: flex;
     flex-direction: column;
-    height: 825px;
     width: 500px; /* Adjusted width */
     transition: left 0.5s ease; /* Slide animation */
 }
@@ -39,6 +37,7 @@
     background-color: rgb(33, 29, 29);
     border-radius: 13px;
     border: 4px solid #5b1b1b;
+    height: 450px;
 }
 
 .message-display::-webkit-scrollbar {

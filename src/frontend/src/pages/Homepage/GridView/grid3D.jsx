@@ -4,7 +4,6 @@ import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
 import House from "./models/House.jsx";
 import Bush from "./models/Bush.jsx";
-import CraftsMan from "./models/CraftsMan.jsx";
 import Tower from "./models/Tower.jsx";
 
 /**

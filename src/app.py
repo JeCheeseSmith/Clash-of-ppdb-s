@@ -117,11 +117,12 @@ def update_chat():
     JSON Output Format (GET):
     List with messages returned in json format, ordered by moment
     """
-    data = request.json
-    message_pname = data.get("pname")
-    message_sname = data.get("sname")
+
 
     if request.method == "POST":
+        data = request.json
+        message_pname = data.get("pname")
+        message_sname = data.get("sname")
         message_content = data.get("content")
         Controle = False
         Chat_obj = Content(None, None, message_content, message_sname)
@@ -131,7 +132,11 @@ def update_chat():
         else:
             return jsonify({"success": Controle, "message": "Failed to send message"})
     else:  # request.method == "GET":
+        data = request.args
+        message_pname = data.get("pname")
+        message_sname = data.get("sname")
         obj = content_data_access.get_chatbox(message_pname, message_sname)
+        print(message_pname, message_sname, obj)
         return jsonify(obj)
 
 @app.route("/groupchat", methods=["POST", "GET"])
@@ -162,11 +167,14 @@ def update_groupchat():
     JSON Output Format (GET):
     List with messages returned in json format, ordered by moment
     """
-    data = request.json
-    message_pname = data.get("pname")
-    message_cname = data.get("cname")
+    # data = request.json
+    # message_pname = data.get("pname")
+    # message_cname = data.get("cname")
 
     if request.method == "POST":
+        data = request.json
+        message_pname = data.get("pname")
+        message_cname = data.get("cname")
         print("hallo")
         message_content = data.get("content")
         Controle = False
@@ -177,7 +185,10 @@ def update_groupchat():
         else:
             return jsonify({"success": Controle, "message": "Failed to send message"})
     else:  # request.method == "GET":
+        data = request.args
+        message_cname = data.get("cname")
         obj = content_data_access.get_groupchat(message_cname)
+        print(message_cname,obj)
         return jsonify(obj)
 
 
