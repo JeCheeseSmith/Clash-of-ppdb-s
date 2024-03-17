@@ -1,6 +1,6 @@
 import React from 'react'; // Importing React library
 import './mainpage.css'; // Importing the CSS file for styling
-import Chat from './Communication/chat/chatBox/chat.jsx';
+import Chat from './Communication/chat/chat.jsx';
 import SocialBox from "./Communication/social/social.jsx";
 import Grid from "./GridView/grid3D.jsx";
 import Buildmenu from "./BuildMenu/buildmenu.jsx";

@@ -1,0 +1,23 @@
+.contact-list{
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.icons {
+    transition: transform 0.4s;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.icons:hover {
+    cursor: pointer;
+    transform: scale(0.9);
+}
+
+.icons:active{
+    transform: scale(0.2);
+}
+

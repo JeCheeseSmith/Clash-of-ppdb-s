@@ -65,3 +65,9 @@
     color: #83771c;
     margin-bottom: 30px;
 }
+
+.chat-ICON-avatar{
+    height: 50px;
+    width: 50px;
+    border-radius: 10px;
+}
