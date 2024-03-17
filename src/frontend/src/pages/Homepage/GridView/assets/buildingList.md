@@ -2,7 +2,7 @@ Production:
 
 [WoodcuttersCamp](https://sketchfab.com/3d-models/medieval-house-1bea14d1a8a34b0b86a5374f256b47bf )
 
-[Quarry]()
+[Quarry](https://sketchfab.com/3d-models/medieval-386f4f0fab8f40bbb3e88dc74e078a40#download)
 
 [SteelMine](https://sketchfab.com/3d-models/medieval-house-4-b42578994a334bb1a544c51043276f85#download)
 
