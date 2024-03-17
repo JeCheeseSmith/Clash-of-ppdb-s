@@ -20,8 +20,10 @@ function ResourceBar() {
 
     // Function that sends a request for the resources by calling the API
     const GetResources = async () => {
-      const data = await POST({ id: "1" }, '/resources');
-      setResources({
+        const sid = localStorage.getItem('sid');
+        console.log(sid);
+        const data = await POST({ id: sid }, '/resources');
+        setResources({
           wood: data.wood,
           stone: data.stone,
           steel: data.steel,
