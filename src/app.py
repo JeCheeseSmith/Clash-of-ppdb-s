@@ -84,9 +84,9 @@ def get_login():
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        return jsonify({"success": Controle[0], "message": "Login successful","sid": Controle[1]})
+        return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
-        return jsonify({"success": Controle[0], "message": "Login failed","sid": Controle[1]})
+        return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
 
 
 @app.route("/chat", methods=["POST", "GET"])
@@ -440,8 +440,8 @@ def removeFriend():
     return jsonify({"success": status})
 
 
-@app.route("/getFriends", methods=["GET"])
-def getFriends():
+@app.route("/getChats", methods=["GET"])
+def getChats():
     """
     POST: API request get al friends from someone
 
@@ -455,8 +455,17 @@ def getFriends():
     """
     data = request.json
     pname = data.get("pname")
+    dct = {}
     status = friend_data_access.get_friend(pname)
-    return jsonify(status)
+    clan = player_data_access.retrieveClan(pname)
+
+    for friend in status:
+        dct[friend.get("pname")] = "person"
+    if clan is not None:
+        print((clan[0]))
+        dct[clan[0]] = "clan"
+
+    return jsonify(dct)
 
 @app.route("/leaveClan", methods=["POST"])
 def leaveClan():
