@@ -20,6 +20,24 @@ Defense:
 
 [Tavern]()
 
+[Training Yard]()
+
 Storage:
 
 [Grain Silo]()
+
+[Stone Stockpile]()
+
+[Armory]()
+
+[Wood Stockpile]()
+
+Governmental:
+
+[Castle]()
+
+Military
+
+[Barracks]()
+
+
