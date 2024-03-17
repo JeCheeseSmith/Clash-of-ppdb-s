@@ -21,7 +21,8 @@ class ClanDataAccess:
                            (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
             self.dbconnect.commit()
             return True
-        except:
+        except Exception as e:
+            print("Error:", e)
             self.dbconnect.rollback()
             return False
 
@@ -73,54 +74,51 @@ class ClanDataAccess:
     def sendRequest(self, request, cname):
         cursor = self.dbconnect.get_cursor()
 
-        print(request.sender,cname)
-
-        # Check if they're not already in a clan
-        queryCheck = """
-                    SELECT (
-                    SELECT EXISTS(SELECT *
-                    FROM member
-                    WHERE pname=%s)
-                        
-                    UNION
-                        
-                    SELECT EXISTS(
-                    SELECT *
-                    FROM clan
-                    WHERE pname=%s)
-                    );
+        # Check if they're not already in a clan (Member or Leader)
+        queryCheckmember = """
+        SELECT 
+        EXISTS(SELECT 1 FROM member WHERE pname=%s);
                     """
-        cursor.execute(queryCheck, (request.sender,request.sender))
-        queryCheck = cursor.fetchone()[0]
+        cursor.execute(queryCheckmember, (request.sender,))
+        queryCheckmember = cursor.fetchone()[0]
 
-        if queryCheck:
+        queryCheckclan="""
+        SELECT 
+        EXISTS(SELECT 1 FROM clan WHERE pname=%s);
+        """
+
+        cursor.execute(queryCheckclan, (request.sender,))
+        queryCheckclan = cursor.fetchone()[0]
+        if queryCheckmember==False and queryCheckclan==False:
+            try:
+                # Insert the content
+                cursor.execute('INSERT INTO content(moment,content,pname) VALUES(now(),%s,%s);',
+                               (request.content, request.sender,))
+
+                # Retrieve the latest ID to use as Foreign Key
+                cursor.execute('SELECT max(id) FROM content;')
+                rid = cursor.fetchone()
+
+                # Create a request and its specialization
+                cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);',
+                               (rid,))  # Set first as NULL, True = Accepted, False = Rejected request
+                cursor.execute('INSERT INTO clanrequest(id) VALUES (%s);', (rid,))
+
+                # Find the clanLeader and send him the Request
+                cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,))
+                clanLeader = cursor.fetchone()
+                cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (rid, clanLeader))
+
+                # Commit to database
+                self.dbconnect.commit()
+                return True
+            except Exception as e:
+                print("Error:", e)
+                self.dbconnect.rollback()
+                return False
+        else:
             return False
 
-        try:
-            # Insert the content
-            cursor.execute('INSERT INTO content(moment,content,pname) VALUES(now(),%s,%s);',
-                           (request.content, request.sender,))
-
-            # Retrieve the latest ID to use as Foreign Key
-            cursor.execute('SELECT max(id) FROM content;')
-            rid = cursor.fetchone()
-
-            # Create a request and its specialization
-            cursor.execute('INSERT INTO request(id,accept) VALUES (%s,NULL);', (rid,))  # Set first as NULL, True = Accepted, False = Rejected request
-            cursor.execute('INSERT INTO clanrequest(id) VALUES (%s);', (rid,))
-
-            # Find the clanLeader and send him the Request
-            cursor.execute('SELECT pname FROM clan WHERE name=%s;', (cname,))
-            clanLeader = cursor.fetchone()
-            cursor.execute('INSERT INTO retrieved(mid,pname) VALUES (%s,%s);', (rid,clanLeader) )
-
-            # Commit to database
-            self.dbconnect.commit()
-            return True
-        except Exception as e:
-            print("Error:", e)
-            self.dbconnect.rollback()
-            return False
 
     def accept_clanrequest(self,State,id,pname, sname):
         """
@@ -141,7 +139,6 @@ class ClanDataAccess:
             cname = cursor.fetchone()
 
             if State:
-                print('a')
                 cursor.execute('INSERT INTO member(pname,cname) VALUES (%s,%s);', (sname, cname,))
 
                 # When accepted; make sure to delete other old requests too
@@ -161,5 +158,48 @@ class ClanDataAccess:
 
         except Exception as e:
             print("Error:", e)
+            self.dbconnect.rollback()
+            return False
+
+    def leaveClan(self,name):
+        try:
+            cursor = self.dbconnect.get_cursor()
+
+            # Remove the membership
+            cursor.execute('DELETE FROM member WHERE pname=%s;', (name,))
+            self.dbconnect.commit()
+            return True
+        except:
+            self.dbconnect.rollback()
+            return False
+
+    def deleteClan(self,cname,lname):
+        """
+        Deletes all members & leader & clanRequests of the clan
+        :param cname: Clan name
+        :param lname: Clan leader name
+        :return:
+        """
+        try:
+            cursor = self.dbconnect.get_cursor()
+
+            # Delete the clan
+            cursor.execute('DELETE FROM clan WHERE name=%s;', (cname,))
+
+            # Delete the members
+            cursor.execute('DELETE FROM member WHERE cname=%s;', (cname,))
+
+            # Remove each now 'old' request towards the Clan
+            cursor.execute('SELECT id FROM clanrequest NATURAL JOIN retrieved WHERE retrieved.pname=%s;', (lname,))
+            oldRequests = cursor.fetchall()
+            for rid in oldRequests:
+                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM request WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM content WHERE id=%s;', (rid,))
+                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (rid,))
+
+            self.dbconnect.commit()
+            return True
+        except:
             self.dbconnect.rollback()
             return False
