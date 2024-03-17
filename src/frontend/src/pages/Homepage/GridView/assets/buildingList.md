@@ -2,9 +2,9 @@ Production:
 
 [WoodcuttersCamp](https://sketchfab.com/3d-models/medieval-house-1bea14d1a8a34b0b86a5374f256b47bf )
 
-[Quarry](https://sketchfab.com/3d-models/medieval-pumpkin-cottage-b89c46770d4747e499a9def29168db26)
+[Quarry]()
 
-[SteelMine](https://sketchfab.com/3d-models/medieval-merchants-house-62319b05a8cd452ea4991cc9e669fd9a)
+[SteelMine](https://sketchfab.com/3d-models/medieval-house-4-b42578994a334bb1a544c51043276f85#download)
 
 [Farm](https://sketchfab.com/3d-models/windmill-game-ready-6a006afce57a447baa60c7a6791f0086)
 
@@ -14,7 +14,7 @@ Defense:
 
 [ArcherTower](https://sketchfab.com/3d-models/viking-watch-tower-5cd42c3ef75748e0b57f25247f073d53)
 
-[LookoutTower](https://sketchfab.com/3d-models/medieval-guard-tower-02-158d1ebb0f9449e4954f95ca7902936d)
+[LookoutTower](https://sketchfab.com/3d-models/medieval-tower-45a6c29ac5b44c608fea237840e31cca#download)
 
 [BlackSmith](https://sketchfab.com/3d-models/medieval-blacksmith-2e4f2725963644c685419dea1e4430df)
 
@@ -26,7 +26,7 @@ Storage:
 
 [Grain Silo](https://sketchfab.com/3d-models/medieval-tower-6c821f2aae3b4e8db5d94c6f48fb568b)
 
-[Stone Stockpile](https://sketchfab.com/3d-models/medieval-merchans-shop-9ad1aaf6f86247ca90950dfa8af090e8)
+[Stone Stockpile](https://sketchfab.com/3d-models/stilized-house-191a15100a9a487fa39540a208bed857)
 
 [Armory](https://sketchfab.com/3d-models/medieval-house-low-poly-for-gamedev-07b3c4f707eb4f419170563ede3557e4)
 
