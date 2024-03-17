@@ -52,6 +52,7 @@ def add_player():
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     Controle = player_data_access.add_user(Player_obj, settlement_data_acces)
     if Controle[0]:
+        friend_data_access.add_admin(name)
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Signed in failed", "sid": Controle[1]})
@@ -203,10 +204,10 @@ def joinClan():
     """
     data = request.json
 
-    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),
-                       None)
+    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),None)
     cname = data.get("cname")  # Name of the clan
     succes = clan_data_acces.sendRequest(rhequest, cname)
+    print("test",succes)
 
     if succes:
         message = "Your request has been send. Please await further correspondence!"
@@ -372,6 +373,83 @@ def accept_general_requests():
             Controle = content_data_access.add_message(message1, sname)
             return jsonify({"success": Controle, "message": "not accepted"})
 
+@app.route("/unfriend", methods=["POST"])
+def removeFriend():
+    """
+    POST: API request to remove someone as friend
+
+    JSON Input Format:
+    {
+    "pname": <string> | Person who you're friend with
+    "sname": <string> | Person who gives the command to remove friend
+    }
+
+    JSON Output Format:
+    {
+    "succes": <BOOL> | Request status
+    }
+    """
+    data = request.json
+    status = friend_data_access.removeFriend(data.get("pname"), data.get("sname"))
+    return jsonify({"success": status})
+
+
+@app.route("/getFriends", methods=["GET"])
+def getFriends():
+    """
+    POST: API request get al friends from someone
+
+    JSON Input Format:
+    {
+    "name": <string> | Person from who we will retrieve all friends
+    }
+
+    JSON Output Format:
+    List of friends
+    """
+    data = request.json
+    pname = data.get("pname")
+    status = friend_data_access.get_friend(pname)
+    return jsonify(status)
+
+@app.route("/leaveClan", methods=["POST"])
+def leaveClan():
+    """
+    POST: API request to leave the Clan
+
+    JSON Input Format:
+    {
+    "name": <string> | Person who leaves the clan
+    }
+
+    JSON Output Format:
+    {
+    "succes": <BOOL> | Request status
+    }
+    """
+    data = request.json
+    succes = clan_data_acces.leaveClan(data.get('name'))
+    return jsonify({"succes": succes})
+
+@app.route("/deleteClan", methods=["POST"])
+def deleteClan():
+    """
+    POST: API request to delete a Clan and all associated data
+
+    JSON Input Format:
+    {
+    "pname": <string> | Clan leader
+    "cname": <string> | Clan name
+    }
+
+    JSON Output Format:
+    {
+    "succes": <BOOL> | Request status
+    }
+    """
+    data = request.json
+    succes = clan_data_acces.deleteClan(data.get('cname'), data.get('pname'))
+    return jsonify({"succes": succes})
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
