@@ -5,7 +5,7 @@ from .dataAcces.building import *
 from .dataAcces.package import *
 from .dataAcces.settlement import *
 from .dataAcces.soldier import *
-from dataAcces.transfer import *
+from .dataAcces.transfer import *
 from .dataAcces.friend import *
 from .dataAcces.clan import *
 from .database import *
@@ -132,6 +132,52 @@ def update_chat():
             return jsonify({"success": Controle, "message": "Failed to send message"})
     else:  # request.method == "GET":
         obj = content_data_access.get_chatbox(message_pname, message_sname)
+        return jsonify(obj)
+
+@app.route("/groupchat", methods=["POST", "GET"])
+def update_groupchat():
+    """
+    POST: API request to send a message to another player
+    GET: API request to get messages from the player
+
+    JSON Input Format (POST):
+    {
+    "content": <string> | Actual text in the message
+    "pname": <string> | Player name of the receiver
+    "sname": <string> | Player name of the sender
+    }
+
+    JSON Input Format (GET):
+    {
+    "pname": <string> | Player name of current logged in user
+    "sname": <string> | Player name of the person you're chatting with
+    }
+
+    JSON Output Format (POST):
+    {
+    "success": <bool> | State of Send of the message
+    "message": <string> | Standard reply
+    }
+
+    JSON Output Format (GET):
+    List with messages returned in json format, ordered by moment
+    """
+    data = request.json
+    message_pname = data.get("pname")
+    message_cname = data.get("cname")
+
+    if request.method == "POST":
+        print("hallo")
+        message_content = data.get("content")
+        Controle = False
+        Chat_obj = Content(None, None, message_content, message_pname)
+        Controle = content_data_access.send_groupchat(message_pname,message_cname,Chat_obj)
+        if Controle:
+            return jsonify({"success": Controle, "message": "message send successful"})
+        else:
+            return jsonify({"success": Controle, "message": "Failed to send message"})
+    else:  # request.method == "GET":
+        obj = content_data_access.get_groupchat(message_cname)
         return jsonify(obj)
 
 
