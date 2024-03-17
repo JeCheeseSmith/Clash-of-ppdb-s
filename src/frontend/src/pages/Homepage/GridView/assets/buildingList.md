@@ -20,7 +20,7 @@ Defense:
 
 [Tavern](https://sketchfab.com/3d-models/medieval-tavern-03f758757c3e448d81f50831b8533c98)
 
-[Training Yard]()
+[Training Yard](https://sketchfab.com/3d-models/fantasy-army-tent-b53f7ed48de1406b8784b9792f0fb4ac)
 
 Storage:
 
@@ -34,7 +34,7 @@ Storage:
 
 Governmental:
 
-[Castle]()
+[Castle](https://sketchfab.com/3d-models/castle-3d-model-23eb94cac33d4099b7185a81bdc038e4)
 
 Military
 
