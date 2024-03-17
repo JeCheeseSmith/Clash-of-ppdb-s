@@ -8,9 +8,18 @@ Production:
 
 [Farm]()
 
-Grain Silo
-
 Defense:
 
 [Stables]()
 
+[ArcherTower]()
+
+[LookoutTower]()
+
+[BlackSmith]()
+
+[Tavern]()
+
+Storage:
+
+[Grain Silo]()
