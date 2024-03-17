@@ -32,7 +32,9 @@ function LoginPage() {
     const handleLoginClick = async () => {
       const data = await POST({ name: username, password: password }, "/login");
       if (data.success) {
-        navigate('/MainPage', { state: { username } });
+          localStorage.setItem('sid', data.sid);
+          console.log(data);
+          navigate('/MainPage', { state: { username: username } });
       }
       else {
         setErrorMessage('Verkeerde login details');
