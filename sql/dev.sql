@@ -111,7 +111,8 @@ CREATE TABLE IF NOT EXISTS buildable(
     type VARCHAR NOT NULL,
     function TEXT NOT NULL, -- The mathematical function to evaluate the resource function with
     cost INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Costs Relation
-    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Drawback Relation
+    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Drawback Relation
+    upgradeFunction TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS building(

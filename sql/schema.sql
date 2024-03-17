@@ -111,7 +111,8 @@ CREATE TABLE IF NOT EXISTS buildable(
     type VARCHAR NOT NULL,
     function TEXT NOT NULL, -- The mathematical function to evaluate the resource function with
     cost INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Costs Relation
-    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Drawback Relation
+    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Drawback Relation
+    upgradeFunction TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS building(
@@ -168,6 +169,7 @@ CREATE TABLE IF NOT EXISTS unlockedBuildable(
     bname VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
+    maxNumber INT,
     PRIMARY KEY (bname,sid)
 );
 
@@ -175,6 +177,7 @@ CREATE TABLE IF NOT EXISTS unlockedsoldier(
     sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
+    maxNumber INT,
     PRIMARY KEY (sid,sname)
 );
 
