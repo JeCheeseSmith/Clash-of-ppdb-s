@@ -14,7 +14,7 @@ Defense:
 
 [ArcherTower]()
 
-[LookoutTower]()
+[LookoutTower](https://sketchfab.com/3d-models/medieval-tower-6c821f2aae3b4e8db5d94c6f48fb568b)
 
 [BlackSmith]()
 
