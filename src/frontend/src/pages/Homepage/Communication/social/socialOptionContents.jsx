@@ -95,14 +95,14 @@ function JoinClanPage()
 function RequestsPage({requests, sendDate})
 {
     const location = useLocation();
-    const sname = location.state.username || {};
+    const username = location.state.username || {};
     const acceptationButton = async (request, state) =>
     {
         const accept = await POST({
             'id': request.id,
             "state": state,
-            "pname": request.pname,
-            "sname": sname
+            "pname": username,
+            "sname": request.pname
         }, "/acceptgeneralrequests")
         sendDate();
     }
