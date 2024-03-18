@@ -1,3 +1,5 @@
+
+
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout, pid):
         self.name = name
@@ -31,7 +33,7 @@ class PlayerDataAccess:
         else:
             return False, None
 
-    def add_user(self, obj, settlement_data_acces):
+    def add_user(self, obj, settlement_data_acces,content_data_access):
         """
         Initialise all standard data for the user.
         - Create a player in the database
@@ -63,14 +65,15 @@ class PlayerDataAccess:
             sid = cursor.fetchone()[0]
 
             # Send a message to the user from the system
-            # TODO: Call message send here
+            content_data_access.add_message(Content(None,"Welcome to Travisia!", "admin"),obj.name)
+
 
             self.dbconnect.commit()
             return True, sid
         except Exception as e:
             print("Error:", e)
             self.dbconnect.rollback()
-            return False
+            return False, None
 
     def search_player(self, name):
         cursor = self.dbconnect.get_cursor()

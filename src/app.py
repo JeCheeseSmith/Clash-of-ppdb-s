@@ -50,7 +50,7 @@ def add_player():
     name = data.get("name")
     password = data.get("password")
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
-    Controle = player_data_access.add_user(Player_obj, settlement_data_acces)
+    Controle = player_data_access.add_user(Player_obj, settlement_data_acces,content_data_access)
     if Controle[0]:
         friend_data_access.add_admin(name)
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
