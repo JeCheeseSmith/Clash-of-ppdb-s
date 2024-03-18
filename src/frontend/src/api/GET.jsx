@@ -7,23 +7,28 @@
  */
 const local = "http://127.0.0.1:5000"
 const remote = "https://team8.ua-ppdb.me/"
-const GET = async (data, endpoint) =>
+
+const GET = async (data,endpoint) =>
 {
-    let returnData;
-    await fetch(remote+endpoint, {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(data)
-    })
-        .then(res => res.json())
-        .then(data => {
-            returnData = data;
-        })
-        .catch(error =>
+    try
+    {
+        const url = new URL(local + endpoint);
+        if (data)
         {
-            console.error('Error:', error);
+            Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));
+        }
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
         });
-    return returnData
+        const responseData = await response.json();
+        return responseData;
+    }
+    catch (error)
+    {
+        console.error('Error:', error);
+        throw error;
+    }
 };
 
 export default GET;

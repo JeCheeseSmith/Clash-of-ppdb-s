@@ -2,6 +2,8 @@ import React from "react";
 import './avatarWithName.css'
 import avatar from "../assets/clanPicture.jpg";
 import notFound from "../assets/groupnotfound.png";
+import person from "../assets/person.png";
+import group from "../assets/group.png";
 function DisplayAvatarName({type, name, pname, succesClanSearch})
 {
     return (
@@ -9,6 +11,8 @@ function DisplayAvatarName({type, name, pname, succesClanSearch})
             {type === 'player-request' && <PlayerRequest name={name}/>}
             {type === 'player-search' && <PlayerSearch name={name}/>}
             {type === 'clan-search' && <ClanSearch name={name} pname={pname} succes={succesClanSearch}/>}
+            {type === 'chat-person' && <ChatPerson name={name}/>}
+            {type === 'chat-group' && <ChatGroup name={name}/>}
         </div>
     )
 }
@@ -45,4 +49,24 @@ function ClanSearch({name, pname, succes}) {
             </div>
         </div>
     )
+}
+
+function ChatPerson({name})
+{
+    return (
+        <div>
+            <img src={person} className={"chat-ICON-avatar"}/>
+            <h3>{name}</h3>
+        </div>
+    );
+}
+
+function ChatGroup({name})
+{
+    return (
+        <div>
+            <img src={group} className={"chat-ICON-avatar"}/>
+            <h3>{name}</h3>
+        </div>
+    );
 }

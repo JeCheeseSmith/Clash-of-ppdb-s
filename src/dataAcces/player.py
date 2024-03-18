@@ -67,9 +67,10 @@ class PlayerDataAccess:
 
             self.dbconnect.commit()
             return True, sid
-        except:
+        except Exception as e:
+            print("Error:", e)
             self.dbconnect.rollback()
-            return False, None
+            return False
 
     def search_player(self, name):
         cursor = self.dbconnect.get_cursor()
@@ -79,3 +80,9 @@ class PlayerDataAccess:
             return True
         else:
             return False
+
+    def retrieveClan(self, pname):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT cname FROM member where pname=%s;', (pname,) )
+        member = cursor.fetchone()
+        return member

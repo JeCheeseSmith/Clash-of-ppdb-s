@@ -4,7 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
 import House from "./models/House.jsx";
 import Bush from "./models/Bush.jsx";
-import CraftsMan from "./models/CraftsMan.jsx";
+import Tower from "./models/Tower.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -32,7 +32,7 @@ function Grid()
                 <mesh key={`${rowIndex}-${colIndex}`}
                       position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}
                 >
-                    <House/>
+                    <Tower/>
                 </mesh>
             );
         }

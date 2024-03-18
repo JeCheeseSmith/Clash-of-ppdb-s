@@ -1,14 +1,14 @@
-from .dataAcces.player import *
-from .dataAcces.content import *
-from .dataAcces.achievement import *
-from .dataAcces.building import *
-from .dataAcces.package import *
-from .dataAcces.settlement import *
-from .dataAcces.soldier import *
+from dataAcces.player import *
+from dataAcces.content import *
+from dataAcces.achievement import *
+from dataAcces.building import *
+from dataAcces.package import *
+from dataAcces.settlement import *
+from dataAcces.soldier import *
 from dataAcces.transfer import *
-from .dataAcces.friend import *
-from .dataAcces.clan import *
-from .database import *
+from dataAcces.friend import *
+from dataAcces.clan import *
+from database import *
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask.templating import render_template
@@ -52,6 +52,7 @@ def add_player():
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     Controle = player_data_access.add_user(Player_obj, settlement_data_acces)
     if Controle[0]:
+        friend_data_access.add_admin(name)
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Signed in failed", "sid": Controle[1]})
@@ -83,9 +84,9 @@ def get_login():
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        return jsonify({"success": Controle[0], "message": "Login successful","sid": Controle[1]})
+        return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
-        return jsonify({"success": Controle[0], "message": "Login failed","sid": Controle[1]})
+        return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
 
 
 @app.route("/chat", methods=["POST", "GET"])
@@ -116,11 +117,12 @@ def update_chat():
     JSON Output Format (GET):
     List with messages returned in json format, ordered by moment
     """
-    data = request.json
-    message_pname = data.get("pname")
-    message_sname = data.get("sname")
+
 
     if request.method == "POST":
+        data = request.json
+        message_pname = data.get("pname")
+        message_sname = data.get("sname")
         message_content = data.get("content")
         Controle = False
         Chat_obj = Content(None, None, message_content, message_sname)
@@ -130,7 +132,60 @@ def update_chat():
         else:
             return jsonify({"success": Controle, "message": "Failed to send message"})
     else:  # request.method == "GET":
+        data = request.args
+        message_pname = data.get("pname")
+        message_sname = data.get("sname")
         obj = content_data_access.get_chatbox(message_pname, message_sname)
+        return jsonify(obj)
+
+@app.route("/groupchat", methods=["POST", "GET"])
+def update_groupchat():
+    """
+    POST: API request to send a message to another player
+    GET: API request to get messages from the player
+
+    JSON Input Format (POST):
+    {
+    "content": <string> | Actual text in the message
+    "pname": <string> | Player name of the receiver
+    "sname": <string> | Player name of the sender
+    }
+
+    JSON Input Format (GET):
+    {
+    "pname": <string> | Player name of current logged in user
+    "sname": <string> | Player name of the person you're chatting with
+    }
+
+    JSON Output Format (POST):
+    {
+    "success": <bool> | State of Send of the message
+    "message": <string> | Standard reply
+    }
+
+    JSON Output Format (GET):
+    List with messages returned in json format, ordered by moment
+    """
+    # data = request.json
+    # message_pname = data.get("pname")
+    # message_cname = data.get("cname")
+
+    if request.method == "POST":
+        data = request.json
+        message_pname = data.get("pname")
+        message_cname = data.get("cname")
+        message_content = data.get("content")
+        Controle = False
+        Chat_obj = Content(None, None, message_content, message_pname)
+        Controle = content_data_access.send_groupchat(message_pname,message_cname,Chat_obj)
+        if Controle:
+            return jsonify({"success": Controle, "message": "message send successful"})
+        else:
+            return jsonify({"success": Controle, "message": "Failed to send message"})
+    else:  # request.method == "GET":
+        data = request.args
+        message_cname = data.get("cname")
+        obj = content_data_access.get_groupchat(message_cname)
         return jsonify(obj)
 
 
@@ -203,8 +258,7 @@ def joinClan():
     """
     data = request.json
 
-    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),
-                       None)
+    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),None)
     cname = data.get("cname")  # Name of the clan
     succes = clan_data_acces.sendRequest(rhequest, cname)
 
@@ -372,6 +426,91 @@ def accept_general_requests():
             Controle = content_data_access.add_message(message1, sname)
             return jsonify({"success": Controle, "message": "not accepted"})
 
+@app.route("/unfriend", methods=["POST"])
+def removeFriend():
+    """
+    POST: API request to remove someone as friend
+
+    JSON Input Format:
+    {
+    "pname": <string> | Person who you're friend with
+    "sname": <string> | Person who gives the command to remove friend
+    }
+
+    JSON Output Format:
+    {
+    "succes": <BOOL> | Request status
+    }
+    """
+    data = request.json
+    status = friend_data_access.removeFriend(data.get("pname"), data.get("sname"))
+    return jsonify({"success": status})
+
+
+@app.route("/getChats", methods=["GET"])
+def getChats():
+    """
+    POST: API request get al friends from someone
+
+    JSON Input Format:
+    {
+    "name": <string> | Person from who we will retrieve all friends
+    }
+
+    JSON Output Format:
+    List of friends
+    """
+    data = request.args
+    pname = data.get("pname")
+    dct = {}
+    status = friend_data_access.get_friend(pname)
+    clan = player_data_access.retrieveClan(pname)
+
+    for friend in status:
+        dct[friend.get("pname")] = "person"
+    if clan is not None:
+        dct[clan[0]] = "clan"
+
+    return jsonify(dct)
+
+@app.route("/leaveClan", methods=["POST"])
+def leaveClan():
+    """
+    POST: API request to leave the Clan
+
+    JSON Input Format:
+    {
+    "name": <string> | Person who leaves the clan
+    }
+
+    JSON Output Format:
+    {
+    "succes": <BOOL> | Request status
+    }
+    """
+    data = request.json
+    succes = clan_data_acces.leaveClan(data.get('name'))
+    return jsonify({"succes": succes})
+
+@app.route("/deleteClan", methods=["POST"])
+def deleteClan():
+    """
+    POST: API request to delete a Clan and all associated data
+
+    JSON Input Format:
+    {
+    "pname": <string> | Clan leader
+    "cname": <string> | Clan name
+    }
+
+    JSON Output Format:
+    {
+    "succes": <BOOL> | Request status
+    }
+    """
+    data = request.json
+    succes = clan_data_acces.deleteClan(data.get('cname'), data.get('pname'))
+    return jsonify({"succes": succes})
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")

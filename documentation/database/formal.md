@@ -186,13 +186,14 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### buildable
 
-| Name     | Type    | Explanation                                                                                  |
-|----------|---------|----------------------------------------------------------------------------------------------|
-| name     | VARCHAR | PRIMARY KEY                                                                                  |
-| type     | VARCHAR | The type of the building; Political,  Decoration, Resources, ...                             |
-| function | TEXT    | NThe mathematical function to evaluate the resource function with                            |
-| cost     | INT     | package(id); Costs Relation expressing how much a building costs to build                    |
-| drawback | INT     | package(id); Drawback Relation; expressing the amount of resources given back when destroyed |
+| Name            | Type    | Explanation                                                                                  |
+|-----------------|---------|----------------------------------------------------------------------------------------------|
+| name            | VARCHAR | PRIMARY KEY                                                                                  |
+| type            | VARCHAR | The type of the building; Political,  Decoration, Resources, ...                             |
+| function        | TEXT    | The mathematical function to evaluate the resource function with                             |
+| cost            | INT     | package(id); Costs Relation expressing how much a building costs to build                    |
+| drawback        | INT     | package(id); Drawback Relation; expressing the amount of resources given back when destroyed |
+| upgradeFunction | TEXT    | Mathematical formula that takes the level as input to calculate upgrade resource             |
 
 ### building
 
@@ -252,19 +253,21 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### unlockedBuildable
 
-| Name  | Type    | Explanation                                                     |
-|-------|---------|-----------------------------------------------------------------|
-| bname | VARCHAR | REFERENCES buildable(name)                                      |
-| sid   | INT     | Buildable which is unlocked by the settlement, specified by sid |
-| level | INT     | Level needed to unlock                                          |
+| Name      | Type    | Explanation                                                     |
+|-----------|---------|-----------------------------------------------------------------|
+| bname     | VARCHAR | REFERENCES buildable(name)                                      |
+| sid       | INT     | Buildable which is unlocked by the settlement, specified by sid |
+| level     | INT     | Level needed to unlock                                          |
+| maxNumber | INT     | Maximum number of entries a settlement may have of this type    |
 
 ### unlockedsoldier
 
-| Name  | Type    | Explanation                                |
-|-------|---------|--------------------------------------------|
-| sname | VARCHAR | REFERENCES soldier(name)                   |
-| sid   | INT     | ID of the settlement unlocking this entity |
-| level | INT     | Level needed to unlock                     |
+| Name      | Type    | Explanation                                                  |
+|-----------|---------|--------------------------------------------------------------|
+| sname     | VARCHAR | REFERENCES soldier(name)                                     |
+| sid       | INT     | ID of the settlement unlocking this entity                   |
+| level     | INT     | Level needed to unlock                                       |
+| maxNumber | INT     | Maximum number of entries a settlement may have of this type |
 
 
 ### wheelofFortune

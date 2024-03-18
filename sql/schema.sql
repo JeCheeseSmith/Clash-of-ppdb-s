@@ -111,7 +111,8 @@ CREATE TABLE IF NOT EXISTS buildable(
     type VARCHAR NOT NULL,
     function TEXT NOT NULL, -- The mathematical function to evaluate the resource function with
     cost INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Costs Relation
-    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Drawback Relation
+    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Drawback Relation
+    upgradeFunction TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS building(
@@ -168,6 +169,7 @@ CREATE TABLE IF NOT EXISTS unlockedBuildable(
     bname VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
+    maxNumber INT,
     PRIMARY KEY (bname,sid)
 );
 
@@ -175,6 +177,7 @@ CREATE TABLE IF NOT EXISTS unlockedsoldier(
     sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT,
+    maxNumber INT,
     PRIMARY KEY (sid,sname)
 );
 
@@ -196,24 +199,24 @@ INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('WoodcuttersCamp','production','200*x',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Quarry','production','200*x',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('SteelMine','production','20+(25*x)',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Farm','production','300*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('WoodcuttersCamp','production','200*x',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Quarry','production','200*x',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('SteelMine','production','20+(25*x)',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Farm','production','300*x',1,1,'');
 
 -- INSERT INTO buildable(name,type,function,storage,cost,drawback) VALUES('Castle','storage');
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Wood','storage','2000*2^(x)',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Stone','storage','2000*2^(x)',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Steel','storage','10000*(2*x)',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Food','storage','2000*2^(x)',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Wood','storage','2000*2^(x)',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Stone','storage','2000*2^(x)',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Steel','storage','10000*(2*x)',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Food','storage','2000*2^(x)',1,1,'');
 
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Stables','defense','1,1*x',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('ArcherTower','defense','1,1*x',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('LookoutTower','defense','1,1*x',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('BlackSmith','defense','1,1*x',1,1);
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('Tavern','defense','1,1*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Stables','defense','1,1*x',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('ArcherTower','defense','1,1*x',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('LookoutTower','defense','1,1*x',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('BlackSmith','defense','1,1*x',1,1,'');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Tavern','defense','1,1*x',1,1,'');
 
-INSERT INTO buildable(name,type,function,cost,drawback) VALUES('empty','decoration','1,1*x',1,1);
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('empty','decoration','1,1*x',1,1,'');
 
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1);
@@ -262,8 +265,15 @@ INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('salah Castle',2,4,7,'sa
 
 -- Create a clan
 INSERT INTO clan(name,pname,status,description) VALUES ('Clan of lord Abu', 'abu', 'Building History', 'We are a clan consisting of powerful members. We stand for power!');
+INSERT INTO member(pname, cname) VALUES('abu','Clan of lord Abu');
+
 -- Have friends
 INSERT INTO friend(pname1, pname2) VALUES ('abu','watson');
+INSERT INTO friend(pname1, pname2) VALUES ('admin','watson');
+INSERT INTO friend(pname1, pname2) VALUES ('admin','jonas');
+INSERT INTO friend(pname1, pname2) VALUES ('admin','abu');
+INSERT INTO friend(pname1, pname2) VALUES ('admin','raadin');
+INSERT INTO friend(pname1, pname2) VALUES ('admin','salah');
 
 -- Display messages
 INSERT INTO content(moment,content,pname) VALUES (now(),'Hi!','watson');
@@ -291,3 +301,5 @@ INSERT INTO content(moment,content,pname) VALUES (now(),'May I join your clan??'
 INSERT INTO retrieved(mid, pname) VALUES (5,'abu');
 INSERT INTO request(id,accept) VALUES (5,NULL);
 INSERT INTO clanrequest(id) VALUES (5);
+
+
