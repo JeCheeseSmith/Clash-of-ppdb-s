@@ -88,23 +88,6 @@ def get_login():
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
 
-@app.route("/logout" , methods=["POST"])
-def logout():
-    """
-    JSON Input Format (POST):
-    {
-    "name": <string> | Player name
-    }
-    :return:
-
-    JSON Output Format (POST):
-    {
-    "success": <bool> | State of transaction
-    }
-    """
-    data = request.json
-    succes = player_data_access.registerLogOut(data.get("name")) #Call the desired functionality
-    return jsonify(succes)
 
 @app.route("/chat", methods=["POST", "GET"])
 def update_chat():
@@ -158,19 +141,20 @@ def update_chat():
 @app.route("/groupchat", methods=["POST", "GET"])
 def update_groupchat():
     """
-    POST: API request to send a message in a groupchat of the clan
-    GET: API request to get messages of a groupchat of the clan
+    POST: API request to send a message to another player
+    GET: API request to get messages from the player
 
     JSON Input Format (POST):
     {
     "content": <string> | Actual text in the message
     "pname": <string> | Player name of the receiver
-    "cname": <string> | Clan name
+    "sname": <string> | Player name of the sender
     }
 
     JSON Input Format (GET):
     {
-    "cname": <string> | Clan name
+    "pname": <string> | Player name of current logged in user
+    "sname": <string> | Player name of the person you're chatting with
     }
 
     JSON Output Format (POST):
@@ -182,6 +166,9 @@ def update_groupchat():
     JSON Output Format (GET):
     List with messages returned in json format, ordered by moment
     """
+    # data = request.json
+    # message_pname = data.get("pname")
+    # message_cname = data.get("cname")
 
     if request.method == "POST":
         data = request.json
@@ -369,7 +356,7 @@ def send_friend_request():
 @app.route("/getgeneralrequests", methods=["POST"])
 def get_general_requests():
     """
-    API request to get requests of a player
+    API request to get requests to a player
 
     JSON Input Format:
     {

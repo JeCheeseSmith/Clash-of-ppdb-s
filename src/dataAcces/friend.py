@@ -107,7 +107,7 @@ class FriendDataAccess:
             return False
 
 
-    def get_friends(self,pname):
+    def get_friend(self,pname):
         cursor = self.dbconnect.get_cursor()
         try:
             cursor.execute('SELECT pname2 FROM friend WHERE pname1 = %s UNION SELECT pname1 FROM friend WHERE pname2 = %s;',(pname, pname,)) # Retrieve the player his friends
