@@ -14,8 +14,9 @@ class ClanDataAccess:
         self.dbconnect = dbconnect
 
     def add_clan(self, obj):
-        cursor = self.dbconnect.get_cursor()
         try: # Insert Clan Object into the Database
+
+            cursor = self.dbconnect.get_cursor()
             cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
             cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
                            (obj.name, cursor.fetchone()[0], obj.description, obj.status,))

@@ -24,7 +24,6 @@ class PackageDataAccess:
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT * FROM;')
         cursor.execute('SELECT * FROM package WHERE id=%s;', pid)
         return Package(cursor.fetchone())
 

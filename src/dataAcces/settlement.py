@@ -10,7 +10,7 @@ class Settlement:
         self.pid = pid
         self.pname = pname
 
-    def to_dict(self):
+    def to_dct(self):
         return dict(id=self.id, name=self.name, mapX=self.mapX, mapY=self.mapY, pid=self.pid, pname=self.pname)
 
 
@@ -29,7 +29,8 @@ class SettlementDataAcces:
         cursor.execute('SELECT pid FROM settlement WHERE settlement.id=%s;', (obj.id,))
         pid = cursor.fetchone()
         cursor.execute('SELECT * FROM package WHERE package.id=%s;', (pid,))
-        return Package(cursor.fetchone()).to_dct()
+        packageData = cursor.fetchone()
+        return Package(packageData).to_dct()
 
     def createOutPost(self):
         pass

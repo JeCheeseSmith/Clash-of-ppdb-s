@@ -50,7 +50,7 @@ class PlayerDataAccess:
                 (obj.name, obj.password, obj.xp, obj.gems, obj.level, obj.avatar))
 
             # Create a package for the settlement
-            cursor.execute('INSERT INTO package(stone,wood,steel,food) VALUES(%s,%s,%s,%s);',
+            cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,0,0);',
                            (500, 500, 500, 500))  # All resource are initialised at the maximum
 
             # Create a settlement & link the package
@@ -64,11 +64,11 @@ class PlayerDataAccess:
             cursor.execute('SELECT max(id) FROM settlement;')
             sid = cursor.fetchone()[0]
 
+            self.dbconnect.commit()
+
             # Send a message to the user from the system
             content_data_access.add_message(Content(None,None,"Welcome to Travisia!", "admin"),obj.name)
 
-
-            self.dbconnect.commit()
             return True, sid
         except Exception as e:
             print("Error:", e)
