@@ -1,14 +1,14 @@
-from .dataAcces.player import *
-from .dataAcces.content import *
-from .dataAcces.achievement import *
-from .dataAcces.building import *
-from .dataAcces.package import *
-from .dataAcces.settlement import *
-from .dataAcces.soldier import *
-from .dataAcces.transfer import *
-from .dataAcces.friend import *
-from .dataAcces.clan import *
-from .database import *
+from dataAcces.player import *
+from dataAcces.content import *
+from dataAcces.achievement import *
+from dataAcces.building import *
+from dataAcces.package import *
+from dataAcces.settlement import *
+from dataAcces.soldier import *
+from dataAcces.transfer import *
+from dataAcces.friend import *
+from dataAcces.clan import *
+from database import *
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask.templating import render_template
@@ -136,7 +136,6 @@ def update_chat():
         message_pname = data.get("pname")
         message_sname = data.get("sname")
         obj = content_data_access.get_chatbox(message_pname, message_sname)
-        print(message_pname, message_sname, obj)
         return jsonify(obj)
 
 @app.route("/groupchat", methods=["POST", "GET"])
@@ -175,7 +174,6 @@ def update_groupchat():
         data = request.json
         message_pname = data.get("pname")
         message_cname = data.get("cname")
-        print("hallo")
         message_content = data.get("content")
         Controle = False
         Chat_obj = Content(None, None, message_content, message_pname)
@@ -188,7 +186,6 @@ def update_groupchat():
         data = request.args
         message_cname = data.get("cname")
         obj = content_data_access.get_groupchat(message_cname)
-        print(message_cname,obj)
         return jsonify(obj)
 
 
@@ -264,7 +261,6 @@ def joinClan():
     rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),None)
     cname = data.get("cname")  # Name of the clan
     succes = clan_data_acces.sendRequest(rhequest, cname)
-    print("test",succes)
 
     if succes:
         message = "Your request has been send. Please await further correspondence!"
@@ -473,7 +469,6 @@ def getChats():
     for friend in status:
         dct[friend.get("pname")] = "person"
     if clan is not None:
-        print((clan[0]))
         dct[clan[0]] = "clan"
 
     return jsonify(dct)
