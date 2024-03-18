@@ -3,7 +3,7 @@ import "./socialOptionContents.css"
 import POST from "../../../../api/POST.jsx";
 import ClanInformation from "./retrievedData/clanInfo.jsx";
 import PersonInformation from "./retrievedData/personInfo.jsx";
-import DisplayAvatarName from "../../../../avatarWithName/avatarWithName.jsx";
+import DisplayAvatarName from "../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
 
 function SocialOption({pageName, requests, sendData})
