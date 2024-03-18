@@ -22,7 +22,7 @@ class ClanDataAccess:
                """
         cursor.execute(QueryCheckmember, (cursor.fetchone()[0],))
         queryCheckmember = cursor.fetchone()[0]
-
+        cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
         QueryCheckclan = """SELECT 
                EXISTS(SELECT 1 FROM clan WHERE pname=%s);
                """
@@ -31,10 +31,11 @@ class ClanDataAccess:
         queryCheckclan = cursor.fetchone()[0]
         if queryCheckmember == False and queryCheckclan == False:
             try:
+                print(obj.name, obj.pname, obj.description, obj.status)
                 cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
-                cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
-                               (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
-                cursor.execute('INSERT INTO member(pname,cname) VALUES(%s,%s);',(cursor.fetchone()[0],obj.name,))
+                player_name= cursor.fetchone()[0]
+                cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',(obj.name,player_name, obj.description, obj.status,))
+                cursor.execute('INSERT INTO member(pname,cname) VALUES(%s,%s);',(obj.pname,obj.name,))
                 # Commit to the database
                 self.dbconnect.commit()
                 return True
@@ -42,6 +43,9 @@ class ClanDataAccess:
                 print("Error:", e)
                 self.dbconnect.rollback()
                 return False
+
+        else:
+            return False
 
     def get_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
