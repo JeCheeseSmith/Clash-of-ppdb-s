@@ -15,21 +15,41 @@ class ClanDataAccess:
 
     def add_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
-        try: # Insert Clan Object into the Database
-            cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
-            cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
-                           (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
-            self.dbconnect.commit()
-            return True
-        except Exception as e:
-            print("Error:", e)
-            self.dbconnect.rollback()
+        cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
+        # Check if they're not already in a clan (Member or Leader)
+        QueryCheckmember = """SELECT 
+               EXISTS(SELECT 1 FROM member WHERE pname=%s);
+               """
+        cursor.execute(QueryCheckmember, (cursor.fetchone()[0],))
+        queryCheckmember = cursor.fetchone()[0]
+        cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
+        QueryCheckclan = """SELECT 
+               EXISTS(SELECT 1 FROM clan WHERE pname=%s);
+               """
+
+        cursor.execute(QueryCheckclan, (cursor.fetchone()[0],))
+        queryCheckclan = cursor.fetchone()[0]
+        if queryCheckmember == False and queryCheckclan == False:
+            try:
+                print(obj.name, obj.pname, obj.description, obj.status)
+                cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
+                player_name= cursor.fetchone()[0]
+                cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',(obj.name,player_name, obj.description, obj.status,))
+                cursor.execute('INSERT INTO member(pname,cname) VALUES(%s,%s);',(obj.pname,obj.name,))
+                # Commit to the database
+                self.dbconnect.commit()
+                return True
+            except Exception as e:
+                print("Error:", e)
+                self.dbconnect.rollback()
+                return False
+
+        else:
             return False
 
     def get_clan(self, obj):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;',
-                       (obj.name,))  # Get the data from the clan with this name
+        cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;',(obj.name,))  # Get the data from the clan with this name
         result = cursor.fetchone()
 
         if result:  # If there is a clan with this name
@@ -75,19 +95,17 @@ class ClanDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         # Check if they're not already in a clan (Member or Leader)
-        queryCheckmember = """
-        SELECT 
+        QueryCheckmember = """SELECT 
         EXISTS(SELECT 1 FROM member WHERE pname=%s);
-                    """
-        cursor.execute(queryCheckmember, (request.sender,))
+        """
+        cursor.execute(QueryCheckmember, (request.sender,))
         queryCheckmember = cursor.fetchone()[0]
 
-        queryCheckclan="""
-        SELECT 
+        QueryCheckclan="""SELECT 
         EXISTS(SELECT 1 FROM clan WHERE pname=%s);
         """
 
-        cursor.execute(queryCheckclan, (request.sender,))
+        cursor.execute(QueryCheckclan, (request.sender,))
         queryCheckclan = cursor.fetchone()[0]
         if queryCheckmember==False and queryCheckclan==False:
             try:
