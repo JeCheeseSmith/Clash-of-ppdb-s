@@ -1,9 +1,9 @@
-import React from 'react'; // Importing React library
+import React, {useState} from 'react'; // Importing React library
 import './mainpage.css'; // Importing the CSS file for styling
 import Chat from './Communication/chat/chat.jsx';
 import SocialBox from "./Communication/social/social.jsx";
-import Grid from "./GridView/grid3D.jsx";
-import Buildmenu from "./BuildMenu/buildmenu.jsx";
+import Grid from "./GridBuilder/GridView/grid3D.jsx";
+import Buildmenu from "./GridBuilder/BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
@@ -14,18 +14,20 @@ import Account from "./Account/account.jsx";
  */
 function MainPage()
 {
-  return (
-      <div className="background"> {/* Container for the background image */}
-          <Chat/>
-          <SocialBox/>
-          <Account/>
-          <Buildmenu/>
-          <Grid/>
-          <ResourceBar/>
+    const [clicked, setClicked] = useState(false)
+    const [type, setType] = useState("")
+    return (
+        <div className="background"> {/* Container for the background image */}
+            <Chat/>
+            <SocialBox/>
+            <Account/>
+            <Buildmenu setClicked={setClicked} setType={setType}/>
+            <Grid typeChosen={clicked} type={type}/>
+            <ResourceBar/>
 
-          {/*<Map/>*/}
-      </div>
-  );
+            {/*<Map/>*/}
+        </div>
+    );
 }
 
 export default MainPage; // Exporting the MainPage component

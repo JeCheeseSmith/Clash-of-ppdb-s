@@ -6,13 +6,27 @@ import House from "./models/House.jsx";
 import Bush from "./models/Bush.jsx";
 import Tower from "./models/Tower.jsx";
 import WoodCuttersCamp from "./models/WoodCuttersCamp.jsx";
+import Quarry from "./models/Quarry.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
-function Grid()
+
+const BuildingComponents = {
+    WoodCuttersCamp,
+    Quarry,
+    // SteelMine,
+    // Farm,
+    // Stables,
+    // ArcherTower,
+    // LookoutTower,
+    // BlackSmith,
+    // Tavern,
+    // TrainingYard
+};
+function Grid({typeChosen, type})
 {
     const gridSize = 40;
     // State variable to hold the coordinates of the house
@@ -29,11 +43,12 @@ function Grid()
             // Calculate the center position of the cell
             const centerX = colIndex + 0.5;
             const centerY = rowIndex + 0.5;
+            const Building = BuildingComponents[type]
             return (
-                <mesh key={`${rowIndex}-${colIndex}`}
+                <mesh
                       position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}
                 >
-                    <WoodCuttersCamp/>
+                    {typeChosen && <Building/>}
                 </mesh>
             );
         }
@@ -44,12 +59,12 @@ function Grid()
             const centerY = rowIndex;
             return (
                 <>
-                    <mesh key={`${rowIndex}-${colIndex}`}
+                    <mesh
                           position={[centerX - gridSize / 2, 6.5, centerY - gridSize / 2 + 0.5]}
                     >
                         <Bush/>
                     </mesh>
-                    <gridHelper key={`${rowIndex}-${colIndex}`}
+                    <gridHelper
                                 position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
                                 args={[1, 1]}
                     />

@@ -2,7 +2,7 @@
     position: absolute;
     z-index: 5000;
     left: 50%;
-    transform: translateX(-45%);
+    transform: translateX(-50%);
     bottom: 0;
 }
 
@@ -10,25 +10,25 @@
     background-image: linear-gradient(to right, rgb(27, 0, 84), rgb(62, 0, 115), #240036);
     border: 2px solid #5c0281;
     height: 100%;
-    width: 960px;
+    width: 1235px;
     border-radius: 10px;
     margin-top: 2px;
+    padding: 0 20px 0 20px;
 }
 
-/* In your CSS file */
+
 .type-container {
-  display: flex; /* Use flexbox layout */
-  justify-content: center; /* Center the contents horizontally */
-  align-items: center; /* Center the contents vertically */
-  background-color: #1f1a18;
-  border: 2px solid #4f037c;
-  height: 130px;
-  width: 960px;
-  border-radius: 10px;
-  overflow-x: auto;
+    display: flex; /* Use flexbox layout */
+    background-color: #1f1a18;
+    border: 2px solid #4f037c;
+    height: 130px;
+    width: 1235px;
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
 }
 
-/* Customize scrollbar */
+
 .type-container::-webkit-scrollbar {
   width: 10px; /* Set the width of the scrollbar */
 }
@@ -48,8 +48,10 @@
 
 
 .buildoptions-links {
-  list-style: none;
-  display: flex;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
 }
 
 .buildoptions-links li {
@@ -74,12 +76,11 @@
 .small-image {
     width: 100px;
     height: 100px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 20px 150px 30px 50px;
     transition: transform 0.3s ease;
 }
 .small-image:hover {
-    transform: scale(1.1);
+    transform: scale(1.5);
 }
 
 .closeMenu {

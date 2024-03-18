@@ -17,7 +17,7 @@
 .image-container {
     width: 50px; /* Set width of the image container */
     height: 50px; /* Set height of the image container */
-    background-image: url(../../../assets/castle-icon.png); /* Ensure the image path is correct */
+    background-image: url(../../../../assets/castle-icon.png); /* Ensure the image path is correct */
     background-repeat: no-repeat;
     background-size: cover; /* Adjust the size of the image */
     border-radius: 20%; /* Apply border-radius to create a circular shape */

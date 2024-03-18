@@ -50,6 +50,6 @@ function House(props) {
   );
 }
 
-useGLTF.preload("/medieval_house_01_mid_poly.glb");
+useGLTF.preload(houseObject);
 
 export default House;
