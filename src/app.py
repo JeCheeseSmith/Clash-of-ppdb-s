@@ -141,20 +141,19 @@ def update_chat():
 @app.route("/groupchat", methods=["POST", "GET"])
 def update_groupchat():
     """
-    POST: API request to send a message to another player
-    GET: API request to get messages from the player
+    POST: API request to send a message in a groupchat of the clan
+    GET: API request to get messages of a groupchat of the clan
 
     JSON Input Format (POST):
     {
     "content": <string> | Actual text in the message
     "pname": <string> | Player name of the receiver
-    "sname": <string> | Player name of the sender
+    "cname": <string> | Clan name
     }
 
     JSON Input Format (GET):
     {
-    "pname": <string> | Player name of current logged in user
-    "sname": <string> | Player name of the person you're chatting with
+    "cname": <string> | Clan name
     }
 
     JSON Output Format (POST):
@@ -166,9 +165,6 @@ def update_groupchat():
     JSON Output Format (GET):
     List with messages returned in json format, ordered by moment
     """
-    # data = request.json
-    # message_pname = data.get("pname")
-    # message_cname = data.get("cname")
 
     if request.method == "POST":
         data = request.json
@@ -356,7 +352,7 @@ def send_friend_request():
 @app.route("/getgeneralrequests", methods=["POST"])
 def get_general_requests():
     """
-    API request to get requests to a player
+    API request to get requests of a player
 
     JSON Input Format:
     {
