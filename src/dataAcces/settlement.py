@@ -37,7 +37,7 @@ class SettlementDataAcces:
 
     def getNewCoordinate(self):
         """
-        Generate new coordinates for new Settlements
+        Generate new unique coordinates for new Settlements on the map
         (0,0) , (2,0) , (0,2) , (2,2) ...
         :return:
         """
