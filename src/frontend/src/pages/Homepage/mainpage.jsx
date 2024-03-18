@@ -7,6 +7,7 @@ import Buildmenu from "./BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import LogOut from "./LogOut/logout.jsx";
 import Map from "./Map/map.jsx";
+import Account from "./Account/account.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -17,12 +18,13 @@ function MainPage()
   return (
       <div className="background"> {/* Container for the background image */}
           <Chat/>
-          <LogOut/>
           <SocialBox/>
+          <Account/>
           <Buildmenu/>
           <Grid/>
           <ResourceBar/>
 
+          {/*<LogOut/>*/}
           {/*<Map/>*/}
       </div>
   );
