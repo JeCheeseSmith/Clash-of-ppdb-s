@@ -5,7 +5,6 @@ import SocialBox from "./Communication/social/social.jsx";
 import Grid from "./GridView/grid3D.jsx";
 import Buildmenu from "./BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
-import LogOut from "./LogOut/logout.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 
@@ -24,7 +23,6 @@ function MainPage()
           <Grid/>
           <ResourceBar/>
 
-          {/*<LogOut/>*/}
           {/*<Map/>*/}
       </div>
   );

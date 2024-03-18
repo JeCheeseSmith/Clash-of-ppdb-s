@@ -89,3 +89,13 @@ class PlayerDataAccess:
         cursor.execute('SELECT cname FROM member where pname=%s;', (pname,) )
         member = cursor.fetchone()
         return member
+
+    def registerLogOut(self,name):
+        """
+        Saves the current logout time to the database
+        :param name: Name of the player
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('UPDATE player SET logout=NOW() WHERE name=%s;' , (name,))
+        self.dbconnect.commit()

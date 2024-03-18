@@ -88,6 +88,23 @@ def get_login():
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
 
+@app.route("/logout" , methods=["POST"])
+def logout():
+    """
+    JSON Input Format (POST):
+    {
+    "name": <string> | Player name
+    }
+    :return:
+
+    JSON Output Format (POST):
+    {
+    "success": <bool> | State of transaction
+    }
+    """
+    data = request.json
+    succes = player_data_access.registerLogOut(data.get("name"))
+    return jsonify(succes)
 
 @app.route("/chat", methods=["POST", "GET"])
 def update_chat():
