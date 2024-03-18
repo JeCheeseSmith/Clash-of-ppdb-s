@@ -1,9 +1,9 @@
 import React from "react";
 import './avatarWithName.css'
-import avatar from "../assets/clanPicture.jpg";
-import notFound from "../assets/groupnotfound.png";
-import person from "../assets/person.png";
-import group from "../assets/group.png";
+import avatar from "../../assets/clanPicture.jpg";
+import notFound from "../../assets/groupnotfound.png";
+import person from "../../assets/person.png";
+import group from "../../assets/group.png";
 function DisplayAvatarName({type, name, pname, succesClanSearch})
 {
     return (

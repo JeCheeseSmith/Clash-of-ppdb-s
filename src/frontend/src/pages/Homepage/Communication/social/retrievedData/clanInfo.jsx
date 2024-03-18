@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import POST from "../../../../../api/POST.jsx";
 import "./clanInfo.css"
-import clanPicture from "../../../../../assets/clanPicture.jpg";
-import notFound from "../../../../../assets/groupnotfound.png";
-import DisplayAvatarName from "../../../../../avatarWithName/avatarWithName.jsx";
+import DisplayAvatarName from "../../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
+import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
 
 /**
  * Represents a component for displaying information about a clan.
@@ -13,31 +12,22 @@ import {useLocation} from "react-router-dom";
  * @param {string} props.description - Description or information about the clan.
  * @param {string} props.status - Status of the clan.
  * @param {string} props.pname - The name of the clan leader.
- * @param {string} props.success - Success: Clan exists or not.
+ * @param {string} props.succesClanSearch - Message: Clan exists or not.
  * @returns {JSX.Element} - A React JSX element representing the clan information component.
  */
 
 function ClanInformation({name, description, status, pname, succesClanSearch})
 {
-    const [massage, setMassage] = useState("")
-    const [succesRequest, setSuccesRequest] = useState(false)
+    const [message, setMessage] = useState("")
+    const [popUp, setPopUp] = useState(false)
     const location = useLocation();
     const sender = location.state.username || {};
     const handleRequestbutton = async () =>
     {
         const requestMassage = await POST({'cname': name, 'sender': sender}, "/joinClan")
-        setMassage(requestMassage.message)
-        setSuccesRequest(requestMassage.succes)
+        setPopUp(true)
+        setMessage(requestMassage.message)
     }
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            setSuccesRequest(false);
-        }, 4000);
-
-        // Clear the timeout when the component unmounts or when succesRequest changes
-        return () => clearTimeout(timeout);
-    }, [succesRequest]);
 
     return(
         <div className={"clan-infowithbutton"}>
@@ -49,18 +39,9 @@ function ClanInformation({name, description, status, pname, succesClanSearch})
                 </div>
             </div>
             {succesClanSearch && <button className={"clan-request-button"} onClick={handleRequestbutton}>Send Request</button>}
-            {succesRequest && <RequestMassagePopUp massage={massage}/>}
-            {!succesRequest && <RequestMassagePopUp massage={massage}/>}
+            {popUp && <RequestMassagePopUp message={message} setPopup={setPopUp}/>}
         </div>
     )
-}
-function RequestMassagePopUp({ massage })
-{
-    return (
-        <div className="popup-message">
-            {massage}
-        </div>
-    );
 }
 
 export default ClanInformation;
