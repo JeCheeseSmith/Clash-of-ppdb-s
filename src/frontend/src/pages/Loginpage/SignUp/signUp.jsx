@@ -7,11 +7,10 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 // Code for signing up
 function RegistrationPage() {
 
-    // State for username & password
+    // States for username, password & error
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
-
 
     // Handler for username change
     function handleUsernameChange(event) {
@@ -24,20 +23,23 @@ function RegistrationPage() {
     }
 
     let navigate = useNavigate();
-    // Handles the navigation from login page to sign-up page
+
     const handleSaveClick = async () => {
+      // Calls the API and stores the returned value in data
       const data = await POST({ name: username, password: password }, "/signup");
       console.log(data);
+      // If the data is true (account already exists), then navigate to main page
       if (data.success) {
+        localStorage.setItem('sid', data.sid); // Store the sid for the resource bar
         navigate('/MainPage', { state: { username } });
       }
+      // Display error
       else {
         setErrorMessage('User already exists');
       }
     }
 
     return (
-        // Makes a form
         <div className="login-container">
           <h1 className="gametitle">TRAVISIA</h1>
           <h2 className="subtitle">FALLEN EMPIRE</h2>

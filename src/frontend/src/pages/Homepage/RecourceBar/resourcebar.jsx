@@ -7,7 +7,7 @@ import food from '../../../assets/food.png';
 import POST from "../../../api/POST.jsx";
 
 
-// Code for resource-bar
+// Code for resource bar
 function ResourceBar() {
 
     // Default values for state
@@ -20,15 +20,16 @@ function ResourceBar() {
 
     // Function that sends a request for the resources by calling the API
     const GetResources = async () => {
-        const sid = localStorage.getItem('sid');
-        console.log(sid);
+        const sid = localStorage.getItem('sid'); // Receives the sid that is sent by login.jsx and signUp.jsx
         const data = await POST({ id: sid }, '/resources');
+        console.log(sid);
+        // The values of the resources are changed
         setResources({
           wood: data.wood,
           stone: data.stone,
           steel: data.steel,
           food: data.food
-      });
+        });
     }
 
     // Calls the GetResources function so that the values can be changed
