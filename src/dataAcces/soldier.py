@@ -14,6 +14,6 @@ class Soldier:
                     consumption=self.consumption, speed=self.speed, stealth=self.stealth)
 
 
-class SoldierDataAccess():
+class SoldierDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect

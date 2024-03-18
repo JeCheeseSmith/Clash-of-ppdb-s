@@ -1,7 +1,7 @@
 class Buildable:
-    def __init__(self, name, type, function, storage, cost, drawback):
+    def __init__(self, name, btype, function, storage, cost, drawback):
         self.name = name
-        self.type = type
+        self.type = btype
         self.function = function
         self.storage = storage
         self.cost = cost,
@@ -12,8 +12,8 @@ class Buildable:
 
 
 class Building(Buildable):
-    def __init__(self, name, type, function, storage, cost, drawback, id, level, gridX, gridY):
-        super(Buildable, self).__init__(name, type, function, storage, cost, drawback)
+    def __init__(self, name, btype, function, storage, cost, drawback, id, level, gridX, gridY):
+        super(Buildable, self).__init__(name, btype, function, storage, cost, drawback)
         self.id = id
         self.level = level
         self.gridX = gridX

@@ -19,7 +19,7 @@ class PackageDataAccess:
 
     def get_resources(self, pid):
         """
-
+        Retrieve a Package object for a given id
         :param pid: Package ID in database
         :return:
         """

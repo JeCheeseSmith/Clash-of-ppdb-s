@@ -1,5 +1,6 @@
 from src.dataAcces.content import *
 
+
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout, pid):
         self.name = name
@@ -23,9 +24,9 @@ class PlayerDataAccess:
     def get_login(self, obj):
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT * FROM player WHERE name=%s AND password=%s;', (obj.name, obj.password))
-        Controle = cursor.fetchone()
+        control = cursor.fetchone()
 
-        if Controle:
+        if control:
             # Get the settlement ID
             cursor.execute('SELECT min(id) FROM settlement WHERE settlement.pname=%s;', (obj.name,))
             sid = cursor.fetchone()[0]
@@ -33,7 +34,7 @@ class PlayerDataAccess:
         else:
             return False, None
 
-    def add_user(self, obj, settlement_data_acces,content_data_access):
+    def add_user(self, obj, settlement_data_acces, content_data_access):
         """
         Initialise all standard data for the user.
         - Create a player in the database
@@ -67,7 +68,7 @@ class PlayerDataAccess:
             self.dbconnect.commit()
 
             # Send a message to the user from the system
-            content_data_access.add_message(Content(None,None,"Welcome to Travisia!", "admin"),obj.name)
+            content_data_access.add_message(Content(None, None, "Welcome to Travisia!", "admin"), obj.name)
 
             return True, sid
         except Exception as e:
@@ -86,16 +87,16 @@ class PlayerDataAccess:
 
     def retrieveClan(self, pname):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT cname FROM member where pname=%s;', (pname,) )
+        cursor.execute('SELECT cname FROM member where pname=%s;', (pname,))
         member = cursor.fetchone()
         return member
 
-    def registerLogOut(self,name):
+    def registerLogOut(self, name):
         """
         Saves the current logout time to the database
         :param name: Name of the player
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('UPDATE player SET logout=NOW() WHERE name=%s;' , (name,))
+        cursor.execute('UPDATE player SET logout=NOW() WHERE name=%s;', (name,))
         self.dbconnect.commit()

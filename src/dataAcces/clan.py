@@ -14,6 +14,29 @@ class ClanDataAccess:
         self.dbconnect = dbconnect
 
     @staticmethod
+    def makeDict(query, cursor, pname):
+        """
+        Helper function to retrieve all requests and their info from the database and put them into a usable format
+        Removes duplicate code!
+        :param query: SQL query
+        :param pname: Username
+        :param cursor: Database Acces
+        :return:
+        """
+        cursor.execute(query, (pname,))
+        data = cursor.fetchall()
+        objects = []
+        for item in data:
+            message_dict = {
+                "id": item[0],
+                "moment": item[2],
+                "content": item[3],
+                "pname": item[4]
+            }
+            objects.append(message_dict)
+        return objects
+
+    @staticmethod
     def __removeOldRequests(old, cursor):
         """
         Helper function to remove duplicate code
@@ -107,7 +130,7 @@ class ClanDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         # Retrieved content en niet message of request morgen oplossen
-        call = """
+        querry = """
                             SELECT *
                             FROM clanrequest 
                             INNER JOIN content ON clanrequest.id = content.id
@@ -117,18 +140,7 @@ class ClanDataAccess:
                                 WHERE pname = %s
                             );
                             """
-        cursor.execute(call, (pname,))
-        clan_request = cursor.fetchall()
-        clans = []
-        for clan in clan_request:
-            message_dict = {
-                "id": clan[0],
-                "moment": clan[2],
-                "content": clan[3],
-                "pname": clan[4]
-            }
-            clans.append(message_dict)
-        return clans
+        return self.makeDict(querry, cursor, pname)
 
     def sendRequest(self, request, cname):
         """

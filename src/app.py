@@ -193,7 +193,7 @@ def update_groupchat():
         message_content = data.get("content")
         Controle = False
         Chat_obj = Content(None, None, message_content, message_pname)
-        Controle = content_data_access.send_groupchat(message_pname,message_cname,Chat_obj)
+        Controle = content_data_access.send_groupchat(message_cname,Chat_obj)
         if Controle:
             return jsonify({"success": Controle, "message": "message send successful"})
         else:
