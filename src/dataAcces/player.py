@@ -1,4 +1,4 @@
-
+from src.dataAcces.content import *
 
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout, pid):
@@ -65,7 +65,7 @@ class PlayerDataAccess:
             sid = cursor.fetchone()[0]
 
             # Send a message to the user from the system
-            content_data_access.add_message(Content(None,"Welcome to Travisia!", "admin"),obj.name)
+            content_data_access.add_message(Content(None,None,"Welcome to Travisia!", "admin"),obj.name)
 
 
             self.dbconnect.commit()

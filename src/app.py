@@ -103,7 +103,7 @@ def logout():
     }
     """
     data = request.json
-    succes = player_data_access.registerLogOut(data.get("name"))
+    succes = player_data_access.registerLogOut(data.get("name")) #Call the desired functionality
     return jsonify(succes)
 
 @app.route("/chat", methods=["POST", "GET"])
