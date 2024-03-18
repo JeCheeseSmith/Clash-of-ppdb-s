@@ -50,6 +50,6 @@ function Tower(props) {
   )
 }
 
-useGLTF.preload('/medieval_tower.glb')
+useGLTF.preload(tower)
 
 export default Tower;

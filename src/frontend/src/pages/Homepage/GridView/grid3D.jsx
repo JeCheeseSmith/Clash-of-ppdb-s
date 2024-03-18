@@ -5,6 +5,7 @@ import './grid3D.css'
 import House from "./models/House.jsx";
 import Bush from "./models/Bush.jsx";
 import Tower from "./models/Tower.jsx";
+import WoodCuttersCamp from "./models/WoodCuttersCamp.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -32,7 +33,7 @@ function Grid()
                 <mesh key={`${rowIndex}-${colIndex}`}
                       position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}
                 >
-                    <Tower/>
+                    <WoodCuttersCamp/>
                 </mesh>
             );
         }
