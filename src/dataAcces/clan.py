@@ -79,7 +79,7 @@ class ClanDataAccess:
         :param obj: Clan Object
         :return:
         """
-        if not self.__isMember(obj):
+        if not self.__isMember(obj.pname):
             try:
                 cursor = self.dbconnect.get_cursor()
 
@@ -149,7 +149,7 @@ class ClanDataAccess:
         :param cname: Name of the clan
         :return:
         """
-        if self.__isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
+        if not self.__isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
             try:
                 cursor = self.dbconnect.get_cursor()
 
