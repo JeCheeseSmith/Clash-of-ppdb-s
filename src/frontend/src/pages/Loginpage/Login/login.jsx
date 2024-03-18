@@ -37,7 +37,7 @@ function LoginPage() {
           navigate('/MainPage', { state: { username: username } });
       }
       else {
-        setErrorMessage('Verkeerde login details');
+        setErrorMessage('Wrong login credentials');
       }
     }
 
