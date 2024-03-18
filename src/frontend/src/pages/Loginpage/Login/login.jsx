@@ -7,7 +7,7 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 // Code for login page
 function LoginPage() {
 
-    // State for username & password
+    // States for username, password & error
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
@@ -23,6 +23,7 @@ function LoginPage() {
     }
 
     let navigate = useNavigate();
+
     // Handles the navigation from login page to sign-up page
     function handleSignUpClick() {
         navigate('/signup');
@@ -32,26 +33,25 @@ function LoginPage() {
     const handleLoginClick = async () => {
       const data = await POST({ name: username, password: password }, "/login");
       if (data.success) {
-          localStorage.setItem('sid', data.sid);
-          console.log(data);
-          navigate('/MainPage', { state: { username: username } });
+          localStorage.setItem('sid', data.sid); // Store the sid for the resource bar
+          navigate('/MainPage', { state: { username: username } }); // Give username to main page
       }
+      // Display error
       else {
-        setErrorMessage('Verkeerde login details');
+        setErrorMessage('Wrong login credentials');
       }
     }
 
   return (
-      // Makes a form
       <div className="login-container">
           <h1 className="gametitle">TRAVISIA</h1>
           <h2 className="subtitle">FALLEN EMPIRE</h2>
           <div className="login-form">
               {errormessage && (
-          <div className="error-message">
-            <AiOutlineExclamationCircle /> {errormessage}
-          </div>
-        )}
+                <div className="error-message">
+                <AiOutlineExclamationCircle /> {errormessage}
+                </div>
+              )}
               <div>
                   {/* <div> groupes the label and input together on one line */}
                   <label htmlFor="username">Username:</label>

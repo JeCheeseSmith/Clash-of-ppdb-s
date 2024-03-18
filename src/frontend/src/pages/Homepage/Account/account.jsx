@@ -1,14 +1,21 @@
 import React from 'react';
 import './account.css'
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
+import POST from "../../../api/POST.jsx";
 
 function Account()
 {
+    let navigate = useNavigate();
+    /** Navigate to the homepage */
+
+    const handleLogOutClick = async () => {
+        await POST({"name":username}, "/logout")
+        navigate('/')
+    };
+
     const username = useLocation().state.username || {};
     return (
-        <button className={"username"}>
-            {username}
-        </button>
+        <button className={"username"} onClick={() => {handleLogOutClick();}}>{username}</button>
     );
 }
 

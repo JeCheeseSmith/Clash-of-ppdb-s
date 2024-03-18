@@ -1,5 +1,5 @@
 class Achievement:
-    def __init__(self, name, task,pid):
+    def __init__(self, name, task, pid):
         self.name = name
         self.task = task
         self.pid = pid
@@ -10,7 +10,7 @@ class Achievement:
 
 class Quest(Achievement):
     def __init__(self, name, task, pid, deadline):
-        super(Achievement, self).__init__(name, task,pid)
+        super(Achievement, self).__init__(name, task, pid)
         self.deadline = deadline
 
     def to_dct(self):

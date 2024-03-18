@@ -19,12 +19,11 @@ class PackageDataAccess:
 
     def get_resources(self, pid):
         """
-
+        Retrieve a Package object for a given id
         :param pid: Package ID in database
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT * FROM;')
         cursor.execute('SELECT * FROM package WHERE id=%s;', pid)
         return Package(cursor.fetchone())
 

@@ -3,8 +3,9 @@ import "./socialOptionContents.css"
 import POST from "../../../../api/POST.jsx";
 import ClanInformation from "./retrievedData/clanInfo.jsx";
 import PersonInformation from "./retrievedData/personInfo.jsx";
-import DisplayAvatarName from "../../../../avatarWithName/avatarWithName.jsx";
+import DisplayAvatarName from "../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
+import RequestMassagePopUp from "../../../../globalComponents/popupMessage/popup.jsx";
 
 function SocialOption({pageName, requests, sendData})
 {
@@ -27,6 +28,8 @@ function CreateClanPage()
     const [clanName, setClanName] = useState("");
     const [clanDescription, setClanDescription] = useState("");
     const [clanStatus,setClanStatus] = useState("")
+    const [popUp, setPopUp] = useState(false)
+    const [popUpMessage, setPopUpMessage] = useState("")
     const handleclanName = (e) =>
     {
         setClanName(e.target.value);
@@ -47,6 +50,15 @@ function CreateClanPage()
             status: clanStatus,
             pname: clanLeader
         }, "/createClan");
+        setPopUp(true)
+        if (data.succes)
+        {
+            setPopUpMessage("Clan Created!")
+        }
+        else
+        {
+            setPopUpMessage("Clan Could Not Be Created!")
+        }
     };
 
     return (
@@ -54,7 +66,8 @@ function CreateClanPage()
             <input value={clanName} onChange={handleclanName} className={"search-name"} placeholder={"Name"} />
             <input value={clanStatus} onChange={handleClanStatus} className={"clanStatus"} placeholder={"clan chant"}/>
             <textarea value={clanDescription} onChange={handleclanDescription} className={"descriptionClan"} placeholder={"Description"}/>
-            <button className={"create-clan-button"} onClick={handleButtonClick} >Create Clan</button>
+            <button className={"create-clan-button"} onClick={handleButtonClick}>Create Clan</button>
+            {popUp && <RequestMassagePopUp message={popUpMessage} setPopup={setPopUp}/>}
         </div>
     );
 }

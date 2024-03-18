@@ -64,7 +64,7 @@ class ContentDataAccess:
             cursor = self.dbconnect.get_cursor()
 
             # Insert the message into content
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
+            cursor.execute('INSERT INTO content(moment,content,pname) VALUES(now(),%s,%s);',
                            (obj.content, obj.sender,))
 
             # Get ID and insert into specilisation message
@@ -81,7 +81,7 @@ class ContentDataAccess:
             self.dbconnect.rollback()
             return False
 
-    def get_chatbox(self, Pname, Sname):
+    def get_chatbox(self, pname, sname):
         chatbox = []  # Last 10 messages
         cursor = self.dbconnect.get_cursor()
 
@@ -97,7 +97,7 @@ class ContentDataAccess:
                                 )
                             LIMIT 10;
                         """
-        cursor.execute(message1, (Sname, Pname,))
+        cursor.execute(message1, (sname, pname,))
         messages = cursor.fetchall()
 
         for message in messages:
@@ -116,7 +116,7 @@ class ContentDataAccess:
                                             )
                                         LIMIT 10;
                                     """
-        cursor.execute(message2, (Pname, Sname,))
+        cursor.execute(message2, (pname, sname,))
 
         messages = cursor.fetchall()
         for message in messages:
@@ -125,17 +125,15 @@ class ContentDataAccess:
 
         return sorted(chatbox, key=lambda x: x['moment'])
 
-
-    def send_groupchat(self,pname,cname,obj):
+    def send_groupchat(self, cname, obj):
         try:
             cursor = self.dbconnect.get_cursor()
-            print(obj.sender)
 
             # Insert the message into content
-            cursor.execute('INSERT INTO content(id,moment,content,pname) VALUES(DEFAULT,now(),%s,%s);',
+            cursor.execute('INSERT INTO content(moment,content,pname) VALUES(now(),%s,%s);',
                            (obj.content, obj.sender,))
 
-            # Get ID and insert into specilisation message
+            # Get ID and insert into specialization message
             cursor.execute('SELECT max(id) FROM content;')
             Rid = cursor.fetchone()
             cursor.execute('INSERT INTO message(id) VALUES (%s);', Rid)
@@ -149,12 +147,7 @@ class ContentDataAccess:
             self.dbconnect.rollback()
             return False
 
-
-
-
-
-
-    def get_groupchat(self,cname):
+    def get_groupchat(self, cname):
         chatbox = []  # Last 10 messages
         cursor = self.dbconnect.get_cursor()
 
@@ -177,9 +170,4 @@ class ContentDataAccess:
             c = Content(message[0], str(message[2]), message[3], message[4])
             chatbox.append(c.to_dct())
 
-
         return sorted(chatbox, key=lambda x: x['moment'])
-
-
-
-

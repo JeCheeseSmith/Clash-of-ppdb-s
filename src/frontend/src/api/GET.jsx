@@ -5,6 +5,11 @@
  * @param {string} endpoint - The endpoint to which the data is sent.
  * @returns {Promise<void>} - A Promise that resolves when the data is sent.
  */
+
+/**
+ * Predefine urls
+ * @type {string}
+ */
 const local = "http://127.0.0.1:5000"
 const remote = "https://team8.ua-ppdb.me/"
 

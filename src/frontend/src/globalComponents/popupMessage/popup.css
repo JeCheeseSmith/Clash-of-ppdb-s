@@ -1,0 +1,46 @@
+.popup-message {
+    position: fixed;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.89);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 9999;
+    max-width: 400px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.popup-message::before {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent rgba(255, 255, 255, 0.9) transparent;
+}
+
+.message {
+    cursor: pointer;
+    margin-right: 10px; /* Add margin here */
+    margin-top: 10px;
+}
+
+.close-button {
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+    margin-left: 10px; /* Add margin here */
+    margin-top: 10px;
+    transition: 0.2s;
+}
+
+.close-button:hover{
+    transform: scale(1.1);
+}

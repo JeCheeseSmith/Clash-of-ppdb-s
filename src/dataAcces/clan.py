@@ -13,20 +13,97 @@ class ClanDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def add_clan(self, obj):
+    @staticmethod
+    def makeDict(query, cursor, pname):
+        """
+        Helper function to retrieve all requests and their info from the database and put them into a usable format
+        Removes duplicate code!
+        :param query: SQL query
+        :param pname: Username
+        :param cursor: Database Acces
+        :return:
+        """
+        cursor.execute(query, (pname,))
+        data = cursor.fetchall()
+        objects = []
+        for item in data:
+            message_dict = {
+                "id": item[0],
+                "moment": item[2],
+                "content": item[3],
+                "pname": item[4]
+            }
+            objects.append(message_dict)
+        return objects
+
+    @staticmethod
+    def __removeOldRequests(old, cursor):
+        """
+        Helper function to remove duplicate code
+        :param old: List of request id's (rid) to remove
+        :param cursor: Database Cursor
+        :return:
+        """
+        for rid in old:
+            cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (rid,))
+            cursor.execute('DELETE FROM request WHERE id=%s;', (rid,))
+            cursor.execute('DELETE FROM content WHERE id=%s;', (rid,))
+            cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (rid,))
+
+    def __isMember(self, pname):
+        """
+        Check if a member is not already in a clan; Helper Function
+        :param pname: Player name
+        :return:
+        """
         cursor = self.dbconnect.get_cursor()
-        try: # Insert Clan Object into the Database
-            cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
-            cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
-                           (obj.name, cursor.fetchone()[0], obj.description, obj.status,))
-            self.dbconnect.commit()
-            return True
-        except Exception as e:
-            print("Error:", e)
-            self.dbconnect.rollback()
+
+        # Check if they're not already in a clan (Member or Leader)
+        cursor.execute('SELECT * FROM player WHERE name=%s;', (pname,))
+        QueryCheckmember = """SELECT 
+               EXISTS(SELECT 1 FROM member WHERE pname=%s);
+               """
+        cursor.execute(QueryCheckmember, (cursor.fetchone()[0],))
+        queryCheckmember = cursor.fetchone()[0]
+        cursor.execute('SELECT * FROM player WHERE name=%s;', (pname,))
+        QueryCheckclan = """SELECT 
+               EXISTS(SELECT 1 FROM clan WHERE pname=%s);
+               """
+        cursor.execute(QueryCheckclan, (cursor.fetchone()[0],))
+        queryCheckclan = cursor.fetchone()[0]
+        return queryCheckclan and queryCheckmember
+
+    def add_clan(self, obj):
+        """
+        Insert a clan (+ clanLeader) into the database and verify the integrity
+        :param obj: Clan Object
+        :return:
+        """
+        if not self.__isMember(obj.pname):
+            try:
+                cursor = self.dbconnect.get_cursor()
+
+                cursor.execute('SELECT * FROM player WHERE name=%s;', (obj.pname,))
+                player_name = cursor.fetchone()[0]
+                cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
+                               (obj.name, player_name, obj.description, obj.status,))
+                cursor.execute('INSERT INTO member(pname,cname) VALUES(%s,%s);', (obj.pname, obj.name,))
+                # Commit to the database
+                self.dbconnect.commit()
+                return True
+            except Exception as e:
+                print("Error:", e)
+                self.dbconnect.rollback()
+                return False
+        else:
             return False
 
     def get_clan(self, obj):
+        """
+        Retrieve information of a clan if it exists
+        :param obj: Clan Class
+        :return:
+        """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT pname,status,description FROM clan WHERE name=%s;',
                        (obj.name,))  # Get the data from the clan with this name
@@ -44,11 +121,16 @@ class ClanDataAccess:
                                                                                             "own clan instead?")
         return obj
 
-    def get_clanrequest(self,pname):
+    def get_clanrequest(self, pname):
+        """
+        Retrieve the requests of this type for the leader
+        :param pname: Name of the clan leader
+        :return:
+        """
         cursor = self.dbconnect.get_cursor()
 
-        #Retrieved content en niet message of request morgen oplossen
-        call = """
+        # Retrieved content en niet message of request morgen oplossen
+        querry = """
                             SELECT *
                             FROM clanrequest 
                             INNER JOIN content ON clanrequest.id = content.id
@@ -58,39 +140,19 @@ class ClanDataAccess:
                                 WHERE pname = %s
                             );
                             """
-        cursor.execute(call, (pname,))
-        clan_request = cursor.fetchall()
-        clans = []
-        for  clan in clan_request:
-            message_dict = {
-                "id": clan[0],
-                "moment": clan[2],
-                "content": clan[3],
-                "pname":  clan[4]
-            }
-            clans.append(message_dict)
-        return clans
+        return self.makeDict(querry, cursor, pname)
 
     def sendRequest(self, request, cname):
-        cursor = self.dbconnect.get_cursor()
-
-        # Check if they're not already in a clan (Member or Leader)
-        queryCheckmember = """
-        SELECT 
-        EXISTS(SELECT 1 FROM member WHERE pname=%s);
-                    """
-        cursor.execute(queryCheckmember, (request.sender,))
-        queryCheckmember = cursor.fetchone()[0]
-
-        queryCheckclan="""
-        SELECT 
-        EXISTS(SELECT 1 FROM clan WHERE pname=%s);
         """
-
-        cursor.execute(queryCheckclan, (request.sender,))
-        queryCheckclan = cursor.fetchone()[0]
-        if queryCheckmember==False and queryCheckclan==False:
+        Send a request to join the clan; insert the data into the database
+        :param request: Request object
+        :param cname: Name of the clan
+        :return:
+        """
+        if not self.__isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
             try:
+                cursor = self.dbconnect.get_cursor()
+
                 # Insert the content
                 cursor.execute('INSERT INTO content(moment,content,pname) VALUES(now(),%s,%s);',
                                (request.content, request.sender,))
@@ -119,12 +181,11 @@ class ClanDataAccess:
         else:
             return False
 
-
-    def accept_clanrequest(self,State,id,pname, sname):
+    def accept_clanrequest(self, state, id, pname, sname):
         """
         Accept a clan request and remove it from the database
         Also remove all other clan requests from this person
-        :param State: State of acceptance
+        :param state: State of acceptance
         :param id: ID of the message
         :param pname: Name of the clanleader
         :param sname: Name of the request sender
@@ -132,13 +193,13 @@ class ClanDataAccess:
         """
         try:
             cursor = self.dbconnect.get_cursor()
-            oldRequests = [(id,)] # Preset list
+            oldRequests = [(id,)]  # Preset list
 
             # Retrieve the clan name based on the pname/clanleader
             cursor.execute('SELECT name FROM clan WHERE clan.pname=%s;', (pname,))
             cname = cursor.fetchone()
 
-            if State:
+            if state:
                 cursor.execute('INSERT INTO member(pname,cname) VALUES (%s,%s);', (sname, cname,))
 
                 # When accepted; make sure to delete other old requests too
@@ -147,13 +208,9 @@ class ClanDataAccess:
                 oldRequests.append(id)
 
             # Remove each old request
-            for rid in oldRequests:
-                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (rid,))
-                cursor.execute('DELETE FROM request WHERE id=%s;', (rid,))
-                cursor.execute('DELETE FROM content WHERE id=%s;', (rid,))
-                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (rid,))
+            self.__removeOldRequests(oldRequests, cursor)
 
-            self.dbconnect.commit()
+            self.dbconnect.commit()  # Make sure to commit the actions
             return True
 
         except Exception as e:
@@ -161,7 +218,12 @@ class ClanDataAccess:
             self.dbconnect.rollback()
             return False
 
-    def leaveClan(self,name):
+    def leaveClan(self, name):
+        """
+        Remove a member from the memberlist in the clan
+        :param name: name of the player
+        :return:
+        """
         try:
             cursor = self.dbconnect.get_cursor()
 
@@ -173,7 +235,7 @@ class ClanDataAccess:
             self.dbconnect.rollback()
             return False
 
-    def deleteClan(self,cname,lname):
+    def deleteClan(self, cname, lname):
         """
         Deletes all members & leader & clanRequests of the clan
         :param cname: Clan name
@@ -192,11 +254,8 @@ class ClanDataAccess:
             # Remove each now 'old' request towards the Clan
             cursor.execute('SELECT id FROM clanrequest NATURAL JOIN retrieved WHERE retrieved.pname=%s;', (lname,))
             oldRequests = cursor.fetchall()
-            for rid in oldRequests:
-                cursor.execute('DELETE FROM clanRequest WHERE id=%s;', (rid,))
-                cursor.execute('DELETE FROM request WHERE id=%s;', (rid,))
-                cursor.execute('DELETE FROM content WHERE id=%s;', (rid,))
-                cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (rid,))
+
+            self.__removeOldRequests(oldRequests, cursor)
 
             self.dbconnect.commit()
             return True

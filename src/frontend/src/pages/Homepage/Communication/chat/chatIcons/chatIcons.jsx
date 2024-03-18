@@ -1,6 +1,6 @@
 import React from 'react';
 import './chatIcons.css'
-import AvatarWithName from "../../../../../avatarWithName/avatarWithName.jsx";
+import AvatarWithName from "../../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import GET from "../../../../../api/GET.jsx";
 import {useLocation} from "react-router-dom";
 
