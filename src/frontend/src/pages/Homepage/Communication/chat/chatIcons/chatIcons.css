@@ -1,15 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
 .contact-list{
     display: flex;
     flex-direction: row;
     margin-top: 10px;
     overflow-x: auto;
     overflow-y: hidden;
+    background-image: linear-gradient(to right, rgba(147, 78, 17, 0.19), rgba(255, 183, 0, 0.29));
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgb(147, 78, 17);
 }
 
 .icons {
     transition: transform 0.4s;
     background-color: transparent;
-    border-color: transparent;
+    font-family: MedievalSharp, cursive;
+    letter-spacing: 1px;
+    color: white;
+    border-color: chocolate;
+    border-radius: 10px;
+    padding-top: 15px;
 }
 
 .icons:hover {

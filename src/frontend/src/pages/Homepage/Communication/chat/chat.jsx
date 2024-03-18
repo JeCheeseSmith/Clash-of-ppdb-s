@@ -2,8 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import POST from "../../../../api/POST.jsx";
 import './chat.css';
 import CommunicationButton from "../communication.jsx";
-import ChatIcons from "./chatIcons/chatIcons.jsx"; // CSS file for styling
-
+import ChatIcons from "./chatIcons/chatIcons.jsx";
+import {useLocation} from "react-router-dom"; // CSS file for styling
 
 /**
  * @brief Represents a chat box component with message display and input functionality.
@@ -14,12 +14,15 @@ import ChatIcons from "./chatIcons/chatIcons.jsx"; // CSS file for styling
  */
 function ChatBox()
 {
-    const [messages, setMessages] = useState([{ senderName: '', message: 'Welcome to Chat!' }]); // Initialize messages
+    const [messages, setMessages] = useState([{content:"Welcome to Chat!"}]); // Initialize messages
     const [chatVisible, setChatVisible] = useState(false); // State variable to track chat visibility
+    const [contactList, setContactList] = useState([])
+    const [receiver, setReceiver] = useState("")
+    const [typeReceiver, setTypeReceiver] = useState("")
 
-    const handleMessageSubmit = (message, senderName) =>
+    const handleMessageSubmit = (content, sender) =>
     {
-        setMessages([...messages, { senderName, message }]);
+        setMessages([...messages, {content, sender}]);
     };
 
     const toggleChatVisibility = () =>
@@ -29,12 +32,20 @@ function ChatBox()
 
     return (
         <div>
-            <CommunicationButton type={"chat"} buttonFunction={toggleChatVisibility} visible={chatVisible}/>
+            <CommunicationButton type={"chat"}
+                                 buttonFunction={toggleChatVisibility}
+                                 visible={chatVisible}
+                                 setVariable={setContactList}
+            />
             <div className={`chat-container ${chatVisible ? 'visible' : 'hidden'}`}>
                 <h1 className="chat-title">CHAT</h1>
                 <MessageDisplay messages={messages} />
-                <MessageInput onSubmit={handleMessageSubmit} />
-                <ChatIcons updateMessages={setMessages}/>
+                {receiver && <MessageInput onSubmit={handleMessageSubmit} receiver={receiver} typeReceiver={typeReceiver}/>}
+                <ChatIcons updateMessages={setMessages}
+                           contactList={contactList}
+                           updateReceiver={setReceiver}
+                           updateTypeReceiver={setTypeReceiver}
+                />
             </div>
         </div>
     );
@@ -67,8 +78,8 @@ function MessageDisplay({ messages })
       <div ref={messageDisplayRef} className="message-display">
         {messages.map((message, index) => (
           <div key={index} className="message">
-            <div>{message.message}</div>
-            <span className="sender-name">{message.senderName}</span>
+            <div>{message.content}</div>
+            <span className="sender-name">{message.sender}</span>
           </div>
         ))}
       </div>
@@ -86,20 +97,28 @@ function MessageDisplay({ messages })
  * @returns {JSX.Element} JSX representation of the MessageInput component.
  */
 
-function MessageInput({ onSubmit })
+function MessageInput({onSubmit, receiver, typeReceiver})
 {
-    const [message, setMessage] = useState('');
+    const location = useLocation();
+    const username = location.state.username || {};
 
+    const [message, setMessage] = useState('');
     const handleInputChange = (e) =>
     {
         setMessage(e.target.value);
     };
-
-    const handleKeyPress = (e) =>
+    const handleKeyPress = async (e) =>
     {
-        if (e.key === 'Enter' && message.trim() !== '')
-        {
-            onSubmit(message, 'You');
+        if (e.key === 'Enter' && message.trim() !== '') {
+            onSubmit(message, username);
+            if (typeReceiver === "person")
+            {
+                await POST({"content": message, "sname": username, "pname":receiver}, "/chat")
+            }
+            else
+            {
+                await POST({"content": message, "pname": username, "cname":receiver}, "/groupchat")
+            }
             setMessage('');
         }
     };
@@ -111,7 +130,7 @@ function MessageInput({ onSubmit })
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
             placeholder="Type a message and press Enter"
-            className="message-input"
+            className={`message-input ${message ? 'visible' : 'hidden'}`}
         />
     );
 }

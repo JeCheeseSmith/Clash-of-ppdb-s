@@ -464,7 +464,7 @@ def getChats():
     JSON Output Format:
     List of friends
     """
-    data = request.json
+    data = request.args
     pname = data.get("pname")
     dct = {}
     status = friend_data_access.get_friend(pname)

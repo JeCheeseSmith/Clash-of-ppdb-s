@@ -4,22 +4,29 @@ import AvatarWithName from "../../../../../avatarWithName/avatarWithName.jsx";
 import GET from "../../../../../api/GET.jsx";
 import {useLocation} from "react-router-dom";
 
-function ChatIcons({contactList, updateMessages})
+function ChatIcons({contactList, updateMessages, updateReceiver, updateTypeReceiver})
 {
     const location = useLocation();
     const username = location.state.username || {};
-    contactList = {"Raadin":"person", "Clan of lord Abu":"group", "Kars":"person"}
     const retrieveMessages = async (name, type) =>
     {
-        if (type === "group")
+        if (type === "clan")
         {
             const data = await GET({"pname":username, "cname":name}, "/groupchat")
             updateMessages(data)
+            updateReceiver(name)
+            updateTypeReceiver(type)
         }
         else if (type === "person")
         {
             const data = await GET({"pname":username, "sname":name}, "/chat")
             updateMessages(data)
+            updateReceiver(name)
+            updateTypeReceiver(type)
+        }
+        if (name === "admin")
+        {
+            updateReceiver("")
         }
     }
 
@@ -29,7 +36,7 @@ function ChatIcons({contactList, updateMessages})
                 Object.entries(contactList).map(([name, type]) => (
                     <button className={"icons"} key={name} onClick={() => retrieveMessages(name, type)}>
                         {type === "person" && <AvatarWithName type={"chat-person"} name={name}/>}
-                        {type === "group" && <AvatarWithName type={"chat-group"} name={name}/>}
+                        {type === "clan" && <AvatarWithName type={"chat-group"} name={name}/>}
                     </button>
                 ))
             }

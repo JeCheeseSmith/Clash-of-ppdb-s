@@ -37,7 +37,7 @@
     background-color: rgb(33, 29, 29);
     border-radius: 13px;
     border: 4px solid #5b1b1b;
-    height: 450px;
+    height: 400px;
 }
 
 .message-display::-webkit-scrollbar {
