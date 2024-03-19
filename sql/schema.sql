@@ -14,7 +14,8 @@ CREATE TABLE IF NOT EXISTS soldier(
     consumption INT,
     speed FLOAT4,
     stealth FLOAT4,
-    cost INT
+    cost INT,
+    trainingTime INT
 );
 
 CREATE TABLE IF NOT EXISTS package(
@@ -111,9 +112,9 @@ CREATE TABLE IF NOT EXISTS buildable(
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
     function TEXT NOT NULL, -- The mathematical function to evaluate the resource function with
-    cost INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Costs Relation
-    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Drawback Relation
-    upgradeFunction TEXT NOT NULL
+    upgradeFunction TEXT NOT NULL,
+    upgradeResource SMALLINT NOT NULL, -- 1: Wood , 2: Stone, 3: Steel, 4: Food, 12: Stone & Wood
+    timeFunction TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS building(
@@ -195,56 +196,50 @@ CREATE TABLE IF NOT EXISTS achieved(
     PRIMARY KEY (pname,aname)
 );
 
--- Preset resources
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
-
--- Insert Core buildings (Castle, Satellite Castles, Chancery)
-
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Castle','government','0',1,1,'10800 * 2(x-1)');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Satellite_Castle','government','0',1,1,'10800 * 2(x-1)');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Chancery','government','0',1,1,'10800 * 2(x-1)');
-
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('WoodcuttersCamp','production','200*x',1,1,'600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Quarry','production','200*x',1,1,'600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('SteelMine','production','20+(25*x)',1,1,'600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Farm','production','300*x',1,1,'600*x');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Satellite_Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','0','86400 * x','1000*4*2^(x+3)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','0','21600 * x','1000*4*2^(2x-1)',12);
 
--- INSERT INTO buildable(name,type,function,storage,cost,drawback) VALUES('Castle','storage');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Wood','storage','2000*2^(x)',1,1,'600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Stone','storage','2000*2^(x)',1,1,'600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Steel','storage','10000*(2*x)',1,1,'600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Food','storage','2000*2^(x)',1,1,'600*x');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodcuttersCamp','production','200*x','600*x','(200*x)*2x-4*200',2);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Quarry','production','200*x','600*x','(200*x)*2x-4*200',1);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','20+(25*x)','600*x','(200*x)*2x-4*200',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','300*x','600*x','(200*x)*2x-4*200',12);
 
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Stables','defense','1,1*x',1,1,'6*3600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('ArcherTower','defense','1,1*x',1,1,'6*3600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('LookoutTower','defense','1,1*x',1,1,'6*3600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('BlackSmith','defense','1,1*x',1,1,'6*3600*x');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Tavern','defense','1,1*x',1,1,'6*3600*x');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Wood','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stone','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Steel','storage','10000*(2*x)','600*x','(2000*2^(x))/2',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Food','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
 
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('empty','decoration','1,1*x',1,1,'3*x');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stables','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('ArcherTower','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('LookoutTower','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('BlackSmith','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Tavern','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1,2);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1,4);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('OrderKnight','HeavyInfantry',45,25,5,4,1,1,8);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('empty','decoration','1,1*x','3*x','3*x',12);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Guardsman','Spearmen',12,12,8,2,1.3,1,2);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Pikeman','Spearmen',20,20,5,8,3.3,1,4);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Halbardier','Spearmen',32,32,8,4,1.3,1,8);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1,2,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1,4,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('OrderKnight','HeavyInfantry',45,25,5,4,1,1,8,40);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Horseman','Cavalry',20,20,7,6,2,0.3,6);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Knight','Cavalry',40,40,5,12,2,0.3,10);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('WarElephant','Cavalry',45,45,7,15,2,0.3,18);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Guardsman','Spearmen',12,12,8,2,1.3,1,2,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Pikeman','Spearmen',20,20,5,8,3.3,1,4,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Halbardier','Spearmen',32,32,8,4,1.3,1,8,40);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Bowman','Ranged',10,15,10,2,1.4,1,2);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Longbowman','Ranged',15,25,10,3,1.4,1,4);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Crossbowman','Ranged',25,45,10,4,1.4,1,8);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Horseman','Cavalry',20,20,7,6,2,0.3,6,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Knight','Cavalry',40,40,5,12,2,0.3,10,40);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('WarElephant','Cavalry',45,45,7,15,2,0.3,18,80);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3,2);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3,5);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3,9);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Bowman','Ranged',10,15,10,2,1.4,1,2,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Longbowman','Ranged',15,25,10,3,1.4,1,4,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Crossbowman','Ranged',25,45,10,4,1.4,1,8,40);
 
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3,2,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3,5,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3,9,40);
 
 -- Insert Simulation Data
 
@@ -262,12 +257,12 @@ INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',0,0,2,'watson');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',2,0,3,'jonas');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,4,'abu');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,5,'admin');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('raadin Castle',4,2,6,'raadin');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('salah Castle',2,4,7,'salah');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',0,0,1,'watson');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',2,0,2,'jonas');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,3,'abu');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,4,'admin');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('raadin Castle',4,2,5,'raadin');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('salah Castle',2,4,6,'salah');
 
 
 -- Create a clan

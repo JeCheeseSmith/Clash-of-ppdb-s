@@ -25,18 +25,26 @@ function RegistrationPage() {
     let navigate = useNavigate();
 
     const handleSaveClick = async () => {
-      // Calls the API and stores the returned value in data
-      const data = await POST({ name: username, password: password }, "/signup");
-      console.log(data);
-      // If the data is true (account already exists), then navigate to main page
-      if (data.success) {
-        localStorage.setItem('sid', data.sid); // Store the sid for the resource bar
-        navigate('/MainPage', { state: { username } });
-      }
-      // Display error
-      else {
-        setErrorMessage('User already exists');
-      }
+        const username2 = username.trim();
+
+        if (username2) {
+            // Calls the API and stores the returned value in data
+            const data = await POST({ name: username, password: password }, "/signup");
+            console.log(data);
+         // If the data is true (account already exists), then navigate to main page
+            if (data.success) {
+            localStorage.setItem('sid', data.sid); // Store the sid for the resource bar
+            navigate('/MainPage', { state: { username } });
+            }
+          // Display error
+            else {
+            setErrorMessage('User already exists');
+            }
+        }
+        else {
+            setErrorMessage('Username cannot be empty');
+        }
+
     }
 
     return (

@@ -225,6 +225,12 @@ def get_resources():
 def get_grid():
     pass
 
+@app.route("/savegrid", methods=["POST"])
+def saveGrid():
+    data = request.json
+    print(len(data))
+    return data
+
 
 @app.route("/buildings", methods=["GET"])
 def get_buildings():

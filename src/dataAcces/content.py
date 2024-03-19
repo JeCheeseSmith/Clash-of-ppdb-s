@@ -161,13 +161,16 @@ class ContentDataAccess:
                                             FROM shared
                                             WHERE cname = %s   
                                         )
+                                    ORDER BY message.id DESC 
                                     LIMIT 10;
                                 """
         cursor.execute(message1, (cname,))
         messages = cursor.fetchall()
 
         for message in messages:
+            print(message)
             c = Content(message[0], str(message[2]), message[3], message[4])
             chatbox.append(c.to_dct())
+
 
         return sorted(chatbox, key=lambda x: x['moment'])

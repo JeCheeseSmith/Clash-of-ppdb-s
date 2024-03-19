@@ -21,7 +21,7 @@
     display: flex; /* Use flexbox layout */
     background-color: #1f1a18;
     border: 2px solid #4f037c;
-    height: 130px;
+    height: 200px;
     width: 1235px;
     padding: 20px;
     border-radius: 10px;
@@ -76,11 +76,11 @@
 .small-image {
     width: 100px;
     height: 100px;
-    margin: 20px 150px 30px 50px;
+    margin: 55px 150px 30px 50px;
     transition: transform 0.3s ease;
 }
 .small-image:hover {
-    transform: scale(1.5);
+    transform: scale(1.7);
 }
 
 .closeMenu {

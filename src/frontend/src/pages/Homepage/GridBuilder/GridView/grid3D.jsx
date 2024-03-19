@@ -1,8 +1,7 @@
-import React, { Suspense, useState } from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
-import Bush from "./models/Bush.jsx";
 import WoodCuttersCamp from "./models/WoodCuttersCamp.jsx";
 import Quarry from "./models/Quarry.jsx";
 import SteelMine from "./models/SteelMine.jsx";
@@ -13,6 +12,12 @@ import LookoutTower from "./models/LookoutTower.jsx";
 import BlackSmith from "./models/BlackSmith.jsx";
 import Tavern from "./models/Tavern.jsx";
 import TrainingYard from "./models/TrainingYard.jsx";
+import GrainSilo from "./models/GrainSilo.jsx";
+import StoneStockpile from "./models/StoneStockpile.jsx";
+import Armory from "./models/Armory.jsx";
+import WoodStockpile from "./models/WoodStockpile.jsx";
+import Castle from "./models/Castle.jsx";
+import Barracks from "./models/Barracks.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -21,73 +26,69 @@ import TrainingYard from "./models/TrainingYard.jsx";
  */
 
 const BuildingComponents = {
+    // Production //
     WoodCuttersCamp,
     Quarry,
     SteelMine,
     Farm,
+    // Defence //
     Stables,
     ArcherTower,
     LookoutTower,
     BlackSmith,
     Tavern,
-    TrainingYard
+    TrainingYard,
+    // Storage //
+    GrainSilo,
+    StoneStockpile,
+    Armory,
+    WoodStockpile,
+    // Governmental //
+    Castle,
+    // Military //
+    Barracks
 };
-function Grid({typeChosen, type})
+function Grid({buildings})
 {
     const gridSize = 40;
     // State variable to hold the coordinates of the house
-    const [housePosition, setHousePosition] = useState({location:[4, 3], type:"house"}); // Initial position
-    const handleCellClick = (rowIndex, colIndex) =>
-    {
-        setHousePosition({location:[rowIndex, colIndex], type: "house"})
-    };
+    // const [buildingPosition, setBuildingPosition] = useState({location:[4, 3]}); // Initial position
+    // const handleCellClick = async (rowIndex, colIndex) =>
+    // {
+    //     setBuildingPosition({location: [rowIndex, colIndex]})
+    // };
 
     const renderCell = (rowIndex, colIndex) =>
     {
-        if (rowIndex === housePosition.location[0] && colIndex === housePosition.location[1])
+        let buildingFound = false;
+        for (let building of buildings)
         {
-            // Calculate the center position of the cell
-            const centerX = colIndex + 0.5;
-            const centerY = rowIndex + 0.5;
-            const Building = BuildingComponents[type]
-            return (
-                <mesh
-                      position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}
-                >
-                    {typeChosen && <Building/>}
-                </mesh>
-            );
-        }
-        else if (rowIndex === 0 || rowIndex === gridSize-1 || colIndex === 0 || colIndex === gridSize-1)
-        {
-            // Calculate the center position of the cell
-            const centerX = colIndex;
-            const centerY = rowIndex;
-            return (
-                <>
-                    <mesh
-                          position={[centerX - gridSize / 2, 6.5, centerY - gridSize / 2 + 0.5]}
-                    >
-                        <Bush/>
+            if (rowIndex === building.position[0] && colIndex === building.position[1]) {
+                // Calculate the center position of the cell
+                const centerX = colIndex + 0.5;
+                const centerY = rowIndex + 0.5;
+                buildingFound = true;
+                const Building = BuildingComponents[building.type]
+                return (
+                    <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
+                        <Building />
                     </mesh>
-                    <gridHelper
-                                position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
-                                args={[1, 1]}
-                    />
-                </>
-            );
+                );
+            }
         }
-        else
+        if (!buildingFound)
         {
             return (
-                <gridHelper key={`${rowIndex}-${colIndex}`}
-                            position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
-                            args={[1, 1]}
-                            onClick={() => handleCellClick(rowIndex, colIndex)}
+                <gridHelper
+                    key={`${rowIndex}-${colIndex}`}
+                    position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
+                    args={[1, 1]}
+                    // onClick={() => handleCellClick(rowIndex, colIndex)}
                 />
             );
         }
     };
+
 
     return (
         <Suspense fallback={null}>
