@@ -191,8 +191,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | name            | VARCHAR | PRIMARY KEY                                                                                  |
 | type            | VARCHAR | The type of the building; Political,  Decoration, Resources, ...                             |
 | function        | TEXT    | The mathematical function to evaluate the resource function with                             |
-| cost            | INT     | package(id); Costs Relation expressing how much a building costs to build                    |
-| drawback        | INT     | package(id); Drawback Relation; expressing the amount of resources given back when destroyed |
 | upgradeFunction | TEXT    | Mathematical formula that takes the level as input to calculate upgrade resource             |
 
 ### building
