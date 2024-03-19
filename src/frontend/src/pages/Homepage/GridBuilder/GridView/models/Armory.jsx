@@ -13,7 +13,7 @@ import armory from '../assets/armory.glb'
 export default function Armory(props) {
   const { nodes, materials } = useGLTF(armory)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} scale={0.3}>
       <mesh
         castShadow
         receiveShadow

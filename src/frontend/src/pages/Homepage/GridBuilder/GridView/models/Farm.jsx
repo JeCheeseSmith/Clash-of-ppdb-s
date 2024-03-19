@@ -14,7 +14,7 @@ import Quarry from "./Quarry.jsx";
 function Farm(props) {
   const { nodes, materials } = useGLTF(farm)
   return (
-    <group {...props} dispose={null} scale={0.3} position={[0, 0.2, 0]}>
+    <group {...props} dispose={null} scale={0.8} position={[0, 0.2, 0]}>
         <group scale={2}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={0.002}>
         <group rotation={[Math.PI / 2, 0, 0]}>

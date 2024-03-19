@@ -13,7 +13,7 @@ import barracks from '../assets/barracks.glb'
 export default function Barracks(props) {
   const { nodes, materials } = useGLTF(barracks)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} scale={0.3}>
       <mesh
         castShadow
         receiveShadow

@@ -13,7 +13,7 @@ import steelMine from '../assets/steelMine.glb'
 export default function SteelMine(props) {
   const { nodes, materials } = useGLTF(steelMine)
   return (
-    <group {...props} dispose={null} scale={0.5}>
+    <group {...props} dispose={null} scale={0.35}>
       <group name="Sketchfab_Scene">
         <group
           name="Sketchfab_model"

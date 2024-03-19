@@ -14,7 +14,7 @@ export default function StoneStockpile(props) {
   const { nodes, materials } = useGLTF(stoneStockpile)
   return (
     <group {...props} dispose={null}>
-      <group scale={0.01}>
+      <group scale={0.004}>
         <mesh
           castShadow
           receiveShadow

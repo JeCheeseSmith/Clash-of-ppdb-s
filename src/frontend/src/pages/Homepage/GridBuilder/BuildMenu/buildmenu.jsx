@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState} from 'react';
 import './buildmenu.css'
 import './buildmenuOptionsContents.css'
 import WoodCuttersCamp from './Assets/woodcutterscamp.png';
@@ -16,6 +16,7 @@ import StoneStockpile from './Assets/stonestockpile.png'
 import Armory from './Assets/armory.png'
 import WoodStockpile from './Assets/woodstockpile.png'
 import Castle from './Assets/castle.png'
+import Chancery from './Assets/chancery.png'
 import Barracks from './Assets/barracks.png'
 
 /**
@@ -24,7 +25,7 @@ import Barracks from './Assets/barracks.png'
  * @returns {JSX.Element} JSX representation of the BuildMenu component.
  */
 
-function BuildMenu({addBuilding})
+function BuildMenu({addBuilding, setPosition})
 {
   // State variable to track the visibility of the build menu
   const [menuVisible, setMenuVisible] = useState(false);
@@ -32,6 +33,7 @@ function BuildMenu({addBuilding})
   const buildType = (type, position) =>
   {
       addBuilding(type, position)
+      setPosition(position)
   };
 
 
@@ -196,6 +198,7 @@ function Governmental({buildType}) {
     <div className="type-container">
       <div className="image-scroll-container">
         <img src={Castle} className="small-image" onClick={() => buildType("Castle", getRandomPosition())}/>
+        <img src={Chancery} className="small-image" onClick={() => buildType("Chancery", getRandomPosition())}/>
       </div>
     </div>
   );

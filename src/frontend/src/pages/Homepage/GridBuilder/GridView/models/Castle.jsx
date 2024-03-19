@@ -12,7 +12,7 @@ import castle from '../assets/castle.glb'
 export default function Castle(props) {
   const { nodes, materials } = useGLTF(castle)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} scale={0.11}>
       <group position={[3.2, 22.6, -16]} rotation={[Math.PI / 2, 0, 0]}>
         <mesh
           castShadow
