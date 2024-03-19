@@ -196,17 +196,12 @@ CREATE TABLE IF NOT EXISTS achieved(
     PRIMARY KEY (pname,aname)
 );
 
--- Preset resources
-INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
-
--- Insert Core buildings (Castle, Satellite Castles, Chancery)
+-- Insert standard buildings
 
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Satellite_Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','0','86400 * x','1000*4*2^(x+3)',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','0','21600 * x','1000*4*2^(2x-1)',12);
-
--- Insert standard buildings
 
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodcuttersCamp','production','200*x','600*x','(200*x)*2x-4*200',2);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Quarry','production','200*x','600*x','(200*x)*2x-4*200',1);
@@ -246,7 +241,6 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3,5,20);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3,9,40);
 
-
 -- Insert Simulation Data
 
 INSERT INTO player(name,password) VALUES('watson','1234');
@@ -263,12 +257,12 @@ INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500','0','0');
 
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',0,0,2,'watson');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',2,0,3,'jonas');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,4,'abu');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,5,'admin');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('raadin Castle',4,2,6,'raadin');
-INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('salah Castle',2,4,7,'salah');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('watson Castle',0,0,1,'watson');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('jonas Castle',2,0,2,'jonas');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('abu Castle',0,2,3,'abu');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('admin Castle',2,2,4,'admin');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('raadin Castle',4,2,5,'raadin');
+INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES('salah Castle',2,4,6,'salah');
 
 
 -- Create a clan
