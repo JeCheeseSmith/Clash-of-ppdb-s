@@ -2,11 +2,17 @@ import React, { Suspense, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
-import House from "./models/House.jsx";
 import Bush from "./models/Bush.jsx";
-import Tower from "./models/Tower.jsx";
 import WoodCuttersCamp from "./models/WoodCuttersCamp.jsx";
 import Quarry from "./models/Quarry.jsx";
+import SteelMine from "./models/SteelMine.jsx";
+import Farm from "./models/Farm.jsx";
+import Stables from "./models/Stables.jsx";
+import ArcherTower from "./models/ArcherTower.jsx";
+import LookoutTower from "./models/LookoutTower.jsx";
+import BlackSmith from "./models/BlackSmith.jsx";
+import Tavern from "./models/Tavern.jsx";
+import TrainingYard from "./models/TrainingYard.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -17,14 +23,14 @@ import Quarry from "./models/Quarry.jsx";
 const BuildingComponents = {
     WoodCuttersCamp,
     Quarry,
-    // SteelMine,
-    // Farm,
-    // Stables,
-    // ArcherTower,
-    // LookoutTower,
-    // BlackSmith,
-    // Tavern,
-    // TrainingYard
+    SteelMine,
+    Farm,
+    Stables,
+    ArcherTower,
+    LookoutTower,
+    BlackSmith,
+    Tavern,
+    TrainingYard
 };
 function Grid({typeChosen, type})
 {
