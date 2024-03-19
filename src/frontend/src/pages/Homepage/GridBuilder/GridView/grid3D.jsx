@@ -48,24 +48,15 @@ const BuildingComponents = {
     // Military //
     Barracks
 };
-function Grid({setClicked, clicked, type, position, buildings})
+function Grid({buildings})
 {
     const gridSize = 40;
-    const Building = BuildingComponents[type]
     // State variable to hold the coordinates of the house
     // const [buildingPosition, setBuildingPosition] = useState({location:[4, 3]}); // Initial position
     // const handleCellClick = async (rowIndex, colIndex) =>
     // {
     //     setBuildingPosition({location: [rowIndex, colIndex]})
     // };
-
-    // useEffect(() =>
-    // {
-    //     console.log("started")
-    //     console.log(buildings)
-    //     setClicked(false)
-    //     console.log("finished")
-    // }, [clicked]);
 
     const renderCell = (rowIndex, colIndex) =>
     {
@@ -77,6 +68,7 @@ function Grid({setClicked, clicked, type, position, buildings})
                 const centerX = colIndex + 0.5;
                 const centerY = rowIndex + 0.5;
                 buildingFound = true;
+                const Building = BuildingComponents[building.type]
                 return (
                     <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
                         <Building />
