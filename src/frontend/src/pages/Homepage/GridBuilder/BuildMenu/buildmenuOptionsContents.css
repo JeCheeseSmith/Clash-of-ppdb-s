@@ -81,6 +81,7 @@
 }
 .small-image:hover {
     transform: scale(1.7);
+    cursor: pointer;
 }
 
 .closeMenu {
@@ -105,3 +106,25 @@
     bottom: 5px; /* Slide in when visible */
     right: 5px;
 }
+
+
+.tooltip {
+    visibility: hidden;
+    width: auto;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.building-container:hover .tooltip {
+  visibility: visible;
+}
+
+
