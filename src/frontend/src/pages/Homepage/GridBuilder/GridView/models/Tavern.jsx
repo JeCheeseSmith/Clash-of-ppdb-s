@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import tavern from '../assets/tavern.glb'
 
+/**
+ * React component for rendering a 3D model of a medieval tavern.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the medieval tavern.
+ */
 export default function Tavern(props) {
   const { nodes, materials } = useGLTF(tavern)
   return (

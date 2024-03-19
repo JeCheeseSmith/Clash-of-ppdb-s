@@ -10,6 +10,16 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import archertower from '../assets/archertower.glb'
 
+/**
+ * ArcherTower component representing a 3D model of an archer tower.
+ * @component
+ * @param {Object} props - Props for the component.
+ * @param {Object} props.materials - Materials for the tower.
+ * @param {Object} props.nodes - Nodes representing different parts of the tower.
+ * @param {Object} props.position - Position of the tower.
+ * @param {number[]} props.scale - Scale of the tower.
+ * @return {JSX.Element} A React JSX Element representing the ArcherTower component.
+ */
 export default function ArcherTower(props) {
   const { nodes, materials } = useGLTF(archertower)
   return (

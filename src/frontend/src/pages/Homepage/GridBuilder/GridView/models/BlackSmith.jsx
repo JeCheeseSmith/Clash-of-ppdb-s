@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import blackSmith from '../assets/blackSmith.glb'
 
+/**
+ * React component for rendering a 3D model of a Medieval Blacksmith.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the blacksmith.
+ */
 export default function BlackSmith(props) {
   const { nodes, materials } = useGLTF(blackSmith)
   return (

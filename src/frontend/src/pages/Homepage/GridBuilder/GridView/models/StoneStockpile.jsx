@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import stoneStockpile from '../assets/stoneStockpile.glb'
 
+/**
+ * React component for rendering a 3D model of a stone stockpile.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the stone stockpile.
+ */
 export default function StoneStockpile(props) {
   const { nodes, materials } = useGLTF(stoneStockpile)
   return (

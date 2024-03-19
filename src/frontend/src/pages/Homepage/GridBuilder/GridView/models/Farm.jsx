@@ -11,6 +11,11 @@ import { useGLTF } from '@react-three/drei'
 import farm from '../assets/farm.glb'
 import Quarry from "./Quarry.jsx";
 
+/**
+ * React component for rendering a 3D model of a windmill on a farm.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the windmill farm.
+ */
 function Farm(props) {
   const { nodes, materials } = useGLTF(farm)
   return (

@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import quary from '../assets/quary.glb'
 
+/**
+ * React component for rendering a 3D model of a quarry.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the quarry.
+ */
 function Quarry(props) {
   const { nodes, materials } = useGLTF(quary)
   return (

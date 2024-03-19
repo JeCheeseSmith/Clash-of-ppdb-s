@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import lookoutTower from '../assets/lookoutTower.glb'
 
+/**
+ * React component for rendering a 3D model of a lookout tower.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the lookout tower.
+ */
 export default function LookoutTower(props) {
   const { nodes, materials } = useGLTF(lookoutTower)
   return (
