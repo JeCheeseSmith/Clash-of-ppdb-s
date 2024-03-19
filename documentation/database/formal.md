@@ -56,18 +56,18 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### soldier
 
-| Name            | Type    | Explanation                                                                        |
-|-----------------|---------|------------------------------------------------------------------------------------|
-| name            | VARCHAR | PRIMARY KEY                                                                        | Unique identifier & name                                             |
-| type            | VARCHAR | The soldiers specilisation                                                         |
-| health          | INT     | Amount of health a soldier has                                                     |
-| damage          | INT     | Amount of damage a soldier does towards others                                     |
-| capacity        | INT     | Amount of resources a soldier can take with                                        |
-| consumption     | INT     | Amount of food a soldier consumes per time unity                                   |
-| speed           | FLOAT4  | Travelspeed of the soldier                                                         |
-| stealth         | FLOAT4  | Numerical value used to calculate how fast a soldier is discovered by another user |
-| upgradeFunction | TEXT    | Mathematical Function which describes steel costs to train the unit                |
-| timeFunction    | TEXT    | Mathematical function which descirbe the time needed to train the unit             |
+| Name         | Type    | Explanation                                                                        |
+|--------------|---------|------------------------------------------------------------------------------------|
+| name         | VARCHAR | PRIMARY KEY                                                                        | Unique identifier & name                                             |
+| type         | VARCHAR | The soldiers specialization                                                        |
+| health       | INT     | Amount of health a soldier has                                                     |
+| damage       | INT     | Amount of damage a soldier does towards others                                     |
+| capacity     | INT     | Amount of resources a soldier can take with                                        |
+| consumption  | INT     | Amount of food a soldier consumes per time unity                                   |
+| speed        | FLOAT4  | Travel speed of the soldier                                                        |
+| stealth      | FLOAT4  | Numerical value used to calculate how fast a soldier is discovered by another user |
+| cost         | INT     | Numerical value which describes steel costs to train the unit                      |
+| trainingTime | INT     | Numerical value which describe the time needed to train the unit                   |
 
 ### package
 
@@ -195,6 +195,7 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | function        | TEXT      | The mathematical function to evaluate the resource function with                                     |
 | upgradeFunction | TEXT      | Mathematical formula that takes the level as input to calculate upgrade resource                     |
 | upgradeResource | SMALL INT | Defines which resources are needed to build: 1: Wood , 2: Stone, 3: Steel, 4: Food, 12: Stone & Wood |
+| timeFunction    | TEXT      | Mathematical formula that describes the building time needed                                         |
 
 ### building
 

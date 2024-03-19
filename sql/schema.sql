@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS soldier(
     speed FLOAT4,
     stealth FLOAT4,
     cost INT,
-    trainingtime INT
+    trainingTime INT
 );
 
 CREATE TABLE IF NOT EXISTS package(
@@ -112,9 +112,8 @@ CREATE TABLE IF NOT EXISTS buildable(
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
     function TEXT NOT NULL, -- The mathematical function to evaluate the resource function with
-    cost INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Costs Relation
-    drawback INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Drawback Relation
     upgradeFunction TEXT NOT NULL,
+    upgradeResource SMALLINT NOT NULL, -- 1: Wood , 2: Stone, 3: Steel, 4: Food, 12: Stone & Wood
     timeFunction TEXT NOT NULL
 );
 
@@ -202,31 +201,30 @@ INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500
 
 -- Insert Core buildings (Castle, Satellite Castles, Chancery)
 
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Castle','government','0',1,1,'10800 * 2(x-1)','1000*4*2^(x)');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Satellite_Castle','government','0',1,1,'10800 * 2(x-1)','1000*4*2^(x)');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Chancery','government','0',1,1,'86400 * x','1000*4*2^(x+3)');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Barracks','government','0',1,1,'21600 * x','1000*4*2^(2x-1)');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Satellite_Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','0','86400 * x','1000*4*2^(x+3)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','0','21600 * x','1000*4*2^(2x-1)',12);
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('WoodcuttersCamp','production','200*x',1,1,'600*x','(200*x)*2x-4*200');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Quarry','production','200*x',1,1,'600*x','(200*x)*2x-4*200');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('SteelMine','production','20+(25*x)',1,1,'600*x','(200*x)*2x-4*200');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Farm','production','300*x',1,1,'600*x','(200*x)*2x-4*200');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodcuttersCamp','production','200*x','600*x','(200*x)*2x-4*200',2);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Quarry','production','200*x','600*x','(200*x)*2x-4*200',1);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','20+(25*x)','600*x','(200*x)*2x-4*200',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','300*x','600*x','(200*x)*2x-4*200',12);
 
--- INSERT INTO buildable(name,type,function,storage,cost,drawback) VALUES('Castle','storage');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Wood','storage','2000*2^(x)',1,1,'600*x','(2000*2^(x))/2');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Stone','storage','2000*2^(x)',1,1,'600*x','(2000*2^(x))/2');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Steel','storage','10000*(2*x)',1,1,'600*x','(2000*2^(x))/2');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Food','storage','2000*2^(x)',1,1,'600*x','(2000*2^(x))/2');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Wood','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stone','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Steel','storage','10000*(2*x)','600*x','(2000*2^(x))/2',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Food','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
 
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Stables','defense','1,1*x',1,1,'6*3600*x','1000*4*2^(x)');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('ArcherTower','defense','1,1*x',1,1,'6*3600*x','1000*4*2^(x)');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('LookoutTower','defense','1,1*x',1,1,'6*3600*x','1000*4*2^(x)');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('BlackSmith','defense','1,1*x',1,1,'6*3600*x','1000*4*2^(x)');
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('Tavern','defense','1,1*x',1,1,'6*3600*x','1000*4*2^(x)');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stables','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('ArcherTower','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('LookoutTower','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('BlackSmith','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Tavern','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
 
-INSERT INTO buildable(name,type,function,cost,drawback,timeFunction,upgradeFunction) VALUES('empty','decoration','1,1*x',1,1,'3*x','3*x');
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('empty','decoration','1,1*x','3*x','3*x',12);
 
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1,2,10);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1,4,20);
