@@ -15,14 +15,26 @@ import Account from "./Account/account.jsx";
 function MainPage()
 {
     const [clicked, setClicked] = useState(false)
-    const [type, setType] = useState("")
+    const [type, setType] = useState("") // update type voor de juiste model jsx file te pakken in grid3D.jsx
+    const [position, setPosition] = useState("")
+    const [buildings, setBuildings] = useState([/*{type:"WoodCuttersCamp", position:[5,5]}*/])
+    const addBuilding = (type, position) =>
+    {
+        const isDuplicate = buildings.some(building => building.type === type);
+        if (!isDuplicate)
+        {
+            setBuildings([...buildings, { type, position }]);
+        }
+    }
+
+
     return (
         <div className="background"> {/* Container for the background image */}
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu setClicked={setClicked} setType={setType}/>
-            <Grid typeChosen={clicked} type={type}/>
+            <Buildmenu setClicked={setClicked} addBuilding={addBuilding} setType={setType} setPosition={setPosition}/>
+            <Grid setClicked={setClicked} clicked={clicked} buildings={buildings} type={type} position={position}/>
             <ResourceBar/>
 
             {/*<Map/>*/}
