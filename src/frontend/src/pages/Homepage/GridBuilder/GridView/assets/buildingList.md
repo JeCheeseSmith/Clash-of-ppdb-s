@@ -6,11 +6,11 @@ Production:
 
 [SteelMine](https://sketchfab.com/3d-models/medieval-house-4-b42578994a334bb1a544c51043276f85#download)
 
-[Farm](https://sketchfab.com/3d-models/windmill-game-ready-6a006afce57a447baa60c7a6791f0086)
+[Farm](https://sketchfab.com/3d-models/windmill-2c54d1c79d27428aaea4d0909cae0635)
 
 Defense:
 
-[Stables](https://sketchfab.com/3d-models/horse-stable-c510f246b5b44027b4fa52f44982aa73)
+[Stables](https://sketchfab.com/3d-models/farm-low-poly-116065ff36c64fe9b8e8edcf6c382a50)
 
 [ArcherTower](https://sketchfab.com/3d-models/viking-watch-tower-5cd42c3ef75748e0b57f25247f073d53)
 

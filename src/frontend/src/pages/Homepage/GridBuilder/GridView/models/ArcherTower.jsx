@@ -14,7 +14,7 @@ export default function ArcherTower(props) {
   const { nodes, materials } = useGLTF(archertower)
   return (
     <group {...props} dispose={null}>
-      <group scale={0.01}>
+      <group scale={0.005}>
         <mesh
           castShadow
           receiveShadow

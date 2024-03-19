@@ -19,7 +19,7 @@ export default function SteelMine(props) {
         receiveShadow
         geometry={nodes.House4_House4_M_0.geometry}
         material={materials.House4_M}
-        scale={0.01}
+        scale={0.004}
       />
     </group>
   )

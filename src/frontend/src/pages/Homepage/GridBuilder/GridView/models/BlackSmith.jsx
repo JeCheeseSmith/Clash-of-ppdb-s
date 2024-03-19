@@ -14,6 +14,7 @@ export default function BlackSmith(props) {
   const { nodes, materials } = useGLTF(blackSmith)
   return (
     <group {...props} dispose={null}>
+      <group scale={0.5}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group position={[-3.754, 0.698, -0.612]} rotation={[Math.PI / 2, 0, 0]}>
           <mesh
@@ -580,6 +581,7 @@ export default function BlackSmith(props) {
           position={[-1.624, 1.702, 5.532]}
           rotation={[0, 0, -Math.PI / 2]}
         />
+      </group>
       </group>
     </group>
   )
