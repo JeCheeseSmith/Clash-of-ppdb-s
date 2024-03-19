@@ -214,6 +214,15 @@ function Military({buildType}) {
   );
 }
 
+/**
+ * Building component function definition.
+ * This component represents a building.
+ * @param {Object} props - Properties passed to the component.
+ * @param {Function} props.buildType - Function to build a type.
+ * @param {string} props.name - Name of the building.
+ * @param {string} props.image - Image of the building.
+ * @returns {JSX.Element} JSX representation of the Building component.
+ */
 
 function Building({buildType, name, image})
 {
