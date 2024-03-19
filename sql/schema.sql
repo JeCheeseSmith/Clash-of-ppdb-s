@@ -199,7 +199,7 @@ INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500
 -- Insert Core buildings (Castle, Satellite Castles, Chancery)
 
 INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('Castle','government','0','10800*2(x-1)',12);
-INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('Satellite_Castle','government','0','10800*2(x-1)',12);
+INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('SatelliteCastle','government','0','10800*2(x-1)',12);
 INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('Chancery','government','0','10800*2(x-1)',12);
 
 -- Insert standard buildings
@@ -219,6 +219,9 @@ INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES
 INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('LookoutTower','defense','1,1*x','6*3600*x',12);
 INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('BlackSmith','defense','1,1*x','6*3600*x',12);
 INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('Tavern','defense','1,1*x','6*3600*x',12);
+
+INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('TrainingYard','military','1,1*x','6*3600*x',12);
+INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('Barracks','military','1,1*x','6*3600*x',12);
 
 INSERT INTO buildable(name,type,function,upgradeFunction,upgradeResource) VALUES('empty','decoration','1,1*x','3*x',12);
 
