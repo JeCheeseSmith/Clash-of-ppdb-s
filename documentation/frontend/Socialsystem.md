@@ -28,5 +28,3 @@ This function extracts data from the JSON (clan name and sender) and creates a m
 Finally a last message is returned to the sender of the request to let them know that their request has been successfully send.
 
 In the backend function `sendRequest` the request is inserted into the database and then the clan leader is send the request.
-
-#### Chat
