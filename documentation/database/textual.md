@@ -43,7 +43,7 @@ Soldiers have an amount of health and damage they do. Also, they consume food at
 
 Some soldiers might move faster than others. Plan your transfer strategically!
 
-A soldier has a cost to train, which is specified per type. 
+A soldier has a cost & time to train, which is specified per type. 
 
 ### Building
 
