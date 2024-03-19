@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS soldier(
     capacity INT,
     consumption INT,
     speed FLOAT4,
-    stealth FLOAT4
+    stealth FLOAT4,
+    cost INT
 );
 
 CREATE TABLE IF NOT EXISTS package(
@@ -224,25 +225,25 @@ INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('
 
 INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('empty','decoration','1,1*x',1,1,'3*x');
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('OrderKnight','HeavyInfantry',45,25,5,4,1,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1,2);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1,4);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('OrderKnight','HeavyInfantry',45,25,5,4,1,1,8);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Guardsman','Spearmen',12,12,8,2,1.3,1);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Pikeman','Spearmen',20,20,5,8,3.3,1);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Halbardier','Spearmen',32,32,8,4,1.3,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Guardsman','Spearmen',12,12,8,2,1.3,1,2);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Pikeman','Spearmen',20,20,5,8,3.3,1,4);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Halbardier','Spearmen',32,32,8,4,1.3,1,8);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Horseman','Cavalry',20,20,7,6,2,0.3);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Knight','Cavalry',40,40,5,12,2,0.3);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('WarElephant','Cavalry',45,45,7,15,2,0.3);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Horseman','Cavalry',20,20,7,6,2,0.3,6);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Knight','Cavalry',40,40,5,12,2,0.3,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('WarElephant','Cavalry',45,45,7,15,2,0.3,18);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Bowman','Ranged',10,15,10,2,1.4,1);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Longbowman','Ranged',15,25,10,3,1.4,1);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Crossbowman','Ranged',25,45,10,4,1.4,1);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Bowman','Ranged',10,15,10,2,1.4,1,2);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Longbowman','Ranged',15,25,10,3,1.4,1,4);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Crossbowman','Ranged',25,45,10,4,1.4,1,8);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3,2);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3,5);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3,9);
 
 
 -- Insert Simulation Data
