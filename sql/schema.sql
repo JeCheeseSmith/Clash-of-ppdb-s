@@ -198,8 +198,8 @@ CREATE TABLE IF NOT EXISTS achieved(
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Satellite_Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','0','10800*2(x-1)','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Satellite_Castle','government','0','10800*2(x-1)','1000*4*2^(x)',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','0','86400 * x','1000*4*2^(x+3)',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','0','21600 * x','1000*4*2^(2x-1)',12);
 

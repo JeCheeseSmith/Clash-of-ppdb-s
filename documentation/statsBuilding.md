@@ -1,9 +1,9 @@
+# Buildings
+> List of several statistics on the gameMechanics.
+> > It defines how many resource are produced/time unit, storage limits, upgrade times, ... 
 
-Also see stats.odt / https://docs.google.com/document/d/1NPCh-eCaVWMZpIOB37ut8xCqsfIeD3AStPSm6Jjfyx4/edit#heading=h.mlj3clo6yci5
+Initial build time for all buildings is 10 seconds unless otherwise stated.
 
-### Buildings
-
-Initial build time for all buildings is 10 seconds unless otherwise stated
 #### Governmental buildings
 
 Upgrade time for storage buildings
@@ -166,7 +166,7 @@ Voor elk level van dit gebouw kan er 1 meer soldaat tegelijk worden getrained. (
 - Stables -> Cavalry
 - Blacksmith -> spearmen
 - Training Yard -> Heavy infantry
-Damage bonus voor units die overeenkomen met het type van dit gebouw is level \* 10%
+Damage bonus for units die overeenkomen met het type van dit gebouw is level \* 10%
 
 | level | upgrade cost function (wood & stone) | upgrade time |
 | ----- | ------------------------------------ | ------------ |
