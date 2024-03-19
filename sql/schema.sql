@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS settlement(
     name VARCHAR UNIQUE NOT NULL,
     mapX INT NOT NULL, -- Coordinate on the map
     mapY INT NOT NULL,
-    UNIQUE (mapX,mapY), -- There cannot be settlements with the same coordinates
+    --UNIQUE (mapX,mapY), -- There cannot be settlements with the same coordinates
     pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Has Relation: Resources currently in the settlement
     pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE -- Owns Relation
 );
