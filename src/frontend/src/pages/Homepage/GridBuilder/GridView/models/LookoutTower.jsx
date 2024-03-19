@@ -15,7 +15,7 @@ function LookoutTower(props) {
   return (
     <group {...props} dispose={null}>
       <group scale={0.75}>
-      <group position={[0, 4, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={0.5}>
+      <group position={[0, 3, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={0.4}>
         <mesh
           castShadow
           receiveShadow

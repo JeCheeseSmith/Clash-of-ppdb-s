@@ -228,7 +228,7 @@ def get_grid():
 @app.route("/savegrid", methods=["POST"])
 def saveGrid():
     data = request.json
-    print(data)
+    print(len(data))
     return data
 
 

@@ -13,14 +13,32 @@ import steelMine from '../assets/steelMine.glb'
 export default function SteelMine(props) {
   const { nodes, materials } = useGLTF(steelMine)
   return (
-    <group {...props} dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.House4_House4_M_0.geometry}
-        material={materials.House4_M}
-        scale={0.004}
-      />
+    <group {...props} dispose={null} scale={0.5}>
+      <group name="Sketchfab_Scene">
+        <group
+          name="Sketchfab_model"
+          rotation={[-Math.PI / 2, 0, 0]}
+          userData={{ name: 'Sketchfab_model' }}>
+          <group
+            name="House4fbx"
+            rotation={[Math.PI / 2, 0, 0]}
+            scale={0.01}
+            userData={{ name: 'House4.fbx' }}>
+            <group name="RootNode" userData={{ name: 'RootNode' }}>
+              <group name="House4" userData={{ name: 'House4' }}>
+                <mesh
+                  name="House4_House4_M_0"
+                  castShadow
+                  receiveShadow
+                  geometry={nodes.House4_House4_M_0.geometry}
+                  material={materials.House4_M}
+                  userData={{ name: 'House4_House4_M_0' }}
+                />
+              </group>
+            </group>
+          </group>
+        </group>
+      </group>
     </group>
   )
 }

@@ -56,6 +56,11 @@ Buildings are split up in category we use them for.
 >[Castle](https://sketchfab.com/3d-models/castle-3d-model-23eb94cac33d4099b7185a81bdc038e4)
 >>"Castle 3D Model" (https://skfb.ly/ooxSL) by JoshGarber is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
+>[SatteliteCastle](Castle)
+
+>[Chancery](https://sketchfab.com/3d-models/rauma-town-hall-e2c47838ebde464bbcea521c0ff5ce9e#download)
+>>"Rauma Town Hall" (https://skfb.ly/6twnU) by Karumaki is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
 ### Military
 
 >[Barracks](https://sketchfab.com/3d-models/medieval-house-4ec56df1c24d422ea85d1cfbf21bbe8c#download)

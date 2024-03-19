@@ -13,7 +13,7 @@ import quary from '../assets/quary.glb'
 function Quarry(props) {
   const { nodes, materials } = useGLTF(quary)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} position={[0,0.2,0]}>
       <group scale={0.005}>
         <group position={[-246.154, 40.984, -223]}>
           <mesh
