@@ -7,6 +7,14 @@ import DisplayAvatarName from "../../../../globalComponents/avatarWithName/avata
 import {useLocation} from "react-router-dom";
 import RequestMassagePopUp from "../../../../globalComponents/popupMessage/popup.jsx";
 
+/**
+ * Component for social options.
+ * @param {Object} props - The props object.
+ * @param {string} props.pageName - The name of the page ('createClan', 'joinClan', 'requests', 'searchPerson').
+ * @param {Array} props.requests - Array of requests data (only required for 'requests' page).
+ * @param {Function} props.sendData - Function to send data (only required for 'requests' page).
+ * @returns {JSX.Element} - The JSX for social options.
+ */
 function SocialOption({pageName, requests, sendData})
 {
     return(
