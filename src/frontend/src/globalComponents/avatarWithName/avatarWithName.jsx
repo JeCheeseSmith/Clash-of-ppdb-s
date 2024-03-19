@@ -4,6 +4,16 @@ import avatar from "../../assets/clanPicture.jpg";
 import notFound from "../../assets/groupnotfound.png";
 import person from "../../assets/person.png";
 import group from "../../assets/group.png";
+
+/**
+ * Function to display avatar and name based on type.
+ * @param {object} props - The props object.
+ * @param {string} props.type - The type of display ('player-request', 'player-search', 'clan-search', 'chat-person', 'chat-group').
+ * @param {string} props.name - The name to be displayed.
+ * @param {string} [props.pname] - The clan leader's name (only required when type is 'clan-search').
+ * @param {boolean} [props.succesClanSearch] - Flag indicating success of clan search (only required when type is 'clan-search').
+ * @returns {JSX.Element} - The JSX for displaying avatar and name.
+ */
 function DisplayAvatarName({type, name, pname, succesClanSearch})
 {
     return (
@@ -19,6 +29,13 @@ function DisplayAvatarName({type, name, pname, succesClanSearch})
 
 export default DisplayAvatarName;
 
+
+/**
+ * Component to display avatar and name for player request.
+ * @param {object} props - The props object.
+ * @param {string} props.name - The name to be displayed.
+ * @returns {JSX.Element} - The JSX for displaying avatar and name for player request.
+ */
 function PlayerRequest({name})
 {
     return (
@@ -29,6 +46,13 @@ function PlayerRequest({name})
     )
 }
 
+
+/**
+ * Component to display avatar and name for player search.
+ * @param {object} props - The props object.
+ * @param {string} props.name - The name to be displayed.
+ * @returns {JSX.Element} - The JSX for displaying avatar and name for player search.
+ */
 function PlayerSearch({name})
 {
     return (
@@ -39,6 +63,14 @@ function PlayerSearch({name})
     )
 }
 
+/**
+ * Component to display avatar and name for clan search.
+ * @param {object} props - The props object.
+ * @param {string} props.name - The name to be displayed.
+ * @param {string} props.pname - The clan leader's name.
+ * @param {boolean} props.succes - Flag indicating success of clan search.
+ * @returns {JSX.Element} - The JSX for displaying avatar and name for clan search.
+ */
 function ClanSearch({name, pname, succes}) {
     return (
         <div className={"clan-SEARCH"}>
@@ -51,6 +83,12 @@ function ClanSearch({name, pname, succes}) {
     )
 }
 
+/**
+ * Component to display avatar and name for chat person.
+ * @param {object} props - The props object.
+ * @param {string} props.name - The name to be displayed.
+ * @returns {JSX.Element} - The JSX for displaying avatar and name for chat person.
+ */
 function ChatPerson({name})
 {
     return (
@@ -61,6 +99,12 @@ function ChatPerson({name})
     );
 }
 
+/**
+ * Component to display avatar and name for chat group.
+ * @param {object} props - The props object.
+ * @param {string} props.name - The name to be displayed.
+ * @returns {JSX.Element} - The JSX for displaying avatar and name for chat group.
+ */
 function ChatGroup({name})
 {
     return (
