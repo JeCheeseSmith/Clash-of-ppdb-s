@@ -24,15 +24,17 @@ import Barracks from './Assets/barracks.png'
  * @returns {JSX.Element} JSX representation of the BuildMenu component.
  */
 
-function BuildMenu({setClicked, setType})
+function BuildMenu({setClicked, addBuilding, setType, setPosition})
 {
   // State variable to track the visibility of the build menu
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const buildType = (type) =>
+  const buildType = (type, position) =>
   {
       setClicked(true)
+      addBuilding(type, position)
       setType(type)
+      setPosition(position)
   };
 
 
@@ -150,8 +152,8 @@ function Production({buildType})
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={WoodCuttersCamp} className="small-image" onClick={() => buildType("WoodCuttersCamp")}/>
-        <img src={Quarry} className="small-image" onClick={() => buildType("Quarry")}/>
+        <img src={WoodCuttersCamp} className="small-image" onClick={() => buildType("WoodCuttersCamp", [5,5])}/>
+        <img src={Quarry} className="small-image" onClick={() => buildType("Quarry", [10,10])}/>
         <img src={SteelMine} className="small-image" onClick={() => buildType("SteelMine")}/>
         <img src={Farm} className="small-image" onClick={() => buildType("Farm")}/>
       </div>
