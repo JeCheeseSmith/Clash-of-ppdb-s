@@ -13,7 +13,7 @@ import archertower from '../assets/archertower.glb'
 export default function ArcherTower(props) {
   const { nodes, materials } = useGLTF(archertower)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} scale={0.5}>
       <group scale={0.005}>
         <mesh
           castShadow

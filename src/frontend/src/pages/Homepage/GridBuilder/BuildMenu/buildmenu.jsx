@@ -11,6 +11,12 @@ import LookoutTower from './Assets/lookouttower.png';
 import BlackSmith from './Assets/blacksmith.png';
 import Tavern from './Assets/tavern.png';
 import TrainingYard from './Assets/trainingyard.png';
+import GrainSilo from './Assets/grainsilo.png'
+import StoneStockpile from './Assets/stonestockpile.png'
+import Armory from './Assets/armory.png'
+import WoodStockpile from './Assets/woodstockpile.png'
+import Castle from './Assets/castle.png'
+import Barracks from './Assets/barracks.png'
 
 /**
  * BuildMenu component function definition.
@@ -173,10 +179,10 @@ function Storage({buildType})
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={ArcherTower} className="small-image" onClick={() => buildType("GrainSilo")}/>
-        <img src={ArcherTower} className="small-image" onClick={() => buildType("StoneStockpile")}/>
-        <img src={ArcherTower} className="small-image" onClick={() => buildType("Armory")}/>
-        <img src={ArcherTower} className="small-image" onClick={() => buildType("Wood Stockpile")}/>
+        <img src={GrainSilo} className="small-image" onClick={() => buildType("GrainSilo")}/>
+        <img src={StoneStockpile} className="small-image" onClick={() => buildType("StoneStockpile")}/>
+        <img src={Armory} className="small-image" onClick={() => buildType("Armory")}/>
+        <img src={WoodStockpile} className="small-image" onClick={() => buildType("WoodStockpile")}/>
       </div>
     </div>
   );
@@ -187,7 +193,7 @@ function Governmental({buildType})
   return (
     <div className="type-container">
         <div className="image-scroll-container">
-            <img src={Stables} className="small-image" onClick={() => buildType("Castle")}/>
+            <img src={Castle} className="small-image" onClick={() => buildType("Castle")}/>
         </div>
     </div>
   );
@@ -198,7 +204,7 @@ function Military({buildType})
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={Farm} className="small-image" onClick={() => buildType("Barracks")}/>
+        <img src={Barracks} className="small-image" onClick={() => buildType("Barracks")}/>
       </div>
     </div>
   );
