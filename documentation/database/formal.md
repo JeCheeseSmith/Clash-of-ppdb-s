@@ -58,7 +58,7 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 | Name        | Type    | Explanation                                                                        |
 |-------------|---------|------------------------------------------------------------------------------------|
-| name        | VARCHAR | PRIMARY KEY | Unique identifier & name                                             |
+| name        | VARCHAR | PRIMARY KEY                                                                        | Unique identifier & name                                             |
 | type        | VARCHAR | The soldiers specilisation                                                         |
 | health      | INT     | Amount of health a soldier has                                                     |
 | damage      | INT     | Amount of damage a soldier does towards others                                     |
@@ -66,6 +66,7 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | consumption | INT     | Amount of food a soldier consumes per time unity                                   |
 | speed       | FLOAT4  | Travelspeed of the soldier                                                         |
 | stealth     | FLOAT4  | Numerical value used to calculate how fast a soldier is discovered by another user |
+| function    | TEXT    | Function which describes steel costs to train the unit                             |
 
 ### package
 

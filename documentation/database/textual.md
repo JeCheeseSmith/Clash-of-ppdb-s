@@ -43,6 +43,8 @@ Soldiers have an amount of health and damage they do. Also, they consume food at
 
 Some soldiers might move faster than others. Plan your transfer strategically!
 
+A soldier has a cost to train, which is specified per type. 
+
 ### Building
 
 You can place multiple buildings of the same type. The types are referred to as "Buildables" and have a unique name. They perform an action specified in a category (type). Farmers may produce food, woodcutters produce wood for upgrading buildings. Some buildings store amounts of resource and others allow for bonus effects such as increasing the health of a soldier type.
