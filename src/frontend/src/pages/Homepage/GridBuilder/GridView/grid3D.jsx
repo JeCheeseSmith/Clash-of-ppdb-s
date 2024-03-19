@@ -1,4 +1,4 @@
-import React, {Suspense, useEffect, useState} from 'react';
+import React, {Suspense} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
@@ -17,6 +17,7 @@ import StoneStockpile from "./models/StoneStockpile.jsx";
 import Armory from "./models/Armory.jsx";
 import WoodStockpile from "./models/WoodStockpile.jsx";
 import Castle from "./models/Castle.jsx";
+import Chancery from "./models/Chancery.jsx";
 import Barracks from "./models/Barracks.jsx";
 
 /**
@@ -45,18 +46,25 @@ const BuildingComponents = {
     WoodStockpile,
     // Governmental //
     Castle,
+    Chancery,
     // Military //
     Barracks
 };
-function Grid({buildings})
+function Grid({buildings, position, setPosition})
 {
     const gridSize = 40;
     // State variable to hold the coordinates of the house
-    // const [buildingPosition, setBuildingPosition] = useState({location:[4, 3]}); // Initial position
-    // const handleCellClick = async (rowIndex, colIndex) =>
-    // {
-    //     setBuildingPosition({location: [rowIndex, colIndex]})
-    // };
+    const handleCellClick = async (rowIndex, colIndex) =>
+    {
+        for (let building of buildings)
+        {
+            if (building.position === position)
+            {
+                setPosition([45,45])
+                building.position = [rowIndex,colIndex]
+            }
+        }
+    };
 
     const renderCell = (rowIndex, colIndex) =>
     {
@@ -83,7 +91,7 @@ function Grid({buildings})
                     key={`${rowIndex}-${colIndex}`}
                     position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
                     args={[1, 1]}
-                    // onClick={() => handleCellClick(rowIndex, colIndex)}
+                    onClick={() => handleCellClick(rowIndex, colIndex)}
                 />
             );
         }

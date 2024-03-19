@@ -14,14 +14,14 @@ export default function TrainingYard(props) {
   const { nodes, materials } = useGLTF(trainingYard)
   return (
     <group {...props} dispose={null} position={[8,1,-2]}>
-        <group scale={0.5}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Object_2.geometry}
-        material={materials.material_0}
-        rotation={[-Math.PI / 2, 0, 0]}
-      />
+        <group scale={0.6}>
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes.Object_2.geometry}
+                material={materials.material_0}
+                rotation={[-Math.PI / 2, 0, 0]}
+            />
         </group>
     </group>
   )

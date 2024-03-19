@@ -14,7 +14,7 @@ import Farm from "./Farm.jsx";
 function Stables(props) {
   const { nodes, materials } = useGLTF(stables)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} position={[0,0.3,0]}>
       <group scale={0.3}>
       <group rotation={[-Math.PI / 2, 0, 0]} >
         <group rotation={[Math.PI / 2, 0, 0]}>

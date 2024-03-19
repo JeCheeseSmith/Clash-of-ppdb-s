@@ -14,6 +14,7 @@ import Account from "./Account/account.jsx";
  */
 function MainPage()
 {
+    const [position, setPosition] = useState("")
     const [buildings, setBuildings] = useState([/*{type:"WoodCuttersCamp", position:[5,5]}*/])
     const addBuilding = (type, position) =>
     {
@@ -26,8 +27,8 @@ function MainPage()
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu addBuilding={addBuilding}/>
-            <Grid buildings={buildings}/>
+            <Buildmenu addBuilding={addBuilding} setPosition={setPosition}/>
+            <Grid buildings={buildings} position={position} setPosition={setPosition}/>
             <ResourceBar/>
 
             {/*<Map/>*/}
