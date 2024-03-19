@@ -199,9 +199,9 @@ INSERT INTO package(stone,wood,steel,food,gems,xp) VALUES('500','500','500','500
 
 -- Insert Core buildings (Castle, Satellite Castles, Chancery)
 
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Castle','government','0',1,1,'10800 * 2(x-1)');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Satellite_Castle','government','0',1,1,'10800 * 2(x-1)');
-INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Chancery','government','0',1,1,'10800 * 2(x-1)');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Castle','government','0',1,1,'10800*2(x-1)');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Satellite_Castle','government','0',1,1,'10800*2(x-1)');
+INSERT INTO buildable(name,type,function,cost,drawback,upgradeFunction) VALUES('Chancery','government','0',1,1,'10800*2(x-1)');
 
 -- Insert standard buildings
 
