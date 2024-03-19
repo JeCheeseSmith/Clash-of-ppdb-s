@@ -11,6 +11,11 @@ import { useGLTF } from '@react-three/drei'
 import stables from '../assets/stables.glb'
 import Farm from "./Farm.jsx";
 
+/**
+ * React component for rendering a 3D model of stables (low poly).
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the stables.
+ */
 function Stables(props) {
   const { nodes, materials } = useGLTF(stables)
   return (

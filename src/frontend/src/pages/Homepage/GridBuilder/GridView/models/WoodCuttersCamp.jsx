@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import woodcuttersCamp from '../assets/woodcuttersCamp.glb'
 
+/**
+ * React component for rendering a 3D model of a medieval woodcutter's camp.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the woodcutter's camp.
+ */
 function WoodCuttersCamp(props) {
   const { nodes, materials } = useGLTF(woodcuttersCamp)
   return (

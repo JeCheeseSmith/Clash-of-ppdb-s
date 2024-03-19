@@ -50,6 +50,16 @@ const BuildingComponents = {
     // Military //
     Barracks
 };
+
+/**
+ * A 3D grid component with interactive cells and objects.
+ * @component
+ * @param {Object[]} buildings - Array of buildings.
+ * @param {number[]} position - Position of the building.
+ * @param {Function} setPosition - Function to set the position of the building.
+ * @return {JSX.Element} A React JSX Element representing the 3D grid.
+ */
+
 function Grid({buildings, position, setPosition})
 {
     const gridSize = 40;

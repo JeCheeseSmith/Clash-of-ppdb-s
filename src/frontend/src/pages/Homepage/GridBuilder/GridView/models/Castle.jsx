@@ -9,6 +9,12 @@ Title: Castle 3D Model
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import castle from '../assets/castle.glb'
+
+/**
+ * React component for rendering a 3D model of a Castle.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the castle.
+ */
 export default function Castle(props) {
   const { nodes, materials } = useGLTF(castle)
   return (

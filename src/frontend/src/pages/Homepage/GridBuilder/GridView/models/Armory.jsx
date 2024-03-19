@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import armory from '../assets/armory.glb'
 
+/**
+ * React component for rendering a 3D model of a medieval armory.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the armory.
+ */
 export default function Armory(props) {
   const { nodes, materials } = useGLTF(armory)
   return (

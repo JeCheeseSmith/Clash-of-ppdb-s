@@ -3,6 +3,10 @@ import './account.css'
 import {useLocation, useNavigate} from "react-router-dom";
 import POST from "../../../api/POST.jsx";
 
+/**
+ * Component for managing user account.
+ * @returns {JSX.Element} - The JSX for managing user account.
+ */
 function Account()
 {
     let navigate = useNavigate();

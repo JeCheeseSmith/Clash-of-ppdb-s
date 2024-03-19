@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import steelMine from '../assets/steelMine.glb'
 
+/**
+ * React component for rendering a 3D model of a medieval building.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the medieval building.
+ */
 export default function SteelMine(props) {
   const { nodes, materials } = useGLTF(steelMine)
   return (

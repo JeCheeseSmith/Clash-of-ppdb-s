@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import woodStockpile from '../assets/woodStockpile.glb'
 
+/**
+ * React component for rendering a 3D model of a wood stockpile.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the wood stockpile.
+ */
 export default function WoodStockpile(props) {
   const { nodes, materials } = useGLTF(woodStockpile)
   return (

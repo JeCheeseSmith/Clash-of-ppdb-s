@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import chancery from '../assets/chancery.glb'
 
+/**
+ * React component for rendering a 3D model of Rauma Town Hall Chancery.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the Chancery.
+ */
 function Chancery(props) {
   const { nodes, materials } = useGLTF(chancery)
   return (

@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import grainSilo from '../assets/grainSilo.glb'
 
+/**
+ * React component for rendering a 3D model of a grain silo.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the grain silo.
+ */
 export default function GrainSilo(props)
 {
   const { nodes, materials } = useGLTF(grainSilo)

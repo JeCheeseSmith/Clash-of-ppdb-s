@@ -156,10 +156,10 @@ function Production({buildType}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={WoodCuttersCamp} className="small-image" onClick={() => buildType("WoodCuttersCamp", getRandomPosition())}/>
-        <img src={Quarry} className="small-image" onClick={() => buildType("Quarry", getRandomPosition())}/>
-        <img src={SteelMine} className="small-image" onClick={() => buildType("SteelMine", getRandomPosition())}/>
-        <img src={Farm} className="small-image" onClick={() => buildType("Farm", getRandomPosition())}/>
+        <Building buildType={buildType} name="WoodCuttersCamp" image={WoodCuttersCamp} />
+        <Building buildType={buildType} name="Quarry" image={Quarry} />
+        <Building buildType={buildType} name="SteelMine" image={SteelMine} />
+        <Building buildType={buildType} name="Farm" image={Farm} />
       </div>
     </div>
   );
@@ -169,12 +169,12 @@ function Defense({buildType}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={Stables} className="small-image" onClick={() => buildType("Stables", getRandomPosition())}/>
-        <img src={ArcherTower} className="small-image" onClick={() => buildType("ArcherTower", getRandomPosition())}/>
-        <img src={LookoutTower} className="small-image" onClick={() => buildType("LookoutTower", getRandomPosition())}/>
-        <img src={BlackSmith} className="small-image" onClick={() => buildType("BlackSmith", getRandomPosition())}/>
-        <img src={Tavern} className="small-image" onClick={() => buildType("Tavern", getRandomPosition())}/>
-        <img src={TrainingYard} className="small-image" onClick={() => buildType("TrainingYard", getRandomPosition())}/>
+        <Building buildType={buildType} name="Stables" image={Stables} />
+        <Building buildType={buildType} name="ArcherTower" image={ArcherTower} />
+        <Building buildType={buildType} name="LookoutTower" image={LookoutTower} />
+        <Building buildType={buildType} name="BlackSmith" image={BlackSmith} />
+        <Building buildType={buildType} name="Tavern" image={Tavern} />
+        <Building buildType={buildType} name="TrainingYard" image={TrainingYard} />
       </div>
     </div>
   );
@@ -184,10 +184,10 @@ function Storage({buildType}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={GrainSilo} className="small-image" onClick={() => buildType("GrainSilo", getRandomPosition())}/>
-        <img src={StoneStockpile} className="small-image" onClick={() => buildType("StoneStockpile", getRandomPosition())}/>
-        <img src={Armory} className="small-image" onClick={() => buildType("Armory", getRandomPosition())}/>
-        <img src={WoodStockpile} className="small-image" onClick={() => buildType("WoodStockpile", getRandomPosition())}/>
+        <Building buildType={buildType} name="GrainSilo" image={GrainSilo} />
+        <Building buildType={buildType} name="StoneStockpile" image={StoneStockpile} />
+        <Building buildType={buildType} name="Armory" image={Armory} />
+        <Building buildType={buildType} name="WoodStockpile" image={WoodStockpile} />
       </div>
     </div>
   );
@@ -197,8 +197,8 @@ function Governmental({buildType}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={Castle} className="small-image" onClick={() => buildType("Castle", getRandomPosition())}/>
-        <img src={Chancery} className="small-image" onClick={() => buildType("Chancery", getRandomPosition())}/>
+        <Building buildType={buildType} name="Castle" image={Castle} />
+        <Building buildType={buildType} name="Chancery" image={Chancery} />
       </div>
     </div>
   );
@@ -208,8 +208,45 @@ function Military({buildType}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={Barracks} className="small-image" onClick={() => buildType("Barracks", getRandomPosition())}/>
+        <Building buildType={buildType} name="Barracks" image={Barracks} />
       </div>
+    </div>
+  );
+}
+
+/**
+ * Building component function definition.
+ * This component represents a building.
+ * @param {Object} props - Properties passed to the component.
+ * @param {Function} props.buildType - Function to build a type.
+ * @param {string} props.name - Name of the building.
+ * @param {string} props.image - Image of the building.
+ * @returns {JSX.Element} JSX representation of the Building component.
+ */
+
+function Building({buildType, name, image})
+{
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleMouseEnter = () => {
+    setShowTooltip(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
+
+  return (
+    <div className="building-container">
+      <img
+        src={image}
+        className="small-image"
+        onClick={() => buildType(name, getRandomPosition())}
+        alt={name}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      />
+      {showTooltip && <div className="tooltip">{name}</div>}
     </div>
   );
 }

@@ -10,6 +10,11 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import barracks from '../assets/barracks.glb'
 
+/**
+ * React component for rendering a 3D model of Seleucid Barracks.
+ * @param {object} props - Props passed to the component.
+ * @returns {JSX.Element} JSX representation of the barracks.
+ */
 export default function Barracks(props) {
   const { nodes, materials } = useGLTF(barracks)
   return (
