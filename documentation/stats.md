@@ -87,7 +87,7 @@ Upgrade time for storage buildings
 Initial build time is time it takes to setup new city (1 day?)
 Initial build cost scales with distance from main base (??)
 Upgrade time & costs same as Castle
-##### Communication camp (name to be changed?)
+##### Chancery
 
 | level | Possible extra cities |
 | ----- | --------------------- |
