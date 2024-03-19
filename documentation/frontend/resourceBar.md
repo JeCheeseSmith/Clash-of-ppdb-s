@@ -1,4 +1,4 @@
-# General Frontend
+# Resource bar
 > This documentation explains the working of resource-bar component.
 
 
