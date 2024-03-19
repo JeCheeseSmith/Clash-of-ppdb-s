@@ -14,15 +14,20 @@ import Account from "./Account/account.jsx";
  */
 function MainPage()
 {
-    const [clicked, setClicked] = useState(false)
-    const [type, setType] = useState("")
+    const [buildings, setBuildings] = useState([/*{type:"WoodCuttersCamp", position:[5,5]}*/])
+    const addBuilding = (type, position) =>
+    {
+        setBuildings([...buildings, { type, position }]);
+    }
+
+
     return (
         <div className="background"> {/* Container for the background image */}
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu setClicked={setClicked} setType={setType}/>
-            <Grid typeChosen={clicked} type={type}/>
+            <Buildmenu addBuilding={addBuilding}/>
+            <Grid buildings={buildings}/>
             <ResourceBar/>
 
             {/*<Map/>*/}

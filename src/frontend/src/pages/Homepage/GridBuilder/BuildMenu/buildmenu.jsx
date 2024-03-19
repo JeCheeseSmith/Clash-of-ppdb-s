@@ -24,15 +24,14 @@ import Barracks from './Assets/barracks.png'
  * @returns {JSX.Element} JSX representation of the BuildMenu component.
  */
 
-function BuildMenu({setClicked, setType})
+function BuildMenu({addBuilding})
 {
   // State variable to track the visibility of the build menu
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const buildType = (type) =>
+  const buildType = (type, position) =>
   {
-      setClicked(true)
-      setType(type)
+      addBuilding(type, position)
   };
 
 
@@ -145,15 +144,20 @@ function BuildOptions({ menuVisible, setMenuVisible, buildType}) {
 
 
 
-function Production({buildType})
+function getRandomPosition()
 {
+  return [Math.floor(Math.random() * 36) + 2, Math.floor(Math.random() * 36) + 2];
+}
+
+
+function Production({buildType}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={WoodCuttersCamp} className="small-image" onClick={() => buildType("WoodCuttersCamp")}/>
-        <img src={Quarry} className="small-image" onClick={() => buildType("Quarry")}/>
-        <img src={SteelMine} className="small-image" onClick={() => buildType("SteelMine")}/>
-        <img src={Farm} className="small-image" onClick={() => buildType("Farm")}/>
+        <img src={WoodCuttersCamp} className="small-image" onClick={() => buildType("WoodCuttersCamp", getRandomPosition())}/>
+        <img src={Quarry} className="small-image" onClick={() => buildType("Quarry", getRandomPosition())}/>
+        <img src={SteelMine} className="small-image" onClick={() => buildType("SteelMine", getRandomPosition())}/>
+        <img src={Farm} className="small-image" onClick={() => buildType("Farm", getRandomPosition())}/>
       </div>
     </div>
   );
@@ -161,52 +165,50 @@ function Production({buildType})
 
 function Defense({buildType}) {
   return (
-      <div className="type-container">
-        <div className="image-scroll-container">
-        <img src={Stables} className="small-image"  onClick={() => buildType("Stables")}/>
-        <img src={ArcherTower} className="small-image" onClick={() => buildType("ArcherTower")}/>
-        <img src={LookoutTower} className="small-image" onClick={() => buildType("LookoutTower")}/>
-        <img src={BlackSmith} className="small-image" onClick={() => buildType("BlackSmith")}/>
-        <img src={Tavern} className="small-image" onClick={() => buildType("Tavern")}/>
-        <img src={TrainingYard} className="small-image" onClick={() => buildType("TrainingYard")}/>
+    <div className="type-container">
+      <div className="image-scroll-container">
+        <img src={Stables} className="small-image" onClick={() => buildType("Stables", getRandomPosition())}/>
+        <img src={ArcherTower} className="small-image" onClick={() => buildType("ArcherTower", getRandomPosition())}/>
+        <img src={LookoutTower} className="small-image" onClick={() => buildType("LookoutTower", getRandomPosition())}/>
+        <img src={BlackSmith} className="small-image" onClick={() => buildType("BlackSmith", getRandomPosition())}/>
+        <img src={Tavern} className="small-image" onClick={() => buildType("Tavern", getRandomPosition())}/>
+        <img src={TrainingYard} className="small-image" onClick={() => buildType("TrainingYard", getRandomPosition())}/>
       </div>
     </div>
   );
 }
 
-function Storage({buildType})
-{
+function Storage({buildType}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={GrainSilo} className="small-image" onClick={() => buildType("GrainSilo")}/>
-        <img src={StoneStockpile} className="small-image" onClick={() => buildType("StoneStockpile")}/>
-        <img src={Armory} className="small-image" onClick={() => buildType("Armory")}/>
-        <img src={WoodStockpile} className="small-image" onClick={() => buildType("WoodStockpile")}/>
+        <img src={GrainSilo} className="small-image" onClick={() => buildType("GrainSilo", getRandomPosition())}/>
+        <img src={StoneStockpile} className="small-image" onClick={() => buildType("StoneStockpile", getRandomPosition())}/>
+        <img src={Armory} className="small-image" onClick={() => buildType("Armory", getRandomPosition())}/>
+        <img src={WoodStockpile} className="small-image" onClick={() => buildType("WoodStockpile", getRandomPosition())}/>
       </div>
     </div>
   );
 }
 
-function Governmental({buildType})
-{
-  return (
-    <div className="type-container">
-        <div className="image-scroll-container">
-            <img src={Castle} className="small-image" onClick={() => buildType("Castle")}/>
-        </div>
-    </div>
-  );
-}
-
-function Military({buildType})
-{
+function Governmental({buildType}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <img src={Barracks} className="small-image" onClick={() => buildType("Barracks")}/>
+        <img src={Castle} className="small-image" onClick={() => buildType("Castle", getRandomPosition())}/>
       </div>
     </div>
   );
 }
+
+function Military({buildType}) {
+  return (
+    <div className="type-container">
+      <div className="image-scroll-container">
+        <img src={Barracks} className="small-image" onClick={() => buildType("Barracks", getRandomPosition())}/>
+      </div>
+    </div>
+  );
+}
+
 export default BuildMenu;

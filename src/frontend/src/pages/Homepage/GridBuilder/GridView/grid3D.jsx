@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import './grid3D.css'
@@ -18,7 +18,6 @@ import Armory from "./models/Armory.jsx";
 import WoodStockpile from "./models/WoodStockpile.jsx";
 import Castle from "./models/Castle.jsx";
 import Barracks from "./models/Barracks.jsx";
-import POST from "../../../../api/POST.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -49,41 +48,47 @@ const BuildingComponents = {
     // Military //
     Barracks
 };
-function Grid({typeChosen, type})
+function Grid({buildings})
 {
     const gridSize = 40;
-    const Building = BuildingComponents[type]
     // State variable to hold the coordinates of the house
-    const [buildingPosition, setBuildingPosition] = useState({location:[4, 3]}); // Initial position
-    const handleCellClick = async (rowIndex, colIndex) =>
-    {
-        setBuildingPosition({location: [rowIndex, colIndex]})
-    };
+    // const [buildingPosition, setBuildingPosition] = useState({location:[4, 3]}); // Initial position
+    // const handleCellClick = async (rowIndex, colIndex) =>
+    // {
+    //     setBuildingPosition({location: [rowIndex, colIndex]})
+    // };
 
     const renderCell = (rowIndex, colIndex) =>
     {
-        if (rowIndex === buildingPosition.location[0] && colIndex === buildingPosition.location[1])
+        let buildingFound = false;
+        for (let building of buildings)
         {
-            // Calculate the center position of the cell
-            const centerX = colIndex + 0.5;
-            const centerY = rowIndex + 0.5;
-            return (
-                <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
-                    {typeChosen && <Building/>}
-                </mesh>
-            );
+            if (rowIndex === building.position[0] && colIndex === building.position[1]) {
+                // Calculate the center position of the cell
+                const centerX = colIndex + 0.5;
+                const centerY = rowIndex + 0.5;
+                buildingFound = true;
+                const Building = BuildingComponents[building.type]
+                return (
+                    <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
+                        <Building />
+                    </mesh>
+                );
+            }
         }
-        else
+        if (!buildingFound)
         {
             return (
-                <gridHelper key={`${rowIndex}-${colIndex}`}
-                            position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
-                            args={[1, 1]}
-                            onClick={() => handleCellClick(rowIndex, colIndex)}
+                <gridHelper
+                    key={`${rowIndex}-${colIndex}`}
+                    position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
+                    args={[1, 1]}
+                    // onClick={() => handleCellClick(rowIndex, colIndex)}
                 />
             );
         }
     };
+
 
     return (
         <Suspense fallback={null}>
