@@ -3,6 +3,16 @@ import './communication.css'
 import GET from "../../../api/GET.jsx";
 import {useLocation} from "react-router-dom";
 
+/**
+ * Component for communication buttons.
+ * @param {Object} props - The props object.
+ * @param {string} props.type - The type of communication button ('chat' or 'social').
+ * @param {Function} props.buttonFunction - Function to handle button click event.
+ * @param {boolean} props.visible - Flag indicating visibility of the button.
+ * @param {Object} props.buttonAudio - Audio object for button sound (only required for social buttons).
+ * @param {Function} props.setVariable - Function to set a variable (only required for chat buttons).
+ * @returns {JSX.Element} - The JSX for communication buttons.
+ */
 function CommunicationButton({type, buttonFunction, visible, buttonAudio, setVariable})
 {
     return (
@@ -17,6 +27,14 @@ function CommunicationButton({type, buttonFunction, visible, buttonAudio, setVar
     )
 }
 
+/**
+ * Component for chat button.
+ * @param {Object} props - The props object.
+ * @param {Function} props.toggleChatVisibility - Function to toggle chat visibility.
+ * @param {boolean} props.chatVisible - Flag indicating chat visibility.
+ * @param {Function} props.setContactList - Function to set the contact list.
+ * @returns {JSX.Element} - The JSX for chat button.
+ */
 function ChatButton({toggleChatVisibility, chatVisible, setContactList})
 {
     const username = useLocation().state.username || {};
@@ -33,6 +51,13 @@ function ChatButton({toggleChatVisibility, chatVisible, setContactList})
     )
 }
 
+/**
+ * Component for social button.
+ * @param {Object} props - The props object.
+ * @param {Function} props.toggleSocialVisibility - Function to toggle social visibility.
+ * @param {Function} props.playSocial - Function to play social audio.
+ * @returns {JSX.Element} - The JSX for social button.
+ */
 function SocialButton({toggleSocialVisibility, playSocial}) {
     return (
         <button onClick={() => {toggleSocialVisibility(); playSocial();}} className={"toggle-social-button"}>
