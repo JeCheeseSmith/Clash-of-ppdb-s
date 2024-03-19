@@ -1,5 +1,4 @@
-from src.dataAcces.content import *
-
+from .content import *
 
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout, pid):

@@ -1,4 +1,4 @@
-from src.dataAcces.clan import *
+from .clan import *
 
 
 class Friend:
