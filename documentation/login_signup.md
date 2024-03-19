@@ -1,0 +1,26 @@
+# Login page 
+
+The LoginPage function, defined in login.jsx, is responsible for rendering the login interface.
+
+This function has three states: username, password and errormessage. Initially, the value of each state is set to an empty string.
+
+This component returns a JSX that contains the layout of the log-in page. The JSX uses styles from 'login_signup.css'. 
+The layout includes input elements for the username and password, which are connected to the 'handleUsernameChange' and 'handlePasswordChange' event handlers, respectively. 
+These event handlers update the 'username' and 'password' state variables as the user types something in the input-box.
+
+When you click on the sign-up button, the event handler "HandleSignUpClick" is called. This event handler handles the navigation from the log-in page to the sign-up page.
+When you click on the login button, the event handler "HandleLoginClick" is called. This event handler checks if a user already exists by calling the API. 
+If the user exists, then the settlement ID (sid), which is returned by the API, is stored and navigation to the main page is initiated. 
+If the login fails, the errormessage state is updated to inform the user of incorrect credentials, displayed alongside an exclamation icon.
+
+# Sign-up page
+
+The function "RegistrationPage()", defined in the signUp.jsx file, is the component that generates the registration interface. 
+
+This function works similarly to the LoginPage() function but is designed with different steps specifically for signing up.
+
+The event handler "HandleLoginClick" is replaced by "HandleSaveClick". This event handler first makes sure that something has been entered in the input box, as the username cannot be left blank. 
+Next, it checks if the username already exists by consulting the database through an API call. If the username is not taken, the new user can proceed with the registration. 
+Their settlement ID (sid) will be saved, and they will be directed to the main page. If the username is already taken, an error message will appear, indicating that the user already exists.
+
+
