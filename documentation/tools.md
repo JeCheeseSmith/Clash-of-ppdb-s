@@ -14,7 +14,7 @@
 
 **src/frontend** All files from the React.js Frontend
 
-**src/backend** All files from the Flask Backend
+**src/ and src/dataAcces** Files from the Flask Backend
 
 ### Use of Technology
 
