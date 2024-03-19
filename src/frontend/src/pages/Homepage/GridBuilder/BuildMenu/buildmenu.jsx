@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './buildmenu.css'
 import './buildmenuOptionsContents.css'
-import WoodCuttersCamp from './Assets/house.png';
+import WoodCuttersCamp from './Assets/woodcutterscamp.png';
 import Quarry from './Assets/quarry.png';
 import SteelMine from './Assets/steelmine.png';
 import Farm from './Assets/farm.png';
