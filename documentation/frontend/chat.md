@@ -1,6 +1,6 @@
 # Chat
 > This documentation explains the working of the chat component.
-> See also: [socialBox](Socialsystem.md)
+> See also: [socialBox](socialSystem)
 
 When hitting the chat icon, a module will flow open with a welcomest message.
 

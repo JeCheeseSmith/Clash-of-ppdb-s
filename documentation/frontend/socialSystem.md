@@ -8,7 +8,7 @@ When sending a friend request on the frontend, a POST request is send to '/sendf
 
 This function extracts the data from the provided JSON into a message object. Using the friend_data_access, a backend function `Friendrequest(self, request, sname)` is called using this message object and sname from the JSON file.
 
-This function inserts a friendrequest into the database.
+This function inserts a friend request into the database.
 
 #### Clans
 
