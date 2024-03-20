@@ -211,7 +211,7 @@ INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeRe
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Wood','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stone','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Steel','storage','10000*(2*x)','600*x','(2000*2^(x))/2',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Food','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('grainSilo','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
 
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stables','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('ArcherTower','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
