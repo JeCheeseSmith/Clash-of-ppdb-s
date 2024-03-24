@@ -28,11 +28,11 @@ This table gives an overview for each building. Make sure to look into the respe
 
 ### Production buildings
 
-These building have the function to make resources over time.
+These building have the function to make resources over time. The function specifies how many / time interval.
 
 ### Storage buildings
 
-These buildings expand a settlements storage amount for different types of resources.
+These buildings expand a settlements storage amount for different types of resources. The function specifies the storage with level as input.
 
 ### Governmental buildings
 
@@ -40,7 +40,7 @@ These buildings unlock certain areas of the game.
 
 ### Defensive buildings
 
-These buildings let the player gain advantages as the defendant in an attack.
+These buildings let the player gain advantages as the defendant in an attack. Function defines the bonus amount, input x = level of the building.
 
 ### Castle
 
@@ -85,7 +85,7 @@ The SatelliteCastle is only present in Settlement Outposts, and are the replacem
 
 ##### Chancery
 
-The chancery gives the oppertunity to create SatelliteCastles.
+The chancery gives the oppertunity to create a number of outposts.
 
 | level | Possible extra cities |
 |-------|-----------------------|
