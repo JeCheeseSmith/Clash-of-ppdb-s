@@ -1,4 +1,5 @@
 from .content import *
+from .package import *
 
 
 class Player:
@@ -34,7 +35,7 @@ class PlayerDataAccess:
         else:
             return False, None
 
-    def add_user(self, obj, settlement_data_acces, content_data_access):
+    def add_user(self, obj, settlement_data_acces, content_data_access, package_data_acces):
         """
         Initialise all standard data for the user.
         - Create a player in the database
@@ -51,12 +52,10 @@ class PlayerDataAccess:
                 (obj.name, obj.password, obj.xp, obj.gems, obj.level, obj.avatar))
 
             # Create a package for the settlement
-            cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,0,0);',
-                           (500, 500, 500, 500))  # All resource are initialised at the maximum
+            pid = package_data_acces.add_resources(
+                Package([0, 500, 500, 500, 500, 0, 0]))  # All resource are initialised at the maximum
 
             # Create a settlement & link the package
-            cursor.execute('SELECT max(id) FROM package;')
-            pid = cursor.fetchone()
             location = settlement_data_acces.getNewCoordinate()
             cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname,level) VALUES(%s,%s,%s,%s,%s,%s);',
                            (obj.name + " Castle", location[0], location[1], pid, obj.name, 1))
