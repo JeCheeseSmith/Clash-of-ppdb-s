@@ -34,6 +34,33 @@ class Package:
         self.xp += other.xp
         return self
 
+    def __neg__(self):
+        """
+        Overloaded negation operator
+        :return:
+        """
+        self.stone *= -1
+        self.wood *= -1
+        self.steel *= -1
+        self.food *= -1
+        self.gems *= -1
+        self.xp *= -1
+        return self
+
+    def __sub__(self, other):
+        """
+        Overload of - operator to calculate the difference of packages
+        :param other: Package Object to take the difference with
+        :return: Result
+        """
+        self.stone -= other.stone
+        self.wood -= other.wood
+        self.steel -= other.steel
+        self.food -= other.steel
+        self.gems -= other.gems
+        self.xp -= other.xp
+        return self
+
     @staticmethod
     def upgradeCost(upgradeResource: int, amount: int):
         """
@@ -105,7 +132,7 @@ class PackageDataAccess:
 
         return pid
 
-    def update_recources(self, package):
+    def update_resources(self, package):
         """
         Updates the values of an already existing package in the database
         :param package: Package Object
@@ -113,7 +140,8 @@ class PackageDataAccess:
         cursor = self.dbconnect.get_cursor()
         cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s , gems = %s , '
                        'xp = %s WHERE id=%s;',
-                       (package.stone, package.wood, package.steel, package.food, package.gems, package.xp, package.id))
+                       (package.stone, package.wood, package.steel, package.food, package.gems, package.xp,
+                        package.id))
         self.dbconnect.commit()
 
     def calc_resources(self, timestamp):
@@ -138,6 +166,8 @@ class PackageDataAccess:
         :param x: Variable in the function
         :return:
         """
-        if function[0] == 0:  # [0,4000,0]: A zero at the begin, means that x should be calculate as 2^x
+        if isinstance(function, tuple):  # Prevent weird python bug where function is converted to a tuple of lists
+            function = function[0]
+        if function[0] == 0:  # [0,4000,0]: A zero at the beginning, means that x should be calculated as 2^x
             x = int(exp2(x))
-        return polyval(function, x)
+        return int(polyval(function, x))
