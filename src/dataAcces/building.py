@@ -1,27 +1,31 @@
 class Buildable:
-    def __init__(self, name, btype, function, storage, cost, drawback):
+    def __init__(self, name, btype, function, upgradeFunction: list, upgradeResource, timeFunction):
         self.name = name
         self.type = btype
         self.function = function
-        self.storage = storage
-        self.cost = cost,
-        self.drawback = drawback
+        self.upgradeFunction = upgradeFunction,
+        self.upgradeResource = upgradeResource
+        self.timeFunction = timeFunction
 
     def to_dct(self):
-        return dict(name=self.name, type=self.type, function=self.function, storage=self.storage, cost=self.cost, drawback=self.drawback)
+        return dict(name=self.name, type=self.type, function=self.function, upgradeFunction=self.upgradeFunction,
+                    upgradeResource=self.upgradeResource, timeFunction=self.timeFunction)
 
 
 class Building(Buildable):
-    def __init__(self, name, btype, function, storage, cost, drawback, id, level, gridX, gridY):
-        super(Buildable, self).__init__(name, btype, function, storage, cost, drawback)
+    def __init__(self, name, btype, function, upgradeFunction: list, upgradeResource, timeFunction, id, level, gridX, gridY,
+                 sid):
+        Buildable.__init__(self,name, btype, function, upgradeFunction, upgradeResource, timeFunction)
         self.id = id
         self.level = level
         self.gridX = gridX
         self.gridY = gridY
+        self.sid = sid
 
     def to_dct(self):
-        return dict(name=self.name, type=self.type, function=self.function, storage=self.storage, level=self.level,
-                    id=self.id, gridX=self.gridX, gridY=self.gridY, cost=self.cost, drawback=self.drawback)
+        return dict(name=self.name, type=self.type, function=self.function, upgradeFunction=self.upgradeFunction,
+                    upgradeResource=self.upgradeResource, timeFunction=self.timeFunction, level=self.level,
+                    id=self.id, gridX=self.gridX, gridY=self.gridY, sid=self.sid)
 
 
 class BuildableDataAccess:

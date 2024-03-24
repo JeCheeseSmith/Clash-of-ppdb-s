@@ -33,7 +33,7 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | [admin](#admin)                     | Contains the users who are also admins                                         |
 | [clan](#clan)                       | Contains all current clans and their info                                      |
 | [achievement](#achievement)         | Stores the different achievements                                              |
-| [quest](#quest)                     | Specialization upon achievements| favoring a deadline                          |
+| [quest](#quest)                     | Specialization upon achievements                                               | favoring a deadline                          |
 | [transfer](#transfer)               | Keeps all the active transfers between settlements                             |
 | [buildable](#buildable)             | All possible buildings to build                                                |
 | [building](#building)               | Actual buildable placed into a settlement                                      |
@@ -41,18 +41,18 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 ### Relational Tables
 > These tables are used to implemented relations between entities from the table.
 
-| Table                                   | Function                                                                     |
-|-----------------------------------------|------------------------------------------------------------------------------|
-| [friend](#friend)                       | Stores the friended relation between users                                   |
-| [member](#member)                       | Stores the members of a clan                                                 |
-| [retrieved](#retrieved)                 | Keeps track of the messages delivered to a receiving user                    |
-| [shared](#shared)                       | Messages displayed in a groupschat from a clan                               |
-| [intercept](#intercept)                 | Contains the transfers that intercept each other                             |
-| [troops](#troops)                       | Relation to stores troops connected to a package                             |
-| [unlockedBuildable](#unlockedBuildable) | Relation to express if a building is unlocked                                |
-| [unlockedsoldier](#unlockedsoldier)     | Relation to express if a soldier is unlocked                                 |
-| [wheelofFortune](#wheelofFortune)       | Interactive relation for the spin on the Wheel of Fortune| storing packagaes |
-| [achieved](#achieved)                   | Stores the achievements a player made                                        |
+| Table                                   | Function                                                  |
+|-----------------------------------------|-----------------------------------------------------------|
+| [friend](#friend)                       | Stores the friended relation between users                |
+| [member](#member)                       | Stores the members of a clan                              |
+| [retrieved](#retrieved)                 | Keeps track of the messages delivered to a receiving user |
+| [shared](#shared)                       | Messages displayed in a groupschat from a clan            |
+| [intercept](#intercept)                 | Contains the transfers that intercept each other          |
+| [troops](#troops)                       | Relation to stores troops connected to a package          |
+| [unlockedBuildable](#unlockedBuildable) | Relation to express if a building is unlocked             |
+| [unlockedSoldier](#unlockedSoldier)     | Relation to express if a soldier is unlocked              |
+| [wheelofFortune](#wheelofFortune)       | Interactive relation for the spin on the Wheel of Fortune | storing packagaes |
+| [achieved](#achieved)                   | Stores the achievements a player made                     |
 
 ### soldier
 
@@ -259,10 +259,9 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 |-----------|---------|-----------------------------------------------------------------|
 | bname     | VARCHAR | REFERENCES buildable(name)                                      |
 | sid       | INT     | Buildable which is unlocked by the settlement, specified by sid |
-| level     | INT     | Level needed to unlock                                          |
 | maxNumber | INT     | Maximum number of entries a settlement may have of this type    |
 
-### unlockedsoldier
+### unlockedSoldier
 
 | Name      | Type    | Explanation                                                  |
 |-----------|---------|--------------------------------------------------------------|
