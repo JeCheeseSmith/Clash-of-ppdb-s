@@ -215,8 +215,8 @@ INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeRe
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','{25,20}','{600,0}','{400,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','{300,0}','{600,0}','{400,0}',12);
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('StoneStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',1);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('StoneStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',2);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Armory','storage','{20000,0}','{600,0}','{0,2000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('GrainSilo','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);
 

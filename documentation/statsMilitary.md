@@ -30,7 +30,7 @@ T2 & T3 units are also unlocked by reaching a certain level.
 
 Defensive Counter Building → **Training yard**
 
-### Spearmen
+### Spear Men
 | Tier | Name         | ⚔️   | ♥️   | 🛞   | 🧺 | 🥖 | 🧿 | ⌚   | 🔗 |
 |------|--------------|------|------|------|----|----|----|-----|----|
 | T1   | Guardsman	   | 12 	 | 12 	 | 1.3	 | 8	 | 2	 | 1	 | 10	 | 2  |
