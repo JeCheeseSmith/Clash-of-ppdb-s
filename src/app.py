@@ -240,6 +240,7 @@ def placeBuilding():
     "name": <STRING> | Unique name of the Buildable
     "gridX": <INT> | X coordinate on the grid
     "gridY": <INT> | Y coordinate on the grid
+    "sid": <INT> | Identifier of the settlement
     }
 
     JSON Output Format:
@@ -249,13 +250,9 @@ def placeBuilding():
     }
     """
     data = request.json
-    test = Building('Castle', 'Government', None, [0,-21600,0], None, [4000,1], None, 5, 0, 0, 1)
-
-
-    settlement_data_acces.placeBuilding(test)
-
-    return jsonify(test.to_dct())
-    pass
+    building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('gridX'), data.get('gridY'))  # Reform data
+    succes = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
+    return jsonify(dict(id=building.id, succes=succes))
 
 
 @app.route("/buildings", methods=["GET"])

@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS buildable(
     type VARCHAR NOT NULL,
     function FLOAT4[] NOT NULL, -- The mathematical function to evaluate the resource function with
     upgradeFunction INT[] NOT NULL,
-    upgradeResource SMALLINT NOT NULL, -- 1: Wood , 2: Stone, 3: Steel, 4: Food, 12: Stone & Wood
+    upgradeResource SMALLINT NOT NULL, -- 2: Wood , 1: Stone, 3: Steel, 4: Food, 12: Stone & Wood
     timeFunction INT[] NOT NULL
 );
 
@@ -197,15 +197,15 @@ CREATE TABLE IF NOT EXISTS achieved(
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','{0}','{21600,-21600}','{0,4000,0}',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','government','{0}','{21600,-21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','{0}','{21600,21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','government','{0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','{0}','{86400,0}','{0,32000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','{0}','{21600,0}','{0,4000,0}',12);
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodCuttersCamp','production','{200,0}','{600,0}','{400,0,-800}',2);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Quarry','production','{200,0}','{600,0}','{400,0,-800}',1);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','{25,20}','{600,0}','{400,0,-800}',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','{300,0}','{600,0}','{400,0,-800}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodCuttersCamp','production','{200,0}','{600,0}','{400,0}',1);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Quarry','production','{200,0}','{600,0}','{400,0}',2);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','{25,20}','{600,0}','{400,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','{300,0}','{600,0}','{400,0}',12);
 
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('StoneStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);

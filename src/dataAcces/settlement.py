@@ -1,8 +1,5 @@
-from numpy import polyval
-from numpy import exp2
 from .package import *
 from .building import *
-
 
 
 class Settlement:
@@ -73,7 +70,7 @@ class SettlementDataAcces:
                            (buildable, sid, 1))
 
         # Prebuild the Castle
-        self.insertBuilding(Building('Castle', 'Government', None, None, None, None, None, 1, 0, 0, sid),cursor)
+        self.insertBuilding(Building('Castle', 'Government', None, None, None, None, None, 1, 0, 0, sid))
 
         # Preset Unlocked Status for each soldier
         cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);',
@@ -85,40 +82,57 @@ class SettlementDataAcces:
 
         self.dbconnect.commit()
 
-    def insertBuilding(self, building: Building, cursor):
+    def insertBuilding(self, building: Building):
         """
         Helper function to insert a Building into the database
+
+        Also add an ID to the Object
+
         :param building: Data Object as defined in building.py
-        :param cursor: Database Acces
         :return:
         """
-        cursor.execute('INSERT INTO building(name, level, gridx, gridy, sid) VALUES (%s,%s,%s,%s,%s);',
-                       (building.name, building.level, building.gridX, building.gridY, building.sid))
+        cursor = self.dbconnect.get_cursor()
 
-    def placeBuilding(self, building: Building):
+        cursor.execute('INSERT INTO building(name, level, gridx, gridy, sid) VALUES (%s,%s,%s,%s,%s);',
+                       (building.name, building.level, building.gridX, building.gridY,
+                        building.sid))  # Insert the Building
+        cursor.execute('SELECT max(id) FROM building;')  # Retrieve building ID; gets added in database as SERIAL
+        building.id = cursor.fetchone()[0]  # Set building ID
+
+        self.dbconnect.commit()
+
+    def placeBuilding(self, building: Building, package_data_acces):
         try:
             cursor = self.dbconnect.get_cursor()
 
             # Calculate Upgrade Costs
-            print(PackageDataAccess.evaluate(building.upgradeFunction[0],building.level))
-
-
+            cost = PackageDataAccess.evaluate(building.upgradeFunction,
+                                              building.level)  # Each type has a specific upgrade function with a
+            # level as input
 
             # Make a Resource Deficit
+            deficit = Package.upgradeCost(building.upgradeResource, cost)
+            cursor.execute('SELECT * FROM package WHERE id IN (SELECT pid FROM settlement WHERE id=1);',
+                           (building.sid,))  # Get the current amount of resources
+            total = cursor.fetchone()
+            total = Package(total)  # Convert to Package Object
+            total -= deficit  # Do arithmetic
 
-            # Insert into Database
-            #self.insertBuilding(building,cursor)
+            if total.hasNegativeBalance():  # Not enough resources :(
+                raise Exception()
+
+            # Insert into Database & Adjust resource amount
+            self.insertBuilding(building)
+            package_data_acces.update_resources(total)
 
             self.dbconnect.commit()
             return True
         except:
             self.dbconnect.rollback()
             return False
+
     def getBuildings(self, id):
-
         pass
-
-
 
     def createOutPost(self):
         pass
