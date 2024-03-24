@@ -9,6 +9,8 @@ We would like to store the majority of our information in the database. This all
 3. An Update/Report should be created by the system/admin user.
 4. A package consists of resources and troops. The troops themselves can be transferable or not. All troops are used to defend the package.
 5. A transfer has a relation from and a relation to| to a settlement. This way a transfer can be easily changed to be captured by another nation.
+6. The format we use for polynomial functions is e.g.: [50,5,10] which translates to f(x)=50x^2 + 5x + 10. The array length is undefined, however it may not start with a **0**!
+7. The format we use for exponantial function is e.g.: [0,50,1] which translates to: 50* **2^x** + 1. This form can only be expressed in an array of length 2.
 
 A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole current database and creates a new one.
 
@@ -188,14 +190,14 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### buildable
 
-| Name            | Type      | Explanation                                                                                         |
-|-----------------|-----------|-----------------------------------------------------------------------------------------------------|
-| name            | VARCHAR   | PRIMARY KEY                                                                                         |
-| type            | VARCHAR   | The type of the building; Political,  Decoration, Resources, ...                                    |
-| function        | TEXT      | The mathematical function to evaluate the resource function with                                    |
-| upgradeFunction | TEXT      | Mathematical formula that takes the level as input to calculate upgrade resource                    |
-| upgradeResource | SMALL INT | Defines which resources are needed to build: 1: Stone, 2: Wood, 3: Steel, 4: Food, 12: Stone & Wood |
-| timeFunction    | TEXT      | Mathematical formula that describes the building time needed                                        |
+| Name            | Type     | Explanation                                                                                        |
+|-----------------|----------|----------------------------------------------------------------------------------------------------|
+| name            | VARCHAR  | PRIMARY KEY                                                                                        |
+| type            | VARCHAR  | The type of the building; Political,  Decoration, Resources, ...                                   |
+| function        | TEXT     | The mathematical function to evaluate the resource function with                                   |
+| upgradeFunction | TEXT     | Mathematical formula that takes the level as input to calculate upgrade resource                   |
+| upgradeResource | SMALLINT | Defines which resources are needed to build: 1: Stone, 2: Wood, 3: Steel, 4: Food, 12: Stone & Wood |
+| timeFunction    | TEXT     | Mathematical formula that describes the building time needed                                       |
 
 ### building
 
