@@ -6,7 +6,8 @@ DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
 CREATE TABLE IF NOT EXISTS soldier(
-    name VARCHAR PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR UNIQUE,
     type VARCHAR,
     health INT,
     damage INT,
@@ -196,7 +197,7 @@ CREATE TABLE IF NOT EXISTS achieved(
 );
 
 CREATE TABLE IF NOT EXISTS timer(
-    id TEXT, -- ID Of the Object (can be converted to a numerical value depending on the type
+    id INT, -- ID Of the Object (can be converted to a numerical value depending on the type
     type TEXT, -- 'building' , 'soldier', 'transfer' , ...
     start TIMESTAMP NOT NULL,
     done TIMESTAMP NOT NULL,
@@ -205,7 +206,7 @@ CREATE TABLE IF NOT EXISTS timer(
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','{0}','{21600,21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','{500,0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','government','{0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','{0}','{86400,0}','{0,32000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','{0}','{21600,0}','{0,4000,0}',12);
