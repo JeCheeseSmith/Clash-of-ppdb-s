@@ -191,8 +191,16 @@ CREATE TABLE IF NOT EXISTS wheelofFortune(
 CREATE TABLE IF NOT EXISTS achieved(
     pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
     aname VARCHAR REFERENCES achievement(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    moment TIMESTAMP,
+    moment TIMESTAMP NOT NULL ,
     PRIMARY KEY (pname,aname)
+);
+
+CREATE TABLE IF NOT EXISTS timer(
+    id TEXT, -- ID Of the Object (can be converted to a numerical value depending on the type
+    type TEXT, -- 'building' , 'soldier', 'transfer' , ...
+    start TIMESTAMP NOT NULL,
+    done TIMESTAMP NOT NULL,
+    PRIMARY KEY (id,type)
 );
 
 -- Insert standard buildings
