@@ -35,7 +35,7 @@ class Package:
         return self
 
     @staticmethod
-    def __upgradeCost(upgradeResource: int, amount: int):
+    def upgradeCost(upgradeResource: int, amount: int):
         """
         Helper function to transform an upgradeResource and an amount into package
         :param upgradeResource: Identifier for the resource type/Index Array
@@ -53,6 +53,22 @@ class Package:
         elif upgradeResource == 12:  # E.g. Stone AND Wood
             return Package([0, amount, amount, 0, 0, 0, 0])
 
+    def hasNegativeBalance(self):
+        """
+        Returns True if any of the resource has a negative amount
+        :return:
+        """
+        if self.stone < 0:
+            return True
+        elif self.wood < 0:
+            return True
+        elif self.steel < 0:
+            return True
+        elif self.wood < 0:
+            return True
+        else:
+            return False
+
 
 class PackageDataAccess:
     def __init__(self, dbconnect):
@@ -67,6 +83,38 @@ class PackageDataAccess:
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT * FROM package WHERE id=%s;', pid)
         return Package(cursor.fetchone())
+
+    def add_resources(self, package):
+        """
+        Creates a new package in the database
+        :param package: Package Object
+        :return: ID of the package in the database
+        """
+
+        # Insert into the database
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,%s,%s);',
+                       (package.stone, package.wood, package.steel, package.food, package.xp, package.gems))
+
+        # Retrieved pid
+        cursor.execute('SELECT max(id) FROM package;')
+        pid = cursor.fetchone()
+        package.id = pid
+
+        self.dbconnect.commit()
+
+        return pid
+
+    def update_recources(self, package):
+        """
+        Updates the values of an already existing package in the database
+        :param package: Package Object
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s , gems = %s , '
+                       'xp = %s WHERE id=%s;',
+                       (package.stone, package.wood, package.steel, package.food, package.gems, package.xp, package.id))
+        self.dbconnect.commit()
 
     def calc_resources(self, timestamp):
         """

@@ -51,7 +51,7 @@ def add_player():
     name = data.get("name")
     password = data.get("password")
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
-    Controle = player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access)
+    Controle = player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     if Controle[0]:
         friend_data_access.add_admin(name)
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
@@ -250,6 +250,8 @@ def placeBuilding():
     """
     data = request.json
     test = Building('Castle', 'Government', None, [0,-21600,0], None, [4000,1], None, 5, 0, 0, 1)
+
+
     settlement_data_acces.placeBuilding(test)
 
     return jsonify(test.to_dct())
