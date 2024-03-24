@@ -1,8 +1,13 @@
 from numpy import polyval
 from numpy import exp2
 
+
 class Package:
     def __init__(self, args):
+        """
+        Standard constructor
+        :param args: 0: id, 1: stone, 2: wood, 3: steel, 4: food, 5: gems, 6: xp
+        """
         self.id = args[0]
         self.stone = args[1]
         self.wood = args[2]
@@ -14,6 +19,28 @@ class Package:
     def to_dct(self):
         return dict(id=self.id, stone=self.stone, wood=self.wood, steel=self.steel, food=self.food, gems=self.gems,
                     xp=self.xp)
+
+    def __add__(self, other):
+        self.stone += other.stone
+        self.wood += other.wood
+        self.steel += other.steel
+        self.food += other.steel
+        self.gems += other.gems
+        self.xp += other.xp
+        return self
+
+    @staticmethod
+    def __upgradeCost(upgradeResource: int, cost: int):
+        if upgradeResource == 1:
+            return Package([0, cost, 0, 0, 0, 0, 0])
+        elif upgradeResource == 2:
+            return Package([0, 0, cost, 0, 0, 0, 0])
+        elif upgradeResource == 3:
+            return Package([0, 0, 0, cost, 0, 0, 0])
+        elif upgradeResource == 4:
+            return Package([0, 0, 0, 0, cost, 0, 0])
+        elif upgradeResource == 12:
+            return Package([0, cost, cost, 0, 0, 0, 0])
 
 
 class PackageDataAccess:
