@@ -1,6 +1,6 @@
-import React, {Suspense} from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import React, {Suspense, useRef, useState} from 'react';
+import {Canvas, useFrame} from '@react-three/fiber';
+import {Float, OrbitControls} from '@react-three/drei';
 import './grid3D.css'
 import WoodCuttersCamp from "./models/WoodCuttersCamp.jsx";
 import Quarry from "./models/Quarry.jsx";
@@ -62,19 +62,47 @@ const BuildingComponents = {
 
 function Grid({buildings, position, setPosition})
 {
+    const [floating, setFloating] = useState(false)
     const gridSize = 40;
     // State variable to hold the coordinates of the house
-    const handleCellClick = async (rowIndex, colIndex) =>
+    const handleCellClick = (rowIndex, colIndex) =>
     {
         for (let building of buildings)
         {
             if (building.position === position)
             {
-                setPosition([45,45])
+                setPosition()
                 building.position = [rowIndex,colIndex]
             }
         }
     };
+
+    const handleObjectClick = (building) =>
+    {
+        setFloating(!floating)
+    }
+
+    const BuildingMesh = ({building, position}) =>
+    {
+        const meshRef = useRef(); // Define the useRef hook here
+        useFrame(() =>
+        {
+            // This function will be called on every frame update
+            if (floating)
+            {
+                meshRef.current.position.y = Math.sin(Date.now() * 0.002) + 7; // Adjust the amplitude and speed as needed
+            }
+        });
+        const centerX = position[0] + 0.5;
+        const centerY = position[1] + 0.5;
+        const Building = BuildingComponents[building.type];
+        return (
+            <mesh ref={meshRef} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]} onClick={() => handleObjectClick(building)}>
+                <Building />
+            </mesh>
+        );
+    };
+
 
     const renderCell = (rowIndex, colIndex) =>
     {
@@ -83,25 +111,18 @@ function Grid({buildings, position, setPosition})
         {
             if (rowIndex === building.position[0] && colIndex === building.position[1]) {
                 // Calculate the center position of the cell
-                const centerX = colIndex + 0.5;
-                const centerY = rowIndex + 0.5;
                 buildingFound = true;
-                const Building = BuildingComponents[building.type]
                 return (
-                    <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
-                        <Building />
-                    </mesh>
+                    <BuildingMesh position={[rowIndex,colIndex]} key={`${rowIndex}-${colIndex}`} building={building} />
                 );
             }
         }
-        if (!buildingFound)
-        {
+        if (!buildingFound) {
             return (
                 <gridHelper
                     key={`${rowIndex}-${colIndex}`}
                     position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
                     args={[1, 1]}
-                    onClick={() => handleCellClick(rowIndex, colIndex)}
                 />
             );
         }
