@@ -21,6 +21,11 @@ class Package:
                     xp=self.xp)
 
     def __add__(self, other):
+        """
+        Overload of + operator to calculate the sum of packages
+        :param other: Package Object to take the sum with
+        :return: Result
+        """
         self.stone += other.stone
         self.wood += other.wood
         self.steel += other.steel
@@ -30,17 +35,23 @@ class Package:
         return self
 
     @staticmethod
-    def __upgradeCost(upgradeResource: int, cost: int):
-        if upgradeResource == 1:
-            return Package([0, cost, 0, 0, 0, 0, 0])
-        elif upgradeResource == 2:
-            return Package([0, 0, cost, 0, 0, 0, 0])
+    def __upgradeCost(upgradeResource: int, amount: int):
+        """
+        Helper function to transform an upgradeResource and an amount into package
+        :param upgradeResource: Identifier for the resource type/Index Array
+        :param amount: Number of resources
+        :return:
+        """
+        if upgradeResource == 1:  # Stone
+            return Package([0, amount, 0, 0, 0, 0, 0])
+        elif upgradeResource == 2:  # Wood
+            return Package([0, 0, amount, 0, 0, 0, 0])
         elif upgradeResource == 3:
-            return Package([0, 0, 0, cost, 0, 0, 0])
+            return Package([0, 0, 0, amount, 0, 0, 0])
         elif upgradeResource == 4:
-            return Package([0, 0, 0, 0, cost, 0, 0])
-        elif upgradeResource == 12:
-            return Package([0, cost, cost, 0, 0, 0, 0])
+            return Package([0, 0, 0, 0, amount, 0, 0])
+        elif upgradeResource == 12:  # E.g. Stone AND Wood
+            return Package([0, amount, amount, 0, 0, 0, 0])
 
 
 class PackageDataAccess:
