@@ -1,5 +1,6 @@
 from .content import *
 
+
 class Player:
     def __init__(self, name, password, avatar, gems, xp, level, logout, pid):
         self.name = name
@@ -57,18 +58,19 @@ class PlayerDataAccess:
             cursor.execute('SELECT max(id) FROM package;')
             pid = cursor.fetchone()
             location = settlement_data_acces.getNewCoordinate()
-            cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES(%s,%s,%s,%s,%s);',
-                           (obj.name + " Castle", location[0], location[1], pid, obj.name))
+            cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname,level) VALUES(%s,%s,%s,%s,%s,%s);',
+                           (obj.name + " Castle", location[0], location[1], pid, obj.name, 1))
 
             # Get the settlement ID
             cursor.execute('SELECT max(id) FROM settlement;')
             sid = cursor.fetchone()[0]
-
             self.dbconnect.commit()
+
+            # Initialise the standard values
+            settlement_data_acces.initialise(sid)
 
             # Send a message to the user from the system
             content_data_access.add_message(Content(None, None, "Welcome to Travisia!", "admin"), obj.name)
-
             return True, sid
         except Exception as e:
             print("Error:", e)

@@ -171,3 +171,4 @@ Damage bonus for units die overeenkomen met het type van dit gebouw is level \* 
 | level | upgrade cost function (wood & stone) | upgrade time |
 | ----- | ------------------------------------ | ------------ |
 | 1-?   | f(x) = upgrade cost townhall level x | 6 hour \* x  |
+

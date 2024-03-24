@@ -1,3 +1,6 @@
+from numpy import polyval
+from numpy import exp2
+
 class Package:
     def __init__(self, args):
         self.id = args[0]
@@ -40,3 +43,15 @@ class PackageDataAccess:
         :return:
         """
         pass
+
+    @staticmethod
+    def evaluate(function: list, x: int):
+        """
+        Evaluate a 'function' according to our format
+        :param function: [500,5,10] means 500x^2 + 5x + 10
+        :param x: Variable in the function
+        :return:
+        """
+        if function[0] == 0:  # [0,4000,0]: A zero at the begin, means that x should be calculate as 2^x
+            x = int(exp2(x))
+        return polyval(function, x)

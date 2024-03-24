@@ -83,7 +83,8 @@ CREATE TABLE IF NOT EXISTS settlement(
     name VARCHAR UNIQUE NOT NULL,
     mapX INT NOT NULL, -- Coordinate on the map
     mapY INT NOT NULL,
-    UNIQUE (mapX,mapY), -- There cannot be settlements with the same coordinates
+    --UNIQUE (mapX,mapY), -- There cannot be settlements with the same coordinates
+    level SMALLINT NOT NULL,
     pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Has Relation: Resources currently in the settlement
     pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE -- Owns Relation
 );
@@ -111,20 +112,20 @@ CREATE TABLE IF NOT EXISTS transfer(
 CREATE TABLE IF NOT EXISTS buildable(
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
-    function TEXT NOT NULL, -- The mathematical function to evaluate the resource function with
-    upgradeFunction TEXT NOT NULL,
+    function FLOAT4[] NOT NULL, -- The mathematical function to evaluate the resource function with
+    upgradeFunction INT[] NOT NULL,
     upgradeResource SMALLINT NOT NULL, -- 1: Wood , 2: Stone, 3: Steel, 4: Food, 12: Stone & Wood
-    timeFunction TEXT NOT NULL
+    timeFunction INT[] NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS building(
-    id INT,
+    id INT GENERATED ALWAYS AS IDENTITY,
     name VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
     level INT NOT NULL,
     gridX INT NOT NULL, -- Coordinate on the grid
     gridY INT NOT NULL,
-    UNIQUE (gridX,gridY),
     sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
+    UNIQUE (gridX,gridY,sid),
     PRIMARY KEY (id,name)
 );
 
@@ -170,7 +171,6 @@ CREATE TABLE IF NOT EXISTS troops(
 CREATE TABLE IF NOT EXISTS unlockedBuildable(
     bname VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    level INT,
     maxNumber INT,
     PRIMARY KEY (bname,sid)
 );
@@ -178,7 +178,6 @@ CREATE TABLE IF NOT EXISTS unlockedBuildable(
 CREATE TABLE IF NOT EXISTS unlockedsoldier(
     sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    level INT,
     maxNumber INT,
     PRIMARY KEY (sid,sname)
 );
@@ -198,28 +197,28 @@ CREATE TABLE IF NOT EXISTS achieved(
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Satellite_Castle','government','0','10800 * 2(x-1)','1000*4*2^(x)',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','0','86400 * x','1000*4*2^(x+3)',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','0','21600 * x','1000*4*2^(2x-1)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','{0}','{21600,-21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','government','{0}','{21600,-21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','{0}','{86400,0}','{0,32000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','{0}','{21600,0}','{0,4000,0}',12);
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodcuttersCamp','production','200*x','600*x','(200*x)*2x-4*200',2);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Quarry','production','200*x','600*x','(200*x)*2x-4*200',1);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','20+(25*x)','600*x','(200*x)*2x-4*200',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','300*x','600*x','(200*x)*2x-4*200',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodCuttersCamp','production','{200,0}','{600,0}','{400,0,-800}',2);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Quarry','production','{200,0}','{600,0}','{400,0,-800}',1);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','{25,20}','{600,0}','{400,0,-800}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','{300,0}','{600,0}','{400,0,-800}',12);
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Wood','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stone','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Steel','storage','10000*(2*x)','600*x','(2000*2^(x))/2',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Food','storage','2000*2^(x)','600*x','(2000*2^(x))/2',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('StoneStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Armory','storage','{20000,0}','{600,0}','{0,2000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('GrainSilo','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stables','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('ArcherTower','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('LookoutTower','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('BlackSmith','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Tavern','defense','1,1*x','6*3600*x','1000*4*2^(x)',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stables','defense','{1.1,0}','{21600,0}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('ArcherTower','defense','{1.1,0}','{21600,0}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('LookoutTower','defense','{1.1,0}','{21600,0}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('BlackSmith','defense','{1.1,0}','{21600,0}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Tavern','defense','{1.1,0}','{21600,0}','{0,4000,0}',12);
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('empty','decoration','1,1*x','3*x','3*x',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('empty','decoration','{1.1,0}','{3,0}','{3,0}',12);
 
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1,2,10);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1,4,20);
