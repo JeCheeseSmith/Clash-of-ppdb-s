@@ -188,14 +188,14 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### buildable
 
-| Name            | Type      | Explanation                                                                                          |
-|-----------------|-----------|------------------------------------------------------------------------------------------------------|
-| name            | VARCHAR   | PRIMARY KEY                                                                                          |
-| type            | VARCHAR   | The type of the building; Political,  Decoration, Resources, ...                                     |
-| function        | TEXT      | The mathematical function to evaluate the resource function with                                     |
-| upgradeFunction | TEXT      | Mathematical formula that takes the level as input to calculate upgrade resource                     |
-| upgradeResource | SMALL INT | Defines which resources are needed to build: 1: Wood , 2: Stone, 3: Steel, 4: Food, 12: Stone & Wood |
-| timeFunction    | TEXT      | Mathematical formula that describes the building time needed                                         |
+| Name            | Type      | Explanation                                                                                         |
+|-----------------|-----------|-----------------------------------------------------------------------------------------------------|
+| name            | VARCHAR   | PRIMARY KEY                                                                                         |
+| type            | VARCHAR   | The type of the building; Political,  Decoration, Resources, ...                                    |
+| function        | TEXT      | The mathematical function to evaluate the resource function with                                    |
+| upgradeFunction | TEXT      | Mathematical formula that takes the level as input to calculate upgrade resource                    |
+| upgradeResource | SMALL INT | Defines which resources are needed to build: 1: Stone, 2: Wood, 3: Steel, 4: Food, 12: Stone & Wood |
+| timeFunction    | TEXT      | Mathematical formula that describes the building time needed                                        |
 
 ### building
 
