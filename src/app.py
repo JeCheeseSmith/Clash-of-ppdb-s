@@ -12,7 +12,6 @@ from database import *
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask.templating import render_template
-from flask_socketio import SocketIO, emit
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask("Travisia", static_folder="frontend/dist/static", template_folder="frontend/dist")
@@ -20,7 +19,6 @@ connection = DBConnection()
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
 CORS(app)
-socketio = SocketIO(app)
 
 player_data_access = PlayerDataAccess(connection)  # Run on the same connection to minimise usage / # of connections
 content_data_access = ContentDataAccess(connection)
@@ -536,12 +534,7 @@ def catch_all(path):
     """
     return render_template("index.html")
 
-@socketio.on('message')
-def receive_message(message):
-    # Broadcast the received message to all connected clients
-    emit('message', message, broadcast=True)
 
 # RUN DEV SERVER
 if __name__ == "__main__":
-    socketio.run(app, debug=DEBUG, port=5173)
-    #app.run(HOST, debug=DEBUG)
+    app.run(HOST, debug=DEBUG)

@@ -25,7 +25,7 @@ import Barracks from './Assets/barracks.png'
  * @returns {JSX.Element} JSX representation of the BuildMenu component.
  */
 
-function BuildMenu({addBuilding, setPosition})
+function BuildMenu({addBuilding})
 {
   // State variable to track the visibility of the build menu
   const [menuVisible, setMenuVisible] = useState(false);
@@ -33,7 +33,6 @@ function BuildMenu({addBuilding, setPosition})
   const buildType = (type, position) =>
   {
       addBuilding(type, position)
-      setPosition(position)
   };
 
 

@@ -8,7 +8,6 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
-import TestSocket from "./Communication/chat/testSocket.jsx"
 
 /**
  * Functional component representing the main page of the application.
@@ -16,22 +15,19 @@ import TestSocket from "./Communication/chat/testSocket.jsx"
  */
 function MainPage()
 {
-    const [position, setPosition] = useState("")
     const [buildings, setBuildings] = useState([/*{type:"WoodCuttersCamp", position:[5,5]}*/])
     const addBuilding = (type, position) =>
     {
         setBuildings([...buildings, { type, position }]);
     }
 
-
     return (
         <div className="background"> {/* Container for the background image */}
-            {/*<Chat/>*/}
-            <TestSocket/>
+            <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu addBuilding={addBuilding} setPosition={setPosition}/>
-            <Grid buildings={buildings} position={position} setPosition={setPosition}/>
+            <Buildmenu addBuilding={addBuilding}/>
+            <Grid buildings={buildings}/>
             <ResourceBar/>
             <SoldierMenu/>
 

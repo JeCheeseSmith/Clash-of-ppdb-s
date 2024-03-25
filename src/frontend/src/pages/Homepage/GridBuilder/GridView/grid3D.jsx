@@ -1,100 +1,82 @@
-import React, {Suspense, useRef, useState} from 'react';
+import React, {Suspense, useEffect, useRef, useState} from 'react';
 import {Canvas, useFrame} from '@react-three/fiber';
-import {Float, OrbitControls} from '@react-three/drei';
+import {OrbitControls} from '@react-three/drei';
 import './grid3D.css'
-import WoodCuttersCamp from "./models/WoodCuttersCamp.jsx";
-import Quarry from "./models/Quarry.jsx";
-import SteelMine from "./models/SteelMine.jsx";
-import Farm from "./models/Farm.jsx";
-import Stables from "./models/Stables.jsx";
-import ArcherTower from "./models/ArcherTower.jsx";
-import LookoutTower from "./models/LookoutTower.jsx";
-import BlackSmith from "./models/BlackSmith.jsx";
-import Tavern from "./models/Tavern.jsx";
-import TrainingYard from "./models/TrainingYard.jsx";
-import GrainSilo from "./models/GrainSilo.jsx";
-import StoneStockpile from "./models/StoneStockpile.jsx";
-import Armory from "./models/Armory.jsx";
-import WoodStockpile from "./models/WoodStockpile.jsx";
-import Castle from "./models/Castle.jsx";
-import Chancery from "./models/Chancery.jsx";
-import Barracks from "./models/Barracks.jsx";
-
-/**
- * A 3D grid component with interactive cells and objects.
- * @component
- * @return {JSX.Element} A React JSX Element representing the 3D grid.
- */
-
-const BuildingComponents = {
-    // Production //
-    WoodCuttersCamp,
-    Quarry,
-    SteelMine,
-    Farm,
-    // Defence //
-    Stables,
-    ArcherTower,
-    LookoutTower,
-    BlackSmith,
-    Tavern,
-    TrainingYard,
-    // Storage //
-    GrainSilo,
-    StoneStockpile,
-    Armory,
-    WoodStockpile,
-    // Governmental //
-    Castle,
-    Chancery,
-    // Military //
-    Barracks
-};
+import BuildingComponents from "./upgradeBuilding/BuildingComponents.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
  * @param {Object[]} buildings - Array of buildings.
  * @param {number[]} position - Position of the building.
- * @param {Function} setPosition - Function to set the position of the building.
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings, position, setPosition})
+function Grid({buildings})
 {
-    const [floating, setFloating] = useState(false)
+    const [selectedBuilding, setSelectedBuilding] = useState([[],false]) // value moet iets uniek van building zijn
     const gridSize = 40;
-    // State variable to hold the coordinates of the house
-    const handleCellClick = (rowIndex, colIndex) =>
+    const moveObject = (row, col) =>
     {
         for (let building of buildings)
         {
-            if (building.position === position)
+            if (building.position === selectedBuilding[0].position && selectedBuilding[1])
             {
-                setPosition()
-                building.position = [rowIndex,colIndex]
+                building.position = [building.position[0] + row, building.position[1] + col]
+                setSelectedBuilding([building,selectedBuilding[1]]);
             }
         }
     };
 
+    useEffect(() =>
+    {
+        const handleKeyDown = (event) =>
+        {
+            switch (event.key)
+            {
+                case 'ArrowUp':
+                    moveObject(0, -1)
+                    break;
+                case 'ArrowDown':
+                    moveObject(0, 1)
+                    break;
+                case 'ArrowLeft':
+                    moveObject(-1, 0)
+                    break;
+                case 'ArrowRight':
+                    moveObject(1, 0)
+                    break;
+                case 'Enter':
+                    setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1]]);
+                    break;
+                default:
+                    return;
+                }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () =>
+        {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [selectedBuilding]);
+
     const handleObjectClick = (building) =>
     {
-        setFloating(!floating)
+        setSelectedBuilding([building, !selectedBuilding[1]]) // momenteel is position, het "id" van een building
     }
 
-    const BuildingMesh = ({building, position}) =>
+    const BuildingMesh = ({building}) =>
     {
         const meshRef = useRef(); // Define the useRef hook here
         useFrame(() =>
         {
-            // This function will be called on every frame update
-            if (floating)
+            if (selectedBuilding[0].position === building.position && selectedBuilding[1])
             {
-                meshRef.current.position.y = Math.sin(Date.now() * 0.002) + 7; // Adjust the amplitude and speed as needed
+                meshRef.current.position.y = Math.sin(Date.now() * 0.002) + 10; // Adjust the amplitude and speed as needed
             }
         });
-        const centerX = position[0] + 0.5;
-        const centerY = position[1] + 0.5;
+        const centerX = building.position[0] + 0.5;
+        const centerY = building.position[1] + 0.5;
         const Building = BuildingComponents[building.type];
         return (
             <mesh ref={meshRef} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]} onClick={() => handleObjectClick(building)}>
@@ -113,7 +95,7 @@ function Grid({buildings, position, setPosition})
                 // Calculate the center position of the cell
                 buildingFound = true;
                 return (
-                    <BuildingMesh position={[rowIndex,colIndex]} key={`${rowIndex}-${colIndex}`} building={building} />
+                    <BuildingMesh key={`${rowIndex}-${colIndex}`} building={building} />
                 );
             }
         }
