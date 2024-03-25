@@ -1,44 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import { socket } from './socket';
-import { ConnectionState } from './components/ConnectionState';
-import { ConnectionManager } from './components/ConnectionManager';
-import { Events } from "./components/Events";
-import { MyForm } from './components/MyForm';
+import HttpCall from "./components/HttpCall";
+import WebSocketCall from "./components/WebSocketCall";
+import { io } from "socket.io-client";
+import { useEffect, useState } from "react";
 
-export default function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
-  const [fooEvents, setFooEvents] = useState([]);
+function App2() {
+  const [socketInstance, setSocketInstance] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [buttonStatus, setButtonStatus] = useState(false);
+
+  const handleClick = () => {
+    if (buttonStatus === false) {
+      setButtonStatus(true);
+    } else {
+      setButtonStatus(false);
+    }
+  };
 
   useEffect(() => {
-    function onConnect() {
-      setIsConnected(true);
+    if (buttonStatus === true) {
+      const socket = io("localhost:5000/", {
+        transports: ["websocket"],
+        cors: {
+          origin: "http://localhost:5173/",
+        },
+      });
+
+      setSocketInstance(socket);
+
+      socket.on("connect", (data) => {
+        console.log(data);
+      });
+
+      setLoading(false);
+
+      socket.on("disconnect", (data) => {
+        console.log(data);
+      });
+
+      return function cleanup() {
+        socket.disconnect();
+      };
     }
-
-    function onDisconnect() {
-      setIsConnected(false);
-    }
-
-    function onFooEvent(value) {
-      setFooEvents(previous => [...previous, value]);
-    }
-
-    socket.on('connect', onConnect);
-    socket.on('disconnect', onDisconnect);
-    socket.on('foo', onFooEvent);
-
-    return () => {
-      socket.off('connect', onConnect);
-      socket.off('disconnect', onDisconnect);
-      socket.off('foo', onFooEvent);
-    };
-  }, []);
+  }, [buttonStatus]);
 
   return (
-    <div className="App">
-      <ConnectionState isConnected={ isConnected } />
-      <Events events={ fooEvents } />
-      <ConnectionManager />
-      <MyForm />
+    <div className="App2">
+      <h1>React/Flask App2 + socket.io</h1>
+      <div className="line">
+        <HttpCall />
+      </div>
+      {!buttonStatus ? (
+        <button onClick={handleClick}>turn chat on</button>
+      ) : (
+        <>
+          <button onClick={handleClick}>turn chat off</button>
+          <div className="line">
+            {!loading && <WebSocketCall socket={socketInstance} />}
+          </div>
+        </>
+      )}
     </div>
   );
 }
+
+export default App2;

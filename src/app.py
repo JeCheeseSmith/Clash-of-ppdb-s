@@ -19,8 +19,9 @@ app = Flask("Travisia", static_folder="frontend/dist/static", template_folder="f
 connection = DBConnection()
 DEBUG = False
 HOST = "127.0.0.1" if DEBUG else "0.0.0.0"
+app.config['SECRET_KEY'] = 'secret!'
 CORS(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app,cors_allowed_origins="http://localhost:5173")
 
 player_data_access = PlayerDataAccess(connection)  # Run on the same connection to minimise usage / # of connections
 content_data_access = ContentDataAccess(connection)
@@ -536,13 +537,32 @@ def catch_all(path):
     """
     return render_template("index.html")
 
-@socketio.on('message')
-def receive_message(message):
-    # Broadcast the received message to all connected clients
-    #emit('message', message, broadcast=True)
-    print("aaa")
+@app.route("/http-call")
+def http_call():
+    """return JSON with string data as the value"""
+    data = {'data':'This text was fetched using an HTTP call to server on render'}
+    return jsonify(data)
+
+@socketio.on("connect")
+def connected():
+    """event listener when client connects to the server"""
+    #print(request.sid)
+    print("client has connected")
+    emit("connect",{"data":f"id: {request.sid} is connected"})
+
+@socketio.on('data')
+def handle_message(data):
+    """event listener when client types a message"""
+    print("data from the front end: ",str(data))
+    emit("data",{'data':data,'id':request.sid},broadcast=True)
+
+@socketio.on("disconnect")
+def disconnected():
+    """event listener when client disconnects to the server"""
+    print("user disconnected")
+    emit("disconnect",f"user {request.sid} disconnected",broadcast=True)
 
 # RUN DEV SERVER
 if __name__ == "__main__":
-    socketio.run(app, debug=DEBUG, port=5173, logger=True, engineio_logger=True)
+    socketio.run(app, debug=DEBUG, cors_allowed_origins="http://localhost:5173") #logger=True, engineio_logger=True,
     #app.run(HOST, debug=DEBUG)

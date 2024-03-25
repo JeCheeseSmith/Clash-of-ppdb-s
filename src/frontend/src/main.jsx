@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.jsx'; // Importing the main App component
+import App2 from "./pages/SocketTest/App2.jsx"
 
 /**
  * Entry point of the application responsible for rendering the main App component into the DOM.
@@ -17,6 +18,6 @@ import App from './App.jsx'; // Importing the main App component
 ReactDOM.createRoot(document.getElementById('root')).render(
   // Wrapping the App component with React.StrictMode to highlight potential issues
   <React.StrictMode>
-    <App /> {/* Rendering the main App component */}
+    <App2 /> {/* Rendering the main App component */}
   </React.StrictMode>,
 );
