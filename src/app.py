@@ -539,9 +539,10 @@ def catch_all(path):
 @socketio.on('message')
 def receive_message(message):
     # Broadcast the received message to all connected clients
-    emit('message', message, broadcast=True)
+    #emit('message', message, broadcast=True)
+    print("aaa")
 
 # RUN DEV SERVER
 if __name__ == "__main__":
-    socketio.run(app, debug=DEBUG, port=5173)
+    socketio.run(app, debug=DEBUG, port=5173, logger=True, engineio_logger=True)
     #app.run(HOST, debug=DEBUG)
