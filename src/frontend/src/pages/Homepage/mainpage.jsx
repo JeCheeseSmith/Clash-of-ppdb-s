@@ -8,6 +8,7 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
+import TestSocket from "./Communication/chat/testSocket.jsx"
 
 /**
  * Functional component representing the main page of the application.
@@ -25,7 +26,8 @@ function MainPage()
 
     return (
         <div className="background"> {/* Container for the background image */}
-            <Chat/>
+            {/*<Chat/>*/}
+            <TestSocket/>
             <SocialBox/>
             <Account/>
             <Buildmenu addBuilding={addBuilding} setPosition={setPosition}/>

@@ -12,7 +12,7 @@ from database import *
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask.templating import render_template
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 
 # INITIALIZE SINGLETON SERVICES
 app = Flask("Travisia", static_folder="frontend/dist/static", template_folder="frontend/dist")
@@ -536,8 +536,12 @@ def catch_all(path):
     """
     return render_template("index.html")
 
+@socketio.on('message')
+def receive_message(message):
+    # Broadcast the received message to all connected clients
+    emit('message', message, broadcast=True)
 
 # RUN DEV SERVER
 if __name__ == "__main__":
-    socketio.run(app, debug=DEBUG)
+    socketio.run(app, debug=DEBUG, port=5173)
     #app.run(HOST, debug=DEBUG)
