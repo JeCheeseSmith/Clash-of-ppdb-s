@@ -83,7 +83,7 @@ function Grid({buildings})
                     <Building/>
                 </mesh>
                 <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
-                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(10,10)}/>}
+                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building.shadowSize[0],building.shadowSize[1])}/>}
                 </mesh>
             </>
         );
@@ -110,13 +110,11 @@ function Grid({buildings})
 
     return (
         <Suspense fallback={null}>
-            <Canvas camera={{ position: [40, 35, 60] }} className={"grid"} shadows={true}>
-                <directionalLight />
-                <ambientLight />
-                <pointLight />
-                <spotLight />
-                <hemisphereLight />
-                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={42} minDistance={0} />
+            <Canvas camera={{ position: [20, 30, 60] }} className={"grid"} shadows={true}>
+                <directionalLight position={[50,10,5]} intensity={3}/>
+                <ambientLight intensity={1}/>
+                <hemisphereLight intensity={1}/>
+                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={60} minDistance={0} />
                 {
                     (() =>
                         {

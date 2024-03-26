@@ -18,32 +18,34 @@ import Barracks from "./ObjectsImages/barracks.png";
 
 const BuildingImages =
 {
-    Production: {
-        WoodCuttersCamp: WoodCuttersCamp,
-        Quarry: Quarry,
-        SteelMine: SteelMine,
-        Farm: Farm
+    Production:
+    {
+        WoodCuttersCamp: [WoodCuttersCamp, [6, 6]],
+        Quarry: [Quarry, [5, 5]],
+        SteelMine: [SteelMine, [8, 5]],
+        Farm: [Farm, [5, 5]]
     },
+
     Defense: {
-        Stables: Stables,
-        ArcherTower: ArcherTower,
-        LookoutTower: LookoutTower,
-        BlackSmith: BlackSmith,
-        Tavern: Tavern,
-        TrainingYard: TrainingYard
+        Stables: [Stables, [8,8]],
+        ArcherTower: [ArcherTower, [3,3]],
+        LookoutTower: [LookoutTower, [3,3]],
+        BlackSmith: [BlackSmith, [6,6]],
+        Tavern: [Tavern, [10,10]],
+        TrainingYard: [TrainingYard, [4,4]]
     },
     Storage: {
-        GrainSilo: GrainSilo,
-        StoneStockpile: StoneStockpile,
-        Armory: Armory,
-        WoodStockpile: WoodStockpile
+        GrainSilo: [GrainSilo, [3,3]],
+        StoneStockpile: [StoneStockpile, [8,8]],
+        Armory: [Armory, [6,5]],
+        WoodStockpile: [WoodStockpile, [4,4]]
     },
     Governmental: {
-        Castle: Castle,
-        Chancery: Chancery
+        Castle: [Castle, [15,15]],
+        Chancery: [Chancery, [10,10]]
     },
     Military: {
-        Barracks: Barracks
+        Barracks: [Barracks, [8,8]]
     }
 };
 

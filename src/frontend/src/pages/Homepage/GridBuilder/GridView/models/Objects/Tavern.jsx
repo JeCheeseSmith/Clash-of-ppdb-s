@@ -18,7 +18,7 @@ import tavern from '../../assets/tavern.glb'
 export default function Tavern(props) {
   const { nodes, materials } = useGLTF(tavern)
   return (
-    <group {...props} dispose={null} position={[0,-0.5,1]}>
+    <group {...props} dispose={null} position={[0,-0.5,7]}>
       <group scale={0.015}>
         <group
           position={[0, 54.867, -394.938]}

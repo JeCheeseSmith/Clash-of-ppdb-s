@@ -8,10 +8,10 @@ function BuildmenuOptionsContents({ currentPage, addBuildable })
         <div className="type-container">
             <div className="image-scroll-container">
                 {Object.entries(BuildingImages).map(([category, buildings]) => (
-                    Object.entries(buildings).map(([name, image]) =>
+                    Object.entries(buildings).map(([name, [image, shadowSize]]) =>
                     {
                         return (
-                            currentPage === category && <Building addBuildable={addBuildable} name={name} image={image} />
+                            currentPage === category && <Building key={`${category}-${name}`} addBuildable={addBuildable} name={name} image={image} shadowSize={shadowSize}/>
                         );
                     })
                 ))}
@@ -30,7 +30,7 @@ function BuildmenuOptionsContents({ currentPage, addBuildable })
  * @returns {JSX.Element} JSX representation of the Building component.
  */
 
-function Building({addBuildable, name, image})
+function Building({addBuildable, name, image, shadowSize})
 {
     const getRandomPosition = () =>
     {
@@ -50,7 +50,7 @@ function Building({addBuildable, name, image})
             <img
                 src={image}
                 className="small-image"
-                onClick={() => addBuildable(name, getRandomPosition())}
+                onClick={() => addBuildable(name, getRandomPosition(), shadowSize)}
                 alt={name}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}

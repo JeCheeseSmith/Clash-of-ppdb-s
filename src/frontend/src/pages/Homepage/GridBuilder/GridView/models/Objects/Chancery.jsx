@@ -18,7 +18,7 @@ import chancery from '../../assets/chancery.glb'
 function Chancery(props) {
   const { nodes, materials } = useGLTF(chancery)
   return (
-    <group {...props} dispose={null} scale={0.002}>
+    <group {...props} dispose={null} scale={0.002} position={[1,0,1]}>
       <mesh
         castShadow
         receiveShadow

@@ -18,7 +18,7 @@ import stoneStockpile from '../../assets/stoneStockpile.glb'
 export default function StoneStockpile(props) {
   const { nodes, materials } = useGLTF(stoneStockpile)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} position={[1.3,0,0]}>
       <group scale={0.004}>
         <mesh
           castShadow

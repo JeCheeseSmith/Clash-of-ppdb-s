@@ -18,7 +18,7 @@ import barracks from '../../assets/barracks.glb'
 export default function Barracks(props) {
   const { nodes, materials } = useGLTF(barracks)
   return (
-    <group {...props} dispose={null} scale={0.24} position={[0,1.3  ,0]}>
+    <group {...props} dispose={null} scale={0.24} position={[0,1.3,0.3]}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <mesh
           castShadow

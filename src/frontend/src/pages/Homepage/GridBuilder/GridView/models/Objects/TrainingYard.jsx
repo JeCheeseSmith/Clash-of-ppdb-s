@@ -18,7 +18,7 @@ import trainingYard from '../../assets/trainingYard.glb'
 export default function TrainingYard(props) {
   const { nodes, materials } = useGLTF(trainingYard)
   return (
-    <group {...props} dispose={null} position={[8,1,-2]}>
+    <group {...props} dispose={null} position={[5,0,0]}>
         <group scale={0.6}>
             <mesh
                 castShadow
