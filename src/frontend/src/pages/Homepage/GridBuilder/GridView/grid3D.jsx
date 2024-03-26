@@ -4,6 +4,7 @@ import {OrbitControls} from '@react-three/drei';
 import './grid3D.css'
 import BuildingComponents from "./BuildingComponents.jsx";
 import * as THREE from "three";
+import Ground from "./models/Ground.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -169,7 +170,8 @@ function Grid({buildings})
         }
         if (!buildingFound)
         {
-            return (<gridHelper key={`${rowIndex}-${colIndex}`} position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]} args={[1, 1]}/>);
+            return (<gridHelper key={`${rowIndex}-${colIndex}`} position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]} args={[1, 1]}
+                                material={new THREE.MeshBasicMaterial({ color: 0x000000 })}/>);
         }
     };
 
@@ -200,6 +202,7 @@ function Grid({buildings})
                         }
                     )()
                 }
+                <Ground/>
             </Canvas>
         </Suspense>
     );
@@ -210,7 +213,7 @@ function createShadow(width, height)
     const geometry = new THREE.PlaneGeometry(width, height); // Make the squares bigger
     const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
     const square = new THREE.Mesh(geometry, material);
-    square.position.set(0, 0, 0); // Adjust position to make them flat and spread out horizontally
+    square.position.set(0, 1, 0); // Adjust position to make them flat and spread out horizontally
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
 }
