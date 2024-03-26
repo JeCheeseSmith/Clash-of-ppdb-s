@@ -2,13 +2,13 @@ import React, {Suspense, useEffect, useRef, useState} from 'react';
 import {Canvas, useFrame} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import './grid3D.css'
-import BuildingComponents from "./upgradeBuilding/BuildingComponents.jsx";
+import BuildingComponents from "./BuildingComponents.jsx";
+import * as THREE from "three";
 
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
  * @param {Object[]} buildings - Array of buildings.
- * @param {number[]} position - Position of the building.
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
@@ -30,18 +30,16 @@ function Grid({buildings})
 
     useEffect(() =>
     {
-        const handleKeyDown = (event) =>
-        {
-            switch (event.key)
-            {
+        const handleKeyDown = (event) => {
+            switch (event.key) {
                 case 'ArrowUp':
-                    moveObject(0, -1)
+                    moveObject(0, -1);
                     break;
                 case 'ArrowDown':
-                    moveObject(0, 1)
+                    moveObject(0, 1);
                     break;
                 case 'ArrowLeft':
-                    moveObject(-1, 0)
+                    moveObject(-1, 0);
                     break;
                 case 'ArrowRight':
                     moveObject(1, 0)
@@ -51,12 +49,80 @@ function Grid({buildings})
                     break;
                 default:
                     return;
-                }
+            }
         };
-        document.addEventListener('keydown', handleKeyDown);
-        return () =>
+
+        const handleMouseMove = (event) =>
         {
-          document.removeEventListener('keydown', handleKeyDown);
+            const { movementX, movementY } = event;
+            // Set threshold to ignore small movements
+            const threshold = 2;
+            // Ignore movements below the threshold
+            if (Math.abs(movementX) < threshold && Math.abs(movementY) < threshold)
+            {
+                return;
+            }
+            // Adjust these values as needed
+            const sensitivity = 0.01;
+            const dx = movementX * sensitivity;
+            const dy = movementY * sensitivity;
+            // Determine direction based on mouse movement
+            let directionX, directionY;
+            if (dx > 0)
+            {
+                directionX = 1;
+            }
+            else if (dx < 0)
+            {
+                directionX = -1;
+            }
+            else
+            {
+                directionX = 0;
+            }
+            if (dy > 0)
+            {
+                directionY = 1;
+            }
+            else if (dy < 0)
+            {
+                directionY = -1;
+            }
+            else
+            {
+                directionY = 0;
+            }
+            // Handle movement based on direction
+            switch (true)
+            {
+                case directionY === -1:
+                    // Mouse moved up
+                    moveObject(0, -1);
+                    break;
+                case directionY === 1:
+                    // Mouse moved down
+                    moveObject(0, 1);
+                    break;
+                case directionX === -1:
+                    // Mouse moved left
+                    moveObject(-1, 0);
+                    break;
+                case directionX === 1:
+                    // Mouse moved right
+                    moveObject(1, 0);
+                    break;
+                default:
+                    return;
+            }
+        };
+
+
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('mousemove', handleMouseMove);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('mousemove', handleMouseMove);
         };
     }, [selectedBuilding]);
 
@@ -79,41 +145,38 @@ function Grid({buildings})
         const centerY = building.position[1] + 0.5;
         const Building = BuildingComponents[building.type];
         return (
-            <mesh ref={meshRef} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]} onClick={() => handleObjectClick(building)}>
-                <Building />
-            </mesh>
+            <>
+                <mesh ref={meshRef} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]} onClick={() => handleObjectClick(building)}>
+                    <Building/>
+                </mesh>
+                <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
+                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(10,10)}/>}
+                </mesh>
+            </>
         );
     };
-
 
     const renderCell = (rowIndex, colIndex) =>
     {
         let buildingFound = false;
         for (let building of buildings)
         {
-            if (rowIndex === building.position[0] && colIndex === building.position[1]) {
-                // Calculate the center position of the cell
+            if (rowIndex === building.position[0] && colIndex === building.position[1])
+            {
                 buildingFound = true;
-                return (
-                    <BuildingMesh key={`${rowIndex}-${colIndex}`} building={building} />
-                );
+                return (<BuildingMesh key={`${rowIndex}-${colIndex}`} building={building} />);
             }
         }
-        if (!buildingFound) {
-            return (
-                <gridHelper
-                    key={`${rowIndex}-${colIndex}`}
-                    position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
-                    args={[1, 1]}
-                />
-            );
+        if (!buildingFound)
+        {
+            return (<gridHelper key={`${rowIndex}-${colIndex}`} position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]} args={[1, 1]}/>);
         }
     };
 
 
     return (
         <Suspense fallback={null}>
-            <Canvas camera={{ position: [40, 35, 60] }} className={"grid"}>
+            <Canvas camera={{ position: [40, 35, 60] }} className={"grid"} shadows={true}>
                 <directionalLight />
                 <ambientLight />
                 <pointLight />
@@ -140,6 +203,16 @@ function Grid({buildings})
             </Canvas>
         </Suspense>
     );
+}
+
+function createShadow(width, height)
+{
+    const geometry = new THREE.PlaneGeometry(width, height); // Make the squares bigger
+    const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const square = new THREE.Mesh(geometry, material);
+    square.position.set(0, 0, 0); // Adjust position to make them flat and spread out horizontally
+    square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
+    return square
 }
 
 export default Grid;

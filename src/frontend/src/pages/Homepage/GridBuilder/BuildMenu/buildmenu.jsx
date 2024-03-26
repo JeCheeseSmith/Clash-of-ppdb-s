@@ -30,9 +30,9 @@ function BuildMenu({addBuilding})
   // State variable to track the visibility of the build menu
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const buildType = (type, position) =>
+  const addBuildable = (type, position, shadowSize) =>
   {
-      addBuilding(type, position)
+      addBuilding(type, position, shadowSize)
   };
 
 
@@ -58,7 +58,7 @@ function BuildMenu({addBuilding})
       </button>
       {/* Rendering the BuildOptions component with visibility controlled by the 'menuVisible' state */}
       <div>
-        <BuildOptions menuVisible={menuVisible} setMenuVisible={setMenuVisible} buildType={buildType}/>
+        <BuildOptions menuVisible={menuVisible} setMenuVisible={setMenuVisible} addBuildable={addBuildable}/>
       </div>
     </div>
   );
@@ -72,7 +72,7 @@ function BuildMenu({addBuilding})
  * @param {Function} props.setMenuVisible - Function to set the visibility of the menu.
  * @returns {JSX.Element} JSX representation of the BuildOptions component.
  */
-function BuildOptions({ menuVisible, setMenuVisible, buildType}) {
+function BuildOptions({ menuVisible, setMenuVisible, addBuildable}) {
   // State variable to track the current page
   const [currentPage, setCurrentPage] = useState('Production');
 
@@ -132,11 +132,11 @@ function BuildOptions({ menuVisible, setMenuVisible, buildType}) {
       {/* Rendering content based on the current page */}
       {menuVisible && (
           <div>
-            {currentPage === 'Production' && <Production buildType={buildType}/>}
-            {currentPage === 'Defense' && <Defense buildType={buildType}/>}
-            {currentPage === 'Storage' && <Storage buildType={buildType}/>}
-            {currentPage === 'Governmental' && <Governmental buildType={buildType}/>}
-            {currentPage === 'Military' && <Military buildType={buildType}/>}
+            {currentPage === 'Production' && <Production addBuildable={addBuildable}/>}
+            {currentPage === 'Defense' && <Defense addBuildable={addBuildable}/>}
+            {currentPage === 'Storage' && <Storage addBuildable={addBuildable}/>}
+            {currentPage === 'Governmental' && <Governmental addBuildable={addBuildable}/>}
+            {currentPage === 'Military' && <Military addBuildable={addBuildable}/>}
         </div>
       )}
     </div>
@@ -151,63 +151,63 @@ function getRandomPosition()
 }
 
 
-function Production({buildType}) {
+function Production({addBuildable}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <Building buildType={buildType} name="WoodCuttersCamp" image={WoodCuttersCamp} />
-        <Building buildType={buildType} name="Quarry" image={Quarry} />
-        <Building buildType={buildType} name="SteelMine" image={SteelMine} />
-        <Building buildType={buildType} name="Farm" image={Farm} />
+        <Building addBuildable={addBuildable} name="WoodCuttersCamp" image={WoodCuttersCamp} />
+        <Building addBuildable={addBuildable} name="Quarry" image={Quarry} />
+        <Building addBuildable={addBuildable} name="SteelMine" image={SteelMine} />
+        <Building addBuildable={addBuildable} name="Farm" image={Farm} />
       </div>
     </div>
   );
 }
 
-function Defense({buildType}) {
+function Defense({addBuildable}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <Building buildType={buildType} name="Stables" image={Stables} />
-        <Building buildType={buildType} name="ArcherTower" image={ArcherTower} />
-        <Building buildType={buildType} name="LookoutTower" image={LookoutTower} />
-        <Building buildType={buildType} name="BlackSmith" image={BlackSmith} />
-        <Building buildType={buildType} name="Tavern" image={Tavern} />
-        <Building buildType={buildType} name="TrainingYard" image={TrainingYard} />
+        <Building addBuildable={addBuildable} name="Stables" image={Stables} />
+        <Building addBuildable={addBuildable} name="ArcherTower" image={ArcherTower} />
+        <Building addBuildable={addBuildable} name="LookoutTower" image={LookoutTower} />
+        <Building addBuildable={addBuildable} name="BlackSmith" image={BlackSmith} />
+        <Building addBuildable={addBuildable} name="Tavern" image={Tavern} />
+        <Building addBuildable={addBuildable} name="TrainingYard" image={TrainingYard} />
       </div>
     </div>
   );
 }
 
-function Storage({buildType}) {
+function Storage({addBuildable}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <Building buildType={buildType} name="GrainSilo" image={GrainSilo} />
-        <Building buildType={buildType} name="StoneStockpile" image={StoneStockpile} />
-        <Building buildType={buildType} name="Armory" image={Armory} />
-        <Building buildType={buildType} name="WoodStockpile" image={WoodStockpile} />
+        <Building addBuildable={addBuildable} name="GrainSilo" image={GrainSilo} />
+        <Building addBuildable={addBuildable} name="StoneStockpile" image={StoneStockpile} />
+        <Building addBuildable={addBuildable} name="Armory" image={Armory} />
+        <Building addBuildable={addBuildable} name="WoodStockpile" image={WoodStockpile} />
       </div>
     </div>
   );
 }
 
-function Governmental({buildType}) {
+function Governmental({addBuildable}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <Building buildType={buildType} name="Castle" image={Castle} />
-        <Building buildType={buildType} name="Chancery" image={Chancery} />
+        <Building addBuildable={addBuildable} name="Castle" image={Castle} />
+        <Building addBuildable={addBuildable} name="Chancery" image={Chancery} />
       </div>
     </div>
   );
 }
 
-function Military({buildType}) {
+function Military({addBuildable}) {
   return (
     <div className="type-container">
       <div className="image-scroll-container">
-        <Building buildType={buildType} name="Barracks" image={Barracks} />
+        <Building addBuildable={addBuildable} name="Barracks" image={Barracks} />
       </div>
     </div>
   );
@@ -217,13 +217,13 @@ function Military({buildType}) {
  * Building component function definition.
  * This component represents a building.
  * @param {Object} props - Properties passed to the component.
- * @param {Function} props.buildType - Function to build a type.
+ * @param {Function} props.addBuildable - Function to build a type.
  * @param {string} props.name - Name of the building.
  * @param {string} props.image - Image of the building.
  * @returns {JSX.Element} JSX representation of the Building component.
  */
 
-function Building({buildType, name, image})
+function Building({addBuildable, name, image})
 {
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -240,7 +240,7 @@ function Building({buildType, name, image})
       <img
         src={image}
         className="small-image"
-        onClick={() => buildType(name, getRandomPosition())}
+        onClick={() => addBuildable(name, getRandomPosition())}
         alt={name}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

@@ -16,9 +16,9 @@ import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
 function MainPage()
 {
     const [buildings, setBuildings] = useState([/*{type:"WoodCuttersCamp", position:[5,5]}*/])
-    const addBuilding = (type, position) =>
+    const addBuilding = (type, position, shadowSize) =>
     {
-        setBuildings([...buildings, { type, position }]);
+        setBuildings([...buildings, { type, position, shadowSize}]);
     }
 
     return (
