@@ -13,12 +13,13 @@ function SoldierMenuButton(props) {
                 setsoldierVisible(!soldierVisible);
             }} className={"trainMenu"}>Troop Menu
             </button>
+            {soldierVisible? SoldierMenuBox():null}
         </>
     );
 }
 export default SoldierMenuButton;
 
-function SoldierMenuBox({soldierVisible}) {
+function SoldierMenuBox() {
     return(
         <div className="SoldierMenubox">
         </div>
