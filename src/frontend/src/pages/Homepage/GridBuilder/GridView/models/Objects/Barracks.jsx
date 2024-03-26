@@ -8,7 +8,7 @@ Title: Seleucid Barracks
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import barracks from '../assets/barracks.glb'
+import barracks from '../../assets/barracks.glb'
 
 /**
  * React component for rendering a 3D model of Seleucid Barracks.

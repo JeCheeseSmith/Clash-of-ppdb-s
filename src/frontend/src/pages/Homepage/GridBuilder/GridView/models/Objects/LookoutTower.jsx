@@ -8,7 +8,7 @@ Title: Medieval Tower
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import lookoutTower from '../assets/lookoutTower.glb'
+import lookoutTower from '../../assets/lookoutTower.glb'
 
 /**
  * React component for rendering a 3D model of a lookout tower.

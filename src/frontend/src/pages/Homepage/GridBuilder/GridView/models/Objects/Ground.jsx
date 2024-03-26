@@ -8,7 +8,7 @@ Title: grass field
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import ground from '../assets/ground.glb'
+import ground from '../../assets/ground.glb'
 
 export default function Ground(props) {
   const { nodes, materials } = useGLTF(ground)

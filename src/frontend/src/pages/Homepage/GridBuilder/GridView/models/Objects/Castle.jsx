@@ -8,7 +8,7 @@ Title: Castle 3D Model
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import castle from '../assets/castle.glb'
+import castle from '../../assets/castle.glb'
 
 /**
  * React component for rendering a 3D model of a Castle.

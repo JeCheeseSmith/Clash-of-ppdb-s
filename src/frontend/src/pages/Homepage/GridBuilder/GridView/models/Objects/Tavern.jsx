@@ -8,7 +8,7 @@ Title: Medieval Tavern
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import tavern from '../assets/tavern.glb'
+import tavern from '../../assets/tavern.glb'
 
 /**
  * React component for rendering a 3D model of a medieval tavern.

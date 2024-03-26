@@ -1,23 +1,6 @@
 import React, {useState} from 'react';
 import './buildmenu.css'
-import './buildmenuOptionsContents.css'
-import WoodCuttersCamp from './Assets/woodcutterscamp.png';
-import Quarry from './Assets/quarry.png';
-import SteelMine from './Assets/steelmine.png';
-import Farm from './Assets/farm.png';
-import Stables from './Assets/stable.png';
-import ArcherTower from './Assets/archertower.png';
-import LookoutTower from './Assets/lookouttower.png';
-import BlackSmith from './Assets/blacksmith.png';
-import Tavern from './Assets/tavern.png';
-import TrainingYard from './Assets/trainingyard.png';
-import GrainSilo from './Assets/grainsilo.png'
-import StoneStockpile from './Assets/stonestockpile.png'
-import Armory from './Assets/armory.png'
-import WoodStockpile from './Assets/woodstockpile.png'
-import Castle from './Assets/castle.png'
-import Chancery from './Assets/chancery.png'
-import Barracks from './Assets/barracks.png'
+import BuildmenuOptionsContents from "./buildmenuOptionsContents.jsx";
 
 /**
  * BuildMenu component function definition.
@@ -130,122 +113,7 @@ function BuildOptions({ menuVisible, setMenuVisible, addBuildable}) {
         </nav>
       )}
       {/* Rendering content based on the current page */}
-      {menuVisible && (
-          <div>
-            {currentPage === 'Production' && <Production addBuildable={addBuildable}/>}
-            {currentPage === 'Defense' && <Defense addBuildable={addBuildable}/>}
-            {currentPage === 'Storage' && <Storage addBuildable={addBuildable}/>}
-            {currentPage === 'Governmental' && <Governmental addBuildable={addBuildable}/>}
-            {currentPage === 'Military' && <Military addBuildable={addBuildable}/>}
-        </div>
-      )}
-    </div>
-  );
-}
-
-
-
-function getRandomPosition()
-{
-  return [Math.floor(Math.random() * 36) + 2, Math.floor(Math.random() * 36) + 2];
-}
-
-
-function Production({addBuildable}) {
-  return (
-    <div className="type-container">
-      <div className="image-scroll-container">
-        <Building addBuildable={addBuildable} name="WoodCuttersCamp" image={WoodCuttersCamp} />
-        <Building addBuildable={addBuildable} name="Quarry" image={Quarry} />
-        <Building addBuildable={addBuildable} name="SteelMine" image={SteelMine} />
-        <Building addBuildable={addBuildable} name="Farm" image={Farm} />
-      </div>
-    </div>
-  );
-}
-
-function Defense({addBuildable}) {
-  return (
-    <div className="type-container">
-      <div className="image-scroll-container">
-        <Building addBuildable={addBuildable} name="Stables" image={Stables} />
-        <Building addBuildable={addBuildable} name="ArcherTower" image={ArcherTower} />
-        <Building addBuildable={addBuildable} name="LookoutTower" image={LookoutTower} />
-        <Building addBuildable={addBuildable} name="BlackSmith" image={BlackSmith} />
-        <Building addBuildable={addBuildable} name="Tavern" image={Tavern} />
-        <Building addBuildable={addBuildable} name="TrainingYard" image={TrainingYard} />
-      </div>
-    </div>
-  );
-}
-
-function Storage({addBuildable}) {
-  return (
-    <div className="type-container">
-      <div className="image-scroll-container">
-        <Building addBuildable={addBuildable} name="GrainSilo" image={GrainSilo} />
-        <Building addBuildable={addBuildable} name="StoneStockpile" image={StoneStockpile} />
-        <Building addBuildable={addBuildable} name="Armory" image={Armory} />
-        <Building addBuildable={addBuildable} name="WoodStockpile" image={WoodStockpile} />
-      </div>
-    </div>
-  );
-}
-
-function Governmental({addBuildable}) {
-  return (
-    <div className="type-container">
-      <div className="image-scroll-container">
-        <Building addBuildable={addBuildable} name="Castle" image={Castle} />
-        <Building addBuildable={addBuildable} name="Chancery" image={Chancery} />
-      </div>
-    </div>
-  );
-}
-
-function Military({addBuildable}) {
-  return (
-    <div className="type-container">
-      <div className="image-scroll-container">
-        <Building addBuildable={addBuildable} name="Barracks" image={Barracks} />
-      </div>
-    </div>
-  );
-}
-
-/**
- * Building component function definition.
- * This component represents a building.
- * @param {Object} props - Properties passed to the component.
- * @param {Function} props.addBuildable - Function to build a type.
- * @param {string} props.name - Name of the building.
- * @param {string} props.image - Image of the building.
- * @returns {JSX.Element} JSX representation of the Building component.
- */
-
-function Building({addBuildable, name, image})
-{
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  const handleMouseEnter = () => {
-    setShowTooltip(true);
-  };
-
-  const handleMouseLeave = () => {
-    setShowTooltip(false);
-  };
-
-  return (
-    <div className="building-container">
-      <img
-        src={image}
-        className="small-image"
-        onClick={() => addBuildable(name, getRandomPosition())}
-        alt={name}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      />
-      {showTooltip && <div className="tooltip">{name}</div>}
+      {menuVisible && (<BuildmenuOptionsContents currentPage={currentPage} addBuildable={addBuildable}/>)}
     </div>
   );
 }

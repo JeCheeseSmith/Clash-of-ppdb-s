@@ -2,9 +2,9 @@ import React, {Suspense, useEffect, useRef, useState} from 'react';
 import {Canvas, useFrame} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import './grid3D.css'
-import BuildingComponents from "./BuildingComponents.jsx";
+import Buildings3D from "./models/Buildings3D.jsx";
 import * as THREE from "three";
-import Ground from "./models/Ground.jsx";
+import Ground from "./models/Objects/Ground.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -52,78 +52,10 @@ function Grid({buildings})
                     return;
             }
         };
-
-        const handleMouseMove = (event) =>
-        {
-            const { movementX, movementY } = event;
-            // Set threshold to ignore small movements
-            const threshold = 2;
-            // Ignore movements below the threshold
-            if (Math.abs(movementX) < threshold && Math.abs(movementY) < threshold)
-            {
-                return;
-            }
-            // Adjust these values as needed
-            const sensitivity = 0.01;
-            const dx = movementX * sensitivity;
-            const dy = movementY * sensitivity;
-            // Determine direction based on mouse movement
-            let directionX, directionY;
-            if (dx > 0)
-            {
-                directionX = 1;
-            }
-            else if (dx < 0)
-            {
-                directionX = -1;
-            }
-            else
-            {
-                directionX = 0;
-            }
-            if (dy > 0)
-            {
-                directionY = 1;
-            }
-            else if (dy < 0)
-            {
-                directionY = -1;
-            }
-            else
-            {
-                directionY = 0;
-            }
-            // Handle movement based on direction
-            switch (true)
-            {
-                case directionY === -1:
-                    // Mouse moved up
-                    moveObject(0, -1);
-                    break;
-                case directionY === 1:
-                    // Mouse moved down
-                    moveObject(0, 1);
-                    break;
-                case directionX === -1:
-                    // Mouse moved left
-                    moveObject(-1, 0);
-                    break;
-                case directionX === 1:
-                    // Mouse moved right
-                    moveObject(1, 0);
-                    break;
-                default:
-                    return;
-            }
-        };
-
-
         document.addEventListener('keydown', handleKeyDown);
-        document.addEventListener('mousemove', handleMouseMove);
-
-        return () => {
+        return () =>
+        {
             document.removeEventListener('keydown', handleKeyDown);
-            document.removeEventListener('mousemove', handleMouseMove);
         };
     }, [selectedBuilding]);
 
@@ -144,7 +76,7 @@ function Grid({buildings})
         });
         const centerX = building.position[0] + 0.5;
         const centerY = building.position[1] + 0.5;
-        const Building = BuildingComponents[building.type];
+        const Building = Buildings3D[building.type];
         return (
             <>
                 <mesh ref={meshRef} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]} onClick={() => handleObjectClick(building)}>
