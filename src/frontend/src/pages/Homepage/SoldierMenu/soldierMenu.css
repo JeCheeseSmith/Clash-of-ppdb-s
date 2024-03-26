@@ -23,6 +23,14 @@
     transition: all 0.2s ease-in;
 }
 
+.SoldierMenubox {
+    position: absolute;
+    left: 500px; /* Adjust this value as needed */
+    top: 80px; /* Adjust this value as needed */
+    width: 1350px;
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
 .trainMenu:hover {
     background: rgb(25, 0, 115);
     box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);

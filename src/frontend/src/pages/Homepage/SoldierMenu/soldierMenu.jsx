@@ -1,10 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './soldierMenu.css'
+import CommunicationButton from "../Communication/communication.jsx";
 
-function SoldierMenu(props) {
+/**
+ * React component for the troop screen button
+ */
+function SoldierMenuButton(props) {
+    const [soldierVisible, setsoldierVisible] = useState(false);
     return (
-        <button className={"trainMenu"}>HALLO</button>
+        <>
+            <button onClick={() => {
+                setsoldierVisible(!soldierVisible);
+            }} className={"trainMenu"}>Troop Menu
+            </button>
+        </>
     );
 }
+export default SoldierMenuButton;
 
-export default SoldierMenu;
+function SoldierMenuBox({soldierVisible}) {
+    return(
+        <div className="SoldierMenubox">
+        </div>
+    )
+}
