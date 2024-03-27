@@ -8,7 +8,7 @@ Title: Wood Plant House-Freepoly.org
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import woodStockpile from '../assets/woodStockpile.glb'
+import woodStockpile from '../../assets/woodStockpile.glb'
 
 /**
  * React component for rendering a 3D model of a wood stockpile.
@@ -18,7 +18,7 @@ import woodStockpile from '../assets/woodStockpile.glb'
 export default function WoodStockpile(props) {
   const { nodes, materials } = useGLTF(woodStockpile)
   return (
-    <group {...props} dispose={null} scale={0.5}>
+    <group {...props} dispose={null} scale={0.5} position={[0.5,0,0]}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={0.76}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
           <group position={[-212.949, 74.161, 229.367]} rotation={[-Math.PI / 2, 0, 0]} scale={100}>

@@ -1,79 +1,133 @@
-import React, {Suspense} from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import React, {Suspense, useEffect, useRef, useState} from 'react';
+import {Canvas, useFrame} from '@react-three/fiber';
+import {OrbitControls} from '@react-three/drei';
 import './grid3D.css'
-import WoodCuttersCamp from "./models/WoodCuttersCamp.jsx";
-import Quarry from "./models/Quarry.jsx";
-import SteelMine from "./models/SteelMine.jsx";
-import Farm from "./models/Farm.jsx";
-import Stables from "./models/Stables.jsx";
-import ArcherTower from "./models/ArcherTower.jsx";
-import LookoutTower from "./models/LookoutTower.jsx";
-import BlackSmith from "./models/BlackSmith.jsx";
-import Tavern from "./models/Tavern.jsx";
-import TrainingYard from "./models/TrainingYard.jsx";
-import GrainSilo from "./models/GrainSilo.jsx";
-import StoneStockpile from "./models/StoneStockpile.jsx";
-import Armory from "./models/Armory.jsx";
-import WoodStockpile from "./models/WoodStockpile.jsx";
-import Castle from "./models/Castle.jsx";
-import Chancery from "./models/Chancery.jsx";
-import Barracks from "./models/Barracks.jsx";
-
-/**
- * A 3D grid component with interactive cells and objects.
- * @component
- * @return {JSX.Element} A React JSX Element representing the 3D grid.
- */
-
-const BuildingComponents = {
-    // Production //
-    WoodCuttersCamp,
-    Quarry,
-    SteelMine,
-    Farm,
-    // Defence //
-    Stables,
-    ArcherTower,
-    LookoutTower,
-    BlackSmith,
-    Tavern,
-    TrainingYard,
-    // Storage //
-    GrainSilo,
-    StoneStockpile,
-    Armory,
-    WoodStockpile,
-    // Governmental //
-    Castle,
-    Chancery,
-    // Military //
-    Barracks
-};
+import Buildings3D from "./models/Buildings3D.jsx";
+import * as THREE from "three";
+import Ground from "./models/Objects/Ground.jsx";
+import GridCalculation from "../gridCalculation.jsx";
+import error from "../../../../assets/buildingPlacementError.mp3";
 
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
  * @param {Object[]} buildings - Array of buildings.
- * @param {number[]} position - Position of the building.
- * @param {Function} setPosition - Function to set the position of the building.
+ * @param addBuildings
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings, position, setPosition})
+function Grid({buildings})
 {
+    const [selectedBuilding, setSelectedBuilding] =
+        useState([[],false /*floating*/, 0x006f00 /*shadowColor*/, true])
     const gridSize = 40;
-    // State variable to hold the coordinates of the house
-    const handleCellClick = async (rowIndex, colIndex) =>
+    const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de celposities checken)
     {
         for (let building of buildings)
         {
-            if (building.position === position)
+            if (building.position[0] === position[0] && building.position[1] === position[1])
             {
-                setPosition([45,45])
-                building.position = [rowIndex,colIndex]
+                return true; // Collision detected
             }
         }
+        return false; // No collision
+    };
+    const moveObject = (row, col) =>
+    {
+        const newPosition = [selectedBuilding[0].position[0] + row, selectedBuilding[0].position[1] + col];
+        let newCells = GridCalculation(buildings, selectedBuilding, newPosition)
+        let insideGrid = InsideGrid(selectedBuilding,newPosition)
+        let technicalValid = checkTechnicalCollisions(newPosition)
+        if (selectedBuilding[1] && insideGrid && !technicalValid) // valid position en boolean van float building
+        {
+            // No collision, move the building
+            selectedBuilding[0].position = newPosition;
+            selectedBuilding[0].occupiedCells = newCells[1]
+        }
+        if (newCells[0])
+        {
+            selectedBuilding[2] = 0x006f00
+        }
+        else
+        {
+            selectedBuilding[2] = 0xff0000
+            const sound = new Audio(error);
+            sound.currentTime = 0.0;
+            sound.volume = 0.1
+            sound.play();
+        }
+        selectedBuilding[3] = newCells[0]
+        setSelectedBuilding([selectedBuilding[0], selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]);
+        return newCells[0]
+    };
+
+    let validPosition
+    useEffect(() =>
+    {
+        const handleKeyDown = (event) =>
+        {
+            switch (event.key) {
+                case 'ArrowUp':
+                    moveObject(0, -1);
+                    break;
+                case 'ArrowDown':
+                    moveObject(0, 1);
+                    break;
+                case 'ArrowLeft':
+                    moveObject(-1, 0);
+                    break;
+                case 'ArrowRight':
+                    moveObject(1, 0)
+                    break;
+                case 'Enter':
+                    validPosition = moveObject(0, 0)
+                    if (validPosition)
+                    {
+                        setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]); //alleen boolean veranderen
+                    }
+                    break;
+                default:
+                    return;
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+        return () =>
+        {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [selectedBuilding]);
+
+    const handleObjectClick = (building) =>
+    {
+        if (selectedBuilding[3])
+        {
+            setSelectedBuilding([building, !selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]])
+        }
+    }
+
+    const BuildingMesh = ({building}) =>
+    {
+        const meshRef = useRef(); // Define the useRef hook here
+        useFrame(() =>
+        {
+            if (selectedBuilding[0].position === building.position && selectedBuilding[1])
+            {
+                meshRef.current.position.y = Math.sin(Date.now() * 0.002) + 10; // Adjust the amplitude and speed as needed
+            }
+        });
+        const centerX = building.position[0] + 0.5;
+        const centerY = building.position[1] + 0.5;
+        const Building = Buildings3D[building.type];
+        return (
+            <>
+                <mesh ref={meshRef} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]} onClick={() => handleObjectClick(building)}>
+                    <Building/>
+                </mesh>
+                <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
+                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building.size[0],building.size[1], selectedBuilding[2])}/>}
+                </mesh>
+            </>
+        );
     };
 
     const renderCell = (rowIndex, colIndex) =>
@@ -81,42 +135,28 @@ function Grid({buildings, position, setPosition})
         let buildingFound = false;
         for (let building of buildings)
         {
-            if (rowIndex === building.position[0] && colIndex === building.position[1]) {
-                // Calculate the center position of the cell
-                const centerX = colIndex + 0.5;
-                const centerY = rowIndex + 0.5;
+            if (rowIndex === building.position[0] && colIndex === building.position[1])
+            {
                 buildingFound = true;
-                const Building = BuildingComponents[building.type]
-                return (
-                    <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
-                        <Building />
-                    </mesh>
-                );
+                return (<BuildingMesh key={`${rowIndex}-${colIndex}`} building={building} />);
             }
         }
         if (!buildingFound)
         {
-            return (
-                <gridHelper
-                    key={`${rowIndex}-${colIndex}`}
-                    position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
-                    args={[1, 1]}
-                    onClick={() => handleCellClick(rowIndex, colIndex)}
-                />
-            );
+            return (<gridHelper key={`${rowIndex}-${colIndex}`} position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]} args={[1, 1]}
+                                material={new THREE.MeshBasicMaterial({ color: 0x000000 })}
+            />);
         }
     };
 
 
     return (
         <Suspense fallback={null}>
-            <Canvas camera={{ position: [40, 35, 60] }} className={"grid"}>
-                <directionalLight />
-                <ambientLight />
-                <pointLight />
-                <spotLight />
-                <hemisphereLight />
-                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={42} minDistance={0} />
+            <Canvas camera={{ position: [20, 30, 60] }} className={"grid"} shadows={true}>
+                <directionalLight position={[50,10,5]} intensity={3}/>
+                <ambientLight intensity={1}/>
+                <hemisphereLight intensity={1}/>
+                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={60} minDistance={0} />
                 {
                     (() =>
                         {
@@ -134,9 +174,25 @@ function Grid({buildings, position, setPosition})
                         }
                     )()
                 }
+                <Ground/>
             </Canvas>
         </Suspense>
     );
+}
+
+function createShadow(width, height, shadowColor)
+{
+    const geometry = new THREE.PlaneGeometry(width, height);
+    const material = new THREE.MeshBasicMaterial({ color: shadowColor });
+    const square = new THREE.Mesh(geometry, material);
+    square.position.set(0, 0, 0);
+    square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
+    return square
+}
+
+function InsideGrid(selectedBuilding, newPosition)
+{
+    return newPosition[0] < 39 && newPosition[1] < 38 && newPosition[0] >= 0 && newPosition[1] >= 0
 }
 
 export default Grid;

@@ -8,7 +8,7 @@ Title: Small Stylised Bush
 
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
-import bush from '../assets/small_stylised_bush.glb'
+import bush from '../../assets/small_stylised_bush.glb'
 
 function Bush(props) {
   const { nodes, materials } = useGLTF(bush);

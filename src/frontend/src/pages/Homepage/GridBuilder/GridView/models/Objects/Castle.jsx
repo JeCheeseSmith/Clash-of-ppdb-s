@@ -8,7 +8,7 @@ Title: Castle 3D Model
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import castle from '../assets/castle.glb'
+import castle from '../../assets/castle.glb'
 
 /**
  * React component for rendering a 3D model of a Castle.
@@ -19,7 +19,7 @@ export default function Castle(props) {
   const { nodes, materials } = useGLTF(castle)
   return (
     <group {...props} dispose={null} scale={0.11}>
-      <group position={[3.2, 22.6, -16]} rotation={[Math.PI / 2, 0, 0]}>
+      <group position={[3.2, 22.6, -4.5]} rotation={[Math.PI / 2, 0, 0]}>
         <mesh
           castShadow
           receiveShadow

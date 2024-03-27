@@ -8,7 +8,7 @@ Title: Stilized house
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import stoneStockpile from '../assets/stoneStockpile.glb'
+import stoneStockpile from '../../assets/stoneStockpile.glb'
 
 /**
  * React component for rendering a 3D model of a stone stockpile.
@@ -18,7 +18,7 @@ import stoneStockpile from '../assets/stoneStockpile.glb'
 export default function StoneStockpile(props) {
   const { nodes, materials } = useGLTF(stoneStockpile)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} position={[1.3,0,0]}>
       <group scale={0.004}>
         <mesh
           castShadow

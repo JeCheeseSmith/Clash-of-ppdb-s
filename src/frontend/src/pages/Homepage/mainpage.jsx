@@ -1,4 +1,4 @@
-import React, {useState} from 'react'; // Importing React library
+import React, {useEffect, useState} from 'react'; // Importing React library
 import './mainpage.css'; // Importing the CSS file for styling
 import Chat from './Communication/chat/chat.jsx';
 import SocialBox from "./Communication/social/social.jsx";
@@ -8,6 +8,8 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
+import GET from "../../api/GET.jsx";
+import POST from "../../api/POST.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -15,21 +17,29 @@ import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
  */
 function MainPage()
 {
-    const [position, setPosition] = useState("")
-    const [buildings, setBuildings] = useState([/*{type:"WoodCuttersCamp", position:[5,5]}*/])
-    const addBuilding = (type, position) =>
+    const [buildings, setBuildings] = useState([])
+    const sid = localStorage.getItem('sid');
+    useEffect(() =>
     {
-        setBuildings([...buildings, { type, position }]);
+        const returnData = async () =>
+        {
+            const data = await GET({"sid":sid}, "/getGrid")
+            setBuildings(data)
+        }
+        returnData();
+    }, []);
+    const addBuilding = (type, position, size, occupiedCells) =>
+    {
+        setBuildings([...buildings, {type, position, size, occupiedCells}]);
     }
-
 
     return (
         <div className="background"> {/* Container for the background image */}
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu addBuilding={addBuilding} setPosition={setPosition}/>
-            <Grid buildings={buildings} position={position} setPosition={setPosition}/>
+            <Buildmenu buildings={buildings} addBuilding={addBuilding}/>
+            <Grid buildings={buildings}/>
             <ResourceBar/>
             <SoldierMenu/>
 
