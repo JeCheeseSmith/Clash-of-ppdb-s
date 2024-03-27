@@ -89,7 +89,6 @@ def get_login():
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        ### TODO
         # timer_data_acces.evualateTimers(Player_obj)
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
