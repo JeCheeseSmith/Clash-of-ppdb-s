@@ -251,7 +251,7 @@ def getGrid():
     "grid": <MATRIX> | Matrix representation of the grid
     }
     """
-    data = request.json
+    data = request.args
     grid = settlement_data_acces.getGrid(data.get('sid'))
     return jsonify(grid)
 
@@ -329,9 +329,15 @@ def upgradeBuilding():
     data = request.json
     building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
                                             data.get('sid'))  # Reform data
-    succes = settlement_data_acces.upgradeBuilding(building, package_data_acces, timer_data_acces,
+    succes, timer = settlement_data_acces.upgradeBuilding(building, package_data_acces, timer_data_acces,
                                                    building_data_acces)  # Execute actual funcionality
-    return jsonify(dict(succes=succes))
+
+    if succes:
+        dct = timer.to_dct()
+        dct["succes"] = succes
+    else:
+        dct = dict(succes=succes)
+    return jsonify(dct)
 
 
 @app.route("/buildings", methods=["GET"])

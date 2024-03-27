@@ -1,4 +1,3 @@
-from .package import *
 from .building import *
 from .timer import *
 
@@ -52,7 +51,7 @@ class SettlementDataAcces:
         return level
 
     def upgradeCastle(self, sid):
-        # Upgrading the Castle is rather complicated and need to be presetted
+        # Upgrading the Castle is rather complicated and need to be preset
         pass
 
     def initialise(self, sid):
@@ -77,7 +76,7 @@ class SettlementDataAcces:
 
         # Preset Unlocked Status for each soldier
         cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);',
-                       ('ArmoredFootman', sid, -1))  # Set maxnumber to -1 aka unlimited
+                       ('ArmoredFootman', sid, -1))  # Set max number to -1 aka unlimited
         cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);', ('Guardsman', sid, -1))
         cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);', ('Horseman', sid, -1))
         cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);', ('Bowman', sid, -1))
@@ -131,6 +130,7 @@ class SettlementDataAcces:
         Verify if a settlement can afford building or upgrading a certain building
         If so, a deficit will be made
         If not, an exception is thrown
+        :param package_data_acces: Database Connection for handling packages related info
         :param building: Building Object
         :return:
         """
@@ -150,7 +150,7 @@ class SettlementDataAcces:
         total -= deficit  # Do arithmetic
 
         if total.hasNegativeBalance():  # Not enough resources :(
-            raise Exception("Not enough resource to fullfill this upgrade!")
+            raise Exception("Not enough resource to fulfill this upgrade!")
 
         package_data_acces.update_resources(total)  # Adjust resource amount
 
@@ -159,7 +159,8 @@ class SettlementDataAcces:
             if self.reachedMaxBuildingAmount(building.name, building.sid):  # Verify if the max buildings is not reached
                 return False
 
-            self.calculateCosts(building,package_data_acces)  # Verify if a settlement can afford this upgrade; throws an error if not
+            self.calculateCosts(building,
+                                package_data_acces)  # Verify if a settlement can afford this upgrade; throws an error if not
 
             self.insertBuilding(building)  # Insert the new building into the database
 
@@ -174,18 +175,22 @@ class SettlementDataAcces:
 
     def upgradeBuilding(self, building: Building, package_data_acces, timer_data_acces, building_data_acces):
         try:
+            building.level += 1  # We want to calculate the building cost for 1 level higher than the current
             self.calculateCosts(building, package_data_acces)  # Verifies if a settlement can afford this upgrade
+            building.level -= 1  # It may not yet produce resource at the new level
 
             start, stop, duration = building_data_acces.calculateBuildTime(building)  # Create Timer
-            timer_data_acces.insertTimer(Timer(building.id, 'building', start, stop, duration, building.sid))  # When
+            timer = Timer(building.id, 'building', start, stop, duration, building.sid)
+            print(timer.to_dct())
+            timer_data_acces.insertTimer(timer)  # When
             # the timer stops, the level of the building will be adjusted
 
             self.dbconnect.commit()
-            return True
+            return True, timer
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
-            return False
+            return False, None
 
     def getGrid(self, sid):
         """
@@ -195,7 +200,7 @@ class SettlementDataAcces:
         """
         grid = []  # Matrix
 
-        cursor = self.dbconnect.get_cursor()  # Execute querry
+        cursor = self.dbconnect.get_cursor()  # Execute query
         cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
         records = cursor.fetchall()
 

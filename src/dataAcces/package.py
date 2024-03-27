@@ -166,8 +166,11 @@ class PackageDataAccess:
         :param x: Variable in the function
         :return:
         """
+        print(function, x)
         if isinstance(function, tuple):  # Prevent weird python bug where function is converted to a tuple of lists
             function = function[0]
         if function[0] == 0:  # [0,4000,0]: A zero at the beginning, means that x should be calculated as 2^x
             x = int(exp2(x))
-        return int(polyval(function, x))
+        result =  int(polyval(function, x))
+        print(result)
+        return result
