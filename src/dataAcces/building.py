@@ -71,10 +71,10 @@ class BuildingDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT * FROM building WHERE sid=%s and gridx=%s and gridy=%s;', (sid, gridX, gridY))
-        dataBuilding = cursor.fetchone()[0]
+        dataBuilding = cursor.fetchone()
 
-        cursor.execute('SELECT * FROM buildable WHERE name=%s;', (dataBuilding[1]))
-        dataBuildable = cursor.fetchone()[0]
+        cursor.execute('SELECT * FROM buildable WHERE name=%s;', (dataBuilding[1],))
+        dataBuildable = cursor.fetchone()
 
         return Building(dataBuildable[0], dataBuildable[1], dataBuildable[2], dataBuildable[3], dataBuildable[4],
                         dataBuildable[5], dataBuilding[0], dataBuilding[2], gridX, gridY, sid, dataBuilding[6])
@@ -95,21 +95,19 @@ class BuildingDataAccess:
         return Building(name, buildable[1], buildable[2], buildable[3], buildable[4], buildable[5], None, 1, gridX,
                         gridY, sid, occupiedCells)
 
-    @staticmethod
-    def toOccupiedCellsFrontend(array: list):
+    def moveBuilding(self, building: Building):
         """
-        Transforms the database OccupiedCells Format to the frontend format
-        Precondition: Array.size%2 == 0
-        :param array: [a,b,c,..] with a is an int
-        :return: [[a,b],[c,d],..]
+        Update the occupied Cells & Position
+        Remember: gridX & gridY is Unique!
+        :param building: The building Object containing new cells & position
+        :return:
         """
-        pass
-
-    @staticmethod
-    def toOccupiedCellsBackend(array: list):
-        """
-        Transforms the Frontend OccupiedCells Format to the database format
-        :param array: [[a,b],[c,d],..] with a is an int
-        :return: array [a,b,c,d..] with a an int
-        """
-        pass
+        try:
+            cursor = self.dbconnect.get_cursor()
+            cursor.execute('UPDATE building SET gridX = %s, gridY= %s, occuppiedcells= %s  WHERE id=%s;', (building.gridX, building.gridY, building.occupiedCells, building.id))
+            self.dbconnect.commit()
+            return True
+        except Exception as e:
+            print('error', e)
+            self.dbconnect.rollback()
+            return False

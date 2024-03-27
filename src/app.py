@@ -245,9 +245,13 @@ def getGrid():
 @app.route("/moveBuilding" , methods=["POST"])
 def moveBuiling():
     """
+    API Call to update the location of a building
+
     JSON Input Format:
     {
-    "position": <ARRAY INT> | [gridX, gridY]
+    "oldPosition": <ARRAY INT> | [gridX, gridY]
+    "newPosition": <ARRAY INT> | [gridX, gridY] New position on the grid
+    "occupiedCells": <INT[][]> | All the cells a building takes in on the grid
     "sid": <INT> | Identifier of the settlement
     }
 
@@ -256,12 +260,19 @@ def moveBuiling():
     "success": <BOOL> | State of action
     }
     """
-
-    pass
+    data = request.json
+    building = building_data_acces.retrieve(data.get('oldPosition')[0], data.get('oldPosition')[1], data.get('sid'))  # Reform data
+    building.occupiedCells = data.get('occupiedCells')
+    building.gridX = data.get('newPosition')[0]
+    building.gridY = data.get('newPosition')[1]
+    succes = building_data_acces.moveBuilding(building)  # Execute functionality
+    return jsonify(dict(succes=succes))
 
 @app.route("/placeBuilding", methods=["POST"])
 def placeBuilding():
     """
+    API Call to place a new building (adds a timer, makes a resource deficit)
+
     JSON Input Format:
     {
     "name": <STRING> | Unique name of the Buildable
@@ -277,7 +288,6 @@ def placeBuilding():
     """
     data = request.json
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0], data.get('position')[1], data.get('occupiedCells'))  # Reform data
-    print(building.to_dct())
     succes = settlement_data_acces.placeBuilding(building, package_data_acces, timer_data_acces, building_data_acces)  # Execute functionality
     return jsonify(dict(succes=succes))
 
