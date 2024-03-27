@@ -22,7 +22,7 @@ export default SoldierMenuButton;
 
 function SoldierMenuBox(soldierVisible) {
     return (
-        <div className="SoldierMenubox">
+        <div className="box-container">
             <SoldierNavbar soldierVisible={soldierVisible}/>
         </div>
     )
@@ -37,16 +37,16 @@ function SoldierNavbar(soldierVisible) {
     };
 
     return (
-        <div className="SoldierMenubox">
+        <div className="navbar-container">
             {soldierVisible && (
             <nav className="navbar visible">
                 <ul className="navbar-links">
                     <li>
-                        <button onClick={() => handleButtonClick('troopoverview')} className={"SoldierMenubox"}>Troop Overview
+                        <button onClick={() => handleButtonClick('troopoverview')} className={"socialOption"}>Troop Overview
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => handleButtonClick('traintroopoverview')} className={"SoldierMenubox"}>Troop Training
+                        <button onClick={() => handleButtonClick('traintroopoverview')} className={"socialOption"}>Troop Training
                         </button>
                     </li>
                 </ul>

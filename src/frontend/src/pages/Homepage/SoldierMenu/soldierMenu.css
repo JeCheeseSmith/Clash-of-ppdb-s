@@ -29,6 +29,42 @@
     margin-top: 2px;
 }
 
+.box-container {
+    position: absolute;
+    left: 500px; /* Adjust this value as needed */
+    top: 80px; /* Adjust this value as needed */
+    width: 1350px;
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+.socialOption {
+    background-color: #8B4513;
+    color: #fff;
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #CD853F;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.socialOption:hover {
+    background-color: #A0522D;
+    border-color: #A0522D;
+}
+
+.socialOption:focus {
+    outline: none;
+    background-color: #A0522D;
+    border-color: #A0522D;
+    box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.4);
+}
+
 .troopoverview{
 }
 
