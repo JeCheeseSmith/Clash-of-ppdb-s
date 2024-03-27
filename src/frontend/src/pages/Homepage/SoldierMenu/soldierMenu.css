@@ -1,27 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
 .soldier-icon {
-  display: flex;
   position: absolute;
-  justify-content: center;
-  align-items: center;
   padding: 10px;
   background-image: linear-gradient(to right, rgb(96, 53, 4), rgb(154, 93, 44), #673909);
   background-size: cover;
   width: 50px;
-  margin: 0 auto;
   border-radius: 10px;
   border: 3px solid #593811;
+  margin-bottom: 40px;
 }
 
 .soldierSection {
   flex: 1;
   margin-bottom: 40px;
-  text-align: left;
+  float: left;
+  width: 20%;
 }
 
 .soldierCount {
   margin-left: 100px;
+  margin-bottom: 40px;
 }
 
 
@@ -71,11 +70,10 @@
     background-image: url(assets/food.png); /* Ensure the image path is correct */
     background-repeat: no-repeat;
     background-size: cover; /* Adjust the size of the image */
-    border-radius: 0%; /* Apply border-radius to create a circular shape */
+    border-radius: 0; /* Apply border-radius to create a circular shape */
     margin-left: 10px; /* Add more margin between image and text */
     z-index: 2;
     padding-right: 50px;
-    padding-top: 0px;
 }
 
 .soldier-primair-input{
@@ -158,8 +156,6 @@
     width: 880px;
     height: 650px;
     z-index: 9999; /* Ensure it appears above other elements */
-    background-color: #8B4513;
-    color: #fff;
     font-family: 'Anton', sans-serif;
     font-size: 18px;
     font-weight: bold;
@@ -218,11 +214,10 @@
 .trainMenu::before {
     content: '';
     display: block;
-    width: 0px;
     height: 86%;
     position: absolute;
     top: 7%;
-    left: 0%;
+    left: 0;
     opacity: 0;
     background: #fff;
     box-shadow: 0 0 50px 30px #fff;
@@ -236,7 +231,6 @@
 @keyframes sh02 {
   from {
     opacity: 0;
-    left: 0%;
   }
 
   50% {

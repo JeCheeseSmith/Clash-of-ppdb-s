@@ -84,14 +84,26 @@ function TroopOverviewPage() {
                 <div className="soldierSection">
                     <img src={warrior} alt="Armored footman" className="soldier-icon"/>
                     <div className="soldierCount">1</div>
-                </div>
-                <div className="soldierSection">
                     <img src={warrior} alt="Huskarl" className="soldier-icon"/>
-                    <span className="soldierCount">0</span>
+                    <div className="soldierCount">1</div>
+                    <img src={warrior} alt="Order Knights" className="soldier-icon"/>
+                    <div className="soldierCount">1</div>
                 </div>
                 <div className="soldierSection">
-                    <img src={warrior} alt="Order Knights" className="soldier-icon"/>
-                    <span className="soldierCount">2</span>
+                    <img src={warrior} alt="test" className="soldier-icon"/>
+                    <div className="soldierCount">0</div>
+                    <img src={warrior} alt="test" className="soldier-icon"/>
+                    <div className="soldierCount">0</div>
+                    <img src={warrior} alt="test" className="soldier-icon"/>
+                    <div className="soldierCount">0</div>
+                </div>
+                <div className="soldierSection">
+                    <img src={warrior} alt="test 2" className="soldier-icon"/>
+                    <div className="soldierCount">2</div>
+                    <img src={warrior} alt="test 2" className="soldier-icon"/>
+                    <div className="soldierCount">0</div>
+                    <img src={warrior} alt="test 2" className="soldier-icon"/>
+                    <div className="soldierCount">0</div>
                 </div>
             </div>
         </div>
