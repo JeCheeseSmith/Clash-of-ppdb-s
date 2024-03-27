@@ -1,7 +1,89 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
+.soldier-icon {
+  display: flex;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  background-image: linear-gradient(to right, rgb(96, 53, 4), rgb(154, 93, 44), #673909);
+  background-size: cover;
+  width: 50px;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: 3px solid #593811;
+}
+
+.soldierSection {
+  flex: 1;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.soldierCount {
+  margin-left: 100px;
+}
+
+
+.army-title {
+    position: relative;
+    font-size: 30px;
+    z-index: 1;
+    overflow: hidden;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Anton', sans-serif;
+}
+
+.army-title:before, .army-title:after {
+    position: absolute;
+    top: 51%;
+    overflow: hidden;
+    width: 48%;
+    height: 1px;
+    content: '\a0';
+    background-color: #cccccc;
+    margin-left: 2%;
+}
+
+.army-title:before {
+    margin-left: -50%;
+    text-align: right;
+}
+
+.soldierMenuButton-icon {
+    width: 50px; /* Set width of the image container */
+    height: 50px; /* Set height of the image container */
+    background-image: url(assets/swords.png); /* Ensure the image path is correct */
+    background-repeat: no-repeat;
+    background-size: cover; /* Adjust the size of the image */
+    border-radius: 20%; /* Apply border-radius to create a circular shape */
+    margin-left: 43px; /* Add more margin between image and text */
+    z-index: 2;
+    padding-right: 50px;
+    padding-top: 50px;
+    align-items: center;
+}
+
+.food-icon {
+    width: 35px; /* Set width of the image container */
+    height: 35px; /* Set height of the image container */
+    background-image: url(assets/food.png); /* Ensure the image path is correct */
+    background-repeat: no-repeat;
+    background-size: cover; /* Adjust the size of the image */
+    border-radius: 0%; /* Apply border-radius to create a circular shape */
+    margin-left: 10px; /* Add more margin between image and text */
+    z-index: 2;
+    padding-right: 50px;
+    padding-top: 0px;
+}
+
 .soldier-primair-input{
     margin: 20px;
+    color: #ffffff;
+    font-size: 30px;
+    font-family: 'Anton', sans-serif;
+
 }
 
 .navbar {
@@ -25,10 +107,10 @@
   margin-right: 6rem; /* Increase the right margin to create larger spaces */
 }
 
-.page-content {
+.soldier-page-content {
     background-color: #1f1a18;
     border: 2px solid #ffd700;
-    height: 500px;
+    height: 540px;
     border-radius: 10px;
     margin-top: 2px;
 }
@@ -69,10 +151,26 @@
     box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.4);
 }
 
-.troopoverview{
-}
-
-.traintroopoverview{
+.SoldierMenubox {
+    position: absolute;
+    left: 500px; /* Adjust this value as needed */
+    top: 80px; /* Adjust this value as needed */
+    width: 880px;
+    height: 650px;
+    z-index: 9999; /* Ensure it appears above other elements */
+    background-color: #8B4513;
+    color: #fff;
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #CD853F;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .trainMenu {
@@ -95,28 +193,6 @@
     -webkit-transition: all 0.2s ease-in;
     -moz-transition: all 0.2s ease-in;
     transition: all 0.2s ease-in;
-}
-
-.SoldierMenubox {
-    position: absolute;
-    left: 500px; /* Adjust this value as needed */
-    top: 80px; /* Adjust this value as needed */
-    width: 880px;
-    height: 650px;
-    z-index: 9999; /* Ensure it appears above other elements */
-    background-color: #8B4513;
-    color: #fff;
-    font-family: 'Anton', sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 2px; /* Adding letter spacing */
-    border: 2px solid #CD853F;
-    border-radius: 10px;
-    padding: 15px 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .center {

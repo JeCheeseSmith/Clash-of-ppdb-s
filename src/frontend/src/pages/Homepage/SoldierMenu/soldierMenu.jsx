@@ -1,10 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './soldierMenu.css'
-import CommunicationButton from "../Communication/communication.jsx";
-import SocialOption from "../Communication/social/socialOptionContents.jsx";
-import {useLocation} from "react-router-dom";
-import POST from "../../../api/POST.jsx";
-import DisplayAvatarName from "../../../globalComponents/avatarWithName/avatarWithName.jsx";
+import warrior from "./assets/knight.png";
 
 /**
  * React component for the troop screen button
@@ -16,8 +12,9 @@ function SoldierMenuButton(props) {
             <button onClick={() => {
                 setsoldierVisible(!soldierVisible);
             }} className={"trainMenu"}>Troop Menu
+                <div className="soldierMenuButton-icon"></div>
             </button>
-            {soldierVisible? SoldierMenuBox(soldierVisible):null}
+            {soldierVisible ? SoldierMenuBox(soldierVisible):null}
         </>
     );
 }
@@ -66,7 +63,7 @@ function SoldierNavbar(soldierVisible) {
 
 function SoldierMenuOptions({pageName, requests, sendData}){
     return (
-        <div className="page-content">
+        <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage/>}
             {pageName === 'trainTroopOverview' && <TroopTrainPage/>}
         </div>
@@ -77,7 +74,26 @@ function SoldierMenuOptions({pageName, requests, sendData}){
 function TroopOverviewPage() {
     return (
         <div className="soldier-primair-input">
-            test
+            <div className="soldier-primair-input">
+                <nobr className="food-icon"></nobr>
+                consumption: 10
+            </div>
+            <div className="army-title"> Army</div>
+            <div className="soldier-primair-input">
+                {/* Each soldier has a symbol and a count */}
+                <div className="soldierSection">
+                    <img src={warrior} alt="Armored footman" className="soldier-icon"/>
+                    <div className="soldierCount">1</div>
+                </div>
+                <div className="soldierSection">
+                    <img src={warrior} alt="Huskarl" className="soldier-icon"/>
+                    <span className="soldierCount">0</span>
+                </div>
+                <div className="soldierSection">
+                    <img src={warrior} alt="Order Knights" className="soldier-icon"/>
+                    <span className="soldierCount">2</span>
+                </div>
+            </div>
         </div>
     )
 }
@@ -85,7 +101,7 @@ function TroopOverviewPage() {
 function TroopTrainPage() {
     return (
         <div className="soldier-primair-input">
-            test 2
+            <div className="army-title"> Training Queue</div>
         </div>
     )
 }
