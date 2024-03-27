@@ -19,18 +19,6 @@ function Grid({buildings, updateBuildings })
 {
     const [selectedBuilding, setSelectedBuilding] = useState([[],false]) // value moet iets uniek van building zijn
     const gridSize = 40;
-    const checkCollisions = (position) =>
-    {
-        for (let building of buildings)
-        {
-            if (building.position[0] === position[0] && building.position[1] === position[1] && building !== selectedBuilding[0])
-            {
-                return true; // Collision detected
-            }
-        }
-        return false; // No collision
-    };
-
     const moveObject = (row, col) =>
     {
         const newPosition = [selectedBuilding[0].position[0] + row, selectedBuilding[0].position[1] + col];
@@ -166,7 +154,7 @@ function createShadow(width, height)
     const geometry = new THREE.PlaneGeometry(width, height); // Make the squares bigger
     const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
     const square = new THREE.Mesh(geometry, material);
-    square.position.set(0, 1, 0); // Adjust position to make them flat and spread out horizontally
+    square.position.set(0, 0, 0); // Adjust position to make them flat and spread out horizontally
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
 }
