@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
-
 .button-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh; /* Dit zorgt ervoor dat de container de volledige viewport hoogte inneemt */
@@ -24,4 +24,9 @@
 .upgrade-button:hover {
   transform: scale(1.05);
   cursor: pointer;
+}
+
+.upgrade-container {
+  position: relative;
+  display: inline-block;
 }
