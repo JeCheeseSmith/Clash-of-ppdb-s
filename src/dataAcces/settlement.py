@@ -160,8 +160,22 @@ class SettlementDataAcces:
             self.dbconnect.rollback()
             return False
 
-    def getBuildings(self, id):
-        pass
+    def getGrid(self, sid):
+        """
+        Retrieves all buildings for a given settlement and puts them in a frontend usable matrix
+        :param sid: Identifier of the settlement
+        :return:
+        """
+        grid = []  # Matrix
+
+        cursor = self.dbconnect.get_cursor()   # Execute querry
+        cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid, ))
+        records = cursor.fetchall()
+
+        for building in records:
+            grid.append([building[1], [building[3],building[4]], building[6]])
+
+        return grid
 
     def createOutPost(self):
         pass

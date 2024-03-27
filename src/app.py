@@ -236,11 +236,21 @@ def update():
 @app.route("/getGrid", methods=["GET"])
 def getGrid():
     """
-    in: sid
-    out: grid
-    :return:
+    API Call to retrieve the grid of a settlement
+
+    JSON Input Format:
+    {
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "grid": <MATRIX> | Matrix representation of the grid
+    }
     """
-    pass
+    data = request.json
+    grid = settlement_data_acces.getGrid(data.get('sid'))
+    return jsonify(grid)
 
 @app.route("/moveBuilding" , methods=["POST"])
 def moveBuiling():
