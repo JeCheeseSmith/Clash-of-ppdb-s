@@ -3,7 +3,7 @@ import './buildmenuOptionsContents.css'
 import BuildingImages from "./assets/BuildingImages.jsx";
 import GridCalculation from "../gridCalculation.jsx";
 
-function BuildmenuOptionsContents({ currentPage, addBuildable, buildings, updateBuildings})
+function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 {
     return (
         <div className="type-container">
@@ -20,7 +20,6 @@ function BuildmenuOptionsContents({ currentPage, addBuildable, buildings, update
                                 image={image}
                                 size={size}
                                 buildings={buildings}
-                                updateBuildings={updateBuildings}
                             />
                         );
                     })
@@ -40,7 +39,7 @@ function BuildmenuOptionsContents({ currentPage, addBuildable, buildings, update
  * @returns {JSX.Element} JSX representation of the Building component.
  */
 
-function Building({addBuildable, name, image, size, buildings, updateBuildings})
+function Building({addBuildable, name, image, size, buildings})
 {
     const getRandomPosition = () =>
     {
@@ -65,8 +64,8 @@ function Building({addBuildable, name, image, size, buildings, updateBuildings})
         while (newCells[0] === false)
         {
             randomPosition = getRandomPosition()
-            selectedBuilding = [{name, randomPosition, size, occupiedCells},selected]
-            newCells = GridCalculation(buildings, updateBuildings, selectedBuilding, randomPosition)
+            selectedBuilding = [{name, randomPosition, size, occupiedCells},selected, 0x006f00 /*shadowColor*/, true /*validPosition*/]
+            newCells = GridCalculation(buildings, selectedBuilding, randomPosition)
         }
         addBuildable(name, randomPosition, size, newCells[1])
     }

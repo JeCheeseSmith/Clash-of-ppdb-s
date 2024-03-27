@@ -8,7 +8,7 @@ import BuildmenuOptionsContents from "./buildmenuOptionsContents.jsx";
  * @returns {JSX.Element} JSX representation of the BuildMenu component.
  */
 
-function BuildMenu({addBuilding, buildings, updateBuildings})
+function BuildMenu({addBuilding, buildings})
 {
   // State variable to track the visibility of the build menu
   const [menuVisible, setMenuVisible] = useState(false);
@@ -41,7 +41,7 @@ function BuildMenu({addBuilding, buildings, updateBuildings})
       </button>
       {/* Rendering the BuildOptions component with visibility controlled by the 'menuVisible' state */}
       <div>
-        <BuildOptions menuVisible={menuVisible} setMenuVisible={setMenuVisible} addBuildable={addBuildable} buildings={buildings} updateBuildings={updateBuildings}/>
+        <BuildOptions menuVisible={menuVisible} setMenuVisible={setMenuVisible} addBuildable={addBuildable} buildings={buildings}/>
       </div>
     </div>
   );
@@ -55,7 +55,7 @@ function BuildMenu({addBuilding, buildings, updateBuildings})
  * @param {Function} props.setMenuVisible - Function to set the visibility of the menu.
  * @returns {JSX.Element} JSX representation of the BuildOptions component.
  */
-function BuildOptions({ menuVisible, setMenuVisible, addBuildable, buildings, updateBuildings}) {
+function BuildOptions({ menuVisible, setMenuVisible, addBuildable, buildings}) {
   // State variable to track the current page
   const [currentPage, setCurrentPage] = useState('Production');
 
@@ -113,7 +113,7 @@ function BuildOptions({ menuVisible, setMenuVisible, addBuildable, buildings, up
         </nav>
       )}
       {/* Rendering content based on the current page */}
-      {menuVisible && (<BuildmenuOptionsContents currentPage={currentPage} addBuildable={addBuildable} buildings={buildings} updateBuildings={updateBuildings}/>)}
+      {menuVisible && (<BuildmenuOptionsContents currentPage={currentPage} addBuildable={addBuildable} buildings={buildings}/>)}
     </div>
   );
 }

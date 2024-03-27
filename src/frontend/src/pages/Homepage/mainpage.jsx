@@ -1,4 +1,4 @@
-import React, {useState} from 'react'; // Importing React library
+import React, {useEffect, useState} from 'react'; // Importing React library
 import './mainpage.css'; // Importing the CSS file for styling
 import Chat from './Communication/chat/chat.jsx';
 import SocialBox from "./Communication/social/social.jsx";
@@ -8,6 +8,7 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
+import GET from "../../api/GET.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -16,9 +17,14 @@ import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
 function MainPage()
 {
     const [buildings, setBuildings] = useState([])
+    /*useEffect(async () =>
+    {
+        const data = await GET({"sid":1}, "/getGrid")
+        setBuildings(data)
+    }, []);*/
     const addBuilding = (type, position, size, occupiedCells) =>
     {
-        setBuildings([...buildings, { type, position, size, occupiedCells}]);
+        setBuildings([...buildings, {type, position, size, occupiedCells}]);
     }
 
     return (
@@ -26,7 +32,7 @@ function MainPage()
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateBuildings={setBuildings}/>
+            <Buildmenu buildings={buildings} addBuilding={addBuilding}/>
             <Grid buildings={buildings} updateBuildings={setBuildings}/>
             <ResourceBar/>
             <SoldierMenu/>

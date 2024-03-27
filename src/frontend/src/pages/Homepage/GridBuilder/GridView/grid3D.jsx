@@ -6,6 +6,7 @@ import Buildings3D from "./models/Buildings3D.jsx";
 import * as THREE from "three";
 import Ground from "./models/Objects/Ground.jsx";
 import GridCalculation from "../gridCalculation.jsx";
+import error from "../../../../assets/buildingPlacementError.mp3";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -15,22 +16,49 @@ import GridCalculation from "../gridCalculation.jsx";
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings, updateBuildings })
+function Grid({buildings})
 {
-    const [selectedBuilding, setSelectedBuilding] = useState([[],false]) // value moet iets uniek van building zijn
+    const [selectedBuilding, setSelectedBuilding] =
+        useState([[],false /*floating*/, 0x006f00 /*shadowColor*/, true])
     const gridSize = 40;
+    const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de celposities checken)
+    {
+        for (let building of buildings)
+        {
+            if (building.position[0] === position[0] && building.position[1] === position[1])
+            {
+                return true; // Collision detected
+            }
+        }
+        return false; // No collision
+    };
     const moveObject = (row, col) =>
     {
         const newPosition = [selectedBuilding[0].position[0] + row, selectedBuilding[0].position[1] + col];
-        let newCells = GridCalculation(buildings, updateBuildings, selectedBuilding, newPosition)
-        if (newCells[0] && selectedBuilding[1])
+        let newCells = GridCalculation(buildings, selectedBuilding, newPosition)
+        let insideGrid = InsideGrid(selectedBuilding,newPosition)
+        let technicalValid = checkTechnicalCollisions(newPosition)
+        if (selectedBuilding[1] && insideGrid && !technicalValid) // valid position en boolean van float building
         {
             // No collision, move the building
             selectedBuilding[0].position = newPosition;
             selectedBuilding[0].occupiedCells = newCells[1]
-            setSelectedBuilding([selectedBuilding[0], selectedBuilding[1]]);
         }
-        return newCells
+        if (newCells[0])
+        {
+            selectedBuilding[2] = 0x006f00
+        }
+        else
+        {
+            selectedBuilding[2] = 0xff0000
+            const sound = new Audio(error);
+            sound.currentTime = 0.0;
+            sound.volume = 0.1
+            sound.play();
+        }
+        selectedBuilding[3] = newCells[0]
+        setSelectedBuilding([selectedBuilding[0], selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]);
+        return newCells[0]
     };
 
     let validPosition
@@ -55,7 +83,7 @@ function Grid({buildings, updateBuildings })
                     validPosition = moveObject(0, 0)
                     if (validPosition)
                     {
-                        setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1]]);
+                        setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]); //alleen boolean veranderen
                     }
                     break;
                 default:
@@ -71,7 +99,10 @@ function Grid({buildings, updateBuildings })
 
     const handleObjectClick = (building) =>
     {
-        setSelectedBuilding([building, !selectedBuilding[1]]) // momenteel is position, het "id" van een building
+        if (selectedBuilding[3])
+        {
+            setSelectedBuilding([building, !selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]])
+        }
     }
 
     const BuildingMesh = ({building}) =>
@@ -93,7 +124,7 @@ function Grid({buildings, updateBuildings })
                     <Building/>
                 </mesh>
                 <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
-                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building.size[0],building.size[1])}/>}
+                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building.size[0],building.size[1], selectedBuilding[2])}/>}
                 </mesh>
             </>
         );
@@ -149,14 +180,19 @@ function Grid({buildings, updateBuildings })
     );
 }
 
-function createShadow(width, height)
+function createShadow(width, height, shadowColor)
 {
-    const geometry = new THREE.PlaneGeometry(width, height); // Make the squares bigger
-    const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const geometry = new THREE.PlaneGeometry(width, height);
+    const material = new THREE.MeshBasicMaterial({ color: shadowColor });
     const square = new THREE.Mesh(geometry, material);
-    square.position.set(0, 0, 0); // Adjust position to make them flat and spread out horizontally
+    square.position.set(0, 0, 0);
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
+}
+
+function InsideGrid(selectedBuilding, newPosition)
+{
+    return newPosition[0] < 39 && newPosition[1] < 38 && newPosition[0] >= 0 && newPosition[1] >= 0
 }
 
 export default Grid;

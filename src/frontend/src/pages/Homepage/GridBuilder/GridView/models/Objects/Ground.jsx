@@ -13,7 +13,7 @@ import ground from '../../assets/ground.glb'
 export default function Ground(props) {
   const { nodes, materials } = useGLTF(ground)
   return (
-    <group {...props} dispose={null} scale={0.1} position={[0,3.8,0]}>
+    <group {...props} dispose={null} scale={0.1} position={[0,3,0]}>
       <mesh
         castShadow
         receiveShadow

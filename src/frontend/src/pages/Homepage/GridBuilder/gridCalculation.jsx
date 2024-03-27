@@ -2,11 +2,10 @@ import {range} from "three/examples/jsm/nodes/geometry/RangeNode.js";
 import {useState} from "react";
 import {element} from "three/examples/jsm/nodes/shadernode/ShaderNode.js";
 
-function GridCalculation(buildings, updateBuildings, selectedBuilding, newPosition)
+function GridCalculation(buildings, selectedBuilding, newPosition)
 {
     let newCells = CalculateCells(selectedBuilding, newPosition)
-    let insideGrid = InsideGrid(selectedBuilding,newPosition)
-    let validCells = ValidPositionChecker(selectedBuilding, newCells, buildings, insideGrid)
+    let validCells = ValidPositionChecker(selectedBuilding, newCells, buildings)
     return [validCells,newCells]
 }
 
@@ -23,17 +22,8 @@ function CalculateCells(selectedBuilding, newPosition)
     return cells
 }
 
-function InsideGrid(selectedBuilding, newPosition)
+function ValidPositionChecker(selectedBuilding, newCells, buildings)
 {
-    return newPosition[0] < 39 && newPosition[1] < 38 && newPosition[0] >= 0 && newPosition[1] >= 0
-}
-
-function ValidPositionChecker(selectedBuilding, newCells, buildings, insideGrid)
-{
-    if (!insideGrid)
-    {
-        return false
-    }
     const hasDuplicates = (array) =>
     {
         const seen = new Set();
