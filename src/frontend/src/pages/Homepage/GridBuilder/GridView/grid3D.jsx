@@ -5,33 +5,51 @@ import './grid3D.css'
 import Buildings3D from "./models/Buildings3D.jsx";
 import * as THREE from "three";
 import Ground from "./models/Objects/Ground.jsx";
+import GridCalculation from "../gridCalculation.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
  * @param {Object[]} buildings - Array of buildings.
+ * @param addBuildings
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings})
+function Grid({buildings, updateBuildings })
 {
     const [selectedBuilding, setSelectedBuilding] = useState([[],false]) // value moet iets uniek van building zijn
     const gridSize = 40;
-    const moveObject = (row, col) =>
+    const checkCollisions = (position) =>
     {
         for (let building of buildings)
         {
-            if (building.position === selectedBuilding[0].position && selectedBuilding[1])
+            if (building.position[0] === position[0] && building.position[1] === position[1] && building !== selectedBuilding[0])
             {
-                building.position = [building.position[0] + row, building.position[1] + col]
-                setSelectedBuilding([building,selectedBuilding[1]]);
+                return true; // Collision detected
             }
         }
+        return false; // No collision
     };
 
+    const moveObject = (row, col) =>
+    {
+        const newPosition = [selectedBuilding[0].position[0] + row, selectedBuilding[0].position[1] + col];
+        let newCells = GridCalculation(buildings, updateBuildings, selectedBuilding, newPosition)
+        if (newCells[0] && selectedBuilding[1])
+        {
+            // No collision, move the building
+            selectedBuilding[0].position = newPosition;
+            selectedBuilding[0].occupiedCells = newCells[1]
+            setSelectedBuilding([selectedBuilding[0], selectedBuilding[1]]);
+        }
+        return newCells
+    };
+
+    let validPosition
     useEffect(() =>
     {
-        const handleKeyDown = (event) => {
+        const handleKeyDown = (event) =>
+        {
             switch (event.key) {
                 case 'ArrowUp':
                     moveObject(0, -1);
@@ -46,7 +64,11 @@ function Grid({buildings})
                     moveObject(1, 0)
                     break;
                 case 'Enter':
-                    setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1]]);
+                    validPosition = moveObject(0, 0)
+                    if (validPosition)
+                    {
+                        setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1]]);
+                    }
                     break;
                 default:
                     return;
@@ -83,7 +105,7 @@ function Grid({buildings})
                     <Building/>
                 </mesh>
                 <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
-                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building.shadowSize[0],building.shadowSize[1])}/>}
+                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building.size[0],building.size[1])}/>}
                 </mesh>
             </>
         );
@@ -103,7 +125,8 @@ function Grid({buildings})
         if (!buildingFound)
         {
             return (<gridHelper key={`${rowIndex}-${colIndex}`} position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]} args={[1, 1]}
-                                material={new THREE.MeshBasicMaterial({ color: 0x000000 })}/>);
+                                material={new THREE.MeshBasicMaterial({ color: 0x000000 })}
+            />);
         }
     };
 

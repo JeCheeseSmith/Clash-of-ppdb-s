@@ -8,14 +8,14 @@ import BuildmenuOptionsContents from "./buildmenuOptionsContents.jsx";
  * @returns {JSX.Element} JSX representation of the BuildMenu component.
  */
 
-function BuildMenu({addBuilding})
+function BuildMenu({addBuilding, buildings, updateBuildings})
 {
   // State variable to track the visibility of the build menu
   const [menuVisible, setMenuVisible] = useState(false);
 
-  const addBuildable = (type, position, shadowSize) =>
+  const addBuildable = (type, position, size, occupiedCells) =>
   {
-      addBuilding(type, position, shadowSize)
+      addBuilding(type, position, size, occupiedCells)
   };
 
 
@@ -41,7 +41,7 @@ function BuildMenu({addBuilding})
       </button>
       {/* Rendering the BuildOptions component with visibility controlled by the 'menuVisible' state */}
       <div>
-        <BuildOptions menuVisible={menuVisible} setMenuVisible={setMenuVisible} addBuildable={addBuildable}/>
+        <BuildOptions menuVisible={menuVisible} setMenuVisible={setMenuVisible} addBuildable={addBuildable} buildings={buildings} updateBuildings={updateBuildings}/>
       </div>
     </div>
   );
@@ -55,7 +55,7 @@ function BuildMenu({addBuilding})
  * @param {Function} props.setMenuVisible - Function to set the visibility of the menu.
  * @returns {JSX.Element} JSX representation of the BuildOptions component.
  */
-function BuildOptions({ menuVisible, setMenuVisible, addBuildable}) {
+function BuildOptions({ menuVisible, setMenuVisible, addBuildable, buildings, updateBuildings}) {
   // State variable to track the current page
   const [currentPage, setCurrentPage] = useState('Production');
 
@@ -113,7 +113,7 @@ function BuildOptions({ menuVisible, setMenuVisible, addBuildable}) {
         </nav>
       )}
       {/* Rendering content based on the current page */}
-      {menuVisible && (<BuildmenuOptionsContents currentPage={currentPage} addBuildable={addBuildable}/>)}
+      {menuVisible && (<BuildmenuOptionsContents currentPage={currentPage} addBuildable={addBuildable} buildings={buildings} updateBuildings={updateBuildings}/>)}
     </div>
   );
 }

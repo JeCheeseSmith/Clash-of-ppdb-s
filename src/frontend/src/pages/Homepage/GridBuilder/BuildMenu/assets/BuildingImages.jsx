@@ -21,7 +21,7 @@ const BuildingImages =
     Production:
     {
         WoodCuttersCamp: [WoodCuttersCamp, [6, 6]],
-        Quarry: [Quarry, [5, 5]],
+        Quarry: [Quarry, [3, 4]],
         SteelMine: [SteelMine, [8, 5]],
         Farm: [Farm, [5, 5]]
     },

@@ -15,10 +15,10 @@ import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
  */
 function MainPage()
 {
-    const [buildings, setBuildings] = useState([/*{type:"WoodCuttersCamp", position:[5,5]}*/])
-    const addBuilding = (type, position, shadowSize) =>
+    const [buildings, setBuildings] = useState([])
+    const addBuilding = (type, position, size, occupiedCells) =>
     {
-        setBuildings([...buildings, { type, position, shadowSize}]);
+        setBuildings([...buildings, { type, position, size, occupiedCells}]);
     }
 
     return (
@@ -26,8 +26,8 @@ function MainPage()
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu addBuilding={addBuilding}/>
-            <Grid buildings={buildings}/>
+            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateBuildings={setBuildings}/>
+            <Grid buildings={buildings} updateBuildings={setBuildings}/>
             <ResourceBar/>
             <SoldierMenu/>
 

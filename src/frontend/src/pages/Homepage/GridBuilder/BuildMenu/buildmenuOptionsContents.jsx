@@ -1,17 +1,27 @@
 import React, {useState} from 'react';
 import './buildmenuOptionsContents.css'
 import BuildingImages from "./assets/BuildingImages.jsx";
+import GridCalculation from "../gridCalculation.jsx";
 
-function BuildmenuOptionsContents({ currentPage, addBuildable })
+function BuildmenuOptionsContents({ currentPage, addBuildable, buildings, updateBuildings})
 {
     return (
         <div className="type-container">
             <div className="image-scroll-container">
-                {Object.entries(BuildingImages).map(([category, buildings]) => (
-                    Object.entries(buildings).map(([name, [image, shadowSize]]) =>
+                {Object.entries(BuildingImages).map(([category, buildables]) => (
+                    Object.entries(buildables).map(([name, [image, size]]) =>
                     {
                         return (
-                            currentPage === category && <Building key={`${category}-${name}`} addBuildable={addBuildable} name={name} image={image} shadowSize={shadowSize}/>
+                            currentPage === category &&
+                            <Building
+                                key={`${category}-${name}`}
+                                addBuildable={addBuildable}
+                                name={name}
+                                image={image}
+                                size={size}
+                                buildings={buildings}
+                                updateBuildings={updateBuildings}
+                            />
                         );
                     })
                 ))}
@@ -30,7 +40,7 @@ function BuildmenuOptionsContents({ currentPage, addBuildable })
  * @returns {JSX.Element} JSX representation of the Building component.
  */
 
-function Building({addBuildable, name, image, shadowSize})
+function Building({addBuildable, name, image, size, buildings, updateBuildings})
 {
     const getRandomPosition = () =>
     {
@@ -45,12 +55,27 @@ function Building({addBuildable, name, image, shadowSize})
     {
         setShowTooltip(false);
     };
+    const handleImageChoice = () =>
+    {
+        let occupiedCells = []
+        let selected = true
+        let randomPosition = 0
+        let selectedBuilding = []
+        let newCells = [false,[]]
+        while (newCells[0] === false)
+        {
+            randomPosition = getRandomPosition()
+            selectedBuilding = [{name, randomPosition, size, occupiedCells},selected]
+            newCells = GridCalculation(buildings, updateBuildings, selectedBuilding, randomPosition)
+        }
+        addBuildable(name, randomPosition, size, newCells[1])
+    }
     return (
         <div className="building-container">
             <img
                 src={image}
                 className="small-image"
-                onClick={() => addBuildable(name, getRandomPosition(), shadowSize)}
+                onClick={handleImageChoice}
                 alt={name}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
