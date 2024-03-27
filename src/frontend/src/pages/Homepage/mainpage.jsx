@@ -9,6 +9,7 @@ import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
 import GET from "../../api/GET.jsx";
+import POST from "../../api/POST.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -17,11 +18,16 @@ import GET from "../../api/GET.jsx";
 function MainPage()
 {
     const [buildings, setBuildings] = useState([])
-    /*useEffect(async () =>
+    const sid = localStorage.getItem('sid');
+    useEffect(() =>
     {
-        const data = await GET({"sid":1}, "/getGrid")
-        setBuildings(data)
-    }, []);*/
+        const returnData = async () =>
+        {
+            const data = await GET({"sid":sid}, "/getGrid")
+            setBuildings(data)
+        }
+        returnData();
+    }, []);
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
@@ -33,7 +39,7 @@ function MainPage()
             <SocialBox/>
             <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding}/>
-            <Grid buildings={buildings} updateBuildings={setBuildings}/>
+            <Grid buildings={buildings}/>
             <ResourceBar/>
             <SoldierMenu/>
 
