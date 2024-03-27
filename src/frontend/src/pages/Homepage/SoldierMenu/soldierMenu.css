@@ -1,5 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
+.navbar {
+    padding: 20px 20px 20px 4%;
+    border: 2px solid #ffd700; /* Golden border color */
+    border-radius: 10px; /* Match border-radius of message box */
+    background-color: #b26616;
+    color: white;
+}
+
+.visible {
+    opacity: 1;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+}
+
+.navbar-links li {
+  margin-right: 6rem; /* Increase the right margin to create larger spaces */
+}
+
+.page-content {
+    background-color: #1f1a18;
+    border: 2px solid #ffd700;
+    height: 500px;
+    border-radius: 10px;
+    margin-top: 2px;
+}
+
+.troopoverview{
+}
+
+.traintroopoverview{
+}
 
 .trainMenu {
     z-index: 999;
@@ -27,8 +61,26 @@
     position: absolute;
     left: 500px; /* Adjust this value as needed */
     top: 80px; /* Adjust this value as needed */
-    width: 1350px;
+    width: 880px;
+    height: 650px;
     z-index: 9999; /* Ensure it appears above other elements */
+    background-color: #8B4513;
+    color: #fff;
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #CD853F;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.center {
+    text-align: center;
 }
 
 .trainMenu:hover {
