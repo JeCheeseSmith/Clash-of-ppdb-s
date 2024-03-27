@@ -60,6 +60,7 @@ class PlayerDataAccess:
             cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname,level) VALUES(%s,%s,%s,%s,%s,%s);',
                            (obj.name + " Castle", location[0], location[1], pid, obj.name, 1))
 
+
             # Get the settlement ID
             cursor.execute('SELECT max(id) FROM settlement;')
             sid = cursor.fetchone()[0]

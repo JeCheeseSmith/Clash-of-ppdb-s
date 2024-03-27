@@ -19,18 +19,19 @@ class Buildable:
 class Building(Buildable):
     def __init__(self, name, btype, function, upgradeFunction: list, upgradeResource, timeFunction, id, level, gridX,
                  gridY,
-                 sid):
+                 sid, occupiedCells: list):
         Buildable.__init__(self, name, btype, function, upgradeFunction, upgradeResource, timeFunction)
         self.id = id
         self.level = level
         self.gridX = gridX
         self.gridY = gridY
         self.sid = sid
+        self.occupiedCells = occupiedCells
 
     def to_dct(self):
         return dict(name=self.name, type=self.type, function=self.function, upgradeFunction=self.upgradeFunction,
                     upgradeResource=self.upgradeResource, timeFunction=self.timeFunction, level=self.level,
-                    id=self.id, gridX=self.gridX, gridY=self.gridY, sid=self.sid)
+                    id=self.id, gridX=self.gridX, gridY=self.gridY, sid=self.sid, occupiedCells=self.occupiedCells)
 
 
 class BuildableDataAccess:
@@ -76,19 +77,39 @@ class BuildingDataAccess:
         dataBuildable = cursor.fetchone()[0]
 
         return Building(dataBuildable[0], dataBuildable[1], dataBuildable[2], dataBuildable[3], dataBuildable[4],
-                        dataBuildable[5], dataBuilding[0], dataBuilding[2], gridX, gridY, sid)
+                        dataBuildable[5], dataBuilding[0], dataBuilding[2], gridX, gridY, sid, dataBuilding[6])
 
-    def instantiate(self, name, sid, gridX, gridY):
+    def instantiate(self, name, sid, gridX, gridY, occupiedCells):
         """
         Instantiate a Building Object using the info from the database
         :param name:
         :param sid:
         :param gridX:
         :param gridY:
+        :param occupiedCells:
         :return:
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT * FROM buildable WHERE name=%s;', (name,))  # Retrieve buildable info
         buildable = cursor.fetchone()
         return Building(name, buildable[1], buildable[2], buildable[3], buildable[4], buildable[5], None, 1, gridX,
-                        gridY, sid)
+                        gridY, sid, occupiedCells)
+
+    @staticmethod
+    def toOccupiedCellsFrontend(array: list):
+        """
+        Transforms the database OccupiedCells Format to the frontend format
+        Precondition: Array.size%2 == 0
+        :param array: [a,b,c,..] with a is an int
+        :return: [[a,b],[c,d],..]
+        """
+        pass
+
+    @staticmethod
+    def toOccupiedCellsBackend(array: list):
+        """
+        Transforms the Frontend OccupiedCells Format to the database format
+        :param array: [[a,b],[c,d],..] with a is an int
+        :return: array [a,b,c,d..] with a an int
+        """
+        pass

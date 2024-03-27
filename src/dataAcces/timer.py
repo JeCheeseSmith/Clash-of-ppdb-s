@@ -1,5 +1,5 @@
-from settlement import *
-from player import *
+from .player import *
+
 
 class Timer:
     def __init__(self, tid, ttype, start, done, duration, sid):
@@ -28,13 +28,14 @@ class TimerDataAccess:
 
     def insertTimer(self, timer: Timer):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('INSERT INTO timer(id,type,start,done,duration,sid) VALUES(%s, %s, %s, %s, %s, %s);', (timer.id, timer.type, timer.start, timer.done, timer.duration, timer.sid))
+        cursor.execute('INSERT INTO timer(id,type,start,done,duration,sid) VALUES(%s, %s, %s, %s, %s, %s);',
+                       (timer.id, timer.type, timer.start, timer.done, timer.duration, timer.sid))
         self.dbconnect.commit()
 
     def evualateTimers(self, player: Player):
         pass
 
-    def evualateTimersSettlement(self, settlement: Settlement):
+    def evualateTimersSettlement(self, settlement):
         pass
 
     def simulateTransfer(self, timer: Timer):

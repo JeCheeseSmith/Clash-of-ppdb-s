@@ -202,14 +202,15 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### building
 
-| Name  | Type    | Explanation                                                           |
-|-------|---------|-----------------------------------------------------------------------|
-| id    | INT     | Unqiue Identifier (Multiple same buildables can be placed)            |
-| name  | VARCHAR | Name of the buildable                                                 |
-| level | INT     | Level of the building                                                 |
-| gridX | INT     | X Coordinate on the settlement grid                                   |
-| gridY | INT     | Y Coordinate on the settlement grid                                   |
-| sid   | INT     | Contains Relation; Expressing which buildings are in which settlement |
+| Name  | Type    | Explanation                                                              |
+|-------|---------|--------------------------------------------------------------------------|
+| id    | INT     | Unqiue Identifier (Multiple same buildables can be placed)               |
+| name  | VARCHAR | Name of the buildable                                                    |
+| level | INT     | Level of the building                                                    |
+| gridX | INT     | X Coordinate on the settlement grid  (Upper Left corner of the building) |
+| gridY | INT     | Y Coordinate on the settlement grid  (Upper Left corner of the building) |
+| sid   | INT     | Contains Relation; Expressing which buildings are in which settlement    |
+| occupiedCells | INT[][] | Contains the cells a Building occupies on the grid                       |
 
 ### timer
 | Name     | Type      | Explanation                                                            |

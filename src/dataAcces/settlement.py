@@ -71,7 +71,9 @@ class SettlementDataAcces:
                            (buildable, sid, 1))
 
         # Prebuild the Castle
-        self.insertBuilding(Building('Castle', 'Government', None, None, None, None, None, 1, 0, 0, sid))
+        self.insertBuilding(Building('Castle', 'Government', None, None, None, None, None, 1, 0, 0, sid, []))
+
+        ### TODO Add OCCUPIEDCells for Castle
 
         # Preset Unlocked Status for each soldier
         cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);',
@@ -94,9 +96,9 @@ class SettlementDataAcces:
         """
         cursor = self.dbconnect.get_cursor()
 
-        cursor.execute('INSERT INTO building(name, level, gridx, gridy, sid) VALUES (%s,%s,%s,%s,%s);',
+        cursor.execute('INSERT INTO building(name, level, gridx, gridy, sid, occuppiedcells) VALUES (%s,%s,%s,%s,%s,%s);',
                        (building.name, building.level, building.gridX, building.gridY,
-                        building.sid))  # Insert the Building
+                        building.sid, building.occupiedCells))  # Insert the Building
         cursor.execute('SELECT max(id) FROM building;')  # Retrieve building ID; gets added in database as SERIAL
         building.id = cursor.fetchone()[0]  # Set building ID
 

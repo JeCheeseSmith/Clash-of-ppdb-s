@@ -88,7 +88,8 @@ def get_login():
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        timer_data_acces.evualateTimers(Player_obj)
+        ### TODO
+        #timer_data_acces.evualateTimers(Player_obj)
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
@@ -228,6 +229,7 @@ def get_resources():
 
 @app.route("/update", methods=["GET"])
 def update():
+    pass
     ### TODO Implement Full Update Function
     timer_data_acces.evualateTimersSettlement(None)
 
@@ -243,9 +245,18 @@ def getGrid():
 @app.route("/moveBuilding" , methods=["POST"])
 def moveBuiling():
     """
-    in: sid, position
-    :return:
+    JSON Input Format:
+    {
+    "position": <ARRAY INT> | [gridX, gridY]
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of action
+    }
     """
+
     pass
 
 @app.route("/placeBuilding", methods=["POST"])
@@ -254,8 +265,8 @@ def placeBuilding():
     JSON Input Format:
     {
     "name": <STRING> | Unique name of the Buildable
-    "gridX": <INT> | X coordinate on the grid
-    "gridY": <INT> | Y coordinate on the grid
+    "position": <INT[]> | [gridX, gridY] X,Y coordinate on the grid
+    "occupiedCells": <INT[][]> | All the cells a building takes in on the grid
     "sid": <INT> | Identifier of the settlement
     }
 
@@ -265,7 +276,8 @@ def placeBuilding():
     }
     """
     data = request.json
-    building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('gridX'), data.get('gridY'))  # Reform data
+    building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0], data.get('position')[1], data.get('occupiedCells'))  # Reform data
+    print(building.to_dct())
     succes = settlement_data_acces.placeBuilding(building, package_data_acces, timer_data_acces, building_data_acces)  # Execute functionality
     return jsonify(dict(succes=succes))
 

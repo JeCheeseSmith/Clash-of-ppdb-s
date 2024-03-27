@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS building(
     gridX INT NOT NULL, -- Coordinate on the grid
     gridY INT NOT NULL,
     sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
+    occuppiedCells INT[][] NOT NULL,
     UNIQUE (gridX,gridY,sid),
     PRIMARY KEY (id,name)
 );
