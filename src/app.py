@@ -30,7 +30,8 @@ package_data_acces = PackageDataAccess(connection)
 building_data_acces = BuildingDataAccess(connection)
 timer_data_acces = TimerDataAccess(connection)
 
-### TODO Upon login re-evaluate timers AS WELL AS ON UpdateFunction api call from server
+
+### TODO Upon login re-evaluate timers AS WELL AS ON UpdateFunction api call from server (after this, do a resouce eval)
 
 @app.route("/signup", methods=["POST"])
 def add_player():
@@ -89,7 +90,7 @@ def get_login():
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
         ### TODO
-        #timer_data_acces.evualateTimers(Player_obj)
+        # timer_data_acces.evualateTimers(Player_obj)
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
@@ -227,11 +228,13 @@ def get_resources():
 
     return jsonify(packageDict)
 
+
 @app.route("/update", methods=["GET"])
 def update():
     pass
     ### TODO Implement Full Update Function
     timer_data_acces.evualateTimersSettlement(None)
+
 
 @app.route("/getGrid", methods=["GET"])
 def getGrid():
@@ -252,7 +255,8 @@ def getGrid():
     grid = settlement_data_acces.getGrid(data.get('sid'))
     return jsonify(grid)
 
-@app.route("/moveBuilding" , methods=["POST"])
+
+@app.route("/moveBuilding", methods=["POST"])
 def moveBuiling():
     """
     API Call to update the location of a building
@@ -271,12 +275,14 @@ def moveBuiling():
     }
     """
     data = request.json
-    building = building_data_acces.retrieve(data.get('oldPosition')[0], data.get('oldPosition')[1], data.get('sid'))  # Reform data
+    building = building_data_acces.retrieve(data.get('oldPosition')[0], data.get('oldPosition')[1],
+                                            data.get('sid'))  # Reform data
     building.occupiedCells = data.get('occupiedCells')
     building.gridX = data.get('newPosition')[0]
     building.gridY = data.get('newPosition')[1]
     succes = building_data_acces.moveBuilding(building)  # Execute functionality
     return jsonify(dict(succes=succes))
+
 
 @app.route("/placeBuilding", methods=["POST"])
 def placeBuilding():
@@ -297,18 +303,35 @@ def placeBuilding():
     }
     """
     data = request.json
-    building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0], data.get('position')[1], data.get('occupiedCells'))  # Reform data
-    succes = settlement_data_acces.placeBuilding(building, package_data_acces, timer_data_acces, building_data_acces)  # Execute functionality
+    building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
+                                               data.get('position')[1], data.get('occupiedCells'))  # Reform data
+    succes = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
     return jsonify(dict(succes=succes))
+
 
 @app.route("/upgradeBuilding", methods=["POST"])
 def upgradeBuilding():
     """
-    in: Locatie
-    out: duratie
-    :return:
+    API Call to upgrade an existing building
+
+    JSON Input Format:
+    {
+    "position": <INT[]> | [gridX, gridY] X,Y coordinate on the grid
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of action
+    "duration": <INT> | Time in seconds
+    }
     """
-    return jsonify(True);
+    data = request.json
+    building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
+                                            data.get('sid'))  # Reform data
+    succes = settlement_data_acces.upgradeBuilding(building, package_data_acces, timer_data_acces,
+                                                   building_data_acces)  # Execute actual funcionality
+    return jsonify(dict(succes=succes))
 
 
 @app.route("/buildings", methods=["GET"])

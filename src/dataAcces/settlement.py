@@ -96,9 +96,10 @@ class SettlementDataAcces:
         """
         cursor = self.dbconnect.get_cursor()
 
-        cursor.execute('INSERT INTO building(name, level, gridx, gridy, sid, occuppiedcells) VALUES (%s,%s,%s,%s,%s,%s);',
-                       (building.name, building.level, building.gridX, building.gridY,
-                        building.sid, building.occupiedCells))  # Insert the Building
+        cursor.execute(
+            'INSERT INTO building(name, level, gridx, gridy, sid, occuppiedcells) VALUES (%s,%s,%s,%s,%s,%s);',
+            (building.name, building.level, building.gridX, building.gridY,
+             building.sid, building.occupiedCells))  # Insert the Building
         cursor.execute('SELECT max(id) FROM building;')  # Retrieve building ID; gets added in database as SERIAL
         building.id = cursor.fetchone()[0]  # Set building ID
 
@@ -106,6 +107,7 @@ class SettlementDataAcces:
 
     def reachedMaxBuildingAmount(self, bname, sid):
         """
+        Helper Function
         Gives true if a given settlement may not have anymore buildings of this type
         :param bname: Name of the Building
         :param sid: Identifier of the Settlement
@@ -113,45 +115,70 @@ class SettlementDataAcces:
         """
 
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT count(building.id) FROM building WHERE sid=%s and name=%s;', (sid, bname))  # Retrieve the current amount of buildings for this type
+        cursor.execute('SELECT count(building.id) FROM building WHERE sid=%s and name=%s;',
+                       (sid, bname))  # Retrieve the current amount of buildings for this type
         nrBuildings = cursor.fetchone()[0]
 
-        cursor.execute('SELECT maxnumber FROM unlockedbuildable WHERE bname=%s and sid=%s;', (bname, sid)) # Retrieve the max amount of buildings for this type
+        cursor.execute('SELECT maxnumber FROM unlockedbuildable WHERE bname=%s and sid=%s;',
+                       (bname, sid))  # Retrieve the max amount of buildings for this type
         nrMax = cursor.fetchone()[0]
 
         return nrBuildings > nrMax  # Compare
 
-    def placeBuilding(self, building: Building, package_data_acces, timer_data_acces, building_data_acces):
-        try:
-            cursor = self.dbconnect.get_cursor()
+    def calculateCosts(self, building, package_data_acces):
+        """
+        Helper function
+        Verify if a settlement can afford building or upgrading a certain building
+        If so, a deficit will be made
+        If not, an exception is thrown
+        :param building: Building Object
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
 
-            # Verify if the max buildings is not reached
-            if self.reachedMaxBuildingAmount(building.name, building.sid):
+        # Calculate Upgrade Costs
+        cost = PackageDataAccess.evaluate(building.upgradeFunction,
+                                          building.level)  # Each type has a specific upgrade function with a
+        # level as input
+
+        # Make a Resource Deficit
+        deficit = Package.upgradeCost(building.upgradeResource, cost)
+        cursor.execute('SELECT * FROM package WHERE id IN (SELECT pid FROM settlement WHERE id=1);',
+                       (building.sid,))  # Get the current amount of resources
+        total = cursor.fetchone()
+        total = Package(total)  # Convert to Package Object
+        total -= deficit  # Do arithmetic
+
+        if total.hasNegativeBalance():  # Not enough resources :(
+            raise Exception("Not enough resource to fullfill this upgrade!")
+
+        package_data_acces.update_resources(total)  # Adjust resource amount
+
+    def placeBuilding(self, building: Building, package_data_acces):
+        try:
+            if self.reachedMaxBuildingAmount(building.name, building.sid):  # Verify if the max buildings is not reached
                 return False
 
-            # Calculate Upgrade Costs
-            cost = PackageDataAccess.evaluate(building.upgradeFunction,
-                                              building.level)  # Each type has a specific upgrade function with a
-            # level as input
+            self.calculateCosts(building,package_data_acces)  # Verify if a settlement can afford this upgrade; throws an error if not
 
-            # Make a Resource Deficit
-            deficit = Package.upgradeCost(building.upgradeResource, cost)
-            cursor.execute('SELECT * FROM package WHERE id IN (SELECT pid FROM settlement WHERE id=1);',
-                           (building.sid,))  # Get the current amount of resources
-            total = cursor.fetchone()
-            total = Package(total)  # Convert to Package Object
-            total -= deficit  # Do arithmetic
+            self.insertBuilding(building)  # Insert the new building into the database
 
-            if total.hasNegativeBalance():  # Not enough resources :(
-                raise Exception()
+            # Notice: No timer is created, since new building will be build instantly
 
-            # Insert into Database & Adjust resource amount
-            self.insertBuilding(building)
-            package_data_acces.update_resources(total)
+            self.dbconnect.commit()
+            return True
+        except Exception as e:
+            print('error', e)
+            self.dbconnect.rollback()
+            return False
 
-            # Create Timer
-            start, stop, duration = building_data_acces.calculateBuildTime(building)
-            timer_data_acces.insertTimer(Timer(building.id, 'building', start, stop, duration, building.sid))
+    def upgradeBuilding(self, building: Building, package_data_acces, timer_data_acces, building_data_acces):
+        try:
+            self.calculateCosts(building, package_data_acces)  # Verifies if a settlement can afford this upgrade
+
+            start, stop, duration = building_data_acces.calculateBuildTime(building)  # Create Timer
+            timer_data_acces.insertTimer(Timer(building.id, 'building', start, stop, duration, building.sid))  # When
+            # the timer stops, the level of the building will be adjusted
 
             self.dbconnect.commit()
             return True
@@ -168,12 +195,12 @@ class SettlementDataAcces:
         """
         grid = []  # Matrix
 
-        cursor = self.dbconnect.get_cursor()   # Execute querry
-        cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid, ))
+        cursor = self.dbconnect.get_cursor()  # Execute querry
+        cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
         records = cursor.fetchall()
 
         for building in records:
-            grid.append([building[1], [building[3],building[4]], building[6]])
+            grid.append([building[1], [building[3], building[4]], building[6]])
 
         return grid
 

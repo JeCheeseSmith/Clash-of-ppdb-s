@@ -45,4 +45,7 @@ class TimerDataAccess:
         pass
 
     def simulateUpgrade(self, timer: Timer):
+        ## Level + 1
+        ## If building.sid = -1:
+
         pass
