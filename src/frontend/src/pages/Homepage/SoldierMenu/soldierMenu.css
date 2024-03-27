@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
+.soldier-primair-input{
+    margin: 20px;
+}
+
 .navbar {
     padding: 20px 20px 20px 4%;
     border: 2px solid #ffd700; /* Golden border color */
@@ -37,7 +41,7 @@
     z-index: 9999; /* Ensure it appears above other elements */
 }
 
-.socialOption {
+.soldierMenuOption {
     background-color: #8B4513;
     color: #fff;
     font-family: 'Anton', sans-serif;

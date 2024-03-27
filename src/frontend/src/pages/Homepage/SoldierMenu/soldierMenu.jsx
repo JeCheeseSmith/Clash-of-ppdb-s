@@ -2,6 +2,9 @@ import React, {useState} from 'react';
 import './soldierMenu.css'
 import CommunicationButton from "../Communication/communication.jsx";
 import SocialOption from "../Communication/social/socialOptionContents.jsx";
+import {useLocation} from "react-router-dom";
+import POST from "../../../api/POST.jsx";
+import DisplayAvatarName from "../../../globalComponents/avatarWithName/avatarWithName.jsx";
 
 /**
  * React component for the troop screen button
@@ -29,11 +32,12 @@ function SoldierMenuBox(soldierVisible) {
 }
 
 function SoldierNavbar(soldierVisible) {
-    const [currentPage, setCurrentPage] = useState('troopoverview');
+    const [currentPage, setCurrentPage] = useState('troopOverview');
 
     const handleButtonClick = (pageName) => {
       setCurrentPage(pageName);
-      playOption();
+      //playOption();
+
     };
 
     return (
@@ -42,11 +46,11 @@ function SoldierNavbar(soldierVisible) {
             <nav className="navbar visible">
                 <ul className="navbar-links">
                     <li>
-                        <button onClick={() => handleButtonClick('troopoverview')} className={"socialOption"}>Troop Overview
+                        <button onClick={() => handleButtonClick('troopOverview')} className={"soldierMenuOption"}>Troop Overview
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => handleButtonClick('traintroopoverview')} className={"socialOption"}>Troop Training
+                        <button onClick={() => handleButtonClick('trainTroopOverview')} className={"soldierMenuOption"}>Troop Training
                         </button>
                     </li>
                 </ul>
@@ -63,25 +67,25 @@ function SoldierNavbar(soldierVisible) {
 function SoldierMenuOptions({pageName, requests, sendData}){
     return (
         <div className="page-content">
-            {pageName === 'troopoverview' && <troopoverviewPage/>}
-            {pageName === 'traintroop' && <traintroopPage/>}
+            {pageName === 'troopOverview' && <TroopOverviewPage/>}
+            {pageName === 'trainTroopOverview' && <TroopTrainPage/>}
         </div>
     )
 }
 
 
-function troopoverviewPage() {
+function TroopOverviewPage() {
     return (
-        <div className="troopoverview">
-
+        <div className="soldier-primair-input">
+            test
         </div>
     )
 }
 
-function trooptrainPage() {
+function TroopTrainPage() {
     return (
-        <div className="traintroopview">
-
+        <div className="soldier-primair-input">
+            test 2
         </div>
     )
 }
