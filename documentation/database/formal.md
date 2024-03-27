@@ -35,10 +35,11 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | [admin](#admin)                     | Contains the users who are also admins                                         |
 | [clan](#clan)                       | Contains all current clans and their info                                      |
 | [achievement](#achievement)         | Stores the different achievements                                              |
-| [quest](#quest)                     | Specialization upon achievements                                               | favoring a deadline                          |
+| [quest](#quest)                     | Specialization upon achievements favoring a deadline                           |                         |
 | [transfer](#transfer)               | Keeps all the active transfers between settlements                             |
 | [buildable](#buildable)             | All possible buildings to build                                                |
 | [building](#building)               | Actual buildable placed into a settlement                                      |
+| [timer](#timer)                     | Keep track of the currently ongoing time process                               |
 
 ### Relational Tables
 > These tables are used to implemented relations between entities from the table.
@@ -209,6 +210,16 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | gridX | INT     | X Coordinate on the settlement grid                                   |
 | gridY | INT     | Y Coordinate on the settlement grid                                   |
 | sid   | INT     | Contains Relation; Expressing which buildings are in which settlement |
+
+### timer
+| Name     | Type      | Explanation                                                            |
+|----------|-----------|------------------------------------------------------------------------|
+| id       | INT       | Unique Identifier of the Object we are referring to (e.g. building ID) |
+| name     | TEXT      | Type of the object the id is referring to (e.g. building.name)         |
+| start    | TIMESTAMP | Start of the timer                                                     |
+| done     | TIMESTAMP | End of the timer                                                       |
+| duration | BIGINT    | Duration in seconds (done-start)                                       |
+| sid      | INT       | Identifier of the settlement the timer belongs to                      |
 
 ### friend
 

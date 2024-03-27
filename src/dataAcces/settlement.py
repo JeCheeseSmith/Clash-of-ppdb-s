@@ -1,5 +1,6 @@
 from .package import *
 from .building import *
+from .timer import *
 
 
 class Settlement:
@@ -101,9 +102,30 @@ class SettlementDataAcces:
 
         self.dbconnect.commit()
 
-    def placeBuilding(self, building: Building, package_data_acces):
+    def reachedMaxBuildingAmount(self, bname, sid):
+        """
+        Gives true if a given settlement may not have anymore buildings of this type
+        :param bname: Name of the Building
+        :param sid: Identifier of the Settlement
+        :return:
+        """
+
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT count(building.id) FROM building WHERE sid=%s and name=%s;', (sid, bname))  # Retrieve the current amount of buildings for this type
+        nrBuildings = cursor.fetchone()[0]
+
+        cursor.execute('SELECT maxnumber FROM unlockedbuildable WHERE bname=%s and sid=%s;', (bname, sid)) # Retrieve the max amount of buildings for this type
+        nrMax = cursor.fetchone()[0]
+
+        return nrBuildings > nrMax  # Compare
+
+    def placeBuilding(self, building: Building, package_data_acces, timer_data_acces, building_data_acces):
         try:
             cursor = self.dbconnect.get_cursor()
+
+            # Verify if the max buildings is not reached
+            if self.reachedMaxBuildingAmount(building.name, building.sid):
+                return False
 
             # Calculate Upgrade Costs
             cost = PackageDataAccess.evaluate(building.upgradeFunction,
@@ -125,9 +147,14 @@ class SettlementDataAcces:
             self.insertBuilding(building)
             package_data_acces.update_resources(total)
 
+            # Create Timer
+            start, stop, duration = building_data_acces.calculateBuildTime(building)
+            timer_data_acces.insertTimer(Timer(building.id, 'building', start, stop, duration, building.sid))
+
             self.dbconnect.commit()
             return True
-        except:
+        except Exception as e:
+            print('error', e)
             self.dbconnect.rollback()
             return False
 

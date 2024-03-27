@@ -6,6 +6,7 @@ from dataAcces.package import *
 from dataAcces.settlement import *
 from dataAcces.soldier import *
 from dataAcces.transfer import *
+from dataAcces.timer import *
 from dataAcces.friend import *
 from dataAcces.clan import *
 from database import *
@@ -27,7 +28,9 @@ friend_data_access = FriendDataAccess(connection)
 settlement_data_acces = SettlementDataAcces(connection)
 package_data_acces = PackageDataAccess(connection)
 building_data_acces = BuildingDataAccess(connection)
+timer_data_acces = TimerDataAccess(connection)
 
+### TODO Upon login re-evaluate timers AS WELL AS ON UpdateFunction api call from server
 
 @app.route("/signup", methods=["POST"])
 def add_player():
@@ -85,6 +88,7 @@ def get_login():
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
+        timer_data_acces.evualateTimers(Player_obj)
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
@@ -217,20 +221,32 @@ def get_resources():
     data = request.json
     id = data.get("id")
     packageDict = settlement_data_acces.getResources(Settlement(id))
+
+    ### TODO Also call getMaxResource to give max values
+
     return jsonify(packageDict)
 
+@app.route("/update", methods=["GET"])
+def update():
+    ### TODO Implement Full Update Function
+    timer_data_acces.evualateTimersSettlement(None)
 
-@app.route("/grid", methods=["GET"])
-def get_grid():
+@app.route("/getGrid", methods=["GET"])
+def getGrid():
+    """
+    in: sid
+    out: grid
+    :return:
+    """
     pass
 
-
-@app.route("/savegrid", methods=["POST"])
-def saveGrid():
-    data = request.json
-    print(len(data))
-    return data
-
+@app.route("/moveBuilding" , methods=["POST"])
+def moveBuiling():
+    """
+    in: sid, position
+    :return:
+    """
+    pass
 
 @app.route("/placeBuilding", methods=["POST"])
 def placeBuilding():
@@ -246,13 +262,21 @@ def placeBuilding():
     JSON Output Format:
     {
     "success": <BOOL> | State of action
-    "id": <INT> | Identifier of the building
     }
     """
     data = request.json
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('gridX'), data.get('gridY'))  # Reform data
-    succes = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
-    return jsonify(dict(id=building.id, succes=succes))
+    succes = settlement_data_acces.placeBuilding(building, package_data_acces, timer_data_acces, building_data_acces)  # Execute functionality
+    return jsonify(dict(succes=succes))
+
+@app.route("/upgradeBuilding", methods=["POST"])
+def upgradeBuilding():
+    """
+    in: Locatie
+    out: duratie
+    :return:
+    """
+    return jsonify(True);
 
 
 @app.route("/buildings", methods=["GET"])

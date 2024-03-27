@@ -201,7 +201,9 @@ CREATE TABLE IF NOT EXISTS timer(
     type TEXT, -- 'building' , 'soldier', 'transfer' , ...
     start TIMESTAMP NOT NULL,
     done TIMESTAMP NOT NULL,
-    PRIMARY KEY (id,type)
+    duration BIGINT NOT NULL,
+    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- BelongsTo relation
+    PRIMARY KEY (id,type,sid)
 );
 
 -- Insert standard buildings
@@ -250,3 +252,5 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3,9,40);
 
 INSERT INTO player(name,password) VALUES('admin','1234');
+
+
