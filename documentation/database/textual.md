@@ -84,3 +84,7 @@ A content can be a message or a request. The send time & content (actual message
 Contents/Messages are send from one player to another, to perform direct messaging. The shared relation is used to make a group chat for a clan. 
 
 A request is a specialization of content and has a status; True = Accepted, False = Rejected. It is used to store Clan Invitations, Friend Request & Transfer Requests (Inherited specializations).
+
+### Timer
+
+A building, soldier or transfer might take time until it arrives. In the database we keep track of the current actions that are running. The server regularly checks if there are timers that needs to be resolved.

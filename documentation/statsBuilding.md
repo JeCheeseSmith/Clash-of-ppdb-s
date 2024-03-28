@@ -14,8 +14,8 @@ This table gives an overview for each building. Make sure to look into the respe
 | StoneStockPile  | storage    | 2000*2^(x)  | 600x         | (2000*2^(x))/2   | 1                 | Wood               |
 | Armory          | storage    | 10000*(2*x) | 600x         | (2000*2^(x))/2   | 12                | Stone & Wood       |
 | GrainSilo       | storage    | 2000*2^(x)  | 600x         | (2000*2^(x))/2   | 12                | Stone & Wood       |
-| Castle          | government | 0           | 10800*2(x-1) | 1000*4*2^(x)     | 12                | Stone & Wood       |
-| SatelliteCastle | government | 0           | 10800*2(x-1) | 1000*4*2^(x)     | 12                | Stone & Wood       |
+| Castle          | government | 500*2^(x)   | 10800*2(x-1) | 1000*4*2^(x)     | 12                | Stone & Wood       |
+| SatelliteCastle | government | 500*2^(x)   | 10800*2(x-1) | 1000*4*2^(x)     | 12                | Stone & Wood       |
 | Chancery        | government | 0           | 86400x       | 1000*4*2^(x+3)   | 12                | Stone & Wood       |
 | Barracks        | government | 0           | 21600x       | 4000*2^(x)       | 12                | Stone & Wood       |
 | Stables         | defense    | 1.1x        | 6*3600*x     | 1000*4*2^(x)     | 12                | Stone & Wood       |
@@ -44,17 +44,7 @@ These buildings let the player gain advantages as the defendant in an attack. Fu
 
 ### Castle
 
-The Castle is the main building and provides some basic features. It determines a settlements level and specifies how many buildings of a type can be placed. It also has a base storage capacity.
-
-| level | storage capacity |
-|-------|------------------| 
-| 1     | 500              |
-| 2     | 1000             | 
-| 3     | 2000             | 
-| 4     | 5000             | 
-| 5     | 20000            | 
-| 6     | 50000            |
-| 7     | 100000           |
+The Castle is the main building and provides some basic features. It determines a settlements level and specifies how many buildings of a type can be placed. It also has a base storage capacity (function).
 
 | level | WoodcuttersCamp | Quarry | SteelMine | Farm | Barracks | WoodStockpile | StoneStockPile | Armory | GrainSilo |
 |-------|-----------------|--------|-----------|------|----------|---------------|----------------|--------|-----------|

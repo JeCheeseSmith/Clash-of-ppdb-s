@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './buildmenuOptionsContents.css'
 import BuildingImages from "./assets/BuildingImages.jsx";
 import GridCalculation from "../gridCalculation.jsx";
+import POST from "../../../../api/POST.jsx";
 
 function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 {
@@ -41,6 +42,7 @@ function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 
 function Building({addBuildable, name, image, size, buildings})
 {
+    const sid = localStorage.getItem('sid');
     const getRandomPosition = () =>
     {
         return [Math.floor(Math.random() * 36) + 2, Math.floor(Math.random() * 36) + 2];
@@ -54,7 +56,7 @@ function Building({addBuildable, name, image, size, buildings})
     {
         setShowTooltip(false);
     };
-    const handleImageChoice = () =>
+    const handleImageChoice = async () =>
     {
         let occupiedCells = []
         let selected = true
@@ -67,7 +69,12 @@ function Building({addBuildable, name, image, size, buildings})
             selectedBuilding = [{name, randomPosition, size, occupiedCells},selected, 0x006f00 /*shadowColor*/, true /*validPosition*/]
             newCells = GridCalculation(buildings, selectedBuilding, randomPosition)
         }
-        addBuildable(name, randomPosition, size, newCells[1])
+        const data = await POST({"name":name, "position": randomPosition, "occupiedCells": occupiedCells, "sid": sid}, "/placeBuilding")
+        console.log(data)
+        if (data.succes)
+        {
+            addBuildable(name, randomPosition, size, newCells[1])
+        }
     }
     return (
         <div className="building-container">
