@@ -205,8 +205,8 @@ class SettlementDataAcces:
         records = cursor.fetchall()
 
         for building in records:
-            grid.append([building[1], [building[3], building[4]], building[6]])
-
+            grid.append({"type": building[1], "position": [building[3], building[4]], "occupiedCells": building[6]})
+        print(grid)
         return grid
 
     def createOutPost(self):

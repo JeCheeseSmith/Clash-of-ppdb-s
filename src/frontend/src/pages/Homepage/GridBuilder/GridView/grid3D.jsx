@@ -7,6 +7,8 @@ import * as THREE from "three";
 import Ground from "./models/Objects/Ground.jsx";
 import GridCalculation from "../gridCalculation.jsx";
 import error from "../../../../assets/buildingPlacementError.mp3";
+import BuildingImages from "../BuildMenu/assets/BuildingImages.jsx";
+import POST from "../../../../api/POST.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -18,10 +20,14 @@ import error from "../../../../assets/buildingPlacementError.mp3";
 
 function Grid({buildings})
 {
+    const sid = localStorage.getItem('sid');
     const [selectedBuilding, setSelectedBuilding] =
-        useState([[],false /*floating*/, 0x006f00 /*shadowColor*/, true])
+        useState([[],false /*floating*/, 0x006f00 /*shadowColor*/, true /*validPosition for Mouse Right Click*/])
+
+    const [oldPosition, setOldPosition] = useState([])
+
     const gridSize = 40;
-    const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de celposities checken)
+    const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de linksboven posities checken)
     {
         for (let building of buildings)
         {
@@ -35,16 +41,16 @@ function Grid({buildings})
     const moveObject = (row, col) =>
     {
         const newPosition = [selectedBuilding[0].position[0] + row, selectedBuilding[0].position[1] + col];
-        let newCells = GridCalculation(buildings, selectedBuilding, newPosition)
+        let occupiedCells = GridCalculation(buildings, selectedBuilding, newPosition)
         let insideGrid = InsideGrid(selectedBuilding,newPosition)
         let technicalValid = checkTechnicalCollisions(newPosition)
         if (selectedBuilding[1] && insideGrid && !technicalValid) // valid position en boolean van float building
         {
             // No collision, move the building
             selectedBuilding[0].position = newPosition;
-            selectedBuilding[0].occupiedCells = newCells[1]
+            selectedBuilding[0].occupiedCells = occupiedCells[1]
         }
-        if (newCells[0])
+        if (occupiedCells[0])
         {
             selectedBuilding[2] = 0x006f00
         }
@@ -56,14 +62,21 @@ function Grid({buildings})
             sound.volume = 0.1
             sound.play();
         }
-        selectedBuilding[3] = newCells[0]
+        selectedBuilding[3] = occupiedCells[0]
         setSelectedBuilding([selectedBuilding[0], selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]);
-        return newCells[0]
+        return [oldPosition,newPosition,occupiedCells]
     };
-
-    let validPosition
     useEffect(() =>
     {
+        const handleEnterButton = async () =>
+        {
+            let moved = moveObject(0, 0)
+            if (moved[2][0])
+            {
+                setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]); //alleen floating boolean veranderen
+                const data = await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
+            }
+        }
         const handleKeyDown = (event) =>
         {
             switch (event.key) {
@@ -80,11 +93,7 @@ function Grid({buildings})
                     moveObject(1, 0)
                     break;
                 case 'Enter':
-                    validPosition = moveObject(0, 0)
-                    if (validPosition)
-                    {
-                        setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]); //alleen boolean veranderen
-                    }
+                    handleEnterButton()
                     break;
                 default:
                     return;
@@ -103,10 +112,25 @@ function Grid({buildings})
         {
             setSelectedBuilding([building, !selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]])
         }
+        if (!selectedBuilding[1])
+        {
+            setOldPosition([building.position[0], building.position[1]]);
+        }
     }
 
     const BuildingMesh = ({building}) =>
     {
+        for (let category in BuildingImages)
+        {
+            for (let buildables in BuildingImages[category])
+            {
+                const size = BuildingImages[category][buildables][1]
+                if (building.type === buildables)
+                {
+                    building.size = size;
+                }
+            }
+        }
         const meshRef = useRef(); // Define the useRef hook here
         useFrame(() =>
         {
