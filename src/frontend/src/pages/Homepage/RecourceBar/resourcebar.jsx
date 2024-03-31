@@ -22,7 +22,6 @@ function ResourceBar() {
     const GetResources = async () => {
         const sid = localStorage.getItem('sid'); // Receives the sid that is sent by login.jsx and signUp.jsx
         const data = await POST({ id: sid }, '/resources');
-        console.log(sid);
         // The values of the resources are changed
         setResources({
           wood: data.wood,

@@ -8,7 +8,7 @@ Title: Rauma Town Hall
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import chancery from '../assets/chancery.glb'
+import chancery from '../../assets/chancery.glb'
 
 /**
  * React component for rendering a 3D model of Rauma Town Hall Chancery.
@@ -18,7 +18,7 @@ import chancery from '../assets/chancery.glb'
 function Chancery(props) {
   const { nodes, materials } = useGLTF(chancery)
   return (
-    <group {...props} dispose={null} scale={0.002}>
+    <group {...props} dispose={null} scale={0.002} position={[1,0,1]}>
       <mesh
         castShadow
         receiveShadow

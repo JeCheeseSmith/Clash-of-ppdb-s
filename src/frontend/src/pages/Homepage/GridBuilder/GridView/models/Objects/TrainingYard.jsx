@@ -8,7 +8,7 @@ Title: Fantasy Army Tent
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import trainingYard from '../assets/trainingYard.glb'
+import trainingYard from '../../assets/trainingYard.glb'
 
 /**
  * React component for rendering a 3D model of a fantasy army training yard.
@@ -18,7 +18,7 @@ import trainingYard from '../assets/trainingYard.glb'
 export default function TrainingYard(props) {
   const { nodes, materials } = useGLTF(trainingYard)
   return (
-    <group {...props} dispose={null} position={[8,1,-2]}>
+    <group {...props} dispose={null} position={[5,0,0]}>
         <group scale={0.6}>
             <mesh
                 castShadow

@@ -30,7 +30,6 @@ function RegistrationPage() {
         if (username2) {
             // Calls the API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/signup");
-            console.log(data);
          // If the data is true (account already exists), then navigate to main page
             if (data.success) {
             localStorage.setItem('sid', data.sid); // Store the sid for the resource bar

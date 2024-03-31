@@ -8,7 +8,7 @@ Title: Medieval House 01 (Mid Poly)
 
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
-import houseObject from '../assets/medieval_house_01_mid_poly.glb'
+import houseObject from '../../assets/medieval_house_01_mid_poly.glb'
 
 function House(props) {
   const { nodes, materials } = useGLTF(houseObject);

@@ -8,7 +8,7 @@ Title: Medieval
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import quary from '../assets/quary.glb'
+import quary from '../../assets/quary.glb'
 
 /**
  * React component for rendering a 3D model of a quarry.
