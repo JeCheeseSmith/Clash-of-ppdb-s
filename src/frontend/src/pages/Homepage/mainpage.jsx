@@ -8,6 +8,8 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
+import TimeBuilding from "../../globalComponents/timeComponent/TimerProgressBar.jsx";
+import UpgradeBuilding from "./GridBuilder/GridView/upgradeBuilding/upgradeBuilding.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -28,11 +30,12 @@ function MainPage()
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu addBuilding={addBuilding} setPosition={setPosition}/>
-            <Grid buildings={buildings} position={position} setPosition={setPosition}/>
-            <ResourceBar/>
-            <SoldierMenu/>
+            <UpgradeBuilding/>
 
+            {/*<Buildmenu addBuilding={addBuilding} setPosition={setPosition}/>*/}
+            {/*<Grid buildings={buildings} position={position} setPosition={setPosition}/>*/}
+            {/*<ResourceBar/>*/}
+            {/*<SoldierMenu/>*/}
             {/*<Map/>*/}
         </div>
     );

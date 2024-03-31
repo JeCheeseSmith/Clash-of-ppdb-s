@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TimerProgressBar.css'; // Vergeet niet je nieuwe CSS-bestand te importeren
 
-const TimerProgressBar = ({ timeValue, finished}) => {
+const TimerProgressBar = ({timeValue, finished}) => {
 
   const [seconds, setSeconds] = useState(timeValue);
   const [percentage, setPercentage] = useState(100);
