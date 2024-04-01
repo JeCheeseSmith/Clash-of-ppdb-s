@@ -1,0 +1,26 @@
+/* TimerProgressBar.css */
+.progressBarContainer {
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  width: 200px;
+  margin-bottom: 7px;
+}
+
+.progressBar {
+  height: 30px;
+  border-radius: 8px;
+  transition: width 1s ease-in-out;
+}
+
+.progressBar.green {
+  background-color: green;
+}
+
+.progressBar.orange {
+  background-color: orange;
+}
+
+.progressBar.red {
+  background-color: red;
+}
+

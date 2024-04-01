@@ -89,7 +89,7 @@ def get_login():
     Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        # timer_data_acces.evualateTimers(Player_obj)
+        package_data_acces.calc_resources(player_name,"2024-03-28 18:38:40.252071")
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})

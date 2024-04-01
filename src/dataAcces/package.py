@@ -1,5 +1,6 @@
 from numpy import polyval
 from numpy import exp2
+from datetime import datetime
 
 
 class Package:
@@ -144,12 +145,136 @@ class PackageDataAccess:
                         package.id))
         self.dbconnect.commit()
 
-    def calc_resources(self, timestamp):
+    def calc_resources(self, pname,timestamp):
         """
         Function to re-evaluate resources number with
         :return:
         """
-        pass
+
+        cursor = self.dbconnect.get_cursor()
+
+        #Tijd omzetten van een string naar een timestamp en het verschil berekenen tussen twee timestamps
+        timestamp_new=datetime.strptime(timestamp,"%Y-%m-%d %H:%M:%S.%f")
+        time=datetime.now()
+        calculated_time=abs(time - timestamp_new)
+        calculated_time=int(calculated_time.total_seconds())
+
+        #Generated resources
+        Generated_wood = 0
+        Generated_stone = 0
+        Generated_steel = 0
+        Generated_food = 0
+
+        #Player resources
+        cursor.execute('SELECT name FROM player WHERE name=%s;', (pname,))
+        name = cursor.fetchone()
+        cursor.execute('SELECT pid FROM settlement WHERE pname=%s;', name)
+        pid = cursor.fetchone()[0]
+        cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid,))
+        Pwood = cursor.fetchone()[0]
+        cursor.execute('SELECT stone FROM package WHERE id=%s;', (pid,))
+        Pstone = cursor.fetchone()[0]
+        cursor.execute('SELECT steel FROM package WHERE id=%s;', (pid,))
+        Psteel = cursor.fetchone()[0]
+        cursor.execute('SELECT food FROM package WHERE id=%s;', (pid,))
+        Pfood = cursor.fetchone()[0]
+
+
+        #Maximum storage
+        Wood = 0
+        Stone = 0
+        Steel = 0
+        Food = 0
+
+
+        #Search the person his buildings on the settlement
+        cursor.execute('SELECT name FROM player WHERE name=%s;',(pname,))
+        name=cursor.fetchone()
+        cursor.execute('SELECT id FROM settlement WHERE pname=%s;',name)
+        sid=cursor.fetchone()[0]
+        cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
+        buildings=cursor.fetchall()
+
+        #Find the right functions to calculate the resources
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodCuttersCamp",))
+        Wood_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Quarry",))
+        Stone_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("SteelMine",))
+        Steel_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Farm",))
+        Food_function = cursor.fetchone()[0]
+
+
+        #Find the right storage functions
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodStockPile",))
+        Wood_Storage_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("StoneStockPile",))
+        Stone_Storage_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Armory",))
+        Steel_Storage_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("GrainSilo",))
+        Food_Storage_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Castle",))
+        Castle_Storage_function = cursor.fetchone()[0]
+
+
+        #Check if there is a building to generate resources OR to store resources
+        for building in buildings:
+            if building[1] == "WoodCuttersCamp":
+                print("test")
+                Generated_wood += PackageDataAccess.evaluate(Wood_function, calculated_time)
+            if building[1] == "Quarry":
+                Generated_stone += PackageDataAccess.evaluate(Stone_function, calculated_time)
+
+            if building[1] == "SteelMine":
+                Generated_steel += PackageDataAccess.evaluate(Steel_function, calculated_time)
+
+            if building[1] == "Farm":
+                Generated_food += PackageDataAccess.evaluate(Food_function, calculated_time)
+
+            if building[1] == "WoodStockPile":
+                Level=building[2]
+                Wood += PackageDataAccess.evaluate(Wood_Storage_function,Level)
+
+            if building[1] == "StoneStockPile":
+                Level=building[2]
+                Stone += PackageDataAccess.evaluate(Stone_Storage_function,Level)
+
+            if building[1] == "Armory":
+                Level=building[2]
+                Steel += PackageDataAccess.evaluate(Steel_Storage_function,Level)
+
+            if building[1] == "GrainSilo":
+                Level = building[2]
+                Food += PackageDataAccess.evaluate(Food_Storage_function, Level)
+
+            if building[1] == "Castle":
+                Level = building[2]
+                MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
+                Wood += MainStorage
+                Stone += MainStorage
+                Steel += MainStorage
+                Food += MainStorage
+
+        #Updaten van resources op de juiste manier
+
+
+
+
+
+        #Problemen met het berekenen van resources door gebruik te maken van tijd in seconden onze functie is niet accuraat
+        #De gebouwen die resources generaten upgraden niet op de juiste manier
+
+        self.dbconnect.commit()
+
 
     def get_soldiers(self):
         """
@@ -166,11 +291,9 @@ class PackageDataAccess:
         :param x: Variable in the function
         :return:
         """
-        print(function, x)
         if isinstance(function, tuple):  # Prevent weird python bug where function is converted to a tuple of lists
             function = function[0]
         if function[0] == 0:  # [0,4000,0]: A zero at the beginning, means that x should be calculated as 2^x
             x = int(exp2(x))
         result =  int(polyval(function, x))
-        print(result)
         return result
