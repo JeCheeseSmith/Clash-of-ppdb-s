@@ -16,8 +16,6 @@ function UpgradeBuilding() {
         }
     }
 
-    console.log(click)
-
     return (
         <div className="button-container">
             {click && <TimerProgressBar timeValue={time} finished={setClick}/>}

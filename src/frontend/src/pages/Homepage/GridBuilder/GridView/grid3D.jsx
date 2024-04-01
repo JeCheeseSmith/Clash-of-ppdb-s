@@ -9,6 +9,7 @@ import error from "../../../../assets/buildingPlacementError.mp3";
 import Buildings from "../buildings.jsx";
 import POST from "../../../../api/POST.jsx";
 import {useLocation} from "react-router-dom";
+import UpgradeBuilding from "./upgradeBuilding/upgradeBuilding.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -197,6 +198,7 @@ function Grid({buildings, updateRecources})
                 }
                 <Ground/>
             </Canvas>
+            {selectedBuilding[1] && <UpgradeBuilding/>}
         </Suspense>
     );
 }
