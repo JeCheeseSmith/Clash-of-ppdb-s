@@ -41,9 +41,8 @@ function Grid({buildings})
     {
         const newPosition = [selectedBuilding[0].position[0] + row, selectedBuilding[0].position[1] + col];
         let occupiedCells = GridCalculation(buildings, selectedBuilding, newPosition)
-        let insideGrid = InsideGrid(selectedBuilding,newPosition)
         let technicalValid = checkTechnicalCollisions(newPosition)
-        if (selectedBuilding[1] && insideGrid && !technicalValid) // valid position en boolean van float building
+        if (selectedBuilding[1] && occupiedCells[0] && !technicalValid) // valid position en boolean van float building
         {
             // No collision, move the building
             selectedBuilding[0].position = newPosition;
@@ -206,82 +205,8 @@ function createShadow(building, shadowColor)
     const material = new THREE.MeshBasicMaterial({ color: shadowColor });
     const square = new THREE.Mesh(geometry, material);
     square.position.set(building.size[0]*0.5-1, 0, building.size[1]*0.5-1.5);
-    /*if (building.type === "WoodCuttersCamp")
-    {
-        square.position.set(2.5, 0, 2);
-    }
-    else if (building.type === "Quarry")
-    {
-        square.position.set(0.5, 0, 0);
-    }
-    else if (building.type === "SteelMine")
-    {
-        square.position.set(2, 0, 0);
-    }
-    else if (building.type === "Farm")
-    {
-        square.position.set(1, 0, 0.5);
-    }
-    else if (building.type === "Stables")
-    {
-        square.position.set(2.5, 0, 1);
-    }
-    else if (building.type === "ArcherTower")
-    {
-        square.position.set(0.5, 0, 0);
-    }
-    else if (building.type === "LookoutTower")
-    {
-        square.position.set(0.5, 0, 0);
-    }
-    else if (building.type === "BlackSmith")
-    {
-        square.position.set(1.5, 0, 1.5);
-    }
-    else if (building.type === "Tavern")
-    {
-        square.position.set(3, 0, 2.5);
-    }
-    else if (building.type === "TrainingYard")
-    {
-        square.position.set(0.5, 0, 0.5);
-    }
-    else if (building.type === "GrainSilo")
-    {
-        square.position.set(0.5, 0, 0);
-    }
-    else if (building.type === "StoneStockpile")
-    {
-        square.position.set(2, 0, 1.5);
-    }
-    else if (building.type === "Armory")
-    {
-        square.position.set(2, 0, 0.5);
-    }
-    else if (building.type === "WoodStockpile")
-    {
-        square.position.set(1, 0, 0);
-    }
-    else if (building.type === "Castle")
-    {
-        square.position.set(5.5, 0, 5);
-    }
-    else if (building.type === "Chancery")
-    {
-        square.position.set(3, 0, 2);
-    }
-    else if (building.type === "Barracks")
-    {
-        square.position.set(1.5, 0, 1.5);
-    }*/
-
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
-}
-
-function InsideGrid(selectedBuilding, newPosition)
-{
-    return newPosition[0] <= 40 - selectedBuilding[0].size[0] && newPosition[1] <= 40 - selectedBuilding[0].size[1] && newPosition[0] >= 0 && newPosition[1] >= 0
 }
 
 export default Grid;
