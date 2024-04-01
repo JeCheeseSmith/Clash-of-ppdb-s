@@ -41,8 +41,9 @@ function Grid({buildings})
     {
         const newPosition = [selectedBuilding[0].position[0] + row, selectedBuilding[0].position[1] + col];
         let occupiedCells = GridCalculation(buildings, selectedBuilding, newPosition)
+        let insideGrid = InsideGrid(selectedBuilding,newPosition)
         let technicalValid = checkTechnicalCollisions(newPosition)
-        if (selectedBuilding[1] && occupiedCells[0] && !technicalValid) // valid position en boolean van float building
+        if (selectedBuilding[1] && insideGrid && !technicalValid) // valid position en boolean van float building
         {
             // No collision, move the building
             selectedBuilding[0].position = newPosition;
@@ -207,6 +208,11 @@ function createShadow(building, shadowColor)
     square.position.set(building.size[0]*0.5-1, 0, building.size[1]*0.5-1.5);
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
+}
+
+function InsideGrid(selectedBuilding, newPosition)
+{
+    return newPosition[0] <= 40 - selectedBuilding[0].size[0] && newPosition[1] <= 40 - selectedBuilding[0].size[1] && newPosition[0] >= 0 && newPosition[1] >= 0
 }
 
 export default Grid;
