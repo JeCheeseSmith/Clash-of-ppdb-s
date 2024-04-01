@@ -205,7 +205,6 @@ function createShadow(building, shadowColor)
     const geometry = new THREE.PlaneGeometry(building.size[0],building.size[1]);
     const material = new THREE.MeshBasicMaterial({ color: shadowColor });
     const square = new THREE.Mesh(geometry, material);
-    //TODO: position.set veranderen op basis van building type
     if (building.type === "WoodCuttersCamp")
     {
         square.position.set(2.5, 0, 2);
