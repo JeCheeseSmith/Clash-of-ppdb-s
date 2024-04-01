@@ -18,30 +18,47 @@ import Buildings from "./GridBuilder/buildings.jsx";
  */
 function MainPage()
 {
-    const [buildings, setBuildings] = useState([])
     const sid = localStorage.getItem('sid');
+    const [buildings, setBuildings] = useState([])
+    const [resources, setResources] = useState({
+        wood: 0,
+        stone: 0,
+        steel: 0,
+        food: 0
+    });
+    const getBuildings = async () =>
+    {
+        const data = await GET({"sid":sid}, "/getGrid")
+        setBuildings(data.grid)
+    }
+    const getResources = async () =>
+    {
+        const data = await POST({ id: sid }, '/resources');
+        // The values of the resources are changed
+        setResources({
+          wood: data.wood,
+          stone: data.stone,
+          steel: data.steel,
+          food: data.food
+        });
+    }
     useEffect(() =>
     {
-        const returnData = async () =>
-        {
-            const data = await GET({"sid":sid}, "/getGrid")
-            setBuildings(data.grid)
-        }
-        returnData();
+        getResources();
+        getBuildings();
     }, []);
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
     }
-
     return (
         <div className="background"> {/* Container for the background image */}
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu buildings={buildings} addBuilding={addBuilding}/>
+            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateRecources={getResources}/>
             <Grid buildings={buildings}/>
-            <ResourceBar/>
+            <ResourceBar resources={resources}/>
             <SoldierMenu/>
 
             {/*<Map/>*/}

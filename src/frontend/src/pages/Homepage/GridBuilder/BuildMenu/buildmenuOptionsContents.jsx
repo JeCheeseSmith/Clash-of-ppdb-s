@@ -71,7 +71,7 @@ function Building({addBuildable, name, image, size, buildings})
         }
         const data = await POST({"name":name, "position": randomPosition, "occupiedCells": occupiedCells, "sid": sid}, "/placeBuilding")
         console.log(data)
-        if (true/*data.succes*/)
+        if (data.succes)
         {
             addBuildable(name, randomPosition, size, newCells[1])
         }
