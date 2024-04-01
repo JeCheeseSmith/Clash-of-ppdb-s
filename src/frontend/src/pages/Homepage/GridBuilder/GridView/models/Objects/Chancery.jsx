@@ -15,10 +15,10 @@ import chancery from '../../assets/chancery.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the Chancery.
  */
-function Chancery(props) {
+function Chancery({props}) {
   const { nodes, materials } = useGLTF(chancery)
   return (
-    <group {...props} dispose={null} scale={0.002} position={[1,0,1]}>
+    <group {...props} dispose={null} scale={0.002+props} position={[4.35,0,3]}>
       <mesh
         castShadow
         receiveShadow

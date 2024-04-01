@@ -15,10 +15,10 @@ import woodcuttersCamp from '../../assets/woodcuttersCamp.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the woodcutter's camp.
  */
-function WoodCuttersCamp(props) {
+function WoodCuttersCamp({props}) {
   const { nodes, materials } = useGLTF(woodcuttersCamp)
   return (
-    <group {...props} dispose={null} scale={0.5}>
+    <group {...props} dispose={null} scale={0.5+props} position={[2.5,0,2.4]}>
       <mesh castShadow receiveShadow geometry={nodes.Object_4.geometry} material={materials.Murs} />
       <mesh
         castShadow

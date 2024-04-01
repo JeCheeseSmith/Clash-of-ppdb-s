@@ -15,12 +15,12 @@ import grainSilo from '../../assets/grainSilo.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the grain silo.
  */
-export default function GrainSilo(props)
+export default function GrainSilo({props})
 {
   const { nodes, materials } = useGLTF(grainSilo)
   return (
     <group {...props} dispose={null}>
-      <group position={[0, 3.8, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={0.35}>
+      <group position={[0.5, 2.65, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={0.35+props}>
         <mesh
           castShadow
           receiveShadow

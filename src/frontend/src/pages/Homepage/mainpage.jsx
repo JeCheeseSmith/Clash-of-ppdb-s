@@ -10,7 +10,7 @@ import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
 import GET from "../../api/GET.jsx";
 import POST from "../../api/POST.jsx";
-import BuildingImages from "./GridBuilder/BuildMenu/assets/BuildingImages.jsx";
+import Buildings from "./GridBuilder/buildings.jsx";
 
 /**
  * Functional component representing the main page of the application.

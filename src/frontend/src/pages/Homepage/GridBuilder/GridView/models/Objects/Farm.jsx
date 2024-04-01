@@ -16,10 +16,10 @@ import Quarry from "./Quarry.jsx";
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the windmill farm.
  */
-function Farm(props) {
+function Farm({props}) {
   const { nodes, materials } = useGLTF(farm)
   return (
-    <group {...props} dispose={null} scale={0.8} position={[0, 0.2, 0]}>
+    <group {...props} dispose={null} scale={0.8+props} position={[1, 0.2, 1]}>
         <group scale={2}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={0.002}>
         <group rotation={[Math.PI / 2, 0, 0]}>

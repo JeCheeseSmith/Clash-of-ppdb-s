@@ -15,11 +15,11 @@ import trainingYard from '../../assets/trainingYard.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the fantasy army training yard.
  */
-export default function TrainingYard(props) {
+export default function TrainingYard({props}) {
   const { nodes, materials } = useGLTF(trainingYard)
   return (
-    <group {...props} dispose={null} position={[5,0,0]}>
-        <group scale={0.6}>
+    <group {...props} dispose={null} position={[5.7,0.5,0.5]}>
+        <group scale={0.6+props}>
             <mesh
                 castShadow
                 receiveShadow

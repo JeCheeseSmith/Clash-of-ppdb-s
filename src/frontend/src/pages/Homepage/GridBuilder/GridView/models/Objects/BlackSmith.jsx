@@ -15,10 +15,10 @@ import blackSmith from '../../assets/blackSmith.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the blacksmith.
  */
-export default function BlackSmith(props) {
+export default function BlackSmith({props}) {
   const { nodes, materials } = useGLTF(blackSmith)
   return (
-    <group {...props} dispose={null} scale={0.9} position={[1,0.55,0.4]}>
+    <group {...props} dispose={null} scale={0.9+props} position={[2.8,0.55,2.2]}>
       <group scale={0.5}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <group position={[-3.754, 0.698, -0.612]} rotation={[Math.PI / 2, 0, 0]}>

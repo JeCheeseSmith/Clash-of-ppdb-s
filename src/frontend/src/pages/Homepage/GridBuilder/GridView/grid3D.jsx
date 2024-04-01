@@ -2,12 +2,11 @@ import React, {Suspense, useEffect, useRef, useState} from 'react';
 import {Canvas, useFrame} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import './grid3D.css'
-import Buildings3D from "./models/Buildings3D.jsx";
 import * as THREE from "three";
 import Ground from "./models/Objects/Ground.jsx";
 import GridCalculation from "../gridCalculation.jsx";
 import error from "../../../../assets/buildingPlacementError.mp3";
-import BuildingImages from "../BuildMenu/assets/BuildingImages.jsx";
+import Buildings from "../buildings.jsx";
 import POST from "../../../../api/POST.jsx";
 
 /**
@@ -22,7 +21,7 @@ function Grid({buildings})
 {
     const sid = localStorage.getItem('sid');
     const [selectedBuilding, setSelectedBuilding] =
-        useState([[],false /*floating*/, 0x006f00 /*shadowColor*/, true /*validPosition for Mouse Right Click*/])
+        useState([[],false /*floating*/, 0x006f00 /*shadowColor*/])
 
     const [oldPosition, setOldPosition] = useState([])
 
@@ -62,8 +61,7 @@ function Grid({buildings})
             sound.volume = 0.1
             sound.play();
         }
-        selectedBuilding[3] = occupiedCells[0]
-        setSelectedBuilding([selectedBuilding[0], selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]);
+        setSelectedBuilding([selectedBuilding[0], selectedBuilding[1], selectedBuilding[2]]);
         return [oldPosition,newPosition,occupiedCells]
     };
     useEffect(() =>
@@ -71,9 +69,9 @@ function Grid({buildings})
         const handleEnterButton = async () =>
         {
             let moved = moveObject(0, 0)
-            if (moved[2][0])
+            if (moved[2][0] && selectedBuilding[1])
             {
-                setSelectedBuilding([selectedBuilding[0],!selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]]); //alleen floating boolean veranderen
+                setSelectedBuilding([selectedBuilding[0],false, selectedBuilding[2]]); //alleen floating boolean veranderen
                 const data = await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
             }
         }
@@ -108,26 +106,25 @@ function Grid({buildings})
 
     const handleObjectClick = (building) =>
     {
-        if (selectedBuilding[3])
-        {
-            setSelectedBuilding([building, !selectedBuilding[1], selectedBuilding[2], selectedBuilding[3]])
-        }
         if (!selectedBuilding[1])
         {
+            setSelectedBuilding([building, true, selectedBuilding[2]])
             setOldPosition([building.position[0], building.position[1]]);
         }
     }
 
     const BuildingMesh = ({building}) =>
     {
-        for (let category in BuildingImages)
+        let Building;
+        for (let category in Buildings)
         {
-            for (let buildables in BuildingImages[category])
+            for (let buildables in Buildings[category])
             {
-                const size = BuildingImages[category][buildables][1]
+                const size = Buildings[category][buildables][2]
                 if (building.type === buildables)
                 {
                     building.size = size;
+                    Building = Buildings[category][buildables][1]
                 }
             }
         }
@@ -141,14 +138,13 @@ function Grid({buildings})
         });
         const centerX = building.position[0] + 0.5;
         const centerY = building.position[1] + 0.5;
-        const Building = Buildings3D[building.type];
         return (
             <>
                 <mesh ref={meshRef} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]} onClick={() => handleObjectClick(building)}>
-                    <Building/>
+                    <Building props={0}/>
                 </mesh>
                 <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
-                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building.size[0],building.size[1], selectedBuilding[2])}/>}
+                    {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building, selectedBuilding[2])}/>}
                 </mesh>
             </>
         );
@@ -204,19 +200,88 @@ function Grid({buildings})
     );
 }
 
-function createShadow(width, height, shadowColor)
+function createShadow(building, shadowColor)
 {
-    const geometry = new THREE.PlaneGeometry(width, height);
+    const geometry = new THREE.PlaneGeometry(building.size[0],building.size[1]);
     const material = new THREE.MeshBasicMaterial({ color: shadowColor });
     const square = new THREE.Mesh(geometry, material);
-    square.position.set(0, 0, 0);
+    //TODO: position.set veranderen op basis van building type
+    if (building.type === "WoodCuttersCamp")
+    {
+        square.position.set(2.5, 0, 2);
+    }
+    else if (building.type === "Quarry")
+    {
+        square.position.set(0.5, 0, 0);
+    }
+    else if (building.type === "SteelMine")
+    {
+        square.position.set(2, 0, 0);
+    }
+    else if (building.type === "Farm")
+    {
+        square.position.set(1, 0, 0.5);
+    }
+    else if (building.type === "Stables")
+    {
+        square.position.set(2.5, 0, 1);
+    }
+    else if (building.type === "ArcherTower")
+    {
+        square.position.set(0.5, 0, 0);
+    }
+    else if (building.type === "LookoutTower")
+    {
+        square.position.set(0.5, 0, 0);
+    }
+    else if (building.type === "BlackSmith")
+    {
+        square.position.set(1.5, 0, 1.5);
+    }
+    else if (building.type === "Tavern")
+    {
+        square.position.set(3, 0, 2.5);
+    }
+    else if (building.type === "TrainingYard")
+    {
+        square.position.set(0.5, 0, 0.5);
+    }
+    else if (building.type === "GrainSilo")
+    {
+        square.position.set(0.5, 0, 0);
+    }
+    else if (building.type === "StoneStockpile")
+    {
+        square.position.set(2, 0, 1.5);
+    }
+    else if (building.type === "Armory")
+    {
+        square.position.set(2, 0, 0.5);
+    }
+    else if (building.type === "WoodStockpile")
+    {
+        square.position.set(1, 0, 0);
+    }
+    else if (building.type === "Castle")
+    {
+        square.position.set(5.5, 0, 5);
+    }
+    else if (building.type === "Chancery")
+    {
+        square.position.set(3, 0, 2);
+    }
+    else if (building.type === "Barracks")
+    {
+        square.position.set(1.5, 0, 1.5);
+    }
+
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
 }
 
 function InsideGrid(selectedBuilding, newPosition)
 {
-    return newPosition[0] < 39 && newPosition[1] < 38 && newPosition[0] >= 0 && newPosition[1] >= 0
+    return newPosition[0] <= 40 - selectedBuilding[0].size[0] && newPosition[1] <= 40 - selectedBuilding[0].size[1] && newPosition[0] >= 0 && newPosition[1] >= 0
 }
 
 export default Grid;
