@@ -18,7 +18,7 @@ import {useLocation} from "react-router-dom";
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings})
+function Grid({buildings, updateRecources})
 {
     const { sid, username } = useLocation().state;
     const [selectedBuilding, setSelectedBuilding] =

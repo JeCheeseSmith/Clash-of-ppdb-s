@@ -43,7 +43,7 @@ function MainPage()
             <SocialBox/>
             <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding} updateRecources={() => API.get_resources(sid).then(data => setResources(data))}/>
-            <Grid buildings={buildings}/>
+            <Grid buildings={buildings} updateRecources={() => API.get_resources(sid).then(data => setResources(data))}/>
             <ResourceBar resources={resources}/>
             <SoldierMenu/>
 
