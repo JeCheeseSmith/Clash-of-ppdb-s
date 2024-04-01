@@ -205,7 +205,8 @@ function createShadow(building, shadowColor)
     const geometry = new THREE.PlaneGeometry(building.size[0],building.size[1]);
     const material = new THREE.MeshBasicMaterial({ color: shadowColor });
     const square = new THREE.Mesh(geometry, material);
-    if (building.type === "WoodCuttersCamp")
+    square.position.set(building.size[0]*0.5-1, 0, building.size[1]*0.5-1.5);
+    /*if (building.type === "WoodCuttersCamp")
     {
         square.position.set(2.5, 0, 2);
     }
@@ -272,7 +273,7 @@ function createShadow(building, shadowColor)
     else if (building.type === "Barracks")
     {
         square.position.set(1.5, 0, 1.5);
-    }
+    }*/
 
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
