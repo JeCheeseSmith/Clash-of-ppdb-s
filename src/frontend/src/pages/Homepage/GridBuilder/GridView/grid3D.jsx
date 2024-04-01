@@ -8,6 +8,7 @@ import GridCalculation from "../gridCalculation.jsx";
 import error from "../../../../assets/buildingPlacementError.mp3";
 import Buildings from "../buildings.jsx";
 import POST from "../../../../api/POST.jsx";
+import {useLocation} from "react-router-dom";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -19,7 +20,7 @@ import POST from "../../../../api/POST.jsx";
 
 function Grid({buildings})
 {
-    const sid = localStorage.getItem('sid');
+    const { sid, username } = useLocation().state;
     const [selectedBuilding, setSelectedBuilding] =
         useState([[],false /*floating*/, 0x006f00 /*shadowColor*/])
 

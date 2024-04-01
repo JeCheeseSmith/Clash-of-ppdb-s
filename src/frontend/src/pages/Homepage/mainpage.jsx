@@ -5,20 +5,17 @@ import SocialBox from "./Communication/social/social.jsx";
 import Grid from "./GridBuilder/GridView/grid3D.jsx";
 import Buildmenu from "./GridBuilder/BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
-import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
-import GET from "../../api/GET.jsx";
-import POST from "../../api/POST.jsx";
-import Buildings from "./GridBuilder/buildings.jsx";
-
+import * as API from "../../api/EndPoints/EndPoints.jsx"
+import {useLocation} from "react-router-dom";
 /**
  * Functional component representing the main page of the application.
  * Displays a full-bleed background image.
  */
 function MainPage()
 {
-    const sid = localStorage.getItem('sid');
+    const { sid, username } = useLocation().state;
     const [buildings, setBuildings] = useState([])
     const [resources, setResources] = useState({
         wood: 0,
@@ -26,26 +23,15 @@ function MainPage()
         steel: 0,
         food: 0
     });
-    const getBuildings = async () =>
-    {
-        const data = await GET({"sid":sid}, "/getGrid")
-        setBuildings(data.grid)
-    }
-    const getResources = async () =>
-    {
-        const data = await POST({ id: sid }, '/resources');
-        // The values of the resources are changed
-        setResources({
-          wood: data.wood,
-          stone: data.stone,
-          steel: data.steel,
-          food: data.food
-        });
-    }
     useEffect(() =>
     {
-        getResources();
-        getBuildings();
+        API.getGrid(sid).then(data => setBuildings(data))
+        API.get_resources(sid).then(data => setResources(data)) // do this twice, because without the first time, resources are going to be 0
+        const intervalId = setInterval(() =>
+        {
+            API.get_resources(sid).then(data => setResources(data))
+        }, 5 * 60 * 1000); // 15 minutes in milliseconds
+        return () => clearInterval(intervalId);
     }, []);
     const addBuilding = (type, position, size, occupiedCells) =>
     {
@@ -56,7 +42,7 @@ function MainPage()
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateRecources={getResources}/>
+            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateRecources={() => API.get_resources(sid).then(data => setResources(data))}/>
             <Grid buildings={buildings}/>
             <ResourceBar resources={resources}/>
             <SoldierMenu/>

@@ -30,14 +30,14 @@ function RegistrationPage() {
         if (username2) {
             // Calls the API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/signup");
-         // If the data is true (account already exists), then navigate to main page
+            // If the data is true (account already exists), then navigate to main page
             if (data.success) {
-            localStorage.setItem('sid', data.sid); // Store the sid for the resource bar
-            navigate('/MainPage', { state: { username } });
+                let sid = data.sid
+                navigate('/MainPage', { state: { sid, username }});
             }
-          // Display error
+            // Display error
             else {
-            setErrorMessage('User already exists');
+                setErrorMessage('User already exists');
             }
         }
         else {
