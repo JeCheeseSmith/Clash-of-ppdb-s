@@ -48,3 +48,19 @@ class SoldierDataAccess:
             return True
         else:
             return False
+
+    def getUnlockedSoldiers(self, sid):
+        """
+        Retrieves all soldier with their update status
+        :param sid: Identifier of the settlement
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        querry = """SELECT name,True FROM soldier JOIN unlockedsoldier on soldier.name = unlockedsoldier.sname WHERE sid=%s
+                    UNION
+                    SELECT name,False FROM soldier WHERE name NOT IN (SELECT name FROM soldier JOIN unlockedsoldier on soldier.name = unlockedsoldier.sname WHERE sid=%s);"""
+
+        cursor.execute(querry, (sid, sid))
+        data = cursor.fetchall()
+        print(data)
+        return data

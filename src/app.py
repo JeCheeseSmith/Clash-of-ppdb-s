@@ -341,7 +341,7 @@ def placeBuilding():
     succes, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
     dct = dict(succes=succes)
     if not succes:
-        dct['error'] = str(error)
+        dct["error"] = str(error)
     return jsonify(dct)
 
 
@@ -384,10 +384,20 @@ def upgradeBuilding():
 def unlockedTroops():
     """
     Retrieve all soldiers and their unlocked status
-    :return:
+
+    JSON Input Format
+    {
+    "sid": <INT> | Identifier of the settlement you are training troops for
+    }
+
+    JSON Output Format:
+    {
+    List of soldier names with a bool specifying their unlocked status
+    }
     """
-    ### TODO implement & bespreek met Jonas om soldiers grijs te maken/non-clickable
-    pass
+    data = request.json
+    data = soldier_data_acces.getUnlockedSoldiers(data.get("sid"))
+    return jsonify(data)
 
 @app.route("/trainTroops", methods=["POST"])
 def trainTroops():
