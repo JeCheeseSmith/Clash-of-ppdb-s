@@ -15,12 +15,12 @@ import steelMine from '../../assets/steelMine.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the medieval building.
  */
-export default function SteelMine(props) {
+export default function SteelMine({props}) {
   const { nodes, materials } = useGLTF(steelMine)
   return (
-    <group {...props} dispose={null} scale={0.3}>
+    <group {...props} dispose={null} scale={0.3+props}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
-        <group position={[-10.241, -5.425, -0.009]}>
+        <group position={[-3.6, -5.5, 0]}>
           <mesh
             castShadow
             receiveShadow

@@ -15,11 +15,11 @@ import castle from '../../assets/castle.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the castle.
  */
-export default function Castle(props) {
+export default function Castle({props}) {
   const { nodes, materials } = useGLTF(castle)
   return (
-    <group {...props} dispose={null} scale={0.11}>
-      <group position={[3.2, 22.6, -4.5]} rotation={[Math.PI / 2, 0, 0]}>
+    <group {...props} dispose={null} scale={0.11+props}>
+      <group position={[53.5, 22.6, 40]} rotation={[Math.PI / 2, 0, 0]}>
         <mesh
           castShadow
           receiveShadow

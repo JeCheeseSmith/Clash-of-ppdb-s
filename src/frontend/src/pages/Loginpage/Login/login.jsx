@@ -33,8 +33,8 @@ function LoginPage() {
     const handleLoginClick = async () => {
       const data = await POST({ name: username, password: password }, "/login");
       if (data.success) {
-          localStorage.setItem('sid', data.sid); // Store the sid for the resource bar
-          navigate('/MainPage', { state: { username: username } }); // Give username to main page
+          let sid = data.sid
+          navigate('/MainPage', { state: { sid, username }});
       }
       // Display error
       else {

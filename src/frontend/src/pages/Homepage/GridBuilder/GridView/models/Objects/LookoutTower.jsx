@@ -15,11 +15,11 @@ import lookoutTower from '../../assets/lookoutTower.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the lookout tower.
  */
-export default function LookoutTower(props) {
+export default function LookoutTower({props}) {
   const { nodes, materials } = useGLTF(lookoutTower)
   return (
     <group {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 0]} scale={0.8} position={[0,0.1,0]}>
+      <group rotation={[-Math.PI / 2, 0, 0]} scale={0.8+props} position={[0.5,0.1,0]}>
         <group rotation={[Math.PI / 2, 0, 0]}>
           <mesh
             castShadow

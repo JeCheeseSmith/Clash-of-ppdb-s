@@ -20,11 +20,11 @@ import archertower from '../../assets/archertower.glb'
  * @param {number[]} props.scale - Scale of the tower.
  * @return {JSX.Element} A React JSX Element representing the ArcherTower component.
  */
-export default function ArcherTower(props) {
+export default function ArcherTower({props}) {
   const { nodes, materials } = useGLTF(archertower)
   return (
-    <group {...props} dispose={null} scale={0.5}>
-      <group scale={0.01}>
+    <group {...props} dispose={null} scale={0.5} position={[0.5,0,0]}>
+      <group scale={0.01+props}>
         <mesh
           castShadow
           receiveShadow

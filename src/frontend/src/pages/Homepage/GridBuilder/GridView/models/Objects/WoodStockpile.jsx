@@ -15,10 +15,10 @@ import woodStockpile from '../../assets/woodStockpile.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the wood stockpile.
  */
-export default function WoodStockpile(props) {
+export default function WoodStockpile({props}) {
   const { nodes, materials } = useGLTF(woodStockpile)
   return (
-    <group {...props} dispose={null} scale={0.5} position={[0.5,0,0]}>
+    <group {...props} dispose={null} scale={0.5+props} position={[1.5,0,-0.65]}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={0.76}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
           <group position={[-212.949, 74.161, 229.367]} rotation={[-Math.PI / 2, 0, 0]} scale={100}>

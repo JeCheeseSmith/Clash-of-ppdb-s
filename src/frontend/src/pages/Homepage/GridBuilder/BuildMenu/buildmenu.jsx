@@ -8,7 +8,7 @@ import BuildmenuOptionsContents from "./buildmenuOptionsContents.jsx";
  * @returns {JSX.Element} JSX representation of the BuildMenu component.
  */
 
-function BuildMenu({addBuilding, buildings})
+function BuildMenu({addBuilding, buildings, updateRecources})
 {
   // State variable to track the visibility of the build menu
   const [menuVisible, setMenuVisible] = useState(false);
@@ -16,8 +16,8 @@ function BuildMenu({addBuilding, buildings})
   const addBuildable = (type, position, size, occupiedCells) =>
   {
       addBuilding(type, position, size, occupiedCells)
+      updateRecources()
   };
-
 
   const toggleMenuVisibility = () => {
     setMenuVisible(!menuVisible);

@@ -16,12 +16,12 @@ import Farm from "./Farm.jsx";
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the stables.
  */
-function Stables(props) {
+function Stables({props}) {
   const { nodes, materials } = useGLTF(stables)
   return (
-    <group {...props} dispose={null} position={[0,0.3,0]}>
-      <group scale={0.3}>
-      <group rotation={[-Math.PI / 2, 0, 0]} >
+    <group {...props} dispose={null} position={[2.5,0.3,0.8]}>
+      <group scale={0.3+props}>
+      <group rotation={[-Math.PI / 2, 0, 0]}>
         <group rotation={[Math.PI / 2, 0, 0]}>
           <mesh
               castShadow

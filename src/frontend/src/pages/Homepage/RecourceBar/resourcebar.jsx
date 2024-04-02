@@ -8,34 +8,7 @@ import POST from "../../../api/POST.jsx";
 
 
 // Code for resource bar
-function ResourceBar() {
-
-    // Default values for state
-    const [resources, setResources] = useState({
-        wood: 0,
-        stone: 0,
-        steel: 0,
-        food: 0
-    });
-
-    // Function that sends a request for the resources by calling the API
-    const GetResources = async () => {
-        const sid = localStorage.getItem('sid'); // Receives the sid that is sent by login.jsx and signUp.jsx
-        const data = await POST({ id: sid }, '/resources');
-        // The values of the resources are changed
-        setResources({
-          wood: data.wood,
-          stone: data.stone,
-          steel: data.steel,
-          food: data.food
-        });
-    }
-
-    // Calls the GetResources function so that the values can be changed
-    useEffect(() => {
-        GetResources();
-    }, []);
-
+function ResourceBar({resources}) {
     return (
         // Resource-bar section
         <div className="resourceBar">

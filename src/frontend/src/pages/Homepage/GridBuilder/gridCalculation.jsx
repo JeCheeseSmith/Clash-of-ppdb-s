@@ -6,15 +6,16 @@ function GridCalculation(buildings, selectedBuilding, newPosition)
 {
     let newCells = CalculateCells(selectedBuilding, newPosition)
     let validCells = ValidPositionChecker(selectedBuilding, newCells, buildings)
+    if (!InsideGrid(selectedBuilding, newPosition)) {validCells=false}
     return [validCells,newCells]
 }
 
 function CalculateCells(selectedBuilding, newPosition)
 {
     let cells = [];
-    for (let i = 0; i < selectedBuilding[0].size[0]; i++)
+    for (let i = 0; i <= selectedBuilding[0].size[0]; i++)
     {
-        for (let j = 0; j < selectedBuilding[0].size[1]; j++)
+        for (let j = 0; j <= selectedBuilding[0].size[1]; j++)
         {
             cells.push([newPosition[0]+i,newPosition[1]+j])
         }
@@ -51,6 +52,11 @@ function ValidPositionChecker(selectedBuilding, newCells, buildings)
         }
     }
     return true
+}
+
+function InsideGrid(selectedBuilding, newPosition)
+{
+    return newPosition[0] <= 40 - selectedBuilding[0].size[0] && newPosition[1] <= 40 - selectedBuilding[0].size[1] && newPosition[0] >= 0 && newPosition[1] >= 0
 }
 
 export default GridCalculation;

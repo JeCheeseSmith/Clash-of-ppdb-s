@@ -45,6 +45,7 @@ function ChatBox()
                            contactList={contactList}
                            updateReceiver={setReceiver}
                            updateTypeReceiver={setTypeReceiver}
+                           chatVisible={chatVisible}
                 />
             </div>
         </div>

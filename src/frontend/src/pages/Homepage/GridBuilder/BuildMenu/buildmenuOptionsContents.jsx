@@ -1,16 +1,17 @@
 import React, {useState} from 'react';
 import './buildmenuOptionsContents.css'
-import BuildingImages from "./assets/BuildingImages.jsx";
+import Buildings from "../buildings.jsx";
 import GridCalculation from "../gridCalculation.jsx";
 import POST from "../../../../api/POST.jsx";
+import {useLocation} from "react-router-dom";
 
 function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 {
     return (
         <div className="type-container">
             <div className="image-scroll-container">
-                {Object.entries(BuildingImages).map(([category, buildables]) => (
-                    Object.entries(buildables).map(([name, [image, size]]) =>
+                {Object.entries(Buildings).map(([category, buildables]) => (
+                    Object.entries(buildables).map(([name, [image, Mesh, size]]) =>
                     {
                         return (
                             currentPage === category &&
@@ -42,7 +43,7 @@ function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 
 function Building({addBuildable, name, image, size, buildings})
 {
-    const sid = localStorage.getItem('sid');
+    const { sid, username } = useLocation().state;
     const getRandomPosition = () =>
     {
         return [Math.floor(Math.random() * 36) + 2, Math.floor(Math.random() * 36) + 2];
@@ -66,11 +67,10 @@ function Building({addBuildable, name, image, size, buildings})
         while (newCells[0] === false)
         {
             randomPosition = getRandomPosition()
-            selectedBuilding = [{name, randomPosition, size, occupiedCells},selected, 0x006f00 /*shadowColor*/, true /*validPosition*/]
+            selectedBuilding = [{name, randomPosition, size, occupiedCells},selected]
             newCells = GridCalculation(buildings, selectedBuilding, randomPosition)
         }
         const data = await POST({"name":name, "position": randomPosition, "occupiedCells": occupiedCells, "sid": sid}, "/placeBuilding")
-        console.log(data)
         if (data.succes)
         {
             addBuildable(name, randomPosition, size, newCells[1])

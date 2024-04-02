@@ -15,10 +15,10 @@ import armory from '../../assets/armory.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the armory.
  */
-export default function Armory(props) {
+export default function Armory({props}) {
   const { nodes, materials } = useGLTF(armory)
   return (
-    <group {...props} dispose={null} scale={0.3}>
+    <group {...props} dispose={null} scale={0.3+props} position={[2,0,0.525]}>
       <mesh
         castShadow
         receiveShadow

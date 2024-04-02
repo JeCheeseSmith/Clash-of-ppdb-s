@@ -15,11 +15,11 @@ import tavern from '../../assets/tavern.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the medieval tavern.
  */
-export default function Tavern(props) {
+export default function Tavern({props}) {
   const { nodes, materials } = useGLTF(tavern)
   return (
-    <group {...props} dispose={null} position={[0,-0.5,7]}>
-      <group scale={0.015}>
+    <group {...props} dispose={null} position={[2.85,-0.5,9.3]}>
+      <group scale={0.015+props}>
         <group
           position={[0, 54.867, -394.938]}
           rotation={[-Math.PI / 2, 0, 0]}

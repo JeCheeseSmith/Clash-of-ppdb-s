@@ -15,11 +15,11 @@ import stoneStockpile from '../../assets/stoneStockpile.glb'
  * @param {object} props - Props passed to the component.
  * @returns {JSX.Element} JSX representation of the stone stockpile.
  */
-export default function StoneStockpile(props) {
+export default function StoneStockpile({props}) {
   const { nodes, materials } = useGLTF(stoneStockpile)
   return (
-    <group {...props} dispose={null} position={[1.3,0,0]}>
-      <group scale={0.004}>
+    <group {...props} dispose={null} position={[3.4,0,1.7]}>
+      <group scale={0.004+props}>
         <mesh
           castShadow
           receiveShadow
