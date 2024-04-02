@@ -380,6 +380,14 @@ def upgradeBuilding():
         dct["error"] = str(timer)  # In this case, timer is an error message
     return jsonify(dct)
 
+@app.route("/unlockedTroops", methods=["GET"])
+def unlockedTroops():
+    """
+    Retrieve all soldiers and their unlocked status
+    :return:
+    """
+    ### TODO implement & bespreek met Jonas om soldiers grijs te maken/non-clickable
+    pass
 
 @app.route("/trainTroops", methods=["POST"])
 def trainTroops():

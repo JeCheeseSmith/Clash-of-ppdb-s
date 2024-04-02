@@ -33,6 +33,7 @@ class TimerDataAccess:
         self.dbconnect.commit()
 
     def evualateTimers(self, player: Player):
+        ### TODO make this functionality
         pass
 
     def evualateTimersSettlement(self, settlement):

@@ -193,7 +193,7 @@ class SettlementDataAcces:
             # Notice: No timer is created, since new building will be build instantly
 
             self.dbconnect.commit()
-            return True
+            return True, ""
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
