@@ -223,7 +223,8 @@ def get_resources():
     id = data.get("id")
     packageDict = settlement_data_acces.getResources(Settlement(id))
 
-    ### TODO Also call getMaxResource to give max values
+    ### TODO Adjust timestamp
+    #package_data_acces.calc_resources(id, "2024-03-28 18:38:40.252071")
 
     return jsonify(packageDict)
 
