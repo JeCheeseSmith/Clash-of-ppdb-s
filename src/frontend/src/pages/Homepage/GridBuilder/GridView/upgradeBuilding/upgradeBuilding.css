@@ -29,3 +29,12 @@
   transform: scale(1.05); /* Slightly enlarges on hover */
 }
 
+.error-message {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
