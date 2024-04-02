@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import './soldierMenu.css'
 import heavyInfantry3 from "./assets/templar.png";
-import heavyInfantry2 from "./assets/knight.png";
+import heavyInfantry2 from "./assets/Knight.png";
 import heavyInfantry1 from "./assets/swordman.png"
 import horseman1 from "./assets/Horseman.png"
 import horseman2 from "./assets/Knight.png"
