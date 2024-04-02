@@ -39,7 +39,7 @@ class SoldierDataAccess:
         Gives True if a settlement unlocked this type of soldier
         :param sid: Identifier of the settlement
         :param sname: Name of the soldier
-        :return: succes: bool
+        :return: success: bool
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT EXISTS(SELECT * FROM unlocked WHERE name=%s and sid=%s);', (sname, sid))

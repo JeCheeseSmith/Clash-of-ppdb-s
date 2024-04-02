@@ -110,8 +110,8 @@ def logout():
     }
     """
     data = request.json
-    succes = player_data_access.registerLogOut(data.get("name"))  # Call the desired functionality
-    return jsonify(succes)
+    success = player_data_access.registerLogOut(data.get("name"))  # Call the desired functionality
+    return jsonify(success)
 
 
 @app.route("/chat", methods=["POST", "GET"])
@@ -281,10 +281,10 @@ def getBuildingInfo():
         building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
                                                 data.get('sid'))  # Reform data
         dct = building.to_dct()
-        dct['succes'] = True
+        dct['success'] = True
         return jsonify(dct)
     except:
-        dct = dict(succes=False)
+        dct = dict(success=False)
         return jsonify(dct)
 
 
@@ -312,8 +312,8 @@ def moveBuiling():
     building.occupiedCells = data.get('occupiedCells')
     building.gridX = data.get('newPosition')[0]
     building.gridY = data.get('newPosition')[1]
-    succes = building_data_acces.moveBuilding(building)  # Execute functionality
-    return jsonify(dict(succes=succes))
+    success = building_data_acces.moveBuilding(building)  # Execute functionality
+    return jsonify(dict(success=success))
 
 
 @app.route("/placeBuilding", methods=["POST"])
@@ -341,9 +341,9 @@ def placeBuilding():
 
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
-    succes, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
-    dct = dict(succes=succes)
-    if not succes:
+    success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
+    dct = dict(success=success)
+    if not success:
         dct["error"] = str(error)
     return jsonify(dct)
 
@@ -372,14 +372,14 @@ def upgradeBuilding():
 
     building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
                                             data.get('sid'))  # Reform data
-    succes, timer = settlement_data_acces.upgradeBuilding(building, package_data_acces, timer_data_acces,
+    success, timer = settlement_data_acces.upgradeBuilding(building, package_data_acces, timer_data_acces,
                                                           building_data_acces)  # Execute actual functionality
 
-    if succes:
+    if success:
         dct = timer.to_dct()
-        dct["succes"] = succes
+        dct["success"] = success
     else:
-        dct = dict(succes=succes)
+        dct = dict(success=success)
         dct["error"] = str(timer)  # In this case, timer is an error message
     return jsonify(dct)
 
@@ -415,7 +415,7 @@ def trainTroops():
 
     JSON Output Format:
     {
-    "succes": <bool> | State of request
+    "success": <bool> | State of request
     "error": <STRING> | Optional error message if success=False
     }
     """
@@ -423,14 +423,14 @@ def trainTroops():
 
     ### TODO call Recalculate resources
 
-    succes, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
+    success, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
                                                      package_data_acces,
                                                      timer_data_acces)  # Execute actual functionality
-    if succes:
+    if success:
         dct = timer.to_dct()
-        dct["succes"] = succes
+        dct["success"] = success
     else:
-        dct = dict(succes=succes)
+        dct = dict(success=success)
         dct["error"] = str(timer)  # In this case, timer is an error message
     return jsonify(dct)
 
@@ -450,13 +450,13 @@ def createClan():
 
     JSON Output Format:
     {
-    "succes": <bool> | State of request
+    "success": <bool> | State of request
     }
     """
     data = request.json
-    succes = clan_data_acces.add_clan(
+    success = clan_data_acces.add_clan(
         Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
-    return jsonify({"succes": succes})
+    return jsonify({"success": success})
 
 
 @app.route("/joinClan", methods=["POST"])
@@ -472,7 +472,7 @@ def joinClan():
 
     JSON Output Format:
     {
-    "succes": <bool> | State of request
+    "success": <bool> | State of request
     "message": <string> | Standard reply
     }
     """
@@ -481,14 +481,14 @@ def joinClan():
     rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),
                        None)
     cname = data.get("cname")  # Name of the clan
-    succes = clan_data_acces.sendRequest(rhequest, cname)
+    success = clan_data_acces.sendRequest(rhequest, cname)
 
-    if succes:
+    if success:
         message = "Your request has been send. Please await further correspondence!"
     else:
         message = "You can't join a clan if you're already in one!"
 
-    return jsonify({"succes": succes, "message": message})
+    return jsonify({"success": success, "message": message})
 
 
 @app.route("/searchClan", methods=["POST"])
@@ -503,7 +503,7 @@ def searchClan():
 
     JSON Output Format
     {
-    "succes": <bool> | Status
+    "success": <bool> | Status
     "name": <string> | Clan Name
     "pname": <string> | Clan Leader name (Player Entity)
     "description": <string> | Info about the clan
@@ -515,9 +515,9 @@ def searchClan():
     dct = clan.to_dct()
 
     if clan.status == "Clan doesn't exists":
-        dct["succes"] = False
+        dct["success"] = False
     else:
-        dct["succes"] = True
+        dct["success"] = True
     return jsonify(dct)
 
 
@@ -653,7 +653,7 @@ def removeFriend():
 
     JSON Output Format:
     {
-    "succes": <BOOL> | Request status
+    "success": <BOOL> | Request status
     }
     """
     data = request.json
@@ -700,12 +700,12 @@ def leaveClan():
 
     JSON Output Format:
     {
-    "succes": <BOOL> | Request status
+    "success": <BOOL> | Request status
     }
     """
     data = request.json
-    succes = clan_data_acces.leaveClan(data.get('name'))  # Execute functionality
-    return jsonify({"succes": succes})
+    success = clan_data_acces.leaveClan(data.get('name'))  # Execute functionality
+    return jsonify({"success": success})
 
 
 @app.route("/deleteClan", methods=["POST"])
@@ -721,12 +721,12 @@ def deleteClan():
 
     JSON Output Format:
     {
-    "succes": <BOOL> | Request status
+    "success": <BOOL> | Request status
     }
     """
     data = request.json
-    succes = clan_data_acces.deleteClan(data.get('cname'), data.get('pname'))  # Execute functionality
-    return jsonify({"succes": succes})
+    success = clan_data_acces.deleteClan(data.get('cname'), data.get('pname'))  # Execute functionality
+    return jsonify({"success": success})
 
 
 @app.route("/", defaults={"path": ""})
