@@ -278,7 +278,7 @@ def getBuilingInfo():
         data = request.json
         building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1], data.get('sid'))  # Reform data
         dct = building.to_dct()
-        dct['succes']=True
+        dct['succes'] = True
         return jsonify(dct)
     except:
         dct = dict(succes=False)
@@ -328,13 +328,17 @@ def placeBuilding():
     JSON Output Format:
     {
     "success": <BOOL> | State of action
+    "error": <STRING> | Optional error message if success=False
     }
     """
     data = request.json
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
-    succes = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
-    return jsonify(dict(succes=succes))
+    succes, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
+    dct = dict(succes=succes)
+    if not succes:
+        dct['error'] = str(error)
+    return jsonify(dct)
 
 
 @app.route("/upgradeBuilding", methods=["POST"])
@@ -352,6 +356,7 @@ def upgradeBuilding():
     {
     "success": <BOOL> | State of action
     "duration": <INT> | Time in seconds
+    "error": <STRING> | Optional error message if success=False
     }
     """
     data = request.json
@@ -365,6 +370,7 @@ def upgradeBuilding():
         dct["succes"] = succes
     else:
         dct = dict(succes=succes)
+        dct["error"] = str(timer)  # In this case, timer is an error message
     return jsonify(dct)
 
 

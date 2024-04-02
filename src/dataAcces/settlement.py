@@ -121,7 +121,7 @@ class SettlementDataAcces:
                        (bname, sid))  # Retrieve the max amount of buildings for this type
         nrMax = cursor.fetchone()[0]
 
-        return nrBuildings > nrMax  # Compare
+        return nrBuildings >= nrMax  # Compare
 
     def calculateCosts(self, building, package_data_acces):
         """
@@ -156,7 +156,7 @@ class SettlementDataAcces:
     def placeBuilding(self, building: Building, package_data_acces):
         try:
             if self.reachedMaxBuildingAmount(building.name, building.sid):  # Verify if the max buildings is not reached
-                return False, "You reached the max amount of buildings for this type! Consider upgrading your Castle."
+                raise Exception("You reached the max amount of buildings for this type! Consider upgrading your Castle.")
 
             self.calculateCosts(building,
                                 package_data_acces)  # Verify if a settlement can afford this upgrade; throws an error if not
