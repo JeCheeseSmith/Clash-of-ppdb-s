@@ -28,12 +28,22 @@ class TimerDataAccess:
 
     def insertTimer(self, timer: Timer):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('INSERT INTO timer(id,type,start,done,duration,sid) VALUES(%s, %s, %s, %s, %s, %s);',
+        cursor.execute('INSERT INTO timer(oid,type,start,done,duration,sid) VALUES(%s, %s, %s, %s, %s, %s);',
                        (timer.id, timer.type, timer.start, timer.done, timer.duration, timer.sid))
         self.dbconnect.commit()
 
-    def evualateTimers(self, player: Player):
-        ### TODO make this functionality
+    def evualateTimers(self):
+        """
+        Evaluate all timers passed their done time
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT * FROM timer WHERE done<now();')
+        timersDone = cursor.fetchall()
+
+        for timer in timersDone:
+            print(timer)
+
         pass
 
     def evualateTimersSettlement(self, settlement):

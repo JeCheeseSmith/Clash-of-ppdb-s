@@ -198,13 +198,13 @@ CREATE TABLE IF NOT EXISTS achieved(
 );
 
 CREATE TABLE IF NOT EXISTS timer(
-    id INT, -- ID Of the Object (can be converted to a numerical value depending on the type
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    oid INT, -- ID Of the Object (can be converted to a numerical value depending on the type
     type TEXT, -- 'building' , 'soldier', 'transfer' , ...
     start TIMESTAMP NOT NULL,
     done TIMESTAMP NOT NULL,
     duration BIGINT NOT NULL,
-    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- BelongsTo relation
-    PRIMARY KEY (id,type,sid)
+    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE -- BelongsTo relation
 );
 
 -- Insert standard buildings

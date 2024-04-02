@@ -231,7 +231,8 @@ def get_resources():
 def update():
     pass
     ### TODO Implement Full Update Function
-    timer_data_acces.evualateTimersSettlement(None)
+    timer_data_acces.evualateTimers()
+    return jsonify('')
 
 
 @app.route("/getGrid", methods=["GET"])

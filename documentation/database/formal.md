@@ -215,7 +215,8 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 ### timer
 | Name     | Type      | Explanation                                                            |
 |----------|-----------|------------------------------------------------------------------------|
-| id       | INT       | Unique Identifier of the Object we are referring to (e.g. building ID) |
+| id       | INT       | PRIMARY KEY                                                            |
+| oid      | INT       | Unique Identifier of the Object we are referring to (e.g. building ID) |
 | name     | TEXT      | Type of the object the id is referring to (e.g. building.name)         |
 | start    | TIMESTAMP | Start of the timer                                                     |
 | done     | TIMESTAMP | End of the timer                                                       |

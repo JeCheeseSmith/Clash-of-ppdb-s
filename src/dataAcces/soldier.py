@@ -29,7 +29,7 @@ class SoldierDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT trainingTime from soldier where name=%s;', (sname,))
-        duration = cursor.fetchone()
+        duration = cursor.fetchone()[0]
         start = datetime.now()
         stop = start + timedelta(seconds=duration)
         return start, stop, duration
@@ -53,14 +53,11 @@ class SoldierDataAccess:
         """
         Retrieves all soldier with their update status
         :param sid: Identifier of the settlement
-        :return:
+        :return: Array of soldier name and unlocked status (True/False)
         """
         cursor = self.dbconnect.get_cursor()
         querry = """SELECT name,True FROM soldier JOIN unlockedsoldier on soldier.name = unlockedsoldier.sname WHERE sid=%s
                     UNION
                     SELECT name,False FROM soldier WHERE name NOT IN (SELECT name FROM soldier JOIN unlockedsoldier on soldier.name = unlockedsoldier.sname WHERE sid=%s);"""
-
         cursor.execute(querry, (sid, sid))
-        data = cursor.fetchall()
-        print(data)
-        return data
+        return cursor.fetchall()
