@@ -394,8 +394,8 @@ def unlockedTroops():
     data = soldier_data_acces.getUnlockedSoldiers(data.get("sid"))
     return jsonify(data)
 
-@app.route("/trainTroops", methods=["POST"])
-def trainTroops():
+@app.route("/trainTroop", methods=["POST"])
+def trainTroop():
     """
     API Endpoint to create a new Clan
 
