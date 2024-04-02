@@ -10,6 +10,7 @@ from dataAcces.timer import *
 from dataAcces.friend import *
 from dataAcces.clan import *
 from database import *
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask.templating import render_template
@@ -31,8 +32,6 @@ building_data_acces = BuildingDataAccess(connection)
 timer_data_acces = TimerDataAccess(connection)
 soldier_data_acces = SoldierDataAccess(connection)
 
-
-### TODO Upon login re-evaluate timers AS WELL AS ON UpdateFunction api call from server (after this, do a resouce eval)
 
 @app.route("/signup", methods=["POST"])
 def add_player():
@@ -89,7 +88,7 @@ def get_login():
                         logout=None, pid=None)
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        package_data_acces.calc_resources(player_name, "2024-03-28 18:38:40.252071")
+        package_data_acces.calc_resources(player_name, datetime.now())
         update()
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
@@ -220,11 +219,8 @@ def get_resources():
    """
     data = request.json
     id = data.get("id")
+    package_data_acces.calc_resources(id, datetime.now())
     packageDict = settlement_data_acces.getResources(Settlement(id))
-
-    ### TODO Adjust timestamp
-    # package_data_acces.calc_resources(id, "2024-03-28 18:38:40.252071")
-
     return jsonify(packageDict)
 
 
@@ -337,8 +333,6 @@ def placeBuilding():
     """
     data = request.json
 
-    ### TODO call Recalculate resources
-
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
     success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
@@ -367,8 +361,6 @@ def upgradeBuilding():
     }
     """
     data = request.json
-
-    ### TODO call Recalculate resources
 
     building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
                                             data.get('sid'))  # Reform data
@@ -421,7 +413,7 @@ def trainTroops():
     """
     data = request.json
 
-    ### TODO call Recalculate resources
+    package_data_acces.calc_resources(data.get('sid'), datetime.now())  # Re evaluate the amount of resources
 
     success, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
                                                      package_data_acces,
