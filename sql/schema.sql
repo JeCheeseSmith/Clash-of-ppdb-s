@@ -170,18 +170,11 @@ CREATE TABLE IF NOT EXISTS troops(
     PRIMARY KEY (pid,sname)
 );
 
-CREATE TABLE IF NOT EXISTS unlockedBuildable(
-    bname VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE IF NOT EXISTS unlocked(
+    name VARCHAR,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     maxNumber INT,
-    PRIMARY KEY (bname,sid)
-);
-
-CREATE TABLE IF NOT EXISTS unlockedsoldier(
-    sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    maxNumber INT,
-    PRIMARY KEY (sid,sname)
+    PRIMARY KEY (sid,name)
 );
 
 CREATE TABLE IF NOT EXISTS wheelofFortune(

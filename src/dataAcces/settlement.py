@@ -50,10 +50,49 @@ class SettlementDataAcces:
 
         return level
 
-    def upgradeCastle(self, sid):
-        # Upgrading the Castle is rather complicated and need to be preset
-        ### TODO upgrade Castle
-        pass
+    def upgradeCastle(self, sid, outpost=False):
+        """
+        Helper function to adjust the info when a castle gets upgraded
+        :param sid: Settlement Identifier
+        :param outpost: Bool saying it's a normal Castle or SatelliteCastle
+        """
+        cursor = self.dbconnect.get_cursor()
+
+        if not outpost:
+            cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("Castle", sid))
+            level = cursor.fetchone()[0]
+
+            if level == 2:
+                dct = dict(WoodCuttersCamp=2, Quarry=2, Farm=2, GrainSilo=2)
+            elif level == 3:
+                dct = dict(Steelmine=2, Farm=3, Barracks=2, WoodStockPile=2, StoneStockPile=2, Armory=2, GrainSilo=3)
+            elif level == 4:
+                dct = dict(WoodCuttersCamp=3, Quarry=3, SteelMine=3, Farm=4, GrainSilo=4)
+            elif level == 5:
+                dct = dict(WoodCuttersCamp=4, Quarry=4, Farm=5, Barracks=3, WoodStockPile=3, StoneStockPile=3, Armory=3,  GrainSilo=5)
+            elif level == 6:
+                dct = dict(SteelMine=4, Farm=6, WoodStockPile=4, StoneStockPile=4)
+            elif level == 7:
+                dct = dict(WoodCuttersCamp=5, Quarry=5, SteelMine=4, Farm=7, Barracks=4, GrainSilo=6)
+        else:  # Satellite Castle differs from Castle
+            cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("SatelliteCastle", sid))
+            level = cursor.fetchone()[0]
+
+            if level == 1:
+                dct = dict(WoodCuttersCamp=1, Quarry=1, Farm=1, SteelMine=1, Barracks=1)
+            elif level == 2:
+                dct = dict(Farm=2)
+            elif level == 3:
+                dct = dict(WoodCuttersCamp=2, Quarry=2, Farm=3, SteelMine=2, Barracks=2)
+            elif level == 5:
+                dct = dict(WoodCuttersCamp=3, Quarry=3, Farm=4, SteelMine=3)
+            else:
+                dct = dict()
+
+        for key in dct.keys():  # Adjust the maxBuilding Number
+            cursor.execute('UPDATE unlocked SET maxnumber = %s WHERE sid=%s and name=%s;', (dct[key], sid, key))
+
+        self.dbconnect.commit()
 
     def initialise(self, sid):
         """
@@ -67,7 +106,7 @@ class SettlementDataAcces:
         cursor.execute('SELECT name FROM buildable;')
         buildings = cursor.fetchall()
         for buildable in buildings:
-            cursor.execute('INSERT INTO unlockedbuildable(bname, sid, maxnumber) VALUES(%s,%s,%s);',
+            cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);',
                            (buildable, sid, 1))
 
         # Prebuild the Castle
@@ -102,12 +141,12 @@ class SettlementDataAcces:
                                       [20, 19], [20, 20]]))
 
         # Preset Unlocked Status for each soldier
-        cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);',
+        cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);',
                        ('ArmoredFootman', sid, -1))  # Set max number to -1 aka unlimited
-        cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);', ('Guardsman', sid, -1))
-        cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);', ('Horseman', sid, -1))
-        cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);', ('Bowman', sid, -1))
-        cursor.execute('INSERT INTO unlockedsoldier(sname, sid, maxnumber) VALUES(%s,%s,%s);', ('Bandit', sid, -1))
+        cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', ('Guardsman', sid, -1))
+        cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', ('Horseman', sid, -1))
+        cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', ('Bowman', sid, -1))
+        cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', ('Bandit', sid, -1))
 
         self.dbconnect.commit()
 
@@ -144,7 +183,7 @@ class SettlementDataAcces:
                        (sid, bname))  # Retrieve the current amount of buildings for this type
         nrBuildings = cursor.fetchone()[0]
 
-        cursor.execute('SELECT maxnumber FROM unlockedbuildable WHERE bname=%s and sid=%s;',
+        cursor.execute('SELECT maxnumber FROM unlocked WHERE name=%s and sid=%s;',
                        (bname, sid))  # Retrieve the max amount of buildings for this type
         nrMax = cursor.fetchone()[0]
 

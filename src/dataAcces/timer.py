@@ -104,6 +104,8 @@ class TimerDataAccess:
             name = cursor.fetchone()
             if name == 'Castle':  # For castle upgrades, special functionality needs to be executed
                 settlement_data_acces.upgradeCastle(timer.sid)
+            elif name == 'SatelliteCastle':
+                settlement_data_acces.upgradeCastle(timer.sid,True)
 
             self.dbconnect.commit()
         except Exception as e:
