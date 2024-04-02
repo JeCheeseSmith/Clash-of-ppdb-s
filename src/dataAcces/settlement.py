@@ -70,7 +70,7 @@ class SettlementDataAcces:
                            (buildable, sid, 1))
 
         # Prebuild the Castle
-        self.insertBuilding(Building('Castle', 'Government', None, None, None, None, None, 1, 0, 0, sid, []))
+        self.insertBuilding(Building('Castle', 'Government', None, None, None, None, None, 1, 6, 6, sid, [[6,6],[6,7],[6,8],[6,9],[6,10],[6,11],[6,12],[6,13],[6,14],[6,15],[6,16],[6,17],[6,18],[6,19],[6,20],[7,6],[7,7],[7,8],[7,9],[7,10],[7,11],[7,12],[7,13],[7,14],[7,15],[7,16],[7,17],[7,18],[7,19],[7,20],[8,6],[8,7],[8,8],[8,9],[8,10],[8,11],[8,12],[8,13],[8,14],[8,15],[8,16],[8,17],[8,18],[8,19],[8,20],[9,6],[9,7],[9,8],[9,9],[9,10],[9,11],[9,12],[9,13],[9,14],[9,15],[9,16],[9,17],[9,18],[9,19],[9,20],[10,6],[10,7],[10,8],[10,9],[10,10],[10,11],[10,12],[10,13],[10,14],[10,15],[10,16],[10,17],[10,18],[10,19],[10,20],[11,6],[11,7],[11,8],[11,9],[11,10],[11,11],[11,12],[11,13],[11,14],[11,15],[11,16],[11,17],[11,18],[11,19],[11,20],[12,6],[12,7],[12,8],[12,9],[12,10],[12,11],[12,12],[12,13],[12,14],[12,15],[12,16],[12,17],[12,18],[12,19],[12,20],[13,6],[13,7],[13,8],[13,9],[13,10],[13,11],[13,12],[13,13],[13,14],[13,15],[13,16],[13,17],[13,18],[13,19],[13,20],[14,6],[14,7],[14,8],[14,9],[14,10],[14,11],[14,12],[14,13],[14,14],[14,15],[14,16],[14,17],[14,18],[14,19],[14,20],[15,6],[15,7],[15,8],[15,9],[15,10],[15,11],[15,12],[15,13],[15,14],[15,15],[15,16],[15,17],[15,18],[15,19],[15,20],[16,6],[16,7],[16,8],[16,9],[16,10],[16,11],[16,12],[16,13],[16,14],[16,15],[16,16],[16,17],[16,18],[16,19],[16,20],[17,6],[17,7],[17,8],[17,9],[17,10],[17,11],[17,12],[17,13],[17,14],[17,15],[17,16],[17,17],[17,18],[17,19],[17,20],[18,6],[18,7],[18,8],[18,9],[18,10],[18,11],[18,12],[18,13],[18,14],[18,15],[18,16],[18,17],[18,18],[18,19],[18,20],[19,6],[19,7],[19,8],[19,9],[19,10],[19,11],[19,12],[19,13],[19,14],[19,15],[19,16],[19,17],[19,18],[19,19],[19,20],[20,6],[20,7],[20,8],[20,9],[20,10],[20,11],[20,12],[20,13],[20,14],[20,15],[20,16],[20,17],[20,18],[20,19],[20,20]]))
 
         ### TODO Add OCCUPIEDCells for Castle
 
@@ -112,7 +112,6 @@ class SettlementDataAcces:
         :param sid: Identifier of the Settlement
         :return:
         """
-
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT count(building.id) FROM building WHERE sid=%s and name=%s;',
                        (sid, bname))  # Retrieve the current amount of buildings for this type
@@ -122,7 +121,7 @@ class SettlementDataAcces:
                        (bname, sid))  # Retrieve the max amount of buildings for this type
         nrMax = cursor.fetchone()[0]
 
-        return nrBuildings > nrMax  # Compare
+        return nrBuildings >= nrMax  # Compare
 
     def calculateCosts(self, building, package_data_acces):
         """
@@ -150,14 +149,14 @@ class SettlementDataAcces:
         total -= deficit  # Do arithmetic
 
         if total.hasNegativeBalance():  # Not enough resources :(
-            raise Exception("Not enough resource to fulfill this upgrade!")
+            raise Exception(total.deficitString())
 
         package_data_acces.update_resources(total)  # Adjust resource amount
 
     def placeBuilding(self, building: Building, package_data_acces):
         try:
             if self.reachedMaxBuildingAmount(building.name, building.sid):  # Verify if the max buildings is not reached
-                return False
+                raise Exception("You reached the max amount of buildings for this type! Consider upgrading your Castle.")
 
             self.calculateCosts(building,
                                 package_data_acces)  # Verify if a settlement can afford this upgrade; throws an error if not
@@ -171,7 +170,7 @@ class SettlementDataAcces:
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
-            return False
+            return False, e
 
     def upgradeBuilding(self, building: Building, package_data_acces, timer_data_acces, building_data_acces):
         try:
@@ -181,7 +180,6 @@ class SettlementDataAcces:
 
             start, stop, duration = building_data_acces.calculateBuildTime(building)  # Create Timer
             timer = Timer(building.id, 'building', start, stop, duration, building.sid)
-            print(timer.to_dct())
             timer_data_acces.insertTimer(timer)  # When
             # the timer stops, the level of the building will be adjusted
 
@@ -190,7 +188,7 @@ class SettlementDataAcces:
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
-            return False, None
+            return False, e
 
     def getGrid(self, sid):
         """

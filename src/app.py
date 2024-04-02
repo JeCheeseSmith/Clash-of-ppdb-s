@@ -223,7 +223,8 @@ def get_resources():
     id = data.get("id")
     packageDict = settlement_data_acces.getResources(Settlement(id))
 
-    ### TODO Also call getMaxResource to give max values
+    ### TODO Adjust timestamp
+    #package_data_acces.calc_resources(id, "2024-03-28 18:38:40.252071")
 
     return jsonify(packageDict)
 
@@ -252,8 +253,36 @@ def getGrid():
     """
     data = request.args
     grid = settlement_data_acces.getGrid(data.get('sid'))
-    return jsonify({"grid":grid})
+    return jsonify({"grid": grid})
 
+@app.route("/getBuilingInfo", methods=["GET"])
+def getBuilingInfo():
+    """
+    Retrieve all information for a given building
+
+    PRECONDITION: The building must exists
+
+    JSON Input Format:
+    {
+    "position": <ARRAY INT> | [gridX, gridY]
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of action
+    <Building info in dict style>
+    }
+    """
+    try:
+        data = request.json
+        building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1], data.get('sid'))  # Reform data
+        dct = building.to_dct()
+        dct['succes'] = True
+        return jsonify(dct)
+    except:
+        dct = dict(succes=False)
+        return jsonify(dct)
 
 @app.route("/moveBuilding", methods=["POST"])
 def moveBuiling():
@@ -299,13 +328,17 @@ def placeBuilding():
     JSON Output Format:
     {
     "success": <BOOL> | State of action
+    "error": <STRING> | Optional error message if success=False
     }
     """
     data = request.json
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
-    succes = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
-    return jsonify(dict(succes=succes))
+    succes, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
+    dct = dict(succes=succes)
+    if not succes:
+        dct['error'] = str(error)
+    return jsonify(dct)
 
 
 @app.route("/upgradeBuilding", methods=["POST"])
@@ -323,6 +356,7 @@ def upgradeBuilding():
     {
     "success": <BOOL> | State of action
     "duration": <INT> | Time in seconds
+    "error": <STRING> | Optional error message if success=False
     }
     """
     data = request.json
@@ -336,6 +370,7 @@ def upgradeBuilding():
         dct["succes"] = succes
     else:
         dct = dict(succes=succes)
+        dct["error"] = str(timer)  # In this case, timer is an error message
     return jsonify(dct)
 
 

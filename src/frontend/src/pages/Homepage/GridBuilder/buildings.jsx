@@ -63,9 +63,9 @@ const Buildings =
     Storage:
     {
         "GrainSilo": [GrainSiloIMAGE, GrainSilo, [3,3]],
-        "StoneStockpile": [StoneStockpileIMAGE, StoneStockpile, [6,6]],
+        "StoneStockPile": [StoneStockpileIMAGE, StoneStockpile, [6,6]],
         "Armory": [ArmoryIMAGE, Armory, [6,4]],
-        "WoodStockpile": [WoodStockpileIMAGE, WoodStockpile, [4,3]]
+        "WoodStockPile": [WoodStockpileIMAGE, WoodStockpile, [4,3]]
     },
 
     Governmental:
