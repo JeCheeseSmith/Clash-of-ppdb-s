@@ -4,7 +4,7 @@
     margin-top: 30px;
     position: absolute;
     width: 840px;
-    height: 60px;
+    height: 80px;
     z-index: 9; /* Ensure it appears above other elements */
     font-family: 'Anton', sans-serif;
     font-size: 18px;
