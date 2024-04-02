@@ -21,6 +21,7 @@ function UpgradeBuilding({selectedBuilding}) {
     async function HandleUpgradeClick() {
         API.upgradeBuilding(selectedBuilding[0].position, sid).then(data => {
             setUpgrade(data.succes);
+            setErrorMessage(data.error);
             if (upgrade) {
                 setTime(data.duration)
             }
@@ -29,7 +30,6 @@ function UpgradeBuilding({selectedBuilding}) {
             setClick(true);
         }
         else {
-            setErrorMessage('Not enough resources');
             setPopup(true)
             await PlaySound("ResourcesError")
         }
