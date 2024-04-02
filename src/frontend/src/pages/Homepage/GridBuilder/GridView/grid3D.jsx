@@ -5,11 +5,11 @@ import './grid3D.css'
 import * as THREE from "three";
 import Ground from "./models/Objects/Ground.jsx";
 import GridCalculation from "../gridCalculation.jsx";
-import error from "../../../../assets/buildingPlacementError.mp3";
 import Buildings from "../buildings.jsx";
 import POST from "../../../../api/POST.jsx";
 import {useLocation} from "react-router-dom";
 import UpgradeBuilding from "./upgradeBuilding/upgradeBuilding.jsx";
+import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -58,10 +58,7 @@ function Grid({buildings, updateRecources})
         else
         {
             selectedBuilding[2] = 0xff0000
-            const sound = new Audio(error);
-            sound.currentTime = 0.0;
-            sound.volume = 0.1
-            sound.play();
+            let promise = PlaySound("ObjectPlacementError");
         }
         setSelectedBuilding([selectedBuilding[0], selectedBuilding[1], selectedBuilding[2]]);
         return [oldPosition,newPosition,occupiedCells]

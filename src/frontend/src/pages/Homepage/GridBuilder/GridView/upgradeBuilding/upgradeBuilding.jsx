@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './upgradeBuilding.css'
 import '../../../../../globalComponents/timeComponent/TimerProgressBar.jsx'
 import TimerProgressBar from "../../../../../globalComponents/timeComponent/TimerProgressBar.jsx";
@@ -6,7 +6,7 @@ import DisplayAvatarName from "../../../../../globalComponents/avatarWithName/av
 import {useLocation} from "react-router-dom";
 import * as API from "../../../../../api/EndPoints/EndPoints.jsx";
 import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
-import notEnough from "../../../../../assets/notEnough.mp3";
+import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
 
 function UpgradeBuilding({selectedBuilding}) {
@@ -20,7 +20,6 @@ function UpgradeBuilding({selectedBuilding}) {
 
     async function HandleUpgradeClick() {
         API.upgradeBuilding(selectedBuilding[0].position, sid).then(data => {
-            console.log(data);
             setUpgrade(data.succes);
             if (upgrade) {
                 setTime(data.duration)
@@ -32,8 +31,7 @@ function UpgradeBuilding({selectedBuilding}) {
         else {
             setErrorMessage('Not enough resources');
             setPopup(true)
-            const sound = new Audio(notEnough);
-            await sound.play();
+            await PlaySound("ResourcesError")
         }
     }
 
