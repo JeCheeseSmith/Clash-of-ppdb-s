@@ -29,6 +29,7 @@ settlement_data_acces = SettlementDataAcces(connection)
 package_data_acces = PackageDataAccess(connection)
 building_data_acces = BuildingDataAccess(connection)
 timer_data_acces = TimerDataAccess(connection)
+soldier_data_acces = SoldierDataAccess(connection)
 
 
 ### TODO Upon login re-evaluate timers AS WELL AS ON UpdateFunction api call from server (after this, do a resouce eval)
@@ -86,10 +87,9 @@ def get_login():
     player_password = data.get("password")
     Player_obj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
                         logout=None, pid=None)
-    Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        package_data_acces.calc_resources(player_name,"2024-03-28 18:38:40.252071")
+        package_data_acces.calc_resources(player_name, "2024-03-28 18:38:40.252071")
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
@@ -146,7 +146,6 @@ def update_chat():
         message_pname = data.get("pname")
         message_sname = data.get("sname")
         message_content = data.get("content")
-        Controle = False
         Chat_obj = Content(None, None, message_content, message_sname)
         Controle = content_data_access.add_message(Chat_obj, message_pname)
         if Controle:
@@ -194,7 +193,6 @@ def update_groupchat():
         message_pname = data.get("pname")
         message_cname = data.get("cname")
         message_content = data.get("content")
-        Controle = False
         Chat_obj = Content(None, None, message_content, message_pname)
         Controle = content_data_access.send_groupchat(message_cname, Chat_obj)
         if Controle:
@@ -224,7 +222,7 @@ def get_resources():
     packageDict = settlement_data_acces.getResources(Settlement(id))
 
     ### TODO Adjust timestamp
-    #package_data_acces.calc_resources(id, "2024-03-28 18:38:40.252071")
+    # package_data_acces.calc_resources(id, "2024-03-28 18:38:40.252071")
 
     return jsonify(packageDict)
 
@@ -255,8 +253,9 @@ def getGrid():
     grid = settlement_data_acces.getGrid(data.get('sid'))
     return jsonify({"grid": grid})
 
+
 @app.route("/getBuilingInfo", methods=["GET"])
-def getBuilingInfo():
+def getBuildingInfo():
     """
     Retrieve all information for a given building
 
@@ -276,13 +275,15 @@ def getBuilingInfo():
     """
     try:
         data = request.json
-        building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1], data.get('sid'))  # Reform data
+        building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
+                                                data.get('sid'))  # Reform data
         dct = building.to_dct()
         dct['succes'] = True
         return jsonify(dct)
     except:
         dct = dict(succes=False)
         return jsonify(dct)
+
 
 @app.route("/moveBuilding", methods=["POST"])
 def moveBuiling():
@@ -332,6 +333,9 @@ def placeBuilding():
     }
     """
     data = request.json
+
+    ### TODO call Recalculate resources
+
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
     succes, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
@@ -360,10 +364,13 @@ def upgradeBuilding():
     }
     """
     data = request.json
+
+    ### TODO call Recalculate resources
+
     building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
                                             data.get('sid'))  # Reform data
     succes, timer = settlement_data_acces.upgradeBuilding(building, package_data_acces, timer_data_acces,
-                                                   building_data_acces)  # Execute actual funcionality
+                                                          building_data_acces)  # Execute actual functionality
 
     if succes:
         dct = timer.to_dct()
@@ -374,24 +381,37 @@ def upgradeBuilding():
     return jsonify(dct)
 
 
-@app.route("/buildings", methods=["GET"])
-def get_buildings():
+@app.route("/trainTroops", methods=["POST"])
+def trainTroops():
     """
-    Returns a list of buildables incl. their upgrade or building costs and unlocked status + maxNumber yet available
+    API Endpoint to create a new Clan
 
-
-    JSON Input Format:
+    JSON Input Format
     {
-    "id": <INT> | Identifier of the settlement
+    "sid": <INT> | Identifier of the settlement you are training troops for
+    "sname": <STRING> | Name of soldier
     }
 
     JSON Output Format:
     {
-    List of all buildings
+    "succes": <bool> | State of request
+    "error": <STRING> | Optional error message if success=False
     }
     """
-    pass
-    pass
+    data = request.json
+
+    ### TODO call Recalculate resources
+
+    succes, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
+                                                     package_data_acces,
+                                                     timer_data_acces)  # Execute actual functionality
+    if succes:
+        dct = timer.to_dct()
+        dct["succes"] = succes
+    else:
+        dct = dict(succes=succes)
+        dct["error"] = str(timer)  # In this case, timer is an error message
+    return jsonify(dct)
 
 
 @app.route("/createClan", methods=["POST"])
