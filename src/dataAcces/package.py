@@ -163,7 +163,7 @@ class PackageDataAccess:
                         package.id))
         self.dbconnect.commit()
 
-    def calc_resources(self, pname, timestamp):
+    def calc_resources(self, sid, timestamp):
         """
         Function to re-evaluate resources number with
         :return:
@@ -176,6 +176,7 @@ class PackageDataAccess:
         time = datetime.now()
         calculated_time = abs(time - timestamp_new)
         calculated_time = int(calculated_time.total_seconds())
+        calculated_time = calculated_time / 3600
 
         # Generated resources
         Generated_wood = 0
@@ -184,9 +185,7 @@ class PackageDataAccess:
         Generated_food = 0
 
         # Player resources
-        cursor.execute('SELECT name FROM player WHERE name=%s;', (pname,))
-        name = cursor.fetchone()
-        cursor.execute('SELECT pid FROM settlement WHERE pname=%s;', name)
+        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))
         pid = cursor.fetchone()[0]
         cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid,))
         Pwood = cursor.fetchone()[0]
@@ -204,10 +203,6 @@ class PackageDataAccess:
         Food = 0
 
         # Search the person his buildings on the settlement
-        cursor.execute('SELECT name FROM player WHERE name=%s;', (pname,))
-        name = cursor.fetchone()
-        cursor.execute('SELECT id FROM settlement WHERE pname=%s;', name)
-        sid = cursor.fetchone()[0]
         cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
         buildings = cursor.fetchall()
 
@@ -243,16 +238,19 @@ class PackageDataAccess:
         # Check if there is a building to generate resources OR to store resources
         for building in buildings:
             if building[1] == "WoodCuttersCamp":
-                print("test")
-                Generated_wood += PackageDataAccess.evaluate(Wood_function, calculated_time)
+                Level = building[2]
+                Generated_wood += PackageDataAccess.evaluate(Wood_function, calculated_time) * Level
             if building[1] == "Quarry":
-                Generated_stone += PackageDataAccess.evaluate(Stone_function, calculated_time)
+                Level = building[2]
+                Generated_stone += PackageDataAccess.evaluate(Stone_function, calculated_time) * Level
 
             if building[1] == "SteelMine":
-                Generated_steel += PackageDataAccess.evaluate(Steel_function, calculated_time)
+                Level = building[2]
+                Generated_steel += PackageDataAccess.evaluate(Steel_function, calculated_time) * Level
 
             if building[1] == "Farm":
-                Generated_food += PackageDataAccess.evaluate(Food_function, calculated_time)
+                Level = building[2]
+                Generated_food += PackageDataAccess.evaluate(Food_function, calculated_time) * Level
 
             if building[1] == "WoodStockPile":
                 Level = building[2]
@@ -278,12 +276,47 @@ class PackageDataAccess:
                 Steel += MainStorage
                 Food += MainStorage
 
-        # Updaten van resources op de juiste manier
+        # Check how many soldiers there are and calculate there consumption
+        cursor.execute('SELECT * FROM troops WHERE pid=%s;', (pid,))
+        Soldiers = cursor.fetchall()
 
-        # Problemen met het berekenen van resources door gebruik te maken van tijd in seconden onze functie is niet accuraat
-        # De gebouwen die resources generaten upgraden niet op de juiste manier
+        Total_Consumption = 0
 
+        # Calculate for every soldier what he/she consumes
+        for soldier in Soldiers:
+            cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
+            Consumption = cursor.fetchone()[0]
+            C = (calculated_time) * Consumption
+            C *= soldier[2]
+            Total_Consumption += C
+
+        # Update the resources in the right way
+        Newp_wood = min((Generated_wood + Pwood), Wood)
+        Newp_stone = min((Generated_stone + Pstone), Stone)
+        Newp_steel = min((Generated_steel + Psteel), Steel)
+        Newp_food = min(Generated_food + Pfood - Total_Consumption, Food)
+
+        Newp_food = -22
+
+        # Check for possible troop starvation
+        for soldier in Soldiers:
+            cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
+            Consumption = cursor.fetchone()[0]
+            for i in range(1, soldier[2] + 1):
+                Newp_food += Consumption
+                if i == soldier[2]:
+                    cursor.execute('DELETE FROM troops WHERE pid=%s and sname=%s;', (pid, soldier[1],))
+                else:
+                    cursor.execute('UPDATE troops SET amount = %s WHERE pid=%s;', (soldier[2] - i, pid,))
+                if Newp_food >= 0:
+                    break
+            if Newp_food >= 0:
+                break
+
+        # Update all resources
+        cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',(Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))
         self.dbconnect.commit()
+
 
     def get_soldiers(self):
         """
