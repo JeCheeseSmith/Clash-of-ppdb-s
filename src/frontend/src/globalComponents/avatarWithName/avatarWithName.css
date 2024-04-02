@@ -71,3 +71,24 @@
     width: 50px;
     border-radius: 10px;
 }
+
+.building-SELECTED{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.building-SELECTED-avatar {
+    height: 150px;
+    width: 150px;
+    border-radius: 10px;
+}
+
+
+.building-SELECTED-name{
+    font-family: Anton, cursive;
+    font-size: 24px;
+    color: #ee8505;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}

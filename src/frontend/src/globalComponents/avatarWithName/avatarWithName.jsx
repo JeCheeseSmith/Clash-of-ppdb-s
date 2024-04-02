@@ -4,6 +4,7 @@ import avatar from "../../assets/clanPicture.jpg";
 import notFound from "../../assets/groupnotfound.png";
 import person from "../../assets/person.png";
 import group from "../../assets/group.png";
+import Buildings from "../../pages/Homepage/GridBuilder/buildings.jsx";
 
 /**
  * Function to display avatar and name based on type.
@@ -23,6 +24,7 @@ function DisplayAvatarName({type, name, pname, succesClanSearch})
             {type === 'clan-search' && <ClanSearch name={name} pname={pname} succes={succesClanSearch}/>}
             {type === 'chat-person' && <ChatPerson name={name}/>}
             {type === 'chat-group' && <ChatGroup name={name}/>}
+            {type === 'building-selected' && <SelectedBuilding name={name}/>}
         </div>
     )
 }
@@ -111,6 +113,27 @@ function ChatGroup({name})
         <div>
             <img src={group} className={"chat-ICON-avatar"}/>
             <h3>{name}</h3>
+        </div>
+    );
+}
+
+function SelectedBuilding({name})
+{
+    let image;
+    for (let category in Buildings)
+    {
+        for (let buildables in Buildings[category])
+        {
+            if (buildables === name)
+            {
+                image = Buildings[category][buildables][0]
+            }
+        }
+    }
+    return (
+        <div className={"building-SELECTED"}>
+            <h3 className={"building-SELECTED-name"}>{name}</h3>
+            <img src={image} className={"building-SELECTED-avatar"}/>
         </div>
     );
 }

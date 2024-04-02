@@ -198,7 +198,7 @@ function Grid({buildings, updateRecources})
                 }
                 <Ground/>
             </Canvas>
-            {selectedBuilding[1] && <UpgradeBuilding/>}
+            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding}/>}
         </Suspense>
     );
 }
