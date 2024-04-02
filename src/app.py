@@ -253,7 +253,7 @@ def getGrid():
     """
     data = request.args
     grid = settlement_data_acces.getGrid(data.get('sid'))
-    return jsonify({"grid":grid})
+    return jsonify({"grid": grid})
 
 
 @app.route("/moveBuilding", methods=["POST"])
