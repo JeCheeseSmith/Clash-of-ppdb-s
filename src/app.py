@@ -255,6 +255,34 @@ def getGrid():
     grid = settlement_data_acces.getGrid(data.get('sid'))
     return jsonify({"grid": grid})
 
+@app.route("/getBuilingInfo", methods=["GET"])
+def getBuilingInfo():
+    """
+    Retrieve all information for a given building
+
+    PRECONDITION: The building must exists
+
+    JSON Input Format:
+    {
+    "position": <ARRAY INT> | [gridX, gridY]
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of action
+    <Building info in dict style>
+    }
+    """
+    try:
+        data = request.json
+        building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1], data.get('sid'))  # Reform data
+        dct = building.to_dct()
+        dct['succes']=True
+        return jsonify(dct)
+    except:
+        dct = dict(succes=False)
+        return jsonify(dct)
 
 @app.route("/moveBuilding", methods=["POST"])
 def moveBuiling():
