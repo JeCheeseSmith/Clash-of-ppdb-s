@@ -57,8 +57,7 @@ const Buildings =
         "ArcherTower": [ArcherTowerIMAGE, ArcherTower, [3,3]],
         "LookoutTower": [LookoutTowerIMAGE, LookoutTower, [3,3]],
         "BlackSmith": [BlackSmithIMAGE, BlackSmith, [5,6]],
-        "Tavern": [TavernIMAGE, Tavern, [8,8]],
-        "TrainingYard": [TrainingYardIMAGE, TrainingYard, [3,4]]
+        "Tavern": [TavernIMAGE, Tavern, [8,8]]
     },
 
     Storage:
