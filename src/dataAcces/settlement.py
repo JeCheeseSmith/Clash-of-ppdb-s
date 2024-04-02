@@ -52,6 +52,7 @@ class SettlementDataAcces:
 
     def upgradeCastle(self, sid):
         # Upgrading the Castle is rather complicated and need to be preset
+        ### TODO upgrade Castle
         pass
 
     def initialise(self, sid):
@@ -206,7 +207,7 @@ class SettlementDataAcces:
             building.level -= 1  # It may not yet produce resource at the new level
 
             start, stop, duration = building_data_acces.calculateBuildTime(building)  # Create Timer
-            timer = Timer(building.id, 'building', start, stop, duration, building.sid)
+            timer = Timer(None, building.id, 'building', start, stop, duration, building.sid)
             timer_data_acces.insertTimer(timer)  # When
             # the timer stops, the level of the building will be adjusted
 
@@ -253,7 +254,7 @@ class SettlementDataAcces:
             package_data_acces.update_resources(total)  # Adjust resource amount
 
             start, stop, duration = soldier_data_acces.calculateTrainTime(sname)  # Create Timer
-            timer = Timer(id, 'soldier', start, stop, duration, sid)
+            timer = Timer(None, id, 'soldier', start, stop, duration, sid)
             timer_data_acces.insertTimer(timer)  # When the timer stops, soldier will be inserted
             return True, timer
         except Exception as e:

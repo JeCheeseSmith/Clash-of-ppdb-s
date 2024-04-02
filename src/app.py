@@ -90,6 +90,7 @@ def get_login():
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
         package_data_acces.calc_resources(player_name, "2024-03-28 18:38:40.252071")
+        update()
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
@@ -229,9 +230,10 @@ def get_resources():
 
 @app.route("/update", methods=["GET"])
 def update():
-    pass
-    ### TODO Implement Full Update Function
-    timer_data_acces.evualateTimers()
+    """
+    Tell the server to re-evaluate its timers
+    """
+    timer_data_acces.evaluateTimers(settlement_data_acces)
     return jsonify('')
 
 
