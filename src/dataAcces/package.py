@@ -21,6 +21,24 @@ class Package:
         return dict(id=self.id, stone=self.stone, wood=self.wood, steel=self.steel, food=self.food, gems=self.gems,
                     xp=self.xp)
 
+    def deficitString(self):
+        """
+        Helper function to make an error message for the lack of resources
+
+        PRECONDITION: Must be called on a package with negative amounts
+        :return:
+        """
+        error = "Not enough resources to continue your action. You lack the following:"
+        if self.stone < 0:
+            error += " Stone: " + str(self.stone)
+        if self.wood < 0:
+            error += " Wood: " + str(self.wood)
+        if self.food < 0:
+            error += " Food: " + str(self.food)
+        if self.steel < 0:
+            error += " Steel: " + str(self.steel)
+        return error
+
     def __add__(self, other):
         """
         Overload of + operator to calculate the sum of packages
@@ -145,7 +163,7 @@ class PackageDataAccess:
                         package.id))
         self.dbconnect.commit()
 
-    def calc_resources(self, pname,timestamp):
+    def calc_resources(self, pname, timestamp):
         """
         Function to re-evaluate resources number with
         :return:
@@ -153,19 +171,19 @@ class PackageDataAccess:
 
         cursor = self.dbconnect.get_cursor()
 
-        #Tijd omzetten van een string naar een timestamp en het verschil berekenen tussen twee timestamps
-        timestamp_new=datetime.strptime(timestamp,"%Y-%m-%d %H:%M:%S.%f")
-        time=datetime.now()
-        calculated_time=abs(time - timestamp_new)
-        calculated_time=int(calculated_time.total_seconds())
+        # Tijd omzetten van een string naar een timestamp en het verschil berekenen tussen twee timestamps
+        timestamp_new = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
+        time = datetime.now()
+        calculated_time = abs(time - timestamp_new)
+        calculated_time = int(calculated_time.total_seconds())
 
-        #Generated resources
+        # Generated resources
         Generated_wood = 0
         Generated_stone = 0
         Generated_steel = 0
         Generated_food = 0
 
-        #Player resources
+        # Player resources
         cursor.execute('SELECT name FROM player WHERE name=%s;', (pname,))
         name = cursor.fetchone()
         cursor.execute('SELECT pid FROM settlement WHERE pname=%s;', name)
@@ -179,23 +197,21 @@ class PackageDataAccess:
         cursor.execute('SELECT food FROM package WHERE id=%s;', (pid,))
         Pfood = cursor.fetchone()[0]
 
-
-        #Maximum storage
+        # Maximum storage
         Wood = 0
         Stone = 0
         Steel = 0
         Food = 0
 
-
-        #Search the person his buildings on the settlement
-        cursor.execute('SELECT name FROM player WHERE name=%s;',(pname,))
-        name=cursor.fetchone()
-        cursor.execute('SELECT id FROM settlement WHERE pname=%s;',name)
-        sid=cursor.fetchone()[0]
+        # Search the person his buildings on the settlement
+        cursor.execute('SELECT name FROM player WHERE name=%s;', (pname,))
+        name = cursor.fetchone()
+        cursor.execute('SELECT id FROM settlement WHERE pname=%s;', name)
+        sid = cursor.fetchone()[0]
         cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
-        buildings=cursor.fetchall()
+        buildings = cursor.fetchall()
 
-        #Find the right functions to calculate the resources
+        # Find the right functions to calculate the resources
         cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodCuttersCamp",))
         Wood_function = cursor.fetchone()[0]
 
@@ -208,8 +224,7 @@ class PackageDataAccess:
         cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Farm",))
         Food_function = cursor.fetchone()[0]
 
-
-        #Find the right storage functions
+        # Find the right storage functions
         cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodStockPile",))
         Wood_Storage_function = cursor.fetchone()[0]
 
@@ -225,8 +240,7 @@ class PackageDataAccess:
         cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Castle",))
         Castle_Storage_function = cursor.fetchone()[0]
 
-
-        #Check if there is a building to generate resources OR to store resources
+        # Check if there is a building to generate resources OR to store resources
         for building in buildings:
             if building[1] == "WoodCuttersCamp":
                 print("test")
@@ -241,16 +255,16 @@ class PackageDataAccess:
                 Generated_food += PackageDataAccess.evaluate(Food_function, calculated_time)
 
             if building[1] == "WoodStockPile":
-                Level=building[2]
-                Wood += PackageDataAccess.evaluate(Wood_Storage_function,Level)
+                Level = building[2]
+                Wood += PackageDataAccess.evaluate(Wood_Storage_function, Level)
 
             if building[1] == "StoneStockPile":
-                Level=building[2]
-                Stone += PackageDataAccess.evaluate(Stone_Storage_function,Level)
+                Level = building[2]
+                Stone += PackageDataAccess.evaluate(Stone_Storage_function, Level)
 
             if building[1] == "Armory":
-                Level=building[2]
-                Steel += PackageDataAccess.evaluate(Steel_Storage_function,Level)
+                Level = building[2]
+                Steel += PackageDataAccess.evaluate(Steel_Storage_function, Level)
 
             if building[1] == "GrainSilo":
                 Level = building[2]
@@ -264,17 +278,12 @@ class PackageDataAccess:
                 Steel += MainStorage
                 Food += MainStorage
 
-        #Updaten van resources op de juiste manier
+        # Updaten van resources op de juiste manier
 
-
-
-
-
-        #Problemen met het berekenen van resources door gebruik te maken van tijd in seconden onze functie is niet accuraat
-        #De gebouwen die resources generaten upgraden niet op de juiste manier
+        # Problemen met het berekenen van resources door gebruik te maken van tijd in seconden onze functie is niet accuraat
+        # De gebouwen die resources generaten upgraden niet op de juiste manier
 
         self.dbconnect.commit()
-
 
     def get_soldiers(self):
         """
@@ -295,5 +304,5 @@ class PackageDataAccess:
             function = function[0]
         if function[0] == 0:  # [0,4000,0]: A zero at the beginning, means that x should be calculated as 2^x
             x = int(exp2(x))
-        result =  int(polyval(function, x))
+        result = int(polyval(function, x))
         return result

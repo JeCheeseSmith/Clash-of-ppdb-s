@@ -112,7 +112,6 @@ class SettlementDataAcces:
         :param sid: Identifier of the Settlement
         :return:
         """
-
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT count(building.id) FROM building WHERE sid=%s and name=%s;',
                        (sid, bname))  # Retrieve the current amount of buildings for this type
@@ -150,14 +149,14 @@ class SettlementDataAcces:
         total -= deficit  # Do arithmetic
 
         if total.hasNegativeBalance():  # Not enough resources :(
-            raise Exception("Not enough resource to fulfill this upgrade!")
+            raise Exception(total.deficitString())
 
         package_data_acces.update_resources(total)  # Adjust resource amount
 
     def placeBuilding(self, building: Building, package_data_acces):
         try:
             if self.reachedMaxBuildingAmount(building.name, building.sid):  # Verify if the max buildings is not reached
-                return False
+                return False, "You reached the max amount of buildings for this type! Consider upgrading your Castle."
 
             self.calculateCosts(building,
                                 package_data_acces)  # Verify if a settlement can afford this upgrade; throws an error if not
@@ -171,7 +170,7 @@ class SettlementDataAcces:
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
-            return False
+            return False, e
 
     def upgradeBuilding(self, building: Building, package_data_acces, timer_data_acces, building_data_acces):
         try:
@@ -181,7 +180,6 @@ class SettlementDataAcces:
 
             start, stop, duration = building_data_acces.calculateBuildTime(building)  # Create Timer
             timer = Timer(building.id, 'building', start, stop, duration, building.sid)
-            print(timer.to_dct())
             timer_data_acces.insertTimer(timer)  # When
             # the timer stops, the level of the building will be adjusted
 
@@ -190,7 +188,7 @@ class SettlementDataAcces:
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
-            return False, None
+            return False, e
 
     def getGrid(self, sid):
         """
