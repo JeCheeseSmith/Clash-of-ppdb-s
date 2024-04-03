@@ -9,6 +9,7 @@ import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
 import * as API from "../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
+import MapButton from "./MapButton/mapButton.jsx";
 /**
  * Functional component representing the main page of the application.
  * Displays a full-bleed background image.
@@ -46,8 +47,7 @@ function MainPage()
             <Grid buildings={buildings} updateResources={() => API.get_resources(sid).then(data => setResources(data))}/>
             <ResourceBar resources={resources}/>
             <SoldierMenu/>
-
-            {/*<Map/>*/}
+            <MapButton/>
         </div>
     );
 }

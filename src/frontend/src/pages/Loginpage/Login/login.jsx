@@ -26,7 +26,7 @@ function LoginPage() {
 
     // Handles the navigation from login page to sign-up page
     function handleSignUpClick() {
-        navigate('/signup');
+        navigate('/Signup');
     }
 
     // Handles the navigation from login page to mainpage
