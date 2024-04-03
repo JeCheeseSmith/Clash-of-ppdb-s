@@ -296,7 +296,7 @@ class PackageDataAccess:
         Newp_steel = min((Generated_steel + Psteel), Steel)
         Newp_food = min(Generated_food + Pfood - Total_Consumption, Food)
 
-        Newp_food = -22
+        #Newp_food = -22
 
         # Check for possible troop starvation
         for soldier in Soldiers:
