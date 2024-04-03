@@ -46,12 +46,10 @@ function Grid({buildings, updateResources})
                     const timer = timers[i];
                     if (timer.duration > 0)
                     {
-                        console.log(`Timer ${timer.ID} duration decreased, ${timer.duration}`);
                         updatedTimers.push({ ...timer, duration: timer.duration - 1 });
                     }
                     else
                     {
-                        console.log(`Timer ${timer.ID} duration finished, ${timer.duration}`);
                         updateResources()
                     }
                 }
@@ -65,31 +63,6 @@ function Grid({buildings, updateResources})
     {
         setTimers([...timers, {ID, duration, totalDuration}])
     }
-
-    const changeIDTimer = (oldID, newID) =>
-    {
-        for (let timer of timers)
-        {
-            if (timer.ID[0] === oldID[0] && timer.ID[1] === oldID[1])
-            {
-                timer.ID = newID
-                setTimers(timers)
-                break
-            }
-        }
-    }
-
-    const getTimer = (ID) =>
-    {
-        let duration = [false, 0, 0]
-        for (let timer of timers) {
-            if (timer.ID[0] === ID[0] && timer.ID[1] === ID[1]) {
-                return [true, timer.duration, timer.totalDuration]
-            }
-        }
-        return duration
-    }
-
     const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de linksboven posities checken)
     {
         for (let building of buildings)
