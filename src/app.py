@@ -88,7 +88,7 @@ def get_login():
                         logout=None, pid=None)
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        package_data_acces.calc_resources(player_name, datetime.now())
+        # package_data_acces.calc_resources(Controle[1], datetime.now())
         update()
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
@@ -228,9 +228,27 @@ def get_resources():
 def update():
     """
     Tell the server to re-evaluate its timers
+
+    Also gives back the timers f
+
+    JSON Input Format:
+    {
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    List of all timers for a settlement
+    }
     """
     timer_data_acces.evaluateTimers(settlement_data_acces)
-    return jsonify('')
+
+    data = request.args
+    sid = data.get('sid')
+
+    if sid is not None:
+        timers = timer_data_acces.retrieveTimers(sid)
+        return jsonify(timers)
 
 
 @app.route("/getGrid", methods=["GET"])

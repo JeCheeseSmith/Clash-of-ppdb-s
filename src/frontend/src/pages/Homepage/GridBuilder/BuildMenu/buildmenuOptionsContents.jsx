@@ -4,6 +4,7 @@ import Buildings from "../buildings.jsx";
 import GridCalculation from "../gridCalculation.jsx";
 import POST from "../../../../api/POST.jsx";
 import {useLocation} from "react-router-dom";
+import RequestMassagePopUp from "../../../../globalComponents/popupMessage/popup.jsx";
 
 function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 {
@@ -44,11 +45,13 @@ function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 function Building({addBuildable, name, image, size, buildings})
 {
     const { sid, username } = useLocation().state;
+    const [popup, setPopup] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+    const [showTooltip, setShowTooltip] = useState(false);
     const getRandomPosition = () =>
     {
         return [Math.floor(Math.random() * 36) + 2, Math.floor(Math.random() * 36) + 2];
     }
-    const [showTooltip, setShowTooltip] = useState(false);
     const handleMouseEnter = () =>
     {
         setShowTooltip(true);
@@ -70,10 +73,15 @@ function Building({addBuildable, name, image, size, buildings})
             selectedBuilding = [{name, randomPosition, size, occupiedCells},selected]
             newCells = GridCalculation(buildings, selectedBuilding, randomPosition)
         }
-        const data = await POST({"name":name, "position": randomPosition, "occupiedCells": occupiedCells, "sid": sid}, "/placeBuilding")
-        if (data.succes)
+        const data = await POST({"name":name, "position": randomPosition, "occupiedCells": newCells[1], "sid": sid}, "/placeBuilding")
+        if (data.success)
         {
             addBuildable(name, randomPosition, size, newCells[1])
+        }
+        else
+        {
+            setErrorMessage(data.error);
+            setPopup(true)
         }
     }
     return (
@@ -87,6 +95,7 @@ function Building({addBuildable, name, image, size, buildings})
                 onMouseLeave={handleMouseLeave}
             />
             {showTooltip && <div className="tooltip">{name}</div>}
+            {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     );
 }

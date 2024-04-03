@@ -5,10 +5,12 @@ import './grid3D.css'
 import * as THREE from "three";
 import Ground from "./models/Objects/Ground.jsx";
 import GridCalculation from "../gridCalculation.jsx";
-import error from "../../../../assets/buildingPlacementError.mp3";
 import Buildings from "../buildings.jsx";
 import POST from "../../../../api/POST.jsx";
 import {useLocation} from "react-router-dom";
+import UpgradeBuilding from "./upgradeBuilding/upgradeBuilding.jsx";
+import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
+import * as API from "../../../../api/EndPoints/EndPoints.jsx"
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -18,15 +20,49 @@ import {useLocation} from "react-router-dom";
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings, updateRecources})
+function Grid({buildings, updateResources})
 {
     const { sid, username } = useLocation().state;
     const [selectedBuilding, setSelectedBuilding] =
-        useState([[],false /*floating*/, 0x006f00 /*shadowColor*/])
-
+        useState([[] /* building */,false /* selected or floating */, 0x006f00 /* shadowColor */])
     const [oldPosition, setOldPosition] = useState([])
-
+    const [timers, setTimers] = useState([])
     const gridSize = 40;
+
+    useEffect(() =>
+    {
+        API.update(sid).then(data => {setTimers(data)})
+    }, []);
+
+    useEffect(() =>
+    {
+        if (timers.length > 0)
+        {
+            const timerInterval = setInterval(() =>
+            {
+                const updatedTimers = [];
+                for (let i = 0; i < timers.length; i++)
+                {
+                    const timer = timers[i];
+                    if (timer.duration > 0)
+                    {
+                        updatedTimers.push({ ...timer, duration: timer.duration - 1 });
+                    }
+                    else
+                    {
+                        updateResources()
+                    }
+                }
+                setTimers(updatedTimers);
+            }, 1000); // Decrease duration every second
+            return () => clearInterval(timerInterval); // Clean up interval on component unmount
+        }
+    }, [timers]);
+
+    const addTimer = (ID, duration, totalDuration) =>
+    {
+        setTimers([...timers, {ID, duration, totalDuration}])
+    }
     const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de linksboven posities checken)
     {
         for (let building of buildings)
@@ -57,10 +93,7 @@ function Grid({buildings, updateRecources})
         else
         {
             selectedBuilding[2] = 0xff0000
-            const sound = new Audio(error);
-            sound.currentTime = 0.0;
-            sound.volume = 0.1
-            sound.play();
+            let promise = PlaySound("ObjectPlacementError");
         }
         setSelectedBuilding([selectedBuilding[0], selectedBuilding[1], selectedBuilding[2]]);
         return [oldPosition,newPosition,occupiedCells]
@@ -73,7 +106,11 @@ function Grid({buildings, updateRecources})
             if (moved[2][0] && selectedBuilding[1])
             {
                 setSelectedBuilding([selectedBuilding[0],false, selectedBuilding[2]]); //alleen floating boolean veranderen
-                const data = await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
+                if (moved[0] !== moved[1])
+                {
+                    const data = await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
+                    API.update(sid).then(data => {setTimers(data)})
+                }
             }
         }
         const handleKeyDown = (event) =>
@@ -197,6 +234,7 @@ function Grid({buildings, updateRecources})
                 }
                 <Ground/>
             </Canvas>
+            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer}/>}
         </Suspense>
     );
 }

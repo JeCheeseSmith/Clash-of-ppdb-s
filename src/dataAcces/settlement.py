@@ -187,7 +187,7 @@ class SettlementDataAcces:
                        (bname, sid))  # Retrieve the max amount of buildings for this type
         nrMax = cursor.fetchone()[0]
 
-        return nrBuildings >= nrMax  # Compare
+        return nrBuildings > nrMax  # Compare
 
     def calculateCosts(self, building, package_data_acces):
         """

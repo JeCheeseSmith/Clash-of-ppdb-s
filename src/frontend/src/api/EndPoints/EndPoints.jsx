@@ -19,6 +19,16 @@ export const get_resources = async (sid) =>
         });
 }
 
+export const upgradeBuilding = async (position, sid) =>
+{
+    return await POST({"position":position, "sid":sid}, '/upgradeBuilding');
+}
+
+export const update = async (sid) =>
+{
+    return await GET({"sid":sid}, '/update')
+}
+
 export const update_groupchat = async (username, receiver, message, API_Request) =>
 {
     let data;

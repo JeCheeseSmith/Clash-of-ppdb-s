@@ -1,3 +1,4 @@
+from datetime import datetime
 class Timer:
     def __init__(self, id, oid, ttype, start, done, duration, sid):
         """
@@ -100,14 +101,44 @@ class TimerDataAccess:
             cursor.execute('UPDATE building SET level=level+1 WHERE id=%s;', (timer.oid,))  # Do level +1
             cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
 
-            cursor.execute('SELECT name FROM building WHERE id=%s', (timer.oid,))  # Verify if we're upgrading the Castle
+            cursor.execute('SELECT name FROM building WHERE id=%s',
+                           (timer.oid,))  # Verify if we're upgrading the Castle
             name = cursor.fetchone()
             if name == 'Castle':  # For castle upgrades, special functionality needs to be executed
                 settlement_data_acces.upgradeCastle(timer.sid)
             elif name == 'SatelliteCastle':
-                settlement_data_acces.upgradeCastle(timer.sid,True)
+                settlement_data_acces.upgradeCastle(timer.sid, True)
 
             self.dbconnect.commit()
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
+
+    def retrieveTimers(self, sid):
+        """
+        Get all timers for a certain settlement and convert to a frontend usable format
+        :param sid: Settlement Identifier
+        :return: List of timer object with info
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT * FROM timer WHERE sid=%s;', (sid,))
+        data = cursor.fetchall()
+        newData = []
+
+        for info in data:
+            timer = Timer(info[0], info[1], info[2], info[3], info[4], info[5],
+                                 info[6])
+            newInfo = {}
+
+            if timer.type == 'building':  # Retrieve building id in frontend = position
+                cursor.execute('SELECT gridX,gridY FROM building WHERE id=%s and sid=%s;', (timer.oid, sid))
+                newInfo["ID"] = cursor.fetchone()
+            else:
+                newInfo["ID"] = timer.oid
+
+            newInfo["type"] = timer.type
+            newInfo["totalDuration"] = timer.duration
+            newInfo["duration"] = int((timer.done - datetime.now()).total_seconds())  # Give back time format from frontEnd
+
+            newData.append(newInfo)
+        return newData
