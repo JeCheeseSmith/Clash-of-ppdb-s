@@ -44,7 +44,7 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
         {
             API.upgradeBuilding(selectedBuilding[0].position, sid).then(data =>
             {
-                if (data.succes)
+                if (data.success)
                 {
                     addTimer(selectedBuilding[0].position, data.duration, data.duration)
                     setCurrentTimeValue(data.duration)
