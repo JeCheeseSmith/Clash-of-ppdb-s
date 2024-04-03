@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './TimerProgressBar.css'; // Vergeet niet je nieuwe CSS-bestand te importeren
 
-const TimerProgressBar = ({timeValue, finished, addTimer, selectedBuilding, updateResources}) => {
+const TimerProgressBar = ({timeValue, totalTimeValue, finished}) => {
 
   const [seconds, setSeconds] = useState(timeValue);
-  const [percentage, setPercentage] = useState(100);
+  const [percentage, setPercentage] = useState((seconds / totalTimeValue) * 100);
 
   useEffect(() => {
 
@@ -12,8 +12,7 @@ const TimerProgressBar = ({timeValue, finished, addTimer, selectedBuilding, upda
       // setSeconds and setPercentage are called every second as long as seconds > 0
       const intervalId = setInterval(() => {
         setSeconds(prevSeconds => prevSeconds - 1);
-        setPercentage((seconds / timeValue) * 100);
-        addTimer(selectedBuilding[0].position, seconds)
+        setPercentage((seconds / totalTimeValue) * 100);
       }, 1000);
 
       return () => clearInterval(intervalId);
@@ -24,8 +23,6 @@ const TimerProgressBar = ({timeValue, finished, addTimer, selectedBuilding, upda
     if (seconds === 0) {
       // Finished variable is set to false and is used in upgradeBuilding
       finished(false);
-      // timer finished -> update resources
-      updateResources()
     }
     if (percentage > 50) {
       return 'green';
@@ -40,7 +37,9 @@ const TimerProgressBar = ({timeValue, finished, addTimer, selectedBuilding, upda
 
   return (
     <div className="progressBarContainer">
-      <div className={`progressBar ${getProgressBarClass()}`} style={{ width: `${percentage}%` }}></div>
+      <div className={`progressBar ${getProgressBarClass()}`} style={{ width: `${percentage}%` }}>
+        seconds {/*(temporary for debug / don't remove!)*/} : {seconds}
+      </div>
     </div>
   );
 };

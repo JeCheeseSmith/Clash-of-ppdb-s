@@ -9,20 +9,21 @@ import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/po
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
 
-function UpgradeBuilding({selectedBuilding, timers, addTimer, updateResources}) {
+function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
 
     const { sid, username } = useLocation().state;
     const [click, setClick] = useState(false);
     const [errormessage, setErrorMessage] = useState(null);
     const [popup, setPopup] = useState(false);
     const [currentTimeValue, setCurrentTimeValue] = useState(null)
+    const [currentTotalDuration, setCurrentTotalDuration] = useState(null)
 
     const getTimer = (ID) =>
     {
         let duration = [false, 0, 0]
         for (let timer of timers) {
             if (timer.ID === ID) {
-                return [true, timer.duration]
+                return [true, timer.duration, timer.totalDuration]
             }
         }
         return duration
@@ -34,6 +35,7 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer, updateResources}) 
         {
             setClick(true)
             setCurrentTimeValue(timer[1])
+            setCurrentTotalDuration(timer[2])
         }
     }, []);
 
@@ -44,8 +46,9 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer, updateResources}) 
             {
                 if (data.succes)
                 {
-                    addTimer(selectedBuilding[0].position, data.duration)
+                    addTimer(selectedBuilding[0].position, data.duration, data.duration)
                     setCurrentTimeValue(data.duration)
+                    setCurrentTotalDuration(data.duration)
                     setClick(true)
                 }
                 else
@@ -63,7 +66,7 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer, updateResources}) 
             <div className="button-container">
                 <DisplayAvatarName type={"building-selected"} name={selectedBuilding[0].type}/>
                 {!click && <button className="upgrade-button" onClick={HandleUpgradeClick}> Upgrade</button>}
-                {click && <TimerProgressBar timeValue={currentTimeValue} finished={setClick} addTimer={addTimer} selectedBuilding={selectedBuilding} updateResources={updateResources}/>}
+                {click && <TimerProgressBar timeValue={currentTimeValue}  totalTimeValue={currentTotalDuration} finished={setClick}/>}
             </div>
             {popup && <RequestMassagePopUp message={errormessage} setPopup={setPopup}/>}
         </div>

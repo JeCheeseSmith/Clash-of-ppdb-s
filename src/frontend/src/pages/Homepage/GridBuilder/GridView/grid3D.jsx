@@ -46,6 +46,7 @@ function Grid({buildings, updateResources})
                     else
                     {
                         console.log(`Timer ${timer.ID} duration finished, ${timer.duration}`);
+                        updateResources()
                     }
                 }
                 setTimers(updatedTimers);
@@ -54,8 +55,9 @@ function Grid({buildings, updateResources})
         }
     }, [timers]);
 
-    const addTimer = (ID, duration) =>
+    const addTimer = (ID, duration, totalDuration) =>
     {
+        // todo: dublicates mss toch ni nodig (was voor addTime in timeprogressbar te gebruiken)
         let dublicates = false
         for (let timer of timers)
         {
@@ -69,7 +71,7 @@ function Grid({buildings, updateResources})
         }
         if (!dublicates)
         {
-            setTimers([...timers, {ID, duration}])
+            setTimers([...timers, {ID, duration, totalDuration}])
         }
     }
 
@@ -240,7 +242,7 @@ function Grid({buildings, updateResources})
                 }
                 <Ground/>
             </Canvas>
-            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer} updateResources={updateResources}/>}
+            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer}/>}
         </Suspense>
     );
 }
