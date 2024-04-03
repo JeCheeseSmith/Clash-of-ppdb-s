@@ -172,7 +172,7 @@ class PackageDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         # Tijd omzetten van een string naar een timestamp en het verschil berekenen tussen twee timestamps
-        timestamp_new = datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
+        timestamp_new = timestamp#datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
         time = datetime.now()
         calculated_time = abs(time - timestamp_new)
         calculated_time = int(calculated_time.total_seconds())
