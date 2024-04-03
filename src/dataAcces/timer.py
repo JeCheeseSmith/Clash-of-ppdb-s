@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime
 class Timer:
     def __init__(self, id, oid, ttype, start, done, duration, sid):
         """
@@ -138,7 +138,7 @@ class TimerDataAccess:
 
             newInfo["type"] = timer.type
             newInfo["totalDuration"] = timer.duration
-            newInfo["duration"] = int((timer.done - timer.start).total_seconds())  # Give back time format from frontEnd
+            newInfo["duration"] = int((timer.done - datetime.now).total_seconds())  # Give back time format from frontEnd
 
             newData.append(newInfo)
         return newData
