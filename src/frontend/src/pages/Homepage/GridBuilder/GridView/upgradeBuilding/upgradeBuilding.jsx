@@ -21,10 +21,7 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
     const getTimer = (ID) =>
     {
         let duration = [false, 0, 0]
-        console.log("(2)(a) Timers at getTimer: ", timers)
         for (let timer of timers) {
-            console.log("(2)(b) Timer found at getTimer: ", timer.ID)
-            console.log("(2)(b) ID requested at getTimer: ", ID)
             if (timer.ID[0] === ID[0] && timer.ID[1] === ID[1]) {
                 return [true, timer.duration, timer.totalDuration]
             }
@@ -33,13 +30,9 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
     }
 
     useEffect(() => {
-        const selected = `${selectedBuilding[0].type}, ${selectedBuilding[0].position}`
-        console.log(`(1) Currently Selected Building IS ->   ${selected}`)
         const timer = getTimer(selectedBuilding[0].position)
-        console.log("(3) Timer found for: ", selected, " IS THIS: ", timer)
         if (timer[0])
         {
-            console.log("(4) Timer found for: ",timer, " AND CLICK -> TRUE")
             setClick(true)
             setCurrentTimeValue(timer[1])
             setCurrentTotalDuration(timer[2])

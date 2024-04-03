@@ -31,7 +31,7 @@ function Grid({buildings, updateResources})
 
     useEffect(() =>
     {
-        API.update(sid).then(data => {setTimers(data); console.log(data)})
+        API.update(sid).then(data => {setTimers(data)})
     }, []);
 
     useEffect(() =>
@@ -63,21 +63,31 @@ function Grid({buildings, updateResources})
 
     const addTimer = (ID, duration, totalDuration) =>
     {
-        let dublicates = false
+        setTimers([...timers, {ID, duration, totalDuration}])
+    }
+
+    const changeIDTimer = (oldID, newID) =>
+    {
         for (let timer of timers)
         {
-            if (timer.ID === ID)
+            if (timer.ID[0] === oldID[0] && timer.ID[1] === oldID[1])
             {
-                timer.duration = duration
+                timer.ID = newID
                 setTimers(timers)
-                dublicates = true
                 break
             }
         }
-        if (!dublicates)
-        {
-            setTimers([...timers, {ID, duration, totalDuration}])
+    }
+
+    const getTimer = (ID) =>
+    {
+        let duration = [false, 0, 0]
+        for (let timer of timers) {
+            if (timer.ID[0] === ID[0] && timer.ID[1] === ID[1]) {
+                return [true, timer.duration, timer.totalDuration]
+            }
         }
+        return duration
     }
 
     const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de linksboven posities checken)
@@ -123,7 +133,11 @@ function Grid({buildings, updateResources})
             if (moved[2][0] && selectedBuilding[1])
             {
                 setSelectedBuilding([selectedBuilding[0],false, selectedBuilding[2]]); //alleen floating boolean veranderen
-                const data = await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
+                if (moved[0] !== moved[1])
+                {
+                    const data = await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
+                    API.update(sid).then(data => {setTimers(data)})
+                }
             }
         }
         const handleKeyDown = (event) =>
