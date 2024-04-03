@@ -10,6 +10,7 @@ import POST from "../../../../api/POST.jsx";
 import {useLocation} from "react-router-dom";
 import UpgradeBuilding from "./upgradeBuilding/upgradeBuilding.jsx";
 import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
+import * as API from "../../../../api/EndPoints/EndPoints.jsx"
 
 /**
  * A 3D grid component with interactive cells and objects.
@@ -27,6 +28,11 @@ function Grid({buildings, updateResources})
     const [oldPosition, setOldPosition] = useState([])
     const [timers, setTimers] = useState([])
     const gridSize = 40;
+
+    useEffect(() =>
+    {
+        API.update(sid).then(data => {setTimers(data); console.log(data)})
+    }, []);
 
     useEffect(() =>
     {
@@ -57,7 +63,6 @@ function Grid({buildings, updateResources})
 
     const addTimer = (ID, duration, totalDuration) =>
     {
-        // todo: dublicates mss toch ni nodig (was voor addTime in timeprogressbar te gebruiken)
         let dublicates = false
         for (let timer of timers)
         {
