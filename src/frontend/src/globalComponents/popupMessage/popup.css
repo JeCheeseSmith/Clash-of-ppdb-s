@@ -17,17 +17,6 @@
     font-family: Arial, sans-serif;
 }
 
-.popup-message::before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 10px;
-    border-style: solid;
-    border-color: transparent transparent rgba(255, 255, 255, 0.9) transparent;
-}
-
 .message-string {
     font-size: 20px;
     font-family: 'MedievalSharp', cursive;

@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, {Suspense, useState} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
@@ -6,14 +6,16 @@ import { useLocation } from 'react-router-dom';
 import './map.css';
 import Settlement1 from "./modals/Settlement1.jsx";
 import Settlement2 from "./modals/Settlement2.jsx";
+import RequestMassagePopUp from "../../globalComponents/popupMessage/popup.jsx";
 
 function Map() {
     const { sid, username } = useLocation().state;
-    const gridSize = 50;
+    const mapSize = 50;
+    const [menuOpen, setMenuOpen] = useState(false)
 
-    const handleGridClick = (rowIndex, colIndex) =>
+    const handleSettlement = () =>
     {
-        console.log(rowIndex, colIndex)
+        setMenuOpen(true)
     }
 
     const renderCell = (rowIndex, colIndex) =>
@@ -24,7 +26,10 @@ function Map() {
             const centerY = colIndex + 0.5;
             return (
                 <>
-                    <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
+                    <mesh key={`${rowIndex}-${colIndex}`}
+                          position={[centerX - mapSize / 2, 6, centerY - mapSize / 2 + 0.5]}
+                          onClick={handleSettlement}
+                    >
                         <Settlement1/>
                     </mesh>
                 </>
@@ -35,8 +40,9 @@ function Map() {
             const centerX = rowIndex + 0.5;
             const centerY = colIndex + 0.5;
             return (
-                <mesh key={`${rowIndex}-${colIndex}`} position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}
-                      onClick={() => {handleGridClick(rowIndex, colIndex)}}
+                <mesh key={`${rowIndex}-${colIndex}`}
+                      position={[centerX - mapSize / 2, 6, centerY - mapSize / 2 + 0.5]}
+                      onClick={handleSettlement}
                 >
                     <Settlement2 />
                 </mesh>
@@ -47,7 +53,7 @@ function Map() {
                 <>
                     <gridHelper
                         key={`${rowIndex}-${colIndex}`}
-                        position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]}
+                        position={[colIndex - mapSize / 2, 6, rowIndex - mapSize / 2]}
                         args={[1, 1]}
                         material={new THREE.MeshBasicMaterial({color: 0x0ff000})}
                     />
@@ -68,14 +74,20 @@ function Map() {
                     maxDistance={13}
                     minDistance={8}
                     panSpeed={0.4}
-                    enableRotate={false} // Disable rotation here
+                    minPolarAngle={Math.PI / 6}
+                    maxPolarAngle={Math.PI - Math.PI / 6}
+                    minAzimuthAngle={-Math.PI / 6}
+                    maxAzimuthAngle={Math.PI / 6}
+                    enableRotate={false}
                     mouseButtons={{ LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE }} // Change mouse buttons configuration
                 />
                 {(() => {
                     const renderedCells = [];
-                    for (let i = 0; i < gridSize; i++) {
+                    for (let i = 0; i < mapSize; i++)
+                    {
                         const renderedRow = [];
-                        for (let j = 0; j < gridSize; j++) {
+                        for (let j = 0; j < mapSize; j++)
+                        {
                             renderedRow.push(renderCell(j, i));
                         }
                         renderedCells.push(renderedRow);
@@ -83,6 +95,7 @@ function Map() {
                     return renderedCells;
                 })()}
             </Canvas>
+            {menuOpen && <RequestMassagePopUp message={"This is a settlement!"} setPopup={setMenuOpen}/>}
         </Suspense>
     );
 }
