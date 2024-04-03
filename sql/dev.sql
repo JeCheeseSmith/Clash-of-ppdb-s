@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS achieved(
 CREATE TABLE IF NOT EXISTS timer(
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     oid INT, -- ID Of the Object (can be converted to a numerical value depending on the type
-    type TEXT, -- 'building' , 'soldier', 'transfer' , ...
+    type TEXT CHECK (type IN ('building', 'soldier', 'transfer', 'attack', 'espionage')),
     start TIMESTAMP NOT NULL,
     done TIMESTAMP NOT NULL,
     duration BIGINT NOT NULL,
