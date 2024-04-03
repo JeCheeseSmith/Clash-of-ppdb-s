@@ -74,7 +74,8 @@ function Building({addBuildable, name, image, size, buildings})
             newCells = GridCalculation(buildings, selectedBuilding, randomPosition)
         }
         const data = await POST({"name":name, "position": randomPosition, "occupiedCells": newCells[1], "sid": sid}, "/placeBuilding")
-        if (data.succes)
+        console.log(data)
+        if (data.success)
         {
             addBuildable(name, randomPosition, size, newCells[1])
         }
