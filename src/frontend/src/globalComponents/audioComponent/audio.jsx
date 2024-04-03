@@ -1,7 +1,7 @@
-import notEnough from "../../assets/notEnough.mp3";
-import error from "../../assets/buildingPlacementError.mp3";
-import buttonSocial from "../../assets/Menu Selection Sound Effect.mp3";
-import buttonOption from "../../assets/socialOptionSound.mp3";
+import notEnough from "./assets/notEnough.mp3";
+import error from "./assets/buildingPlacementError.mp3";
+import buttonSocial from "./assets/Menu Selection Sound Effect.mp3";
+import buttonOption from "./assets/socialOptionSound.mp3";
 
 async function PlaySound(typeSound)
 {

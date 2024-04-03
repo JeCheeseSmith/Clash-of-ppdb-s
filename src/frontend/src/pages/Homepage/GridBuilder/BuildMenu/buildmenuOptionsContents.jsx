@@ -47,11 +47,11 @@ function Building({addBuildable, name, image, size, buildings})
     const { sid, username } = useLocation().state;
     const [popup, setPopup] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
+    const [showTooltip, setShowTooltip] = useState(false);
     const getRandomPosition = () =>
     {
         return [Math.floor(Math.random() * 36) + 2, Math.floor(Math.random() * 36) + 2];
     }
-    const [showTooltip, setShowTooltip] = useState(false);
     const handleMouseEnter = () =>
     {
         setShowTooltip(true);
@@ -74,7 +74,6 @@ function Building({addBuildable, name, image, size, buildings})
             newCells = GridCalculation(buildings, selectedBuilding, randomPosition)
         }
         const data = await POST({"name":name, "position": randomPosition, "occupiedCells": newCells[1], "sid": sid}, "/placeBuilding")
-        console.log(data)
         if (data.success)
         {
             addBuildable(name, randomPosition, size, newCells[1])
@@ -86,19 +85,17 @@ function Building({addBuildable, name, image, size, buildings})
         }
     }
     return (
-        <div>
-            <div>
-                <img
-                    src={image}
-                    className="small-image"
-                    onClick={handleImageChoice}
-                    alt={name}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                />
-                {showTooltip && <div className="tooltip">{name}</div>}
-                {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
-            </div>
+        <div className="building-container">
+            <img
+                src={image}
+                className="small-image"
+                onClick={handleImageChoice}
+                alt={name}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            />
+            {showTooltip && <div className="tooltip">{name}</div>}
+            {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     );
 }

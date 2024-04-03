@@ -88,7 +88,7 @@ def get_login():
                         logout=None, pid=None)
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        package_data_acces.calc_resources(player_name, datetime.now())
+        # package_data_acces.calc_resources(Controle[1], datetime.now())
         update()
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
@@ -243,7 +243,7 @@ def update():
     """
     timer_data_acces.evaluateTimers(settlement_data_acces)
 
-    data = request.json
+    data = request.args
     sid = data.get('sid')
 
     if sid is not None:
