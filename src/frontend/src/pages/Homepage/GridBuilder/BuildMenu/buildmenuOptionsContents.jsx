@@ -4,6 +4,7 @@ import Buildings from "../buildings.jsx";
 import GridCalculation from "../gridCalculation.jsx";
 import POST from "../../../../api/POST.jsx";
 import {useLocation} from "react-router-dom";
+import RequestMassagePopUp from "../../../../globalComponents/popupMessage/popup.jsx";
 
 function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 {
@@ -44,6 +45,8 @@ function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 function Building({addBuildable, name, image, size, buildings})
 {
     const { sid, username } = useLocation().state;
+    const [popup, setPopup] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
     const getRandomPosition = () =>
     {
         return [Math.floor(Math.random() * 36) + 2, Math.floor(Math.random() * 36) + 2];
@@ -75,18 +78,26 @@ function Building({addBuildable, name, image, size, buildings})
         {
             addBuildable(name, randomPosition, size, newCells[1])
         }
+        else
+        {
+            setErrorMessage(data.error);
+            setPopup(true)
+        }
     }
     return (
-        <div className="building-container">
-            <img
-                src={image}
-                className="small-image"
-                onClick={handleImageChoice}
-                alt={name}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            />
-            {showTooltip && <div className="tooltip">{name}</div>}
+        <div>
+            <div>
+                <img
+                    src={image}
+                    className="small-image"
+                    onClick={handleImageChoice}
+                    alt={name}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                />
+                {showTooltip && <div className="tooltip">{name}</div>}
+                {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
+            </div>
         </div>
     );
 }

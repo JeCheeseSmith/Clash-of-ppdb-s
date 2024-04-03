@@ -19,15 +19,60 @@ import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings, updateRecources})
+function Grid({buildings, updateResources})
 {
     const { sid, username } = useLocation().state;
     const [selectedBuilding, setSelectedBuilding] =
-        useState([[],false /*floating*/, 0x006f00 /*shadowColor*/])
-
+        useState([[] /* building */,false /* selected or floating */, 0x006f00 /* shadowColor */])
     const [oldPosition, setOldPosition] = useState([])
-
+    const [timers, setTimers] = useState([])
     const gridSize = 40;
+
+    useEffect(() =>
+    {
+        if (timers.length > 0)
+        {
+            const timerInterval = setInterval(() =>
+            {
+                const updatedTimers = [];
+                for (let i = 0; i < timers.length; i++)
+                {
+                    const timer = timers[i];
+                    if (timer.duration > 0)
+                    {
+                        console.log(`Timer ${timer.ID} duration decreased, ${timer.duration}`);
+                        updatedTimers.push({ ...timer, duration: timer.duration - 1 });
+                    }
+                    else
+                    {
+                        console.log(`Timer ${timer.ID} duration finished, ${timer.duration}`);
+                    }
+                }
+                setTimers(updatedTimers);
+            }, 1000); // Decrease duration every second
+            return () => clearInterval(timerInterval); // Clean up interval on component unmount
+        }
+    }, [timers]);
+
+    const addTimer = (ID, duration) =>
+    {
+        let dublicates = false
+        for (let timer of timers)
+        {
+            if (timer.ID === ID)
+            {
+                timer.duration = duration
+                setTimers(timers)
+                dublicates = true
+                break
+            }
+        }
+        if (!dublicates)
+        {
+            setTimers([...timers, {ID, duration}])
+        }
+    }
+
     const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de linksboven posities checken)
     {
         for (let building of buildings)
@@ -195,7 +240,7 @@ function Grid({buildings, updateRecources})
                 }
                 <Ground/>
             </Canvas>
-            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding}/>}
+            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer} updateResources={updateResources}/>}
         </Suspense>
     );
 }

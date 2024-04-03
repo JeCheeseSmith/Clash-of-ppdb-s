@@ -17,7 +17,7 @@ function RequestMassagePopUp({ message, setPopup })
     }
     return (
         <div className="popup-message">
-            <div className="message">{message}</div>
+            <div className="message-string">{message}</div>
             <img src={close} alt={"close"} className={"close-button"} onClick={closeButton}/>
         </div>
     );

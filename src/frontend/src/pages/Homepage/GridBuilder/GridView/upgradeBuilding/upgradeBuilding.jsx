@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './upgradeBuilding.css'
 import '../../../../../globalComponents/timeComponent/TimerProgressBar.jsx'
 import TimerProgressBar from "../../../../../globalComponents/timeComponent/TimerProgressBar.jsx";
@@ -9,38 +9,63 @@ import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/po
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
 
-function UpgradeBuilding({selectedBuilding}) {
+function UpgradeBuilding({selectedBuilding, timers, addTimer, updateResources}) {
 
     const { sid, username } = useLocation().state;
-    const [upgrade, setUpgrade] = useState(false)
-    const [time, setTime] = useState(null);
     const [click, setClick] = useState(false);
     const [errormessage, setErrorMessage] = useState(null);
     const [popup, setPopup] = useState(false);
+    const [currentTimeValue, setCurrentTimeValue] = useState(null)
 
-    async function HandleUpgradeClick() {
-        API.upgradeBuilding(selectedBuilding[0].position, sid).then(data => {
-            setUpgrade(data.succes);
-            setErrorMessage(data.error);
-            if (upgrade) {
-                setTime(data.duration)
+    const getTimer = (ID) =>
+    {
+        let duration = [false, 0, 0]
+        for (let timer of timers) {
+            if (timer.ID === ID) {
+                return [true, timer.duration]
             }
-        })
-        if (upgrade) {
-            setClick(true);
         }
-        else {
-            setPopup(true)
-            await PlaySound("ResourcesError")
+        return duration
+    }
+
+    useEffect(() => {
+        const timer = getTimer(selectedBuilding[0].position)
+        if (timer[0])
+        {
+            setClick(true)
+            setCurrentTimeValue(timer[1])
+        }
+    }, []);
+
+    function HandleUpgradeClick() {
+        if (!click)
+        {
+            API.upgradeBuilding(selectedBuilding[0].position, sid).then(data =>
+            {
+                if (data.succes)
+                {
+                    addTimer(selectedBuilding[0].position, data.duration)
+                    setCurrentTimeValue(data.duration)
+                    setClick(true)
+                }
+                else
+                {
+                    setErrorMessage(data.error);
+                    setPopup(true)
+                    const promise = PlaySound("ResourcesError")
+                }
+            })
         }
     }
 
     return (
-        <div className="button-container">
-            <DisplayAvatarName type={"building-selected"} name={selectedBuilding[0].type}/>
+        <div>
+            <div className="button-container">
+                <DisplayAvatarName type={"building-selected"} name={selectedBuilding[0].type}/>
+                {!click && <button className="upgrade-button" onClick={HandleUpgradeClick}> Upgrade</button>}
+                {click && <TimerProgressBar timeValue={currentTimeValue} finished={setClick} addTimer={addTimer} selectedBuilding={selectedBuilding} updateResources={updateResources}/>}
+            </div>
             {popup && <RequestMassagePopUp message={errormessage} setPopup={setPopup}/>}
-            {click && <TimerProgressBar timeValue={time} finished={setClick}/>}
-            {!click && <button className="upgrade-button" onClick={HandleUpgradeClick}> Upgrade</button>}
         </div>
     );
 }
