@@ -29,7 +29,7 @@ class SoldierDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT trainingTime from soldier where name=%s;', (sname,))
-        duration = cursor.fetchone()
+        duration = cursor.fetchone()[0]
         start = datetime.now()
         stop = start + timedelta(seconds=duration)
         return start, stop, duration
@@ -39,12 +39,25 @@ class SoldierDataAccess:
         Gives True if a settlement unlocked this type of soldier
         :param sid: Identifier of the settlement
         :param sname: Name of the soldier
-        :return: succes: bool
+        :return: success: bool
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT EXISTS(SELECT * FROM unlockedsoldier WHERE sname=%s and sid=%s);', (sname, sid))
+        cursor.execute('SELECT EXISTS(SELECT * FROM unlocked WHERE name=%s and sid=%s);', (sname, sid))
         unlocked = cursor.fetchone()[0]
         if unlocked:
             return True
         else:
             return False
+
+    def getUnlockedSoldiers(self, sid):
+        """
+        Retrieves all soldier with their update status
+        :param sid: Identifier of the settlement
+        :return: Array of soldier name and unlocked status (True/False)
+        """
+        cursor = self.dbconnect.get_cursor()
+        querry = """SELECT soldier.name,True FROM soldier JOIN unlocked on soldier.name = unlocked.name
+                    UNION
+                    SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=%s);"""
+        cursor.execute(querry, (sid,))
+        return cursor.fetchall()

@@ -44,18 +44,17 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 ### Relational Tables
 > These tables are used to implemented relations between entities from the table.
 
-| Table                                   | Function                                                  |
-|-----------------------------------------|-----------------------------------------------------------|
-| [friend](#friend)                       | Stores the friended relation between users                |
-| [member](#member)                       | Stores the members of a clan                              |
-| [retrieved](#retrieved)                 | Keeps track of the messages delivered to a receiving user |
-| [shared](#shared)                       | Messages displayed in a groupschat from a clan            |
-| [intercept](#intercept)                 | Contains the transfers that intercept each other          |
-| [troops](#troops)                       | Relation to stores troops connected to a package          |
-| [unlockedBuildable](#unlockedBuildable) | Relation to express if a building is unlocked             |
-| [unlockedSoldier](#unlockedSoldier)     | Relation to express if a soldier is unlocked              |
-| [wheelofFortune](#wheelofFortune)       | Interactive relation for the spin on the Wheel of Fortune | storing packagaes |
-| [achieved](#achieved)                   | Stores the achievements a player made                     |
+| Table                             | Function                                                  |
+|-----------------------------------|-----------------------------------------------------------|
+| [friend](#friend)                 | Stores the friended relation between users                |
+| [member](#member)                 | Stores the members of a clan                              |
+| [retrieved](#retrieved)           | Keeps track of the messages delivered to a receiving user |
+| [shared](#shared)                 | Messages displayed in a groupschat from a clan            |
+| [intercept](#intercept)           | Contains the transfers that intercept each other          |
+| [troops](#troops)                 | Relation to stores troops connected to a package          |
+| [unlocked](#unlocked)             | Relation to express if a building or soldier is unlocked  |
+| [wheelofFortune](#wheelofFortune) | Interactive relation for the spin on the Wheel of Fortune |
+| [achieved](#achieved)             | Stores the achievements a player made                     |
 
 ### soldier
 
@@ -215,7 +214,8 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 ### timer
 | Name     | Type      | Explanation                                                            |
 |----------|-----------|------------------------------------------------------------------------|
-| id       | INT       | Unique Identifier of the Object we are referring to (e.g. building ID) |
+| id       | INT       | PRIMARY KEY                                                            |
+| oid      | INT       | Unique Identifier of the Object we are referring to (e.g. building ID) |
 | name     | TEXT      | Type of the object the id is referring to (e.g. building.name)         |
 | start    | TIMESTAMP | Start of the timer                                                     |
 | done     | TIMESTAMP | End of the timer                                                       |
@@ -267,23 +267,13 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | transferable | BOOL    | Indicating if the soldiers should go back home or join the settlement they're going to |
 | discovered   | BOOL    | Indicating if soldiers are spotted by another settlement                               |
 
-### unlockedBuildable
+### unlocked
 
-| Name      | Type    | Explanation                                                     |
-|-----------|---------|-----------------------------------------------------------------|
-| bname     | VARCHAR | REFERENCES buildable(name)                                      |
-| sid       | INT     | Buildable which is unlocked by the settlement, specified by sid |
-| maxNumber | INT     | Maximum number of entries a settlement may have of this type    |
-
-### unlockedSoldier
-
-| Name      | Type    | Explanation                                                  |
-|-----------|---------|--------------------------------------------------------------|
-| sname     | VARCHAR | REFERENCES soldier(name)                                     |
-| sid       | INT     | ID of the settlement unlocking this entity                   |
-| level     | INT     | Level needed to unlock                                       |
-| maxNumber | INT     | Maximum number of entries a settlement may have of this type |
-
+| Name      | Type    | Explanation                                                                |
+|-----------|---------|----------------------------------------------------------------------------|
+| bname     | VARCHAR | Name of the soldier or buildable                                           |
+| sid       | INT     | Buildable or soldier which is unlocked by the settlement, specified by sid |
+| maxNumber | INT     | Maximum number of entries a settlement may have of this type               |
 
 ### wheelofFortune
 

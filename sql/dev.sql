@@ -6,7 +6,8 @@ DROP SCHEMA public CASCADE;
 CREATE SCHEMA public;
 
 CREATE TABLE IF NOT EXISTS soldier(
-    name VARCHAR PRIMARY KEY,
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR UNIQUE,
     type VARCHAR,
     health INT,
     damage INT,
@@ -125,6 +126,7 @@ CREATE TABLE IF NOT EXISTS building(
     gridX INT NOT NULL, -- Coordinate on the grid
     gridY INT NOT NULL,
     sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
+    occuppiedCells INT[][] NOT NULL,
     UNIQUE (gridX,gridY,sid),
     PRIMARY KEY (id,name)
 );
@@ -168,18 +170,11 @@ CREATE TABLE IF NOT EXISTS troops(
     PRIMARY KEY (pid,sname)
 );
 
-CREATE TABLE IF NOT EXISTS unlockedBuildable(
-    bname VARCHAR REFERENCES buildable(name) ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE IF NOT EXISTS unlocked(
+    name VARCHAR,
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     maxNumber INT,
-    PRIMARY KEY (bname,sid)
-);
-
-CREATE TABLE IF NOT EXISTS unlockedsoldier(
-    sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    maxNumber INT,
-    PRIMARY KEY (sid,sname)
+    PRIMARY KEY (sid,name)
 );
 
 CREATE TABLE IF NOT EXISTS wheelofFortune(
@@ -196,17 +191,19 @@ CREATE TABLE IF NOT EXISTS achieved(
 );
 
 CREATE TABLE IF NOT EXISTS timer(
-    id TEXT, -- ID Of the Object (can be converted to a numerical value depending on the type
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    oid INT, -- ID Of the Object (can be converted to a numerical value depending on the type
     type TEXT, -- 'building' , 'soldier', 'transfer' , ...
     start TIMESTAMP NOT NULL,
     done TIMESTAMP NOT NULL,
-    PRIMARY KEY (id,type)
+    duration BIGINT NOT NULL,
+    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE -- BelongsTo relation
 );
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','government','{0}','{21600,21600}','{0,4000,0}',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','government','{0}','{21600,21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','storage','{0,500,0}','{21600,21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','storage','{0,500,0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','{0}','{86400,0}','{0,32000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','{0}','{21600,0}','{0,4000,0}',12);
 
@@ -249,3 +246,5 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3,9,40);
 
 INSERT INTO player(name,password) VALUES('admin','1234');
+
+

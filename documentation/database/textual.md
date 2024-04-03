@@ -87,4 +87,4 @@ A request is a specialization of content and has a status; True = Accepted, Fals
 
 ### Timer
 
-A building, soldier or transfer might take time until it arrives. In the database we keep track of the current actions that are running. The server regularly checks if there are timers that needs to be resolved.
+A building, soldier or transfer might take time until it arrives. In the database we keep track of the current actions that are running. The server regularly checks if there are timers that need to be resolved.
