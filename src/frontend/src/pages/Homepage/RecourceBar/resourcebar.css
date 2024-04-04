@@ -1,12 +1,13 @@
 .resourceBar {
   display: flex;
+  z-index: 2;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background-image: linear-gradient(to right, rgb(96, 53, 4), rgb(154, 93, 44), #673909);
+  background-image: linear-gradient(to right, rgba(96, 53, 4, 0.64), rgba(154, 93, 44, 0.63), rgba(103, 57, 9, 0.66));
   background-size: cover;
   width: 25%;
   margin: 0 auto;

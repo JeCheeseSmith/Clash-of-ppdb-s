@@ -6,21 +6,24 @@ import { useLocation } from 'react-router-dom';
 import './map.css';
 import Settlement1 from "./modals/Settlement1.jsx";
 import Settlement2 from "./modals/Settlement2.jsx";
+import Ground from "./modals/Ground.jsx";
 import RequestMassagePopUp from "../../globalComponents/popupMessage/popup.jsx";
+import Paper from "./modals/Paper.jsx";
 
 function Map() {
     const { sid, username } = useLocation().state;
-    const mapSize = 50;
+    const mapSize = 20;
     const [menuOpen, setMenuOpen] = useState(false)
 
-    const handleSettlement = () =>
+    const handleSettlement = (rowIndex, colIndex) =>
     {
+        console.log(colIndex,rowIndex)
         setMenuOpen(true)
     }
 
     const renderCell = (rowIndex, colIndex) =>
     {
-        if (colIndex % 7 === 0 && rowIndex % 8 === 0)
+        if ((rowIndex !== 0 && colIndex !==0) && colIndex % 7 === 0 && rowIndex % 8 === 0)
         {
             const centerX = rowIndex + 0.5;
             const centerY = colIndex + 0.5;
@@ -28,21 +31,21 @@ function Map() {
                 <>
                     <mesh key={`${rowIndex}-${colIndex}`}
                           position={[centerX - mapSize / 2, 6, centerY - mapSize / 2 + 0.5]}
-                          onClick={handleSettlement}
+                          onClick={() => handleSettlement(rowIndex, colIndex)}
                     >
                         <Settlement1/>
                     </mesh>
                 </>
             );
         }
-        else if (colIndex % 9 === 0 && rowIndex % 13 === 0)
+        else if ((rowIndex !== 0 && colIndex !==0) && colIndex % 5 === 0 && rowIndex % 5 === 0)
         {
             const centerX = rowIndex + 0.5;
             const centerY = colIndex + 0.5;
             return (
                 <mesh key={`${rowIndex}-${colIndex}`}
                       position={[centerX - mapSize / 2, 6, centerY - mapSize / 2 + 0.5]}
-                      onClick={handleSettlement}
+                      onClick={() => handleSettlement(rowIndex, colIndex)}
                 >
                     <Settlement2 />
                 </mesh>
@@ -71,14 +74,14 @@ function Map() {
                 <OrbitControls
                     enableZoom={true}
                     zoomSpeed={0.5}
-                    maxDistance={13}
+                    maxDistance={50}
                     minDistance={8}
                     panSpeed={0.4}
                     minPolarAngle={Math.PI / 6}
                     maxPolarAngle={Math.PI - Math.PI / 6}
                     minAzimuthAngle={-Math.PI / 6}
                     maxAzimuthAngle={Math.PI / 6}
-                    enableRotate={false}
+                    enableRotate={true}
                     mouseButtons={{ LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE }} // Change mouse buttons configuration
                 />
                 {(() => {
@@ -88,12 +91,13 @@ function Map() {
                         const renderedRow = [];
                         for (let j = 0; j < mapSize; j++)
                         {
-                            renderedRow.push(renderCell(j, i));
+                            renderedRow.push(renderCell(i, j));
                         }
                         renderedCells.push(renderedRow);
                     }
                     return renderedCells;
                 })()}
+                <Paper/>
             </Canvas>
             {menuOpen && <RequestMassagePopUp message={"This is a settlement!"} setPopup={setMenuOpen}/>}
         </Suspense>
