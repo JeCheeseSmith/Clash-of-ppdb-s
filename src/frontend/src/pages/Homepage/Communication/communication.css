@@ -40,7 +40,7 @@
     transform: translateY(-50%);
     height: 70px;
     width: 55px;
-    z-index: 1; /* Decreased z-index to bring it down in the background */
+    z-index: 3; /* Decreased z-index to bring it down in the background */
     padding: 0px;
     background-color: #262826;
     font-family: "Fira Code", italic, serif;

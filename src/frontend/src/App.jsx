@@ -5,8 +5,7 @@ import SignUp from "./pages/Loginpage/SignUp/signUp.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from "react";
 import './App.css';
-import Map from "./pages/Map/map.jsx"; // Importing CSS file for styling
-
+import Map from "./pages/Map/map.jsx";
 /**
  * Main application component responsible for routing and rendering different pages.
  * @component
@@ -14,26 +13,23 @@ import Map from "./pages/Map/map.jsx"; // Importing CSS file for styling
  * // Usage:
  * <App />
  */
-function App() {
-    /**
-     * Render method for the App component.
-     * @returns {JSX.Element} - The JSX element representing the entire application.
-     */
-  return (
-    // Wrapping the entire application with a div having a specific CSS class
-    <div className="background-login">
-      {/* BrowserRouter component to enable routing */}
-      <Router>
-        {/* Routes component to define different routes */}
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/MainPage" element={<MainPage />} />
-          <Route path="/Map" element={<Map />} />
-        </Routes>
-      </Router>
-    </div>
-  );
+function App()
+{
+    return (
+        // Wrapping the entire application with a div having a specific CSS class
+        <div className="background-login">
+            {/* BrowserRouter component to enable routing */}
+            <Router>
+                {/* Routes component to define different routes */}
+                <Routes>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="/SignUp" element={<SignUp />} />
+                    <Route path="/MainPage" element={<MainPage />} />
+                    <Route path="/Map" element={<Map />} />
+                </Routes>
+            </Router>
+        </div>
+    );
 }
 
 // Exporting the App component as default

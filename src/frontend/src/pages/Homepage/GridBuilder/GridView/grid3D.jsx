@@ -1,7 +1,6 @@
 import React, {Suspense, useEffect, useRef, useState} from 'react';
 import {Canvas, useFrame} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
-import './grid3D.css'
 import * as THREE from "three";
 import Ground from "./models/Objects/Ground.jsx";
 import GridCalculation from "../gridCalculation.jsx";
@@ -11,7 +10,6 @@ import {useLocation} from "react-router-dom";
 import UpgradeBuilding from "./upgradeBuilding/upgradeBuilding.jsx";
 import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
 import * as API from "../../../../api/EndPoints/EndPoints.jsx"
-
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
@@ -46,10 +44,15 @@ function Grid({buildings, updateResources})
                     const timer = timers[i];
                     if (timer.duration > 0)
                     {
+                        if (timer.duration === timer.totalDuration)
+                        {
+                            updateResources()
+                        }
                         updatedTimers.push({ ...timer, duration: timer.duration - 1 });
                     }
                     else
                     {
+                        let promise  = PlaySound("BuildingUpgraded")
                         updateResources()
                     }
                 }
@@ -207,14 +210,21 @@ function Grid({buildings, updateResources})
         }
     };
 
-
     return (
-        <Suspense fallback={null}>
-            <Canvas camera={{ position: [20, 30, 60] }} className={"grid"} shadows={true}>
+        <Suspense fallback={null} >
+            <Canvas camera={{ position: [3, 35, 15] }} shadows={true}>
                 <directionalLight position={[50,10,5]} intensity={3}/>
                 <ambientLight intensity={1}/>
                 <hemisphereLight intensity={1}/>
-                <OrbitControls enableZoom={true} zoomSpeed={0.5} maxDistance={60} minDistance={0} />
+                <OrbitControls enableZoom={true}
+                               enablePan={false}
+                               zoomSpeed={0.2}
+                               rotateSpeed={0.1}
+                               maxDistance={38}
+                               minDistance={25}
+                               maxPolarAngle={Math.PI / 5}
+                               minPolarAngle={Math.PI / 8}
+                />
                 {
                     (() =>
                         {
