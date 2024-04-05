@@ -244,7 +244,7 @@ function Grid({buildings, updateResources})
                 }
                 <Ground/>
             </Canvas>
-            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer}/>}
+            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer} updateResources={updateResources}/>}
         </Suspense>
     );
 }
