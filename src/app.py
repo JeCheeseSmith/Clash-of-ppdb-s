@@ -6,9 +6,11 @@ from dataAcces.package import *
 from dataAcces.settlement import *
 from dataAcces.soldier import *
 from dataAcces.transfer import *
+from dataAcces.timer import *
 from dataAcces.friend import *
 from dataAcces.clan import *
 from database import *
+from datetime import datetime
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask.templating import render_template
@@ -26,6 +28,9 @@ clan_data_acces = ClanDataAccess(connection)
 friend_data_access = FriendDataAccess(connection)
 settlement_data_acces = SettlementDataAcces(connection)
 package_data_acces = PackageDataAccess(connection)
+building_data_acces = BuildingDataAccess(connection)
+timer_data_acces = TimerDataAccess(connection)
+soldier_data_acces = SoldierDataAccess(connection)
 
 
 @app.route("/signup", methods=["POST"])
@@ -50,7 +55,7 @@ def add_player():
     name = data.get("name")
     password = data.get("password")
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
-    Controle = player_data_access.add_user(Player_obj, settlement_data_acces,content_data_access)
+    Controle = player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     if Controle[0]:
         friend_data_access.add_admin(name)
         return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
@@ -81,14 +86,16 @@ def get_login():
     player_password = data.get("password")
     Player_obj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
                         logout=None, pid=None)
-    Controle = False
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
+        # package_data_acces.calc_resources(Controle[1], datetime.now())
+        update()
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
 
-@app.route("/logout" , methods=["POST"])
+
+@app.route("/logout", methods=["POST"])
 def logout():
     """
     JSON Input Format (POST):
@@ -102,8 +109,9 @@ def logout():
     }
     """
     data = request.json
-    succes = player_data_access.registerLogOut(data.get("name")) #Call the desired functionality
-    return jsonify(succes)
+    success = player_data_access.registerLogOut(data.get("name"))  # Call the desired functionality
+    return jsonify(success)
+
 
 @app.route("/chat", methods=["POST", "GET"])
 def update_chat():
@@ -133,14 +141,11 @@ def update_chat():
     JSON Output Format (GET):
     List with messages returned in json format, ordered by moment
     """
-
-
     if request.method == "POST":
         data = request.json
         message_pname = data.get("pname")
         message_sname = data.get("sname")
         message_content = data.get("content")
-        Controle = False
         Chat_obj = Content(None, None, message_content, message_sname)
         Controle = content_data_access.add_message(Chat_obj, message_pname)
         if Controle:
@@ -153,6 +158,7 @@ def update_chat():
         message_sname = data.get("sname")
         obj = content_data_access.get_chatbox(message_pname, message_sname)
         return jsonify(obj)
+
 
 @app.route("/groupchat", methods=["POST", "GET"])
 def update_groupchat():
@@ -182,18 +188,13 @@ def update_groupchat():
     JSON Output Format (GET):
     List with messages returned in json format, ordered by moment
     """
-    # data = request.json
-    # message_pname = data.get("pname")
-    # message_cname = data.get("cname")
-
     if request.method == "POST":
         data = request.json
         message_pname = data.get("pname")
         message_cname = data.get("cname")
         message_content = data.get("content")
-        Controle = False
         Chat_obj = Content(None, None, message_content, message_pname)
-        Controle = content_data_access.send_groupchat(message_cname,Chat_obj)
+        Controle = content_data_access.send_groupchat(message_cname, Chat_obj)
         if Controle:
             return jsonify({"success": Controle, "message": "message send successful"})
         else:
@@ -218,23 +219,230 @@ def get_resources():
    """
     data = request.json
     id = data.get("id")
+    package_data_acces.calc_resources(id, datetime.now())
     packageDict = settlement_data_acces.getResources(Settlement(id))
     return jsonify(packageDict)
 
-@app.route("/grid", methods=["GET"])
-def get_grid():
-    pass
 
-@app.route("/savegrid", methods=["POST"])
-def saveGrid():
+@app.route("/update", methods=["GET"])
+def update():
+    """
+    Tell the server to re-evaluate its timers
+
+    Also gives back the timers f
+
+    JSON Input Format:
+    {
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    List of all timers for a settlement
+    }
+    """
+    timer_data_acces.evaluateTimers(settlement_data_acces)
+
+    data = request.args
+    sid = data.get('sid')
+
+    if sid is not None:
+        timers = timer_data_acces.retrieveTimers(sid)
+        return jsonify(timers)
+
+
+@app.route("/getGrid", methods=["GET"])
+def getGrid():
+    """
+    API Call to retrieve the grid of a settlement
+
+    JSON Input Format:
+    {
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "grid": <MATRIX> | Matrix representation of the grid
+    }
+    """
+    data = request.args
+    grid = settlement_data_acces.getGrid(data.get('sid'))
+    return jsonify({"grid": grid})
+
+
+@app.route("/getBuilingInfo", methods=["GET"])
+def getBuildingInfo():
+    """
+    Retrieve all information for a given building
+
+    PRECONDITION: The building must exists
+
+    JSON Input Format:
+    {
+    "position": <ARRAY INT> | [gridX, gridY]
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of action
+    <Building info in dict style>
+    }
+    """
+    try:
+        data = request.json
+        building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
+                                                data.get('sid'))  # Reform data
+        dct = building.to_dct()
+        dct['success'] = True
+        return jsonify(dct)
+    except:
+        dct = dict(success=False)
+        return jsonify(dct)
+
+
+@app.route("/moveBuilding", methods=["POST"])
+def moveBuiling():
+    """
+    API Call to update the location of a building
+
+    JSON Input Format:
+    {
+    "oldPosition": <ARRAY INT> | [gridX, gridY]
+    "newPosition": <ARRAY INT> | [gridX, gridY] New position on the grid
+    "occupiedCells": <INT[][]> | All the cells a building takes in on the grid
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of action
+    }
+    """
     data = request.json
-    print(len(data))
-    return data
+    building = building_data_acces.retrieve(data.get('oldPosition')[0], data.get('oldPosition')[1],
+                                            data.get('sid'))  # Reform data
+    building.occupiedCells = data.get('occupiedCells')
+    building.gridX = data.get('newPosition')[0]
+    building.gridY = data.get('newPosition')[1]
+    success = building_data_acces.moveBuilding(building)  # Execute functionality
+    return jsonify(dict(success=success))
 
 
-@app.route("/buildings", methods=["GET"])
-def get_buildings():
-    pass
+@app.route("/placeBuilding", methods=["POST"])
+def placeBuilding():
+    """
+    API Call to place a new building (adds a timer, makes a resource deficit)
+
+    JSON Input Format:
+    {
+    "name": <STRING> | Unique name of the Buildable
+    "position": <INT[]> | [gridX, gridY] X,Y coordinate on the grid
+    "occupiedCells": <INT[][]> | All the cells a building takes in on the grid
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of action
+    "error": <STRING> | Optional error message if success=False
+    }
+    """
+    data = request.json
+
+    building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
+                                               data.get('position')[1], data.get('occupiedCells'))  # Reform data
+    success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
+    dct = dict(success=success)
+    if not success:
+        dct["error"] = str(error)
+    return jsonify(dct)
+
+
+@app.route("/upgradeBuilding", methods=["POST"])
+def upgradeBuilding():
+    """
+    API Call to upgrade an existing building
+
+    JSON Input Format:
+    {
+    "position": <INT[]> | [gridX, gridY] X,Y coordinate on the grid
+    "sid": <INT> | Identifier of the settlement
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of action
+    "duration": <INT> | Time in seconds
+    "error": <STRING> | Optional error message if success=False
+    }
+    """
+    data = request.json
+
+    building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
+                                            data.get('sid'))  # Reform data
+    success, timer = settlement_data_acces.upgradeBuilding(building, package_data_acces, timer_data_acces,
+                                                          building_data_acces)  # Execute actual functionality
+
+    if success:
+        dct = timer.to_dct()
+        dct["success"] = success
+    else:
+        dct = dict(success=success)
+        dct["error"] = str(timer)  # In this case, timer is an error message
+    return jsonify(dct)
+
+@app.route("/unlockedTroops", methods=["GET"])
+def unlockedTroops():
+    """
+    Retrieve all soldiers and their unlocked status
+
+    JSON Input Format
+    {
+    "sid": <INT> | Identifier of the settlement you are training troops for
+    }
+
+    JSON Output Format:
+    {
+    List of soldier names with a bool specifying their unlocked status
+    }
+    """
+    data = request.json
+    data = soldier_data_acces.getUnlockedSoldiers(data.get("sid"))
+    return jsonify(data)
+
+@app.route("/trainTroop", methods=["POST"])
+def trainTroop():
+    """
+    API Endpoint to create a new Clan
+
+    JSON Input Format
+    {
+    "sid": <INT> | Identifier of the settlement you are training troops for
+    "sname": <STRING> | Name of soldier
+    }
+
+    JSON Output Format:
+    {
+    "success": <bool> | State of request
+    "error": <STRING> | Optional error message if success=False
+    }
+    """
+    data = request.json
+
+    package_data_acces.calc_resources(data.get('sid'), datetime.now())  # Re evaluate the amount of resources
+
+    success, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
+                                                     package_data_acces,
+                                                     timer_data_acces)  # Execute actual functionality
+    if success:
+        dct = timer.to_dct()
+        dct["success"] = success
+    else:
+        dct = dict(success=success)
+        dct["error"] = str(timer)  # In this case, timer is an error message
+    return jsonify(dct)
 
 
 @app.route("/createClan", methods=["POST"])
@@ -252,13 +460,13 @@ def createClan():
 
     JSON Output Format:
     {
-    "succes": <bool> | State of request
+    "success": <bool> | State of request
     }
     """
     data = request.json
-    succes = clan_data_acces.add_clan(
+    success = clan_data_acces.add_clan(
         Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
-    return jsonify({"succes": succes})
+    return jsonify({"success": success})
 
 
 @app.route("/joinClan", methods=["POST"])
@@ -274,22 +482,23 @@ def joinClan():
 
     JSON Output Format:
     {
-    "succes": <bool> | State of request
+    "success": <bool> | State of request
     "message": <string> | Standard reply
     }
     """
     data = request.json
 
-    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),None)
+    rhequest = Request(None, None, "Dear High Magistrate of this clan, may I join your alliance?", data.get("sender"),
+                       None)
     cname = data.get("cname")  # Name of the clan
-    succes = clan_data_acces.sendRequest(rhequest, cname)
+    success = clan_data_acces.sendRequest(rhequest, cname)
 
-    if succes:
+    if success:
         message = "Your request has been send. Please await further correspondence!"
     else:
         message = "You can't join a clan if you're already in one!"
 
-    return jsonify({"succes": succes, "message": message})
+    return jsonify({"success": success, "message": message})
 
 
 @app.route("/searchClan", methods=["POST"])
@@ -304,7 +513,7 @@ def searchClan():
 
     JSON Output Format
     {
-    "succes": <bool> | Status
+    "success": <bool> | Status
     "name": <string> | Clan Name
     "pname": <string> | Clan Leader name (Player Entity)
     "description": <string> | Info about the clan
@@ -316,9 +525,9 @@ def searchClan():
     dct = clan.to_dct()
 
     if clan.status == "Clan doesn't exists":
-        dct["succes"] = False
+        dct["success"] = False
     else:
-        dct["succes"] = True
+        dct["success"] = True
     return jsonify(dct)
 
 
@@ -390,7 +599,7 @@ def get_general_requests():
     """
     data = request.json
     pname = data.get("pname")
-    Friendrequests = friend_data_access.get_Friendrequest(pname) # Execute functionality
+    Friendrequests = friend_data_access.get_Friendrequest(pname)  # Execute functionality
     Clanrequests = clan_data_acces.get_clanrequest(pname)
     Generalrequest = Friendrequests + Clanrequests
 
@@ -424,11 +633,11 @@ def accept_general_requests():
     state = data.get("state")
     id = data.get("id")
 
-    if content_data_access.isFriendRequest(id): # Depending on the type of request
-        Controle = friend_data_access.accept_Friendrequest(state, id, pname, sname) # Execute functionality
+    if content_data_access.isFriendRequest(id):  # Depending on the type of request
+        Controle = friend_data_access.accept_Friendrequest(state, id, pname, sname)  # Execute functionality
 
     elif content_data_access.isClanRequest(id):
-        Controle = clan_data_acces.accept_clanrequest(state,id,pname,sname) # Execute functionality
+        Controle = clan_data_acces.accept_clanrequest(state, id, pname, sname)  # Execute functionality
 
     # Send a message back to the user from the admin account
     if state:
@@ -439,6 +648,7 @@ def accept_general_requests():
         message1 = Content(None, None, "Your request is denied by " + pname, "admin")
         Controle = content_data_access.add_message(message1, sname)
         return jsonify({"success": Controle, "message": "rejected"})
+
 
 @app.route("/unfriend", methods=["POST"])
 def removeFriend():
@@ -453,7 +663,7 @@ def removeFriend():
 
     JSON Output Format:
     {
-    "succes": <BOOL> | Request status
+    "success": <BOOL> | Request status
     }
     """
     data = request.json
@@ -487,6 +697,7 @@ def getChats():
 
     return jsonify(dct)
 
+
 @app.route("/leaveClan", methods=["POST"])
 def leaveClan():
     """
@@ -499,12 +710,13 @@ def leaveClan():
 
     JSON Output Format:
     {
-    "succes": <BOOL> | Request status
+    "success": <BOOL> | Request status
     }
     """
     data = request.json
-    succes = clan_data_acces.leaveClan(data.get('name'))  # Execute functionality
-    return jsonify({"succes": succes})
+    success = clan_data_acces.leaveClan(data.get('name'))  # Execute functionality
+    return jsonify({"success": success})
+
 
 @app.route("/deleteClan", methods=["POST"])
 def deleteClan():
@@ -519,12 +731,13 @@ def deleteClan():
 
     JSON Output Format:
     {
-    "succes": <BOOL> | Request status
+    "success": <BOOL> | Request status
     }
     """
     data = request.json
-    succes = clan_data_acces.deleteClan(data.get('cname'), data.get('pname'))  # Execute functionality
-    return jsonify({"succes": succes})
+    success = clan_data_acces.deleteClan(data.get('cname'), data.get('pname'))  # Execute functionality
+    return jsonify({"success": success})
+
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")

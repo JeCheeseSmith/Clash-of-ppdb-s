@@ -50,7 +50,7 @@ A soldier has a cost & time to train, which is specified per type.
 You can place multiple buildings of the same type. The types are referred to as "Buildables" and have a unique name. They perform an action specified in a category (type). Farmers may produce food, woodcutters produce wood for upgrading buildings. Some buildings store amounts of resource and others allow for bonus effects such as increasing the health of a soldier type.
 Refer to the other documentation for specific amounts & functions. 
 
-A building costs resources to build, which are specified in the upgradeFunction. The time needed to build the building is specified in a timeFunction.
+A building costs resources to build, which are specified in the upgradeFunction. The time needed to build the building is specified in a timeFunction. We use a more technical representation of these functions to evaluate them with ease.
 
 ### Package
 
@@ -84,3 +84,7 @@ A content can be a message or a request. The send time & content (actual message
 Contents/Messages are send from one player to another, to perform direct messaging. The shared relation is used to make a group chat for a clan. 
 
 A request is a specialization of content and has a status; True = Accepted, False = Rejected. It is used to store Clan Invitations, Friend Request & Transfer Requests (Inherited specializations).
+
+### Timer
+
+A building, soldier or transfer might take time until it arrives. In the database we keep track of the current actions that are running. The server regularly checks if there are timers that need to be resolved.

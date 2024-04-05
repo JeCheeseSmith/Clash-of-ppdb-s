@@ -14,9 +14,11 @@ function ChatComponent() {
             console.log('Connected to server');
         });
 
-        socket.on('message', (message) => {
+        socket.on('message', (message) =>
+        {
+            console.log('Received message:', message); // Log the received message
             // Append the new message to the existing list of messages
-            setMessages((prevMessages) => [...prevMessages, message]);
+            setMessages(prevMessages => [...prevMessages, message]);
         });
 
         return () => {

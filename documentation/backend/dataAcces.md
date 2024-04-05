@@ -1,0 +1,1 @@
+"For each database entity, a python class is made + dataAcces"

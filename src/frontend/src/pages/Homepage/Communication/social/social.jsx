@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import POST from "../../../../api/POST.jsx";
 import "./social.css"
-import buttonSocial from '../../../../assets/Menu Selection Sound Effect.mp3';
-import buttonOption from '../../../../assets/socialOptionSound.mp3';
 import SocialOption from "./socialOptionContents.jsx";
 import CommunicationButton from "../communication.jsx";
 import {useLocation} from "react-router-dom";
+import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
 
 /**
  * React component representing a social box.
@@ -20,16 +19,9 @@ function SocialBox()
         setSocialVisible(!socialVisible);
     };
 
-    const playSocial = () =>
-    {
-        const sound = new Audio(buttonSocial);
-        sound.currentTime = 0.315;
-        sound.play();
-    };
-
     return (
         <div>
-            <CommunicationButton type={"social"} buttonFunction={toggleSocialVisibility} buttonAudio={playSocial}/>
+            <CommunicationButton type={"social"} buttonFunction={toggleSocialVisibility}/>
             <div className="social-container"></div>
             <Box socialVisible={socialVisible}/>
         </div>
@@ -67,15 +59,10 @@ function Navbar({ socialVisible })
     const location = useLocation();
     const pname = location.state.username || {};
 
-    const playOption = () => {
-      const sound = new Audio(buttonOption);
-      sound.currentTime = 0.5;
-      sound.play();
-    };
-
-    const handleButtonClick = (pageName) => {
+    const handleButtonClick = (pageName) =>
+    {
       setCurrentPage(pageName);
-      playOption();
+      let promise = PlaySound("SocialOptionButton");
     };
 
     const [requests, setRequests] = useState([]);

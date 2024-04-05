@@ -1,36 +1,50 @@
-import React, {useState} from 'react'; // Importing React library
+import React, {useEffect, useState} from 'react'; // Importing React library
 import './mainpage.css'; // Importing the CSS file for styling
 import Chat from './Communication/chat/chat.jsx';
 import SocialBox from "./Communication/social/social.jsx";
 import Grid from "./GridBuilder/GridView/grid3D.jsx";
 import Buildmenu from "./GridBuilder/BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
-import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
-
+import * as API from "../../api/EndPoints/EndPoints.jsx"
+import {useLocation} from "react-router-dom";
 /**
  * Functional component representing the main page of the application.
  * Displays a full-bleed background image.
  */
 function MainPage()
 {
-    const [position, setPosition] = useState("")
-    const [buildings, setBuildings] = useState([/*{type:"WoodCuttersCamp", position:[5,5]}*/])
-    const addBuilding = (type, position) =>
+    const { sid, username } = useLocation().state;
+    const [buildings, setBuildings] = useState([])
+    const [resources, setResources] = useState({
+        wood: 0,
+        stone: 0,
+        steel: 0,
+        food: 0
+    });
+    useEffect(() =>
     {
-        setBuildings([...buildings, { type, position }]);
+        API.getGrid(sid).then(data => setBuildings(data))
+        API.get_resources(sid).then(data => setResources(data)) // do this twice, because without the first time, resources are going to be 0
+        const intervalId = setInterval(() =>
+        {
+            API.get_resources(sid).then(data => setResources(data))
+        }, 5 * 60 * 1000); // 15 minutes in milliseconds
+        return () => clearInterval(intervalId);
+    }, []);
+    const addBuilding = (type, position, size, occupiedCells) =>
+    {
+        setBuildings([...buildings, {type, position, size, occupiedCells}]);
     }
-
-
     return (
         <div className="background"> {/* Container for the background image */}
             <Chat/>
             <SocialBox/>
             <Account/>
-            <Buildmenu addBuilding={addBuilding} setPosition={setPosition}/>
-            <Grid buildings={buildings} position={position} setPosition={setPosition}/>
-            <ResourceBar/>
+            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateRecources={() => API.get_resources(sid).then(data => setResources(data))}/>
+            <Grid buildings={buildings} updateResources={() => API.get_resources(sid).then(data => setResources(data))}/>
+            <ResourceBar resources={resources}/>
             <SoldierMenu/>
 
             {/*<Map/>*/}

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import './communication.css'
 import GET from "../../../api/GET.jsx";
 import {useLocation} from "react-router-dom";
+import PlaySound from "../../../globalComponents/audioComponent/audio.jsx";
 
 /**
  * Component for communication buttons.
@@ -13,7 +14,7 @@ import {useLocation} from "react-router-dom";
  * @param {Function} props.setVariable - Function to set a variable (only required for chat buttons).
  * @returns {JSX.Element} - The JSX for communication buttons.
  */
-function CommunicationButton({type, buttonFunction, visible, buttonAudio, setVariable})
+function CommunicationButton({type, buttonFunction, visible, setVariable})
 {
     return (
         <div className={"buttons"}>
@@ -22,7 +23,7 @@ function CommunicationButton({type, buttonFunction, visible, buttonAudio, setVar
                                             setContactList={setVariable}
 
             />}
-            {type === 'social' && <SocialButton toggleSocialVisibility={buttonFunction} playSocial={buttonAudio}/>}
+            {type === 'social' && <SocialButton toggleSocialVisibility={buttonFunction}/>}
         </div>
     )
 }
@@ -58,9 +59,10 @@ function ChatButton({toggleChatVisibility, chatVisible, setContactList})
  * @param {Function} props.playSocial - Function to play social audio.
  * @returns {JSX.Element} - The JSX for social button.
  */
-function SocialButton({toggleSocialVisibility, playSocial}) {
+function SocialButton({toggleSocialVisibility}) {
+    let promise;
     return (
-        <button onClick={() => {toggleSocialVisibility(); playSocial();}} className={"toggle-social-button"}>
+        <button onClick={() => {toggleSocialVisibility(); promise = PlaySound("SocialButton")}} className={"toggle-social-button"}>
             social
         </button>
     )
