@@ -6,13 +6,11 @@ import Grid from "./GridBuilder/GridView/grid3D.jsx";
 import Buildmenu from "./GridBuilder/BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Account from "./Account/account.jsx";
-import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
 import * as API from "../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"
 import backgroundMotion from "../../assets/BackgroundMotion.mp4"
-import PlaySound from "../../globalComponents/audioComponent/audio.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -75,7 +73,6 @@ function MainPage()
                 <Grid buildings={buildings} updateResources={updateResources}/>
             </div>
             <ResourceBar resources={resources} updateResources={updateResources}/>
-            <SoldierMenu/>
             <MapButton/>
             <video src={backgroundMotion} autoPlay={true} loop={true} muted={true}/>
         </div>
