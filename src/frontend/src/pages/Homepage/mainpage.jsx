@@ -62,7 +62,7 @@ function MainPage()
         const intervalId = setInterval(() =>
         {
             updateResources()
-        }, 5 * 60 * 1000);
+        }, 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);
     return (
@@ -74,7 +74,7 @@ function MainPage()
             <div className={"grid"}>
                 <Grid buildings={buildings} updateResources={updateResources}/>
             </div>
-            <ResourceBar resources={resources}/>
+            <ResourceBar resources={resources} updateResources={updateResources}/>
             <SoldierMenu/>
             <MapButton/>
             <video src={backgroundMotion} autoPlay={true} loop={true} muted={true}/>

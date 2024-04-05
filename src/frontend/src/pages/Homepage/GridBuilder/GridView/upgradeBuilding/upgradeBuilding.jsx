@@ -9,7 +9,7 @@ import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/po
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
 
-function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
+function UpgradeBuilding({selectedBuilding, timers, addTimer, updateResources}) {
 
     const { sid, username } = useLocation().state;
     const [click, setClick] = useState(false);
@@ -40,6 +40,7 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
     }, []);
 
     function HandleUpgradeClick() {
+        updateResources()
         if (!click)
         {
             API.upgradeBuilding(selectedBuilding[0].position, sid).then(data =>
