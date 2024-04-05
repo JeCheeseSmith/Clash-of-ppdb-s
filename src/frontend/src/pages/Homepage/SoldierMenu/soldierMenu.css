@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
+.button {
+    display: inline-block;
+    background: transparent;
+    border: transparent;
+    margin: 0;
+    padding: 0;
+
+}
+
+
 .trainingQueue {
     margin-top: 30px;
     position: absolute;
