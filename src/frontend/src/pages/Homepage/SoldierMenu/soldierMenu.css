@@ -47,6 +47,12 @@
     cursor: pointer;
 }
 
+#wrapper {
+    opacity: 0.1;
+    filter: alpha(opacity=40);
+    background-color: #000;
+}
+
 .soldierSection {
   flex: 1;
   margin-bottom: 40px;
