@@ -199,7 +199,7 @@ class SettlementDataAcces:
         :param building: Building Object
         :return:
         """
-        package_data_acces.calc_resources(building.sid, datetime.now())  # Recalculate resources
+        package_data_acces.calc_resources(building.sid, None, datetime.now())  # Recalculate resources
 
         cursor = self.dbconnect.get_cursor()
 

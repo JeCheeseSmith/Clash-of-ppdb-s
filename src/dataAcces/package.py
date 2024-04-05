@@ -163,20 +163,28 @@ class PackageDataAccess:
                         package.id))
         self.dbconnect.commit()
 
-    def calc_resources(self, sid, timestamp):
+    def calc_resources(self, sid, start, stop):
         """
         Function to re-evaluate resources number with
+        start: Start Time of the inbterval to calculat resource from
+        stop: end time towards resources need to be calculated
         :return:
         """
 
         cursor = self.dbconnect.get_cursor()
 
+        if start is None:  # Logout time from player needs to be used & updated
+            cursor.execute('SELECT logout FROM player WHERE name IN (SELECT pname FROM settlement WHERE id=%s);', (sid, ))
+            start = cursor.fetchone()[0]
+        cursor.execute('UPDATE player SET logout = %s WHERE name IN (SELECT pname FROM settlement WHERE id=%s);', (stop, sid ))
+
         # Tijd omzetten van een string naar een timestamp en het verschil berekenen tussen twee timestamps
-        timestamp_new = timestamp#datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
-        time = datetime.now()
-        calculated_time = abs(time - timestamp_new)
+        # timestamp_new = timestamp#datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
+        # time = datetime.now()
+        calculated_time = abs(start - stop)
         calculated_time = int(calculated_time.total_seconds())
         calculated_time = calculated_time / 3600
+        print(calculated_time)
 
         # Generated resources
         Generated_wood = 0
@@ -286,7 +294,7 @@ class PackageDataAccess:
         for soldier in Soldiers:
             cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
             Consumption = cursor.fetchone()[0]
-            C = (calculated_time) * Consumption
+            C = calculated_time * Consumption
             C *= soldier[2]
             Total_Consumption += C
 
@@ -296,7 +304,7 @@ class PackageDataAccess:
         Newp_steel = min((Generated_steel + Psteel), Steel)
         Newp_food = min(Generated_food + Pfood - Total_Consumption, Food)
 
-        #Newp_food = -22
+        print(Newp_stone, Newp_wood, Newp_food, Stone, Wood, Food)
 
         # Check for possible troop starvation
         for soldier in Soldiers:
@@ -314,9 +322,9 @@ class PackageDataAccess:
                 break
 
         # Update all resources
-        cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',(Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))
+        cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
+                       (Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))
         self.dbconnect.commit()
-
 
     def get_soldiers(self):
         """
