@@ -178,13 +178,10 @@ class PackageDataAccess:
             start = cursor.fetchone()[0]
         cursor.execute('UPDATE player SET logout = %s WHERE name IN (SELECT pname FROM settlement WHERE id=%s);', (stop, sid ))
 
-        # Tijd omzetten van een string naar een timestamp en het verschil berekenen tussen twee timestamps
-        # timestamp_new = timestamp#datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f")
-        # time = datetime.now()
+        # Calculated difference in timestamp
         calculated_time = abs(start - stop)
         calculated_time = int(calculated_time.total_seconds())
         calculated_time = calculated_time / 3600
-        print(calculated_time)
 
         # Generated resources
         Generated_wood = 0
@@ -303,8 +300,6 @@ class PackageDataAccess:
         Newp_stone = min((Generated_stone + Pstone), Stone)
         Newp_steel = min((Generated_steel + Psteel), Steel)
         Newp_food = min(Generated_food + Pfood - Total_Consumption, Food)
-
-        print(Newp_stone, Newp_wood, Newp_food, Stone, Wood, Food)
 
         # Check for possible troop starvation
         for soldier in Soldiers:
