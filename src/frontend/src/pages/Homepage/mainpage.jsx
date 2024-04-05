@@ -40,6 +40,7 @@ function MainPage()
 
     useEffect(() =>
     {
+        //todo: compress size of main page mp3 and mp4, or download new ones
         const audio = new Audio(backgroundMusic);
         audio.loop = true; // Loop the audio
         audio.play();
