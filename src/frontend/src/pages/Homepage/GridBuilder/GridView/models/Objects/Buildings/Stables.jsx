@@ -8,8 +8,7 @@ Title: Stables (low poly)
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import stables from '../../assets/stables.glb'
-import Farm from "./Farm.jsx";
+import stables from '../../../assets/stables.glb'
 
 /**
  * React component for rendering a 3D model of stables (low poly).

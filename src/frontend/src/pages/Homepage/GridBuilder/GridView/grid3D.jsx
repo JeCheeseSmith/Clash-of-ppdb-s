@@ -2,7 +2,6 @@ import React, {Suspense, useEffect, useRef, useState} from 'react';
 import {Canvas, useFrame} from '@react-three/fiber';
 import {OrbitControls} from '@react-three/drei';
 import * as THREE from "three";
-import Ground from "./models/Objects/Ground.jsx";
 import GridCalculation from "../gridCalculation.jsx";
 import Buildings from "../buildings.jsx";
 import POST from "../../../../api/POST.jsx";
@@ -10,6 +9,9 @@ import {useLocation} from "react-router-dom";
 import UpgradeBuilding from "./upgradeBuilding/upgradeBuilding.jsx";
 import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
 import * as API from "../../../../api/EndPoints/EndPoints.jsx"
+import Ground from "./models/Objects/Ground.jsx";
+import Bush from "./models/Objects/Bush.jsx";
+import Tree from "./models/Objects/Tree.jsx";
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
@@ -18,7 +20,7 @@ import * as API from "../../../../api/EndPoints/EndPoints.jsx"
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings, updateResources})
+function Grid({buildings, updateResources, randomArray})
 {
     const { sid, username } = useLocation().state;
     const [selectedBuilding, setSelectedBuilding] =
@@ -26,7 +28,6 @@ function Grid({buildings, updateResources})
     const [oldPosition, setOldPosition] = useState([])
     const [timers, setTimers] = useState([])
     const gridSize = 40;
-
     useEffect(() =>
     {
         API.update(sid).then(data => {setTimers(data)})
@@ -212,18 +213,31 @@ function Grid({buildings, updateResources})
 
     return (
         <Suspense fallback={null} >
-            <Canvas camera={{ position: [3, 35, 15] }} shadows={true}>
-                <directionalLight position={[50,10,5]} intensity={3}/>
-                <ambientLight intensity={1}/>
-                <hemisphereLight intensity={1}/>
+            <Canvas camera={{position: [3, 35, 15]}} shadows={true}>
+                <color attach="background" args={['lightblue']}/>
+                <directionalLight
+                    position={[50, 50, 50]}
+                    intensity={2}
+                    castShadow={true}
+                    shadow-mapSize-width={1024}
+                    shadow-mapSize-height={1024}
+                    shadow-camera-far={50}
+                    shadow-camera-left={-10}
+                    shadow-camera-right={10}
+                    shadow-camera-top={10}
+                    shadow-camera-bottom={-10}
+                />
+                <ambientLight intensity={0.5}/>
                 <OrbitControls enableZoom={true}
                                enablePan={false}
                                zoomSpeed={0.2}
                                rotateSpeed={0.1}
                                maxDistance={38}
                                minDistance={25}
-                               maxPolarAngle={Math.PI / 5}
-                               minPolarAngle={Math.PI / 8}
+                               maxPolarAngle={Math.PI / 3.5}
+                               minPolarAngle={Math.PI / 10}
+                               maxAzimuthAngle={Math.PI / 3}
+                               minAzimuthAngle={Math.PI / 5}
                 />
                 {
                     (() =>
@@ -242,9 +256,13 @@ function Grid({buildings, updateResources})
                         }
                     )()
                 }
+                {createBushes(randomArray)}
+                {createTree()}
                 <Ground/>
             </Canvas>
-            {selectedBuilding[1] && <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer} updateResources={updateResources}/>}
+            {selectedBuilding[1] &&
+                <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer}
+                                 updateResources={updateResources}/>}
         </Suspense>
     );
 }
@@ -254,9 +272,82 @@ function createShadow(building, shadowColor)
     const geometry = new THREE.PlaneGeometry(building.size[0],building.size[1]);
     const material = new THREE.MeshBasicMaterial({ color: shadowColor });
     const square = new THREE.Mesh(geometry, material);
-    square.position.set(building.size[0]*0.5-1, 0, building.size[1]*0.5-1.5);
+    square.position.set(building.size[0]*0.5-1, 0.001, building.size[1]*0.5-1.5);
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
+}
+
+function createBushes(randomArray)
+{
+    let counter = 0;
+    const bushes = [];
+    for (let i = 20; i <= 45; i += 3)
+    {
+        for (let j = 0; j < 10; j++)
+        {
+            // LEFT
+            bushes.push([-i, 8, -j * 5]);
+            bushes.push([-i, 8, j * 5]);
+            // RIGHT
+            if (j < 5)
+            {
+                bushes.push([i, 8, j * 5]);
+            }
+            bushes.push([i, 8, -j * 5]);
+            // TOP
+            bushes.push([j * 5, 8, -i]);
+            bushes.push([-j * 5, 8, -i]);
+            // BOTTOM
+            if (j < 5)
+            {
+                bushes.push([j * 5, 8, i]);
+            }
+            bushes.push([-j * 5, 8, i]);
+        }
+        for (let j = 0; j < 5; j++)
+        {
+            // LEFT
+            bushes.push([-i, 8, j * 5+randomArray[counter]]);
+            counter++
+            bushes.push([-i, 8, -j * 5+randomArray[counter]]);
+            counter++
+            // TOP
+            bushes.push([j * 5 +randomArray[counter], 8, -i]);
+            counter++
+            bushes.push([-j * 5 +randomArray[counter], 8, -i]);
+            counter++
+        }
+    }
+    const bushComponents = [];
+    for (let i = 0; i < bushes.length; i++)
+    {
+        bushComponents.push(<Bush key={i} position={bushes[i]} />);
+    }
+    return bushComponents
+}
+
+function createTree()
+{
+    const trees = [];
+    for (let i = 0; i <= 40; i+=12)
+    {
+        // LEFT
+        trees.push([-30, 20, i]);
+        trees.push([-30, 20, -i]);
+        trees.push([i, 20, -30]);
+        trees.push([-i, 20, -30]);
+
+        trees.push([-35, 20, i+5]);
+        trees.push([-35, 20, -i+5]);
+        trees.push([i+4, 20, -40]);
+        trees.push([-i+4, 20, -40]);
+    }
+    const treeComponents = [];
+    for (let i = 0; i < trees.length; i++)
+    {
+        treeComponents.push(<Tree key={i} position={trees[i]} />);
+    }
+    return treeComponents
 }
 
 function InsideGrid(selectedBuilding, newPosition)

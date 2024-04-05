@@ -16,22 +16,22 @@ import CastleIMAGE from "./BuildMenu/assets/ObjectsImages/castle.png";
 import ChanceryIMAGE from "./BuildMenu/assets/ObjectsImages/chancery.png";
 import BarracksIMAGE from "./BuildMenu/assets/ObjectsImages/barracks.png";
 ////////////////////////////////////////// BUILDING 3D OBJECTS //////////////////////////////////////////
-import WoodCuttersCamp from "./GridView/models/Objects/WoodCuttersCamp.jsx";
-import Quarry from "./GridView/models/Objects/Quarry.jsx";
-import SteelMine from "./GridView/models/Objects/SteelMine.jsx";
-import Farm from "./GridView/models/Objects/Farm.jsx";
-import Stables from "./GridView/models/Objects/Stables.jsx";
-import ArcherTower from "./GridView/models/Objects/ArcherTower.jsx";
-import LookoutTower from "./GridView/models/Objects/LookoutTower.jsx";
-import BlackSmith from "./GridView/models/Objects/BlackSmith.jsx";
-import Tavern from "./GridView/models/Objects/Tavern.jsx";
-import GrainSilo from "./GridView/models/Objects/GrainSilo.jsx";
-import StoneStockpile from "./GridView/models/Objects/StoneStockpile.jsx";
-import Armory from "./GridView/models/Objects/Armory.jsx";
-import WoodStockpile from "./GridView/models/Objects/WoodStockpile.jsx";
-import Castle from "./GridView/models/Objects/Castle.jsx";
-import Chancery from "./GridView/models/Objects/Chancery.jsx";
-import Barracks from "./GridView/models/Objects/Barracks.jsx";
+import WoodCuttersCamp from "./GridView/models/Objects/Buildings/WoodCuttersCamp.jsx";
+import Quarry from "./GridView/models/Objects/Buildings/Quarry.jsx";
+import SteelMine from "./GridView/models/Objects/Buildings/SteelMine.jsx";
+import Farm from "./GridView/models/Objects/Buildings/Farm.jsx";
+import Stables from "./GridView/models/Objects/Buildings/Stables.jsx";
+import ArcherTower from "./GridView/models/Objects/Buildings/ArcherTower.jsx";
+import LookoutTower from "./GridView/models/Objects/Buildings/LookoutTower.jsx";
+import BlackSmith from "./GridView/models/Objects/Buildings/BlackSmith.jsx";
+import Tavern from "./GridView/models/Objects/Buildings/Tavern.jsx";
+import GrainSilo from "./GridView/models/Objects/Buildings/GrainSilo.jsx";
+import StoneStockpile from "./GridView/models/Objects/Buildings/StoneStockpile.jsx";
+import Armory from "./GridView/models/Objects/Buildings/Armory.jsx";
+import WoodStockpile from "./GridView/models/Objects/Buildings/WoodStockpile.jsx";
+import Castle from "./GridView/models/Objects/Buildings/Castle.jsx";
+import Chancery from "./GridView/models/Objects/Buildings/Chancery.jsx";
+import Barracks from "./GridView/models/Objects/Buildings/Barracks.jsx";
 
 
 /*

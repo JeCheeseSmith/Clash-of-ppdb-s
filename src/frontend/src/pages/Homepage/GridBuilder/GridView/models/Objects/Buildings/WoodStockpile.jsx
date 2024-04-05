@@ -8,7 +8,7 @@ Title: Wood Plant House-Freepoly.org
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import woodStockpile from '../../assets/woodStockpile.glb'
+import woodStockpile from '../../../assets/woodStockpile.glb'
 
 /**
  * React component for rendering a 3D model of a wood stockpile.

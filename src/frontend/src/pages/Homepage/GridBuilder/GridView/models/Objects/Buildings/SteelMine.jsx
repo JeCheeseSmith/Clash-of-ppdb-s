@@ -8,7 +8,7 @@ Title: Medieval Building
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import steelMine from '../../assets/steelMine.glb'
+import steelMine from '../../../assets/steelMine.glb'
 
 /**
  * React component for rendering a 3D model of a medieval building.

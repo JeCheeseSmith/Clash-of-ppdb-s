@@ -8,7 +8,7 @@ Title: Stilized house
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import stoneStockpile from '../../assets/stoneStockpile.glb'
+import stoneStockpile from '../../../assets/stoneStockpile.glb'
 
 /**
  * React component for rendering a 3D model of a stone stockpile.

@@ -8,7 +8,7 @@ Title: Windmill
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import farm from '../../assets/farm.glb'
+import farm from '../../../assets/farm.glb'
 import Quarry from "./Quarry.jsx";
 
 /**

@@ -8,7 +8,7 @@ Title: Medieval House
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import woodcuttersCamp from '../../assets/woodcuttersCamp.glb'
+import woodcuttersCamp from '../../../assets/woodcuttersCamp.glb'
 
 /**
  * React component for rendering a 3D model of a medieval woodcutter's camp.
