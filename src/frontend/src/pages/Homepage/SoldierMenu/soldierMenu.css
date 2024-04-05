@@ -32,14 +32,19 @@
 
 
 .soldier-icon {
-  position: absolute;
-  padding: 10px;
-  background-image: linear-gradient(to right, rgb(96, 53, 4), rgb(154, 93, 44), #673909);
-  background-size: cover;
-  width: 50px;
-  border-radius: 10px;
-  border: 3px solid #593811;
-  margin-bottom: 40px;
+      position: absolute;
+      padding: 10px;
+      background-image: linear-gradient(to right, rgb(96, 53, 4), rgb(154, 93, 44), #673909);
+      background-size: cover;
+      width: 50px;
+      border-radius: 10px;
+      border: 3px solid #593811;
+      margin-bottom: 40px;
+}
+
+.soldier-icon:hover {
+    opacity: 0.6;
+    cursor: pointer;
 }
 
 .soldierSection {
