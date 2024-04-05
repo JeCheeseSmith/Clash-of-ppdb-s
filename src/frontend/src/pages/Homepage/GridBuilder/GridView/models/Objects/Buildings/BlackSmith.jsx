@@ -8,7 +8,7 @@ Title: Medieval Blacksmith
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import blackSmith from '../../assets/blackSmith.glb'
+import blackSmith from '../../../assets/blackSmith.glb'
 
 /**
  * React component for rendering a 3D model of a Medieval Blacksmith.

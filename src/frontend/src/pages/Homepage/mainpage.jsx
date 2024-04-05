@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react'; // Importing React library
+import React, {useEffect, useMemo, useRef, useState} from 'react'; // Importing React library
 import './mainpage.css'; // Importing the CSS file for styling
 import Chat from './Communication/chat/chat.jsx';
 import SocialBox from "./Communication/social/social.jsx";
@@ -10,7 +10,6 @@ import * as API from "../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"
-import backgroundMotion from "../../assets/BackgroundMotion.mp4"
 
 /**
  * Functional component representing the main page of the application.
@@ -22,6 +21,7 @@ function MainPage()
     const videoRef = useRef(null);
     const [buildings, setBuildings] = useState([])
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
+    const randomArray = useMemo(getRandomArray, []); // Memoize the random array
 
     const updateResources = () =>
     {
@@ -38,7 +38,7 @@ function MainPage()
 
     useEffect(() =>
     {
-        //todo: compress size of main page mp3 and mp4, or download new ones
+        //todo: compress size of main page mp3, or download new ones
         const audio = new Audio(backgroundMusic);
         audio.loop = true; // Loop the audio
         audio.play();
@@ -70,13 +70,23 @@ function MainPage()
             <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
             <div className={"grid"}>
-                <Grid buildings={buildings} updateResources={updateResources}/>
+                <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray}/>
             </div>
             <ResourceBar resources={resources} updateResources={updateResources}/>
             <MapButton/>
-            <video src={backgroundMotion} autoPlay={true} loop={true} muted={true}/>
         </div>
     );
+}
+
+function getRandomArray()
+{
+    const randomArray = [];
+    for (let i = 0; i < 150; i++)
+    {
+        const randomNumber = Math.floor(Math.random() * 3) + 1;
+        randomArray.push(randomNumber);
+    }
+    return randomArray
 }
 
 export default MainPage; // Exporting the MainPage component

@@ -8,7 +8,7 @@ Title: Medieval House Low Poly (For Gamedev)
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import armory from '../../assets/armory.glb'
+import armory from '../../../assets/armory.glb'
 
 /**
  * React component for rendering a 3D model of a medieval armory.

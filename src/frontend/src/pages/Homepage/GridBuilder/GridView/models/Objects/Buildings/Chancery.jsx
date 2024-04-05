@@ -8,7 +8,7 @@ Title: Rauma Town Hall
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import chancery from '../../assets/chancery.glb'
+import chancery from '../../../assets/chancery.glb'
 
 /**
  * React component for rendering a 3D model of Rauma Town Hall Chancery.

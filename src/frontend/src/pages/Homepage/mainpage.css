@@ -1,4 +1,4 @@
-.background {
+.mainpage {
   position: fixed;        /* Position the container fixed to the viewport */
   top: 0;             /* Shift the background image 20px above the top of the viewport */
   left: 0;                /* Align to the left of the viewport */
@@ -13,9 +13,10 @@
     z-index: 2;
 }
 
+/*
 video {
     position: relative;
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
+}*/

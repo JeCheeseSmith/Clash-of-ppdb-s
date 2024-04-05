@@ -8,7 +8,7 @@ Title: Viking Watch LookoutTower
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import archertower from '../../assets/archertower.glb'
+import archertower from '../../../assets/archertower.glb'
 
 /**
  * ArcherTower component representing a 3D model of an archer tower.
