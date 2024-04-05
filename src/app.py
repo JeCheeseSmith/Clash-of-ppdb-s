@@ -250,7 +250,7 @@ def update():
     """
     timer_data_acces.evaluateTimers(settlement_data_acces)
 
-    data = request.json
+    data = request.args
     sid = data.get('sid')
 
     if sid is not None:
