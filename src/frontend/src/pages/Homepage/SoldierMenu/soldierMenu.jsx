@@ -127,10 +127,10 @@ function TroopOverviewPage() {
     // Function that gets the availability of every soldier and sends a request for the soldier counts by calling the API
     useEffect(() =>
     {
-        API.get_SoldiersAvailable(sid).then(data => setSoldierAvailable(data)) // we check twice to overwrite initialize
+        API.get_unlockedTroops(sid).then(data => setSoldierAvailable(data)) // we check twice to overwrite initialize
         const intervalId = setInterval(() =>
         {
-            API.get_SoldiersAvailable(sid).then(data => setSoldierAvailable(data))
+            API.get_unlockedTroops(sid).then(data => setSoldierAvailable(data))
         }, 5 * 60 * 1000); // 15 minutes in milliseconds
         return () => clearInterval(intervalId);
     }, []);

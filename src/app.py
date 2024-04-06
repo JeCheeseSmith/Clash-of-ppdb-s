@@ -408,7 +408,7 @@ def unlockedTroops():
     List of soldier names with a bool specifying their unlocked status
     }
     """
-    data = request.json
+    data = request.args
     data = soldier_data_acces.getUnlockedSoldiers(data.get("sid"))
     return jsonify(data)
 
