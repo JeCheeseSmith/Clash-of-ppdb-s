@@ -89,10 +89,6 @@ function SoldierMenuOptions({pageName, requests, sendData}){
 
 function TroopOverviewPage() {
     const { sid, username } = useLocation().state;
-
-    const handleTroopTrain = (troop) => {
-        console.log(troop)
-    };
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
         heavyInfantry1: 0,
@@ -128,13 +124,21 @@ function TroopOverviewPage() {
         ambush2: false,
         ambush3: false,
     });
-    // Function that sends a request for the soldier counts by calling the API
-    const GetSoldiers = async () => {
-    }
+    // Function that gets the availability of every soldier and sends a request for the soldier counts by calling the API
+    useEffect(() =>
+    {
+        API.get_SoldiersAvailable(sid).then(data => setSoldierAvailable(data)) // we check twice to overwrite initialize
+        const intervalId = setInterval(() =>
+        {
+            API.get_SoldiersAvailable(sid).then(data => setSoldierAvailable(data))
+        }, 5 * 60 * 1000); // 15 minutes in milliseconds
+        return () => clearInterval(intervalId);
+    }, []);
 
-    // Function that gets the availability of every soldier
-    const GetSoldiersAvailable = async () => {
-    }
+    // Function that sends a request for a soldier to be trained
+    const handleTroopTrain = (troop) => {
+        console.log(troop)
+    };
 
     return (
         <div className="soldier-primair-input">

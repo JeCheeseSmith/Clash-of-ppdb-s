@@ -19,6 +19,30 @@ export const get_resources = async (sid) =>
         });
 }
 
+export const get_SoldiersAvailable = async (sid) =>
+{
+    const data = await GET( {"id": sid}, '/unlockedTroops');
+    return (
+        {
+            heavyInfantry1: data.heavyInfantry1,
+            heavyInfantry2: data.heavyInfantry2,
+            heavyInfantry3: data.heavyInfantry3,
+            spear1: data.spear1,
+            spear2: data.spear2,
+            spear3: data.spear3,
+            horseman1: data.horseman1,
+            horseman2: data.horseman2,
+            horseman3: data.horseman3,
+            bowman1: data.bowman1,
+            bowman2: data.bowman2,
+            bowman3: data.bowman3,
+            ambush1: data.ambush1,
+            ambush2: data.ambush2,
+            ambush3: data.ambush3
+    });
+}
+
+
 export const upgradeBuilding = async (position, sid) =>
 {
     return await POST({"position":position, "sid":sid}, '/upgradeBuilding');
