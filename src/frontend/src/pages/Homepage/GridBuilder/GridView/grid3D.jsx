@@ -281,7 +281,7 @@ function createBushes(randomArray)
 {
     let counter = 0;
     const bushes = [];
-    for (let i = 20; i <= 45; i += 3)
+    for (let i = 21.5; i <= 45; i += 3)
     {
         for (let j = 0; j < 10; j++)
         {
