@@ -170,7 +170,6 @@ class PackageDataAccess:
         stop: end time towards resources need to be calculated
         :return:
         """
-
         cursor = self.dbconnect.get_cursor()
 
         if start is None:  # Logout time from player needs to be used & updated

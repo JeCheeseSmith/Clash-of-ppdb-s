@@ -254,7 +254,6 @@ def update():
     sid = data.get('sid')
 
     if sid is not None:
-        package_data_acces.calc_resources(sid, None, datetime.now())
         timers = timer_data_acces.retrieveTimers(sid)
         return jsonify(timers)
 
@@ -460,8 +459,6 @@ def trainTroop():
     }
     """
     data = request.json
-
-    package_data_acces.calc_resources(data.get('sid'), None, datetime.now())  # Re evaluate the amount of resources
 
     success, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
                                                       package_data_acces,
