@@ -1,4 +1,4 @@
-from math import sqrt, inf
+from math import inf
 from .soldier import *
 from .friend import *
 from .settlement import *
@@ -37,16 +37,6 @@ class TransferDataAccess:
             speed += package.food % 1000
             speed += package.steel % 1000
         return speed
-
-    @staticmethod
-    def calculateDistance(to: list, start: list):
-        """
-        Calc grid distance between 2 grid Coordinates (Euclidean distance)
-        :param to: (x <INT> ,y <INT>)
-        :param start: (x <INT> ,y <INT>)
-        :return: int value expressing the distance
-        """
-        return sqrt(pow((to[0] - start[0]), 2) + pow((to[1] - start[1]), 2))
 
     def __extent(self, soldierDict, discovered, transferable):
         """
@@ -117,7 +107,7 @@ class TransferDataAccess:
         else:  # Espionage
             speed = 1
 
-        distance = TransferDataAccess.calculateDistance(to, start)  # Calc distance
+        distance = SettlementDataAcces.calculateDistance(to, start)  # Calc distance
 
         duration = distance / speed * self.determineSpeed(package.package)
         start = datetime.now()

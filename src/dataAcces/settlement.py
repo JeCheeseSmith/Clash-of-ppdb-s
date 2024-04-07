@@ -1,3 +1,5 @@
+from random import randrange
+from math import sqrt
 from .building import *
 from .timer import *
 
@@ -18,7 +20,6 @@ class Settlement:
 class SettlementDataAcces:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
-        self.latestMap = (2, 4)
 
     def getResources(self, obj):
         """
@@ -353,20 +354,30 @@ class SettlementDataAcces:
     def createOutPost(self):
         pass
 
+    @staticmethod
+    def calculateDistance(to: list, start: list):
+        """
+        Calc grid distance between 2 grid Coordinates (Euclidean distance)
+        :param to: (x <INT> ,y <INT>)
+        :param start: (x <INT> ,y <INT>)
+        :return: int value expressing the distance
+        """
+        return sqrt(pow((to[0] - start[0]), 2) + pow((to[1] - start[1]), 2))
+
     def getNewCoordinate(self):
         """
         Generate new unique coordinates for new Settlements on the map
         (0,0) , (2,0) , (0,2) , (2,2) ...
         :return:
         """
-        x = self.latestMap[0]
-        y = self.latestMap[1]
-        if x == y:
-            x += 2
-        elif x > y:
-            x = y
-            y = self.latestMap[0]
-        elif x < y:
-            x += 2
-        self.latestMap = (x, y)
-        return self.latestMap
+        x = randrange(0,50)
+        y = randrange(0,50)
+
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT mapX, mapY FROM settlement;')
+        coordinates = cursor.fetchall()
+
+        for coord in coordinates:
+            if SettlementDataAcces.calculateDistance(coord, [x,y]) < 2:
+                return self.getNewCoordinate()
+        return [x,y]
