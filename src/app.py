@@ -437,14 +437,32 @@ def getTroops():
     List of soldier names with their respective amount
     }
     """
-    data = request.json
+    data = request.args
     return jsonify(soldier_data_acces.getTroops(data.get("id"), data.get("type")))
 
+@app.route("/getConsumption", methods=["GET"])
+def getConsumption():
+    """
+    Retrieve the food consumption per time unit for a settlement
+
+    JSON Input Format
+    {
+    "sid": <INT> | Identifier of the type referring to
+    }
+
+    JSON Output Format:
+    {
+    "consumption": <INT> | consumption
+    }
+    """
+    data = request.args
+    amount = package_data_acces.calc_consumption(data.get('sid'))
+    return jsonify({"consumption": amount})
 
 @app.route("/trainTroop", methods=["POST"])
 def trainTroop():
     """
-    API Endpoint to create a new Clan
+    API Endpoint to train a new troops
 
     JSON Input Format
     {
@@ -579,6 +597,14 @@ def transfer():
 def createOutpost():
     """
 
+    :return:
+    """
+    pass
+
+@app.route("/getTransfers", methods=["POST"])
+def getTransfers():
+    """
+    Returns a list of all points and their current start and end coordinate
     :return:
     """
     pass

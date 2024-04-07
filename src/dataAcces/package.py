@@ -163,6 +163,32 @@ class PackageDataAccess:
                         package.id))
         self.dbconnect.commit()
 
+    def calc_consumption(self, sid, calculated_time=1):
+        """
+        Retrieves the amount of food per time unit consumed in a settlement
+        :param sid: Identifier of the settlement
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))
+        pid = cursor.fetchone()[0]  # Retrieve package id
+
+        # Check how many soldiers there are and calculate there consumption
+        cursor.execute('SELECT * FROM troops WHERE pid=%s;', (pid,))
+        Soldiers = cursor.fetchall()
+
+        Total_Consumption = 0
+
+        # Calculate for every soldier what he/she consumes
+        for soldier in Soldiers:
+            cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
+            Consumption = cursor.fetchone()[0]
+            C = calculated_time * Consumption
+            C *= soldier[2]
+            Total_Consumption += C
+
+        return Total_Consumption
+
     def calc_resources(self, sid, start, stop):
         """
         Function to re-evaluate resources number with
@@ -284,15 +310,7 @@ class PackageDataAccess:
         cursor.execute('SELECT * FROM troops WHERE pid=%s;', (pid,))
         Soldiers = cursor.fetchall()
 
-        Total_Consumption = 0
-
-        # Calculate for every soldier what he/she consumes
-        for soldier in Soldiers:
-            cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
-            Consumption = cursor.fetchone()[0]
-            C = calculated_time * Consumption
-            C *= soldier[2]
-            Total_Consumption += C
+        Total_Consumption = self.calc_consumption(sid, calculated_time)
 
         # Update the resources in the right way
         Newp_wood = min((Generated_wood + Pwood), Wood)
