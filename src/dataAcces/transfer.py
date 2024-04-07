@@ -219,16 +219,11 @@ class TransferDataAccess:
             return False, e
 
     def createEspionage(self):
-        # Espionage fails at random -> Notify person being spied on
-        # Espionage a settlement also gives all resource transfers
-        # Espionage an attack gives soldier infos
+
         pass
 
     def createAttack(self):
         pass
 
     def createOutpost(self):
-        pass
-
-    def getTransfers(self):
         pass

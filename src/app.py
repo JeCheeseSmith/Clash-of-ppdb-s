@@ -256,6 +256,8 @@ def update():
     data = request.args
     pname = data.get('pname')
 
+    # TODO UNION Transfers from Clans & Friends
+
     if pname is not None:
         cursor = connection.get_cursor()
         cursor.execute('SELECT id FROM settlement WHERE pname=%s;', (pname,))
@@ -540,26 +542,6 @@ def getMap():
     return jsonify(settlement_data_acces.getMap())
 
 
-@app.route("/getTransfers", methods=["GET"])
-def getTransfers():
-    """
-    Returns a list of all transfers visible to a user
-
-    JSON Input Format
-    {
-    "pname": <STRING> | Name of the player
-    }
-
-    JSON Output Format:
-    {
-    }
-    """
-    return jsonify(timer_data_acces.g)
-    # Discovered bool UNION ALL Transfers from and to my settlements UNION Transfers from Clans
-
-    pass
-
-
 @app.route("/attack", methods=["POST"])
 def attack():
     """
@@ -586,6 +568,7 @@ def attack():
 
     # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
     # Transferable should be set to TRUE FOR ATTACKS
+    # TODO Priority
 
 
 @app.route("/espionage", methods=["POST"])
@@ -607,7 +590,7 @@ def espionage():
     """
     data = request.json
     TransferDataAccess.createEspionage(data.get('idTo'), )
-
+    # TODO Priority
     pass
 
 
@@ -657,11 +640,14 @@ def createOutpost():
 
 @app.route("/getTransferInfo", methods=["GET"])
 def getTransferInfo():
+    # IN: tid
     pass
 
 
 @app.route("/getSettlementInfo", methods=["GET"])
 def getSettlementInfo():
+    # IN: sid
+    # check if friend, ally, enemy
     pass
 
 

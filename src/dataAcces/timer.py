@@ -176,6 +176,7 @@ SELECT id FROM transfer WHERE idto IN(SELECT idto FROM transfer WHERE idfrom=%s)
         newInfo["to"] = transfer_data_acces.translatePosition(transfer[2], transfer[3])
         newInfo["from"] = transfer_data_acces.translatePosition(transfer[4], transfer[5])
         newInfo["discovered"] = transfer[1]
+        newInfo["tid"] = transfer[0]
 
         return newInfo
 
@@ -188,6 +189,13 @@ SELECT id FROM transfer WHERE idto IN(SELECT idto FROM transfer WHERE idfrom=%s)
         retrieve building info and soldiers: full reports
         :return:
         """
+        # Espionage fails at random -> Notify person being spied on
+        # Espionage a settlement sets all resource transfers to discovered
+        # Espionage an attack gives soldier infos
+
+        # Settlement Spionage
+        # Transfer Spionage
+
         pass
 
     def simulateAttack(self):
