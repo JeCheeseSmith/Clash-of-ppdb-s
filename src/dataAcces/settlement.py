@@ -5,8 +5,8 @@ from .timer import *
 
 
 class Settlement:
-    def __init__(self, id, name=None, mapX=None, mapY=None, pid=None, pname=None):
-        self.id = id
+    def __init__(self, sid, name=None, mapX=None, mapY=None, pid=None, pname=None):
+        self.id = sid
         self.name = name
         self.mapX = mapX
         self.mapY = mapY
@@ -70,7 +70,8 @@ class SettlementDataAcces:
             elif level == 4:
                 dct = dict(WoodCuttersCamp=3, Quarry=3, SteelMine=3, Farm=4, GrainSilo=4)
             elif level == 5:
-                dct = dict(WoodCuttersCamp=4, Quarry=4, Farm=5, Barracks=3, WoodStockPile=3, StoneStockPile=3, Armory=3,  GrainSilo=5)
+                dct = dict(WoodCuttersCamp=4, Quarry=4, Farm=5, Barracks=3, WoodStockPile=3, StoneStockPile=3, Armory=3,
+                           GrainSilo=5)
             elif level == 6:
                 dct = dict(SteelMine=4, Farm=6, WoodStockPile=4, StoneStockPile=4)
             elif level == 7:
@@ -313,7 +314,7 @@ class SettlementDataAcces:
             cursor.execute('SELECT cost, id FROM soldier WHERE name=%s;', (sname,))
             data = cursor.fetchone()
             cost = data[0]
-            id = data[1]  # ID of the soldier
+            soldierId = data[1]  # ID of the soldier
 
             # Make a Resource Deficit
             cursor.execute('SELECT * FROM package WHERE id IN (SELECT pid FROM settlement WHERE id=%s);',
@@ -327,7 +328,7 @@ class SettlementDataAcces:
             package_data_acces.update_resources(total)  # Adjust resource amount
 
             start, stop, duration = soldier_data_acces.calculateTrainTime(sname)  # Create Timer
-            timer = Timer(None, id, 'soldier', start, stop, duration, sid)
+            timer = Timer(None, soldierId, 'soldier', start, stop, duration, sid)
             timer_data_acces.insertTimer(timer)  # When the timer stops, soldier will be inserted
             return True, timer
         except Exception as e:
@@ -370,14 +371,14 @@ class SettlementDataAcces:
         (0,0) , (2,0) , (0,2) , (2,2) ...
         :return:
         """
-        x = randrange(0,50)
-        y = randrange(0,50)
+        x = randrange(0, 50)
+        y = randrange(0, 50)
 
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT mapX, mapY FROM settlement;')
         coordinates = cursor.fetchall()
 
         for coord in coordinates:
-            if SettlementDataAcces.calculateDistance(coord, [x,y]) < 2:
+            if SettlementDataAcces.calculateDistance(coord, [x, y]) < 2:
                 return self.getNewCoordinate()
-        return [x,y]
+        return [x, y]

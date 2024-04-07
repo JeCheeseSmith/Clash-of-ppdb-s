@@ -5,8 +5,8 @@ from .settlement import *
 
 
 class Transfer:
-    def __init__(self, id, speed, sidto, discovered, sidfrom, pid, type):
-        self.id = id
+    def __init__(self, tid, speed, sidto, discovered, sidfrom, pid, type):
+        self.id = tid
         self.speed = speed
         self.sidto = sidto
         self.discovered = discovered
@@ -64,24 +64,24 @@ class TransferDataAccess:
             soldierDct[soldier[0]] = dict(amount=soldier[1], transferable=soldier[2], discovered=discovered)
         return self.__extent(soldierDct, discovered, transferable)
 
-    def translatePosition(self, id, transfer):
+    def translatePosition(self, oid, transfer):
         """
         Translate a SID to a coordinate [x,y]
-        :param id: Settlement or Transfer Identifier
+        :param oid: Settlement or Transfer Identifier
         :param transfer: Bool indicating the id option
         :return: [int,int]
         """
         cursor = self.dbconnect.get_cursor()
         if transfer:  # If it's a transfer, we take the middle of the 2 sids
-            cursor.execute('SELECT idTo,toType,idFrom, fromtype FROM transfer WHERE id=%s;', (id,))
+            cursor.execute('SELECT idTo,toType,idFrom, fromtype FROM transfer WHERE id=%s;', (oid,))
             ids = cursor.fetchone()
             sidTo = self.translatePosition(ids[0], ids[1])  # This can go recursively for transfers on transfers
             sidFrom = self.translatePosition(ids[2], ids[3])
-            midX = int((sidTo[0] + sidFrom[0])/2)
-            midY = int((sidTo[1] + sidFrom[1])/2)
+            midX = int((sidTo[0] + sidFrom[0]) / 2)
+            midY = int((sidTo[1] + sidFrom[1]) / 2)
             return [midX, midY]
         else:
-            cursor.execute('SELECT mapX,mapY FROM settlement WHERE id=%s;', (id,))
+            cursor.execute('SELECT mapX,mapY FROM settlement WHERE id=%s;', (oid,))
             return cursor.fetchone()
 
     def doesIntercept(self, tid, tid2):
@@ -119,6 +119,8 @@ class TransferDataAccess:
                              soldier_data_acces: SoldierDataAccess, discovered: bool, transferable: bool):
         """
         Helper function to update the resource and soldiers amounts in the settlement and insert the new correct data into the database
+        :param transferable:
+        :param discovered:
         :param sidFrom: Settlement Identifier we will subtract the soldiers from
         :param soldiers: Soldier Dict in backend format; item in dict is of the following format: {soldier_name: {'transferable': bool, 'amount': int, 'discovered': bool}}
         :param resources: Array of amounts 0: id, 1: stone , ...
@@ -133,7 +135,9 @@ class TransferDataAccess:
 
         # Instantiate packages
         tp = PackageWithSoldier(Package(resources), soldiers)  # transferPackage
-        sp = PackageWithSoldier(package_data_acces.get_resources(pid), self.__extent(soldier_data_acces.getTroops(sidFrom, 'settlement'),discovered, transferable))  # settlementPackage
+        sp = PackageWithSoldier(package_data_acces.get_resources(pid),
+                                self.__extent(soldier_data_acces.getTroops(sidFrom, 'settlement'), discovered,
+                                              transferable))  # settlementPackage
 
         # Do arithmetic and verify result
         sp -= tp
@@ -151,8 +155,8 @@ class TransferDataAccess:
         Helper function to verify if 2 settlements are allies
         :param sidTo: Settlement Identifier 1
         :param sidFrom: Settlement Identifier 2
-        :param clan_data_acces:
-        :param settlement_data_acces:
+        :param clan_data_acces: Access DB
+        :param settlement_data_acces: DB Access
         :return:
         """
         pname1 = settlement_data_acces.getOwner(sidTo)
@@ -165,17 +169,19 @@ class TransferDataAccess:
         Helper function to verify if 2 settlements are befriended
         :param sidTo: Settlement Identifier 1
         :param sidFrom: Settlement Identifier 2
-        :param friend_data_acces:
-        :param settlement_data_acces:
+        :param friend_data_acces: DB acces
+        :param settlement_data_acces: acces DB
         :return:
         """
         pname1 = settlement_data_acces.getOwner(sidTo)
         pname2 = settlement_data_acces.getOwner(sidFrom)
         return friend_data_acces.areFriends(pname1, pname2)
 
-    def createTransfer(self, sidTo: int, sidFrom: int, soldiers: list, resources: list, timer_data_access: TimerDataAccess,
+    def createTransfer(self, sidTo: int, sidFrom: int, soldiers: list, resources: list,
+                       timer_data_access: TimerDataAccess,
                        package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
-                       friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces, soldier_data_acces: SoldierDataAccess):
+                       friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces,
+                       soldier_data_acces: SoldierDataAccess):
         try:
             cursor = self.dbconnect.get_cursor()  # DB Acces
 
@@ -188,11 +194,13 @@ class TransferDataAccess:
             soldiers = self.__restructure(soldiers, False, False)
 
             # Adjust resource & troop info
-            tp = self.updateResourceTroops(sidFrom, soldiers, resources, package_data_acces, soldier_data_acces, False, False)
+            tp = self.updateResourceTroops(sidFrom, soldiers, resources, package_data_acces, soldier_data_acces, False,
+                                           False)
 
             # Insert transfer into the database
-            cursor.execute('INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid) VALUES (%s,%s,%s,%s,%s,%s)',
-                           (sidTo, False, sidFrom, False, False, tp.package.id))
+            cursor.execute(
+                'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid) VALUES (%s,%s,%s,%s,%s,%s)',
+                (sidTo, False, sidFrom, False, False, tp.package.id))
             cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
             tid = cursor.fetchone()
 
@@ -219,20 +227,4 @@ class TransferDataAccess:
         pass
 
     def createOutpost(self):
-        pass
-
-    def simulateTransfer(self):
-        pass
-
-    def simulateEspionage(self):
-        """
-        retrieve building info and soldiers: full reports
-        :return:
-        """
-        pass
-
-    def simulateAttack(self):
-        pass
-
-    def simulateOutpost(self):
         pass

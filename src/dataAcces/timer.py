@@ -1,6 +1,8 @@
 from datetime import datetime
+
+
 class Timer:
-    def __init__(self, id, oid, ttype, start, done, duration, sid):
+    def __init__(self, tid, oid, ttype, start, done, duration, sid):
         """
         :param: id: Timer Identifier
         :param: sid: Settlement Identifier
@@ -9,7 +11,7 @@ class Timer:
         :param start: Starting time of the timer
         :param done: Stop Time of the Timer
         """
-        self.id = id
+        self.id = tid
         self.oid = oid
         self.type = ttype
         self.start = start
@@ -52,10 +54,6 @@ class TimerDataAccess:
                 self.simulateTransfer(timer)
             else:
                 raise Exception('We dont support this timer type!!!! ' + timer.type)
-
-    def simulateTransfer(self, timer: Timer):
-        # TODO Notify the user at the end of a transfer
-        pass
 
     def simulateTroopTraining(self, timer: Timer):
         """
@@ -130,7 +128,7 @@ class TimerDataAccess:
 
         for info in data:
             timer = Timer(info[0], info[1], info[2], info[3], info[4], info[5],
-                                 info[6])
+                          info[6])
             newInfo = {}
 
             if timer.type == 'building':  # Retrieve building id in frontend = position
@@ -141,7 +139,25 @@ class TimerDataAccess:
 
             newInfo["type"] = timer.type
             newInfo["totalDuration"] = timer.duration
-            newInfo["duration"] = int((timer.done - datetime.now()).total_seconds())  # Give back time format from frontEnd
+            newInfo["duration"] = int(
+                (timer.done - datetime.now()).total_seconds())  # Give back time format from frontEnd
 
             newData.append(newInfo)
         return newData
+
+    def simulateTransfer(self, timer: Timer):
+        # TODO Notify the user at the end of a transfer
+        pass
+
+    def simulateEspionage(self):
+        """
+        retrieve building info and soldiers: full reports
+        :return:
+        """
+        pass
+
+    def simulateAttack(self):
+        pass
+
+    def simulateOutpost(self):
+        pass

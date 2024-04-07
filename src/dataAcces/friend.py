@@ -21,7 +21,7 @@ class FriendDataAccess:
             if state:
                 cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);',
                                (pname, sname,))  # Insert the pname and sname as friends in the database table friend
-            # Delete the request that was send after it is accepted or declined
+            # Delete the request that was sent after it is accepted or declined
             cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
             cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
             cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
@@ -139,7 +139,7 @@ class FriendDataAccess:
                   WHERE (pname1 = %s AND pname2 = %s) OR (pname1 = %s AND pname2 = %s);
         """
         cursor.execute(Query, (pname1, pname2, pname2, pname1))
-        Controle = cursor.fetchone()
-        if Controle is None:
+        control = cursor.fetchone()
+        if control is None:
             return False
         return True
