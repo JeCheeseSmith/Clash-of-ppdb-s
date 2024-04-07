@@ -28,7 +28,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | [content](#content)                 | Base class to store message related data                                       |
 | [message](#message)                 | Specialisation Class to store messages between users                           |
 | [request](#request)                 | Specialisation Base Class to store requests and their status                   |
-| [transferRequest](#transferRequest) | Specialization on request type                                                 |
 | [clanRequest](#clanRequest)         | Specialization on request type                                                 |
 | [friendRequest](#friendRequest)     | Specialization on request type                                                 |
 | [settlement](#settlement)           | Store and link all data from a settlement                                      |
@@ -117,12 +116,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 |--------|------|-------------------------------|
 | id     | INT  | ID of Message; specialization |
 | accept | BOOL | Status of the request         |
-
-### transferRequest
-
-| Name | Type | Explanation                   |
-|------|------|-------------------------------|
-| id   | INT  | ID of Request; specialization |
 
 ### clanRequest
 
