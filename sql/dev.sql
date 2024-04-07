@@ -238,8 +238,8 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('WarElephant','Cavalry',45,45,7,15,2,0.3,18,80);
 
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Bowman','Ranged',10,15,10,2,1.4,1,2,10);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Longbowman','Ranged',15,25,10,3,1.4,1,4,20);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Crossbowman','Ranged',25,45,10,4,1.4,1,8,40);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('LongbowMan','Ranged',15,25,10,3,1.4,1,4,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('CrossbowMan','Ranged',25,45,10,4,1.4,1,8,40);
 
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3,2,10);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3,5,20);
