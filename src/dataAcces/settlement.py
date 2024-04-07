@@ -94,6 +94,30 @@ class SettlementDataAcces:
 
         self.dbconnect.commit()
 
+    def upgradeBarracks(self, sid):
+        """
+        Helper function to adjust the unlocked soldiers for a barrack
+        :param sid: Settlement Identifier
+        """
+        cursor = self.dbconnect.get_cursor()
+
+        cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("Castle", sid))
+        level = cursor.fetchone()[0]
+
+        if level == 3:
+            lst = ["Militia", "LongbowMan", "Knight", "Pikeman", "Huskarl"]
+        elif level == 6:
+            lst = ["Skirmishers", "CrossbowMan", "WarElephant", "Halbardier", "OrderKnight"]
+        else:  # Nothing needs to be done
+            lst = []
+
+        for soldier in lst:  # Adjust the maxBuilding Number
+            cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', (soldier, sid, -1))
+            # Soldiers don't have a max amount
+
+        self.dbconnect.commit()
+
+
     def initialise(self, sid):
         """
         Helper function which initialises standard data for a newly created settlement
