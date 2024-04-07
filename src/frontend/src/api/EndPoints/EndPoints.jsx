@@ -24,8 +24,22 @@ export const get_unlockedTroops = async (sid) =>
     const data = await GET( {"id": sid}, '/unlockedTroops');
     return (
         {
-            data
-    });
+            heavyInfantry1: data.ArmoredFootman,
+            heavyInfantry2: data.Huskarl,
+            heavyInfantry3: data.OrderKnight,
+            spear1: data.Guardsman,
+            spear2: data.Pikeman,
+            spear3: data.Halbardier,
+            horseman1: data.Horseman,
+            horseman2: data.Knight,
+            horseman3: data.WarElephant,
+            bowman1: data.Bowman,
+            bowman2: data.LongbowMan,
+            bowman3: data.CrossbowMan,
+            ambush1: data.Bandit,
+            ambush2: data.Militia,
+            ambush3: data.Skirmisher
+        });
 }
 
 

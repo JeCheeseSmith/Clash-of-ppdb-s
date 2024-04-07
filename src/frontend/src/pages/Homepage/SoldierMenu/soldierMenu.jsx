@@ -105,29 +105,29 @@ function TroopOverviewPage() {
         bowman3: 0,
         ambush1: 0,
         ambush2: 0,
-        ambush3: 0,
+        ambush3: 0
     });
     const [soldiersAvailable, setSoldierAvailable] = useState({
-        heavyInfantry1: true,
+        heavyInfantry1: false,
         heavyInfantry2: false,
         heavyInfantry3: false,
-        spear1: true,
+        spear1: false,
         spear2: false,
         spear3: false,
-        horseman1: true,
+        horseman1: false,
         horseman2: false,
         horseman3: false,
-        bowman1: true,
+        bowman1: false,
         bowman2: false,
         bowman3: false,
-        ambush1: true,
+        ambush1: false,
         ambush2: false,
-        ambush3: false,
+        ambush3: false
     });
     // Function that gets the availability of every soldier and sends a request for the soldier counts by calling the API
     useEffect(() =>
     {
-        API.get_unlockedTroops(sid).then(data => setSoldierAvailable(data)) // we check twice to overwrite initialize
+        API.get_unlockedTroops(sid).then(data => setSoldierAvailable(data))
         const intervalId = setInterval(() =>
         {
             API.get_unlockedTroops(sid).then(data => setSoldierAvailable(data))
