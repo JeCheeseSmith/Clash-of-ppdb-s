@@ -18,7 +18,6 @@ import backgroundMusic from "../../globalComponents/audioComponent/assets/Backgr
 function MainPage()
 {
     const { sid, username } = useLocation().state;
-    const videoRef = useRef(null);
     const [buildings, setBuildings] = useState([])
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const randomArray = useMemo(getRandomArray, []); // Memoize the random array
@@ -36,7 +35,7 @@ function MainPage()
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
     }
 
-    useEffect(() =>
+    /*useEffect(() =>
     {
         //todo: compress size of main page mp3, or download new ones
         const audio = new Audio(backgroundMusic);
@@ -46,21 +45,16 @@ function MainPage()
         {
             audio.pause(); // Pause the audio when component unmounts
         };
-    }, [backgroundMusic]);
+    }, [backgroundMusic]);*/
 
     useEffect(() =>
     {
-        if (videoRef.current)
-        {
-          // Access the video element and set its volume
-          videoRef.current.volume = 0.1; // This will set the volume to 50%
-        }
         API.getGrid(sid).then(data => setBuildings(data.grid))
         updateResources() // do this twice, because without the first time, resources are going to be 0
         const intervalId = setInterval(() =>
         {
             updateResources()
-        }, 60 * 1000);
+        }, 15 * 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);
     return (

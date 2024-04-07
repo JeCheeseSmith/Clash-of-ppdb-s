@@ -12,6 +12,8 @@ import * as API from "../../../../api/EndPoints/EndPoints.jsx"
 import Ground from "./models/Objects/Ground.jsx";
 import Bush from "./models/Objects/Bush.jsx";
 import Tree from "./models/Objects/Tree.jsx";
+import Mountain from "./models/Objects/Mountain.jsx";
+import Cobblestones from "./models/Objects/Cobblestones.jsx";
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
@@ -28,9 +30,19 @@ function Grid({buildings, updateResources, randomArray})
     const [oldPosition, setOldPosition] = useState([])
     const [timers, setTimers] = useState([])
     const gridSize = 40;
-    useEffect(() =>
+
+    const updateTimers = () =>
     {
         API.update(sid).then(data => {setTimers(data)})
+    }
+    useEffect(() =>
+    {
+        updateTimers()
+        const intervalId = setInterval(() =>
+        {
+            updateTimers()
+        }, 15 * 60 * 1000);
+        return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() =>
@@ -55,6 +67,7 @@ function Grid({buildings, updateResources, randomArray})
                     {
                         let promise  = PlaySound("BuildingUpgraded")
                         updateResources()
+                        updateTimers()
                     }
                 }
                 setTimers(updatedTimers);
@@ -113,7 +126,7 @@ function Grid({buildings, updateResources, randomArray})
                 if (moved[0] !== moved[1])
                 {
                     const data = await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
-                    API.update(sid).then(data => {setTimers(data)})
+                    updateTimers()
                 }
             }
         }
@@ -203,9 +216,9 @@ function Grid({buildings, updateResources, randomArray})
                 return (<BuildingMesh key={`${rowIndex}-${colIndex}`} building={building} />);
             }
         }
-        if (!buildingFound)
+        if (selectedBuilding[1])
         {
-            return (<gridHelper key={`${rowIndex}-${colIndex}`} position={[colIndex - gridSize / 2, 6, rowIndex - gridSize / 2]} args={[1, 1]}
+            return (<gridHelper key={`${rowIndex}-${colIndex}`} position={[colIndex - gridSize / 2, 6.2, rowIndex - gridSize / 2]} args={[1, 1]}
                                 material={new THREE.MeshBasicMaterial({ color: 0x000000 })}
             />);
         }
@@ -216,25 +229,26 @@ function Grid({buildings, updateResources, randomArray})
             <Canvas camera={{position: [3, 35, 15]}} shadows={true}>
                 <color attach="background" args={['lightblue']}/>
                 <directionalLight
-                    position={[50, 50, 50]}
-                    intensity={2}
-                    castShadow={true}
-                    shadow-mapSize-width={1024}
-                    shadow-mapSize-height={1024}
-                    shadow-camera-far={50}
-                    shadow-camera-left={-10}
-                    shadow-camera-right={10}
-                    shadow-camera-top={10}
-                    shadow-camera-bottom={-10}
+                    position={[50, 50, 50]} // Position of the light source
+                    intensity={3} // Intensity of the light
+                    castShadow={true} // Enable shadow casting
+                    shadow-mapSize-width={2048} // Shadow map width
+                    shadow-mapSize-height={2048} // Shadow map height
+                    shadow-camera-far={100} // Far plane of the shadow camera
+                    shadow-camera-left={-50} // Left frustum edge of the shadow camera
+                    shadow-camera-right={50} // Right frustum edge of the shadow camera
+                    shadow-camera-top={50} // Top frustum edge of the shadow camera
+                    shadow-camera-bottom={-50} // Bottom frustum edge of the shadow camera
+                    shadow-bias={-0.01} // Shadow bias to reduce artifacts
                 />
                 <ambientLight intensity={0.5}/>
                 <OrbitControls enableZoom={true}
                                enablePan={false}
                                zoomSpeed={0.2}
                                rotateSpeed={0.1}
-                               maxDistance={38}
+                               maxDistance={45}
                                minDistance={25}
-                               maxPolarAngle={Math.PI / 3.5}
+                               maxPolarAngle={Math.PI / 2.5}
                                minPolarAngle={Math.PI / 10}
                                maxAzimuthAngle={Math.PI / 3}
                                minAzimuthAngle={Math.PI / 5}
@@ -259,10 +273,21 @@ function Grid({buildings, updateResources, randomArray})
                 {createBushes(randomArray)}
                 {createTree()}
                 <Ground/>
+                <Cobblestones position={[12,5.7,0]}/>
+                <Cobblestones position={[-10,5.8,0]}/>
+
+                <Mountain position={[-40,2,-70]}/>
+                <Mountain position={[-40,-2,-10]}/>
+                <Mountain position={[-10,2,-150]}/>
+                <Mountain position={[50,2,-150]}/>
             </Canvas>
             {selectedBuilding[1] &&
-                <UpgradeBuilding selectedBuilding={selectedBuilding} timers={timers} addTimer={addTimer}
-                                 updateResources={updateResources}/>}
+                <UpgradeBuilding selectedBuilding={selectedBuilding}
+                                 timers={timers}
+                                 addTimer={addTimer}
+                                 updateResources={updateResources}
+                                 oldPosition={oldPosition}
+                />}
         </Suspense>
     );
 }
@@ -272,7 +297,7 @@ function createShadow(building, shadowColor)
     const geometry = new THREE.PlaneGeometry(building.size[0],building.size[1]);
     const material = new THREE.MeshBasicMaterial({ color: shadowColor });
     const square = new THREE.Mesh(geometry, material);
-    square.position.set(building.size[0]*0.5-1, 0.001, building.size[1]*0.5-1.5);
+    square.position.set(building.size[0]*0.5-1, 0.2, building.size[1]*0.5-1.5);
     square.rotation.x =  - Math.PI / 2; // Rotate 90 degrees around the x-axis
     return square
 }
