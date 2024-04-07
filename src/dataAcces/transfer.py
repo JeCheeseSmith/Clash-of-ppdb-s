@@ -18,16 +18,18 @@ class TransferDataAccess:
         self.dbconnect = dbconnect
 
     def getPosition(self, tid):
-
+        # Get the start & stop
+        # Check timer duration + distance
         pass
 
     def calculateDistance(self, to: tuple, start: tuple):
         """
         Calc grid distance between 2 grid Coordinates
-        :param to:
-        :param start:
-        :return: int value
+        :param to: (x <INT> ,y <INT>)
+        :param start: (x <INT> ,y <INT>)
+        :return: int value expressing the distance
         """
+
         pass
 
     def calculateDuration(self, speed, distance):
@@ -48,6 +50,10 @@ class TransferDataAccess:
     def simulateTransfer(self):
         pass
     def simulateEspionage(self):
+        """
+        retrieve building info and soldiers: full reports
+        :return:
+        """
         pass
 
     def simulateAttack(self):
