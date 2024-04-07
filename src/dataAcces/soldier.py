@@ -56,10 +56,10 @@ class SoldierDataAccess:
         :return: Array of soldier name and unlocked status (True/False)
         """
         cursor = self.dbconnect.get_cursor()
-        querry = """SELECT soldier.name,True FROM soldier JOIN unlocked on soldier.name = unlocked.name
-                    UNION
-                    SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=%s);"""
-        cursor.execute(querry, (sid,))
+        querry = """SELECT soldier.name,True FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=1
+UNION
+SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=1);"""
+        cursor.execute(querry, (sid,sid))
         data = cursor.fetchall()
 
         dct = dict()  # reformat to frontend format

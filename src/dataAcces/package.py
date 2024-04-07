@@ -1,6 +1,5 @@
 from numpy import polyval
 from numpy import exp2
-from datetime import datetime
 
 
 class Package:
@@ -337,13 +336,6 @@ class PackageDataAccess:
         cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
                        (Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))
         self.dbconnect.commit()
-
-    def get_soldiers(self):
-        """
-        Method to get all soldiers contained in this package
-        :return:
-        """
-        pass
 
     @staticmethod
     def evaluate(function: list, x: int):

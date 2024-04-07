@@ -31,6 +31,7 @@ package_data_acces = PackageDataAccess(connection)
 building_data_acces = BuildingDataAccess(connection)
 timer_data_acces = TimerDataAccess(connection)
 soldier_data_acces = SoldierDataAccess(connection)
+transfer_data_acces = TransferDataAccess(connection)
 
 
 @app.route("/signup", methods=["POST"])
@@ -590,7 +591,8 @@ def transfer():
     "error": <STRING> | Optional error message if success=False
     }
     """
-
+    data = request.json
+    success = transfer_data_acces.createTransfer(data.get('sidTo'), data.get('sidFrom'), data.get('soldiers'), data.get('resources'))
     pass
 
 @app.route("/createOutpost", methods=["POST"])
