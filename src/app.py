@@ -56,12 +56,12 @@ def add_player():
     name = data.get("name")
     password = data.get("password")
     Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
-    Controle = player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
-    if Controle[0]:
+    control = player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    if control[0]:
         friend_data_access.add_admin(name)
-        return jsonify({"success": Controle[0], "message": "Signed in successful", "sid": Controle[1]})
+        return jsonify({"success": control[0], "message": "Signed in successful", "sid": control[1]})
     else:
-        return jsonify({"success": Controle[0], "message": "Signed in failed", "sid": Controle[1]})
+        return jsonify({"success": control[0], "message": "Signed in failed", "sid": control[1]})
 
 
 @app.route("/login", methods=["POST"])
@@ -77,7 +77,7 @@ def get_login():
 
     JSON Output Format:
     {
-    "success": <bool> | State of Loginrequest
+    "success": <bool> | State of Login Request
     "message": <string> | Standard reply
     "sid": <INT> | ID of the home settlement
     }
@@ -87,8 +87,8 @@ def get_login():
     player_password = data.get("password")
     Player_obj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
                         logout=None, pid=None)
-    Controle = player_data_access.get_login(Player_obj)
-    if Controle:
+    control = player_data_access.get_login(Player_obj)
+    if control:
         # Update all data for this player
         cursor = package_data_acces.dbconnect.get_cursor()
         cursor.execute('SELECT id FROM settlement WHERE pname=%s;', (player_name,))
@@ -98,9 +98,9 @@ def get_login():
 
         update()
 
-        return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
+        return jsonify({"success": control[0], "message": "Login successful", "sid": control[1]})
     else:
-        return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
+        return jsonify({"success": control[0], "message": "Login failed", "sid": control[1]})
 
 
 @app.route("/logout", methods=["POST"])
@@ -136,7 +136,7 @@ def update_chat():
 
     JSON Input Format (GET):
     {
-    "pname": <string> | Player name of current logged in user
+    "pname": <string> | Player name of current logged-in user
     "sname": <string> | Player name of the person you're chatting with
     }
 
@@ -155,11 +155,11 @@ def update_chat():
         message_sname = data.get("sname")
         message_content = data.get("content")
         Chat_obj = Content(None, None, message_content, message_sname)
-        Controle = content_data_access.add_message(Chat_obj, message_pname)
-        if Controle:
-            return jsonify({"success": Controle, "message": "message send successful"})
+        control = content_data_access.add_message(Chat_obj, message_pname)
+        if control:
+            return jsonify({"success": control, "message": "message send successful"})
         else:
-            return jsonify({"success": Controle, "message": "Failed to send message"})
+            return jsonify({"success": control, "message": "Failed to send message"})
     else:  # request.method == "GET":
         data = request.args
         message_pname = data.get("pname")
@@ -183,7 +183,7 @@ def update_groupchat():
 
     JSON Input Format (GET):
     {
-    "pname": <string> | Player name of current logged in user
+    "pname": <string> | Player name of current logged-in user
     "sname": <string> | Player name of the person you're chatting with
     }
 
@@ -202,11 +202,11 @@ def update_groupchat():
         message_cname = data.get("cname")
         message_content = data.get("content")
         Chat_obj = Content(None, None, message_content, message_pname)
-        Controle = content_data_access.send_groupchat(message_cname, Chat_obj)
-        if Controle:
-            return jsonify({"success": Controle, "message": "message send successful"})
+        control = content_data_access.send_groupchat(message_cname, Chat_obj)
+        if control:
+            return jsonify({"success": control, "message": "message send successful"})
         else:
-            return jsonify({"success": Controle, "message": "Failed to send message"})
+            return jsonify({"success": control, "message": "Failed to send message"})
     else:  # request.method == "GET":
         data = request.args
         message_cname = data.get("cname")
@@ -234,6 +234,7 @@ def get_resources():
 
 @app.route("/update", methods=["GET"])
 def update():
+    # TODO ABU : Change sid to pname in update! - Greetings watson
     """
     Tell the server to re-evaluate its timers
 
@@ -241,21 +242,30 @@ def update():
 
     JSON Input Format:
     {
-    "sid": <INT> | Identifier of the settlement
+    "pname": <STRING> | Player name
     }
 
     JSON Output Format:
     {
     List of all timers for a settlement
+    Timer objects related to transfer have the following extra info: {"from": <ARRAY INT[2]> , "to": <ARRAY INT[2]>, "discovered": <BOOL> }
     }
     """
     timer_data_acces.evaluateTimers(settlement_data_acces)
 
     data = request.args
-    sid = data.get('sid')
+    pname = data.get('pname')
 
-    if sid is not None:
-        timers = timer_data_acces.retrieveTimers(sid)
+    # TODO UNION Transfers from Clans & Friends
+
+    if pname is not None:
+        cursor = connection.get_cursor()
+        cursor.execute('SELECT id FROM settlement WHERE pname=%s;', (pname,))
+        sids = cursor.fetchall()  # Retrieve all settlements owned by this player
+        timers = []
+        for id in sids:  # Extend the dictionary with new timers found
+            timers += timer_data_acces.retrieveTimers(id, transfer_data_acces)
+
         return jsonify(timers)
 
 
@@ -279,7 +289,7 @@ def getGrid():
     return jsonify({"grid": grid})
 
 
-@app.route("/getBuilingInfo", methods=["GET"])
+@app.route("/getBuildingInfo", methods=["GET"])
 def getBuildingInfo():
     """
     Retrieve all information for a given building
@@ -311,7 +321,7 @@ def getBuildingInfo():
 
 
 @app.route("/moveBuilding", methods=["POST"])
-def moveBuiling():
+def moveBuilding():
     """
     API Call to update the location of a building
 
@@ -515,22 +525,22 @@ def setFunction():
 
 @app.route("/map", methods=["GET"])
 def getMap():
-    """Retrieve all settlements on the map
-    level, positie, sid, outpostBOOL
-    # get map: [{sid: 1, positie: [x,y], level:2}, {...}, ...]
     """
-    pass
+    Retrieve all settlements on the map with basic info
 
+    JSON Input Format
+    {
+    "sid": <INT> | Identifier of the settlement you are training troops for
+    "sname": <STRING> | Name of soldier
+    }
 
-@app.route("/getTransfers", methods=["POST"])
-def getTransfers():
+    JSON Output Format:
+    {
+    LIST: [ {"sid": <INT> , "position": ARRAY INT[2], "level": <INT>, "isOutpost": BOOL } , ... ]
+    }
     """
-    Returns a list of all points and their current start and end coordinate
-    :return:
-    """
-    # Discovered bool UNION ALL Transfers from and to my settlements UNION Transfers from Clans
-    # from, to, type (attack, transfer)
-    pass
+    return jsonify(settlement_data_acces.getMap())
+
 
 @app.route("/attack", methods=["POST"])
 def attack():
@@ -556,12 +566,9 @@ def attack():
     # data = request.json
     # success = TransferDataAccess.createAttack()
 
-    # TODO get map: [{sid: 1, positie: [x,y], level:2}, {...}, ...] (bewerkt)
-    # [19:47]
-    # # TODO get transfer: [{from: [x,y], to: [x,y], type: "attack"}, {...}, ...] (bewerkt)
-
     # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
     # Transferable should be set to TRUE FOR ATTACKS
+    # TODO Priority
 
 
 @app.route("/espionage", methods=["POST"])
@@ -583,7 +590,7 @@ def espionage():
     """
     data = request.json
     TransferDataAccess.createEspionage(data.get('idTo'), )
-
+    # TODO Priority
     pass
 
 
@@ -633,11 +640,14 @@ def createOutpost():
 
 @app.route("/getTransferInfo", methods=["GET"])
 def getTransferInfo():
+    # IN: tid
     pass
 
 
 @app.route("/getSettlementInfo", methods=["GET"])
 def getSettlementInfo():
+    # IN: sid
+    # check if friend, ally, enemy
     pass
 
 
@@ -745,12 +755,11 @@ def search_player():
     """
     data = request.json
     name = data.get("pname")
-    Cotrole = False
-    Controle = player_data_access.search_player(name)  # Execute functionality
-    if Controle:
-        return jsonify({"success": Controle, "message": "Player exists"})
+    control = player_data_access.search_player(name)  # Execute functionality
+    if control:
+        return jsonify({"success": control, "message": "Player exists"})
     else:
-        return jsonify({"success": Controle, "message": "Player doesn't exists"})
+        return jsonify({"success": control, "message": "Player doesn't exists"})
 
 
 @app.route("/sendfriendrequest", methods=["POST"])
@@ -773,11 +782,11 @@ def send_friend_request():
     """
     data = request.json
     Friend_request = Content(None, None, data.get("content"), data.get("sname"))
-    Controle = friend_data_access.send_Friendrequest(Friend_request, data.get("pname"))
-    if Controle:
-        return jsonify({"success": Controle, "message": "Friend request is send"})
+    control = friend_data_access.send_Friendrequest(Friend_request, data.get("pname"))
+    if control:
+        return jsonify({"success": control, "message": "Friend request is send"})
     else:
-        return jsonify({"success": Controle, "message": "Friend request isn't send"})
+        return jsonify({"success": control, "message": "Friend request isn't send"})
 
 
 @app.route("/getgeneralrequests", methods=["POST"])
@@ -838,12 +847,12 @@ def accept_general_requests():
     # Send a message back to the user from the admin account
     if state:
         message1 = Content(None, None, "Your request is accepted by " + pname, "admin")
-        Controle = content_data_access.add_message(message1, sname)
-        return jsonify({"success": Controle, "message": "accepted"})
+        control = content_data_access.add_message(message1, sname)
+        return jsonify({"success": control, "message": "accepted"})
     else:
         message1 = Content(None, None, "Your request is denied by " + pname, "admin")
-        Controle = content_data_access.add_message(message1, sname)
-        return jsonify({"success": Controle, "message": "rejected"})
+        control = content_data_access.add_message(message1, sname)
+        return jsonify({"success": control, "message": "rejected"})
 
 
 @app.route("/unfriend", methods=["POST"])

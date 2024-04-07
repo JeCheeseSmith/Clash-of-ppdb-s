@@ -2,6 +2,7 @@ from numpy import polyval
 from numpy import exp2
 from abc import abstractmethod
 
+
 class Package:
     def __init__(self, args):
         """
@@ -119,12 +120,14 @@ class Package:
         else:
             return False
 
-class PackageWithSoldier():
+
+class PackageWithSoldier:
     """
     Specialised Class to ease arithmetic with Soldier Amounts
 
-    We chose to implemented this as a composition class do certainly not disturb any other functionality which was already written
+    We chose to implement this as a composition class do certainly not disturb any other functionality which was already written
     """
+
     def __init__(self, package: Package, soldiers):
         """
         :param package: See Package Class
@@ -205,7 +208,8 @@ class PackageDataAccess:
         # Insert resources into the database
         if isinstance(package, PackageWithSoldier):
             cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,%s,%s);',
-                           (package.package.stone, package.package.wood, package.package.steel, package.package.food, package.package.xp, package.package.gems))
+                           (package.package.stone, package.package.wood, package.package.steel, package.package.food,
+                            package.package.xp, package.package.gems))
         elif isinstance(package, Package):
             cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,%s,%s);',
                            (package.stone, package.wood, package.steel, package.food, package.xp, package.gems))
@@ -254,21 +258,26 @@ class PackageDataAccess:
                 discovered = package.soldiers[soldier]['discovered']
                 transferable = package.soldiers[soldier]['transferable']
 
-                if amount != 0: # Don't insert useless info
+                if amount != 0:  # Don't insert useless info
                     # Check if we need to insert or update this troop!
-                    cursor.execute('SELECT EXISTS(SELECT sname,pid FROM troops WHERE sname=%s AND pid=%s);', (soldier, package.package.id))
+                    cursor.execute('SELECT EXISTS(SELECT sname,pid FROM troops WHERE sname=%s AND pid=%s);',
+                                   (soldier, package.package.id))
 
                     if cursor.fetchone()[0]:  # It exists, so update
-                        cursor.execute('UPDATE troops SET amount = %s , transferable = %s, discovered = %s WHERE pid=%s AND sname=%s;', (amount, transferable, discovered, package.package.id,soldier))
+                        cursor.execute(
+                            'UPDATE troops SET amount = %s , transferable = %s, discovered = %s WHERE pid=%s AND sname=%s;',
+                            (amount, transferable, discovered, package.package.id, soldier))
                     else:  # Insert
-                        cursor.execute('INSERT INTO troops(pid, sname, amount, transferable, discovered) VALUES (%s, %s, %s, %s, %s);', (package.package.id, soldier, amount, transferable, discovered))
+                        cursor.execute(
+                            'INSERT INTO troops(pid, sname, amount, transferable, discovered) VALUES (%s, %s, %s, %s, %s);',
+                            (package.package.id, soldier, amount, transferable, discovered))
 
         self.dbconnect.commit()
-
 
     def calc_consumption(self, sid, calculated_time=1):
         """
         Retrieves the amount of food per time unit consumed in a settlement
+        :param calculated_time:
         :param sid: Identifier of the settlement
         :return:
         """
@@ -295,21 +304,23 @@ class PackageDataAccess:
     def calc_resources(self, sid, start, stop):
         """
         Function to re-evaluate resources number with
-        start: Start Time of the inbterval to calculat resource from
+        start: Start Time of the interval to calculate resource from
         stop: end time towards resources need to be calculated
         :return:
         """
         cursor = self.dbconnect.get_cursor()
 
         if start is None:  # Logout time from player needs to be used & updated
-            cursor.execute('SELECT logout FROM player WHERE name IN (SELECT pname FROM settlement WHERE id=%s);', (sid, ))
+            cursor.execute('SELECT logout FROM player WHERE name IN (SELECT pname FROM settlement WHERE id=%s);',
+                           (sid,))
             start = cursor.fetchone()[0]
-        cursor.execute('UPDATE player SET logout = %s WHERE name IN (SELECT pname FROM settlement WHERE id=%s);', (stop, sid ))
+        cursor.execute('UPDATE player SET logout = %s WHERE name IN (SELECT pname FROM settlement WHERE id=%s);',
+                       (stop, sid))
 
         # Calculated difference in timestamp
         calculated_time = abs(start - stop)
         calculated_time = int(calculated_time.total_seconds())
-        calculated_time = calculated_time / 3600
+        calculated_time = int(calculated_time / 3600)
 
         # Generated resources
         Generated_wood = 0

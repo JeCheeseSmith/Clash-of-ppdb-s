@@ -1,6 +1,8 @@
 from datetime import datetime
+
+
 class Timer:
-    def __init__(self, id, oid, ttype, start, done, duration, sid):
+    def __init__(self, tid, oid, ttype, start, done, duration, sid):
         """
         :param: id: Timer Identifier
         :param: sid: Settlement Identifier
@@ -9,7 +11,7 @@ class Timer:
         :param start: Starting time of the timer
         :param done: Stop Time of the Timer
         """
-        self.id = id
+        self.id = tid
         self.oid = oid
         self.type = ttype
         self.start = start
@@ -32,6 +34,12 @@ class TimerDataAccess:
                        (timer.oid, timer.type, timer.start, timer.done, timer.duration, timer.sid))
         self.dbconnect.commit()
 
+        # Update the id
+        cursor.execute('SELECT max(id) FROM timer;')
+        id = cursor.fetchone()[0]
+        timer.id = id
+        return id
+
     def evaluateTimers(self, settlement_data_acces):
         """
         Evaluate all timers passed their done time
@@ -52,10 +60,6 @@ class TimerDataAccess:
                 self.simulateTransfer(timer)
             else:
                 raise Exception('We dont support this timer type!!!! ' + timer.type)
-
-    def simulateTransfer(self, timer: Timer):
-        # TODO Notify the user at the end of a transfer
-        pass
 
     def simulateTroopTraining(self, timer: Timer):
         """
@@ -117,31 +121,85 @@ class TimerDataAccess:
             print('error', e)
             self.dbconnect.rollback()
 
-    def retrieveTimers(self, sid):
+    def retrieveTimers(self, sid, transfer_data_acces):
         """
         Get all timers for a certain settlement and convert to a frontend usable format
+        :param transfer_data_acces:
         :param sid: Settlement Identifier
         :return: List of timer object with info
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT * FROM timer WHERE sid=%s;', (sid,))
+        query = """SELECT * FROM timer WHERE sid=1
+UNION
+SELECT * FROM timer WHERE type='transfer' OR type='espionage' OR type='attack' OR type = 'outpost' AND oid IN (
+
+-- Transfers interacting with my settlements
+SELECT id FROM transfer WHERE idto=%s and toType=false -- Resource transfers to my sids
+UNION
+SELECT id FROM transfer WHERE idfrom=%s -- Transfers from my sids
+UNION
+-- Transfers interacting with my transfers: the transfers going to any ID departing from me(sidfrom)
+SELECT id FROM transfer WHERE idto IN(SELECT idto FROM transfer WHERE idfrom=%s)
+);"""
+        cursor.execute(query, (sid, sid, sid,))
         data = cursor.fetchall()
         newData = []
 
         for info in data:
             timer = Timer(info[0], info[1], info[2], info[3], info[4], info[5],
-                                 info[6])
+                          info[6])
             newInfo = {}
 
             if timer.type == 'building':  # Retrieve building id in frontend = position
                 cursor.execute('SELECT gridX,gridY FROM building WHERE id=%s and sid=%s;', (timer.oid, sid))
                 newInfo["ID"] = cursor.fetchone()
+            elif timer.type == 'transfer':
+                newInfo = self.addTransferTimerInfo(newInfo, timer, transfer_data_acces)
+                newInfo["ID"] = timer.oid
             else:
                 newInfo["ID"] = timer.oid
 
             newInfo["type"] = timer.type
             newInfo["totalDuration"] = timer.duration
-            newInfo["duration"] = int((timer.done - datetime.now()).total_seconds())  # Give back time format from frontEnd
+            newInfo["duration"] = int(
+                (timer.done - datetime.now()).total_seconds())  # Give back time format from frontEnd
 
             newData.append(newInfo)
         return newData
+
+    def addTransferTimerInfo(self, newInfo: dict, timer: Timer, transfer_data_acces):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT * FROM transfer WHERE id=%s;', (timer.oid,))
+        transfer = cursor.fetchone()  # tid, discovered, idTo, toType, idFrom, fromType, pid
+
+        # Add info to dict
+        newInfo["to"] = transfer_data_acces.translatePosition(transfer[2], transfer[3])
+        newInfo["from"] = transfer_data_acces.translatePosition(transfer[4], transfer[5])
+        newInfo["discovered"] = transfer[1]
+        newInfo["tid"] = transfer[0]
+
+        return newInfo
+
+    def simulateTransfer(self, timer: Timer):
+        # TODO Notify the user at the end of a transfer
+        pass
+
+    def simulateEspionage(self):
+        """
+        retrieve building info and soldiers: full reports
+        :return:
+        """
+        # Espionage fails at random -> Notify person being spied on
+        # Espionage a settlement sets all resource transfers to discovered
+        # Espionage an attack gives soldier infos
+
+        # Settlement Spionage
+        # Transfer Spionage
+
+        pass
+
+    def simulateAttack(self):
+        pass
+
+    def simulateOutpost(self):
+        pass

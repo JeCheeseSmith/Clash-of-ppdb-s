@@ -56,10 +56,10 @@ class SoldierDataAccess:
         :return: Array of soldier name and unlocked status (True/False)
         """
         cursor = self.dbconnect.get_cursor()
-        querry = """SELECT soldier.name,True FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=1
+        query = """SELECT soldier.name,True FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=1
 UNION
 SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=1);"""
-        cursor.execute(querry, (sid,sid))
+        cursor.execute(query, (sid, sid))
         data = cursor.fetchall()
 
         dct = dict()  # reformat to frontend format
@@ -67,18 +67,18 @@ SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FR
             dct[str(soldier[0])] = soldier[1]
         return dct
 
-    def getTroops(self, id, type):
+    def getTroops(self, oid, type):
         cursor = self.dbconnect.get_cursor()
         if type == 'settlement':
-            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (id,) )
+            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (oid,))
             pid = cursor.fetchone()[0]
             return self.getTroops(pid, 'package')
         elif type == 'transfer':
-            cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (id,))
+            cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (oid,))
             pid = cursor.fetchone()[0]
             return self.getTroops(pid, 'package')
         else:  # type == 'package':
-            cursor.execute('SELECT sname, amount, transferable, discovered FROM troops WHERE pid=%s;', (id,))
+            cursor.execute('SELECT sname, amount, transferable, discovered FROM troops WHERE pid=%s;', (oid,))
 
             data = cursor.fetchall()
 
@@ -86,4 +86,3 @@ SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FR
             for soldier in data:
                 dct[str(soldier[0])] = dict(amount=soldier[1], transferable=soldier[2], discovered=soldier[3])
             return dct
-
