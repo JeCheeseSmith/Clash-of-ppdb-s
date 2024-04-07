@@ -422,6 +422,26 @@ def unlockedTroops():
     return jsonify(data)
 
 
+@app.route("/getTroops", methods=["GET"])
+def getTroops():
+    """
+    Retrieve the soldiers connected to a Settlement, Package or Transfer (depending on the specified type)
+
+    JSON Input Format
+    {
+    "id": <INT> | Identifier of the type referring to
+    "type": <STRING> | can be: 'package', 'settlement' or 'transfer'
+    }
+
+    JSON Output Format:
+    {
+    List of soldier names with their respective amount
+    }
+    """
+    data = request.json
+    return jsonify(soldier_data_acces.getTroops(data.get("id"), data.get("type")))
+
+
 @app.route("/trainTroop", methods=["POST"])
 def trainTroop():
     """
