@@ -254,7 +254,6 @@ def update():
     sid = data.get('sid')
 
     if sid is not None:
-        package_data_acces.calc_resources(sid, None, datetime.now())
         timers = timer_data_acces.retrieveTimers(sid)
         return jsonify(timers)
 
@@ -422,6 +421,26 @@ def unlockedTroops():
     return jsonify(data)
 
 
+@app.route("/getTroops", methods=["GET"])
+def getTroops():
+    """
+    Retrieve the soldiers connected to a Settlement, Package or Transfer (depending on the specified type)
+
+    JSON Input Format
+    {
+    "id": <INT> | Identifier of the type referring to
+    "type": <STRING> | can be: 'package', 'settlement' or 'transfer'
+    }
+
+    JSON Output Format:
+    {
+    List of soldier names with their respective amount
+    }
+    """
+    data = request.json
+    return jsonify(soldier_data_acces.getTroops(data.get("id"), data.get("type")))
+
+
 @app.route("/trainTroop", methods=["POST"])
 def trainTroop():
     """
@@ -436,12 +455,11 @@ def trainTroop():
     JSON Output Format:
     {
     "success": <bool> | State of request
+    If success = True, the timer object will be sent back as well
     "error": <STRING> | Optional error message if success=False
     }
     """
     data = request.json
-
-    package_data_acces.calc_resources(data.get('sid'), None, datetime.now())  # Re evaluate the amount of resources
 
     success, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
                                                       package_data_acces,
@@ -453,6 +471,117 @@ def trainTroop():
         dct = dict(success=success)
         dct["error"] = str(timer)  # In this case, timer is an error message
     return jsonify(dct)
+
+
+@app.route("/getFunction", methods=["GET"])
+def getFunction():
+    """
+    VERIFY ADMIN STATUS
+    :return:
+    """
+    pass
+
+
+@app.route("/setFunction", methods=["POST"])
+def setFunction():
+    """
+    VERIFY ADMIN STATUS
+    :return:
+    """
+    pass
+
+@app.route("/map", methods=["GET"])
+def getMap():
+    """Retrieve all settlements on the map
+    """
+    pass
+
+@app.route("/getVisibleTransfer", methods=["GET"])
+def getVisibleTransfer():
+    """
+    Retrieve all transfers and info visible for a player
+    :return:
+    """
+    pass
+
+
+@app.route("/attack", methods=["POST"])
+def attack():
+    """
+    Endpoint to start an attack towards another settlement or transfer
+
+    JSON Input Format
+    {
+    "sidTo": <INT> | Identifier of the object going to ('defendant')
+    "sidFrom": <INT> | Identifier of the object going from ('attacker')
+    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>) , ... ] : List of : soldier names and the amount of soldiers for that type
+    "intercept": <BOOL>: Bool specifying if this transfer will attack/intercept another transfer (True) or a settlement (False)
+    "tid": <INT> | Optional transfer id which we want to intercept
+    }
+
+    JSON Output Format:
+    {
+    "success": <bool> | State of request
+    If success = True, the timer object will be sent back as well
+    "error": <STRING> | Optional error message if success=False
+    }
+    """
+    data = request.json
+    success = TransferDataAccess.createAttack()
+
+
+@app.route("/espionage", methods=["POST"])
+def espionage():
+    """
+    Endpoint to start an espionage towards another settlement or transfer
+
+    JSON Input Format
+    {
+    "idTo": <INT> | Identifier of the object going to ('defendant')
+    "sidFrom": <INT> | Identifier of the object going from ('attacker')
+    "type": <STRING> | type = 'settlement' or 'transfer'
+    }
+
+    JSON Output Format:
+    {
+    "success": <bool> | State of request
+    }
+    """
+    data = request.json
+    TransferDataAccess.createEspionage(data.get('idTo'), )
+
+    pass
+
+@app.route("/transfer", methods=["POST"])
+def transfer():
+    """
+    Endpoint to start a transfer towards another settlement
+
+    JSON Input Format
+    {
+    "sidTo": <INT> | Identifier of the object going to ('receiver')
+    "sidFrom": <INT> | Identifier of the object going from ('sender')
+    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
+    "resources": <LIST>: [ (resourceType <INT> , amount <INT>) , ... ]: Similar as soldiers, but now with resource ID's: 1: Stone, 2: Wood, 3: Steel, 4: Food, 12: Stone & Wood
+    }
+
+    JSON Output Format:
+    {
+    "success": <bool> | State of request
+    If success = True, the timer object will be sent back as well
+    "error": <STRING> | Optional error message if success=False
+    }
+    """
+
+    pass
+
+@app.route("/createOutpost", methods=["POST"])
+def createOutpost():
+    """
+
+    :return:
+    """
+    pass
 
 
 @app.route("/createClan", methods=["POST"])
@@ -477,7 +606,6 @@ def createClan():
     success = clan_data_acces.add_clan(
         Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
     return jsonify({"success": success})
-
 
 @app.route("/joinClan", methods=["POST"])
 def joinClan():

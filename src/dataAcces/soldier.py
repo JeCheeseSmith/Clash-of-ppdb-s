@@ -61,3 +61,19 @@ class SoldierDataAccess:
                     SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=%s);"""
         cursor.execute(querry, (sid,))
         return cursor.fetchall()
+
+    def getTroops(self, id, type):
+        cursor = self.dbconnect.get_cursor()
+        if type == 'settlement':
+            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (id,) )
+            pid = cursor.fetchone()[0]
+            print(pid)
+            return self.getTroops(pid, 'package')
+        elif type == 'transfer':
+            cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (id,))
+            pid = cursor.fetchone()[0]
+            return self.getTroops(pid, 'package')
+        else:  # type == 'package':
+            cursor.execute('SELECT sname, amount, transferable, discovered FROM troops WHERE pid=%s;', (id,))
+            return cursor.fetchall()
+

@@ -108,6 +108,8 @@ class TimerDataAccess:
                 settlement_data_acces.upgradeCastle(timer.sid)
             elif name == 'SatelliteCastle':
                 settlement_data_acces.upgradeCastle(timer.sid, True)
+            elif name == 'Barracks':  # Upgrading a barrack unlocks new troops
+                settlement_data_acces.upgradeBarracks(timer.sid)
 
             self.dbconnect.commit()
         except Exception as e:

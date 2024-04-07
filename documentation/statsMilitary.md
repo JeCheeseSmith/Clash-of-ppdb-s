@@ -89,12 +89,11 @@ Hogere levels ontgrendelen meer decoratieve gebouwen of betere soldaten.
 | Level | Unlocked: |
 |-------|-----------|
 | 1     | T1 Units  |
+| 2     |           |
+| 3     | T2 Units  |
+| 4     |           |
 | 5     |           |
-| 10    |           |
-| 15    |           |
-| 25    | T2 Units  |
-| 30    |           |
-| 40    |           |
-| 50    | T3 Units  |
+| 6     | T3 Units  |
+| 7     |           |
 
 Level f(x) = (x-1) * 5000
