@@ -352,8 +352,10 @@ class SettlementDataAcces:
             grid.append({"type": building[1], "position": [building[3], building[4]], "occupiedCells": building[6]})
         return grid
 
-    def createOutPost(self):
-        pass
+    def isOutPost(self, sid: int):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT EXISTS(SELECT name FROM building WHERE sid=%s AND name=%s);', (sid, 'SatelliteCastle'))
+        return cursor.fetchone()[0]
 
     @staticmethod
     def calculateDistance(to: list, start: list):
@@ -382,3 +384,16 @@ class SettlementDataAcces:
             if SettlementDataAcces.calculateDistance(coord, [x, y]) < 2:
                 return self.getNewCoordinate()
         return [x, y]
+
+    def getMap(self):
+        # sid, gridX,gridY, level, isOutpost
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT id,mapX,mapY FROM settlement;')
+        data = cursor.fetchall()
+        sList = []
+
+        for settlement in data:
+            sList.append(dict(sid=settlement[0], position=[settlement[1], settlement[2]],
+                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0])))
+        print(sList)
+        return sList

@@ -84,6 +84,34 @@ class TransferDataAccess:
             cursor.execute('SELECT mapX,mapY FROM settlement WHERE id=%s;', (oid,))
             return cursor.fetchone()
 
+    @staticmethod
+    def areInSameClan(sidTo, sidFrom, clan_data_acces: ClanDataAccess, settlement_data_acces: SettlementDataAcces):
+        """
+        Helper function to verify if 2 settlements are allies
+        :param sidTo: Settlement Identifier 1
+        :param sidFrom: Settlement Identifier 2
+        :param clan_data_acces: Access DB
+        :param settlement_data_acces: DB Access
+        :return:
+        """
+        pname1 = settlement_data_acces.getOwner(sidTo)
+        pname2 = settlement_data_acces.getOwner(sidFrom)
+        return clan_data_acces.areAllies(pname1, pname2)
+
+    @staticmethod
+    def areFriends(sidTo, sidFrom, friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces):
+        """
+        Helper function to verify if 2 settlements are befriended
+        :param sidTo: Settlement Identifier 1
+        :param sidFrom: Settlement Identifier 2
+        :param friend_data_acces: DB acces
+        :param settlement_data_acces: acces DB
+        :return:
+        """
+        pname1 = settlement_data_acces.getOwner(sidTo)
+        pname2 = settlement_data_acces.getOwner(sidFrom)
+        return friend_data_acces.areFriends(pname1, pname2)
+
     def doesIntercept(self, tid, tid2):
         # TODO Gives true if an attack on a transfer will succeed (this can change over time!) - see notes
         pass
@@ -149,34 +177,6 @@ class TransferDataAccess:
 
         return tp  # Return Transfer Package with Troops
 
-    @staticmethod
-    def areInSameClan(sidTo, sidFrom, clan_data_acces: ClanDataAccess, settlement_data_acces: SettlementDataAcces):
-        """
-        Helper function to verify if 2 settlements are allies
-        :param sidTo: Settlement Identifier 1
-        :param sidFrom: Settlement Identifier 2
-        :param clan_data_acces: Access DB
-        :param settlement_data_acces: DB Access
-        :return:
-        """
-        pname1 = settlement_data_acces.getOwner(sidTo)
-        pname2 = settlement_data_acces.getOwner(sidFrom)
-        return clan_data_acces.areAllies(pname1, pname2)
-
-    @staticmethod
-    def areFriends(sidTo, sidFrom, friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces):
-        """
-        Helper function to verify if 2 settlements are befriended
-        :param sidTo: Settlement Identifier 1
-        :param sidFrom: Settlement Identifier 2
-        :param friend_data_acces: DB acces
-        :param settlement_data_acces: acces DB
-        :return:
-        """
-        pname1 = settlement_data_acces.getOwner(sidTo)
-        pname2 = settlement_data_acces.getOwner(sidFrom)
-        return friend_data_acces.areFriends(pname1, pname2)
-
     def createTransfer(self, sidTo: int, sidFrom: int, soldiers: list, resources: list,
                        timer_data_access: TimerDataAccess,
                        package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
@@ -227,4 +227,7 @@ class TransferDataAccess:
         pass
 
     def createOutpost(self):
+        pass
+
+    def getTransfers(self):
         pass

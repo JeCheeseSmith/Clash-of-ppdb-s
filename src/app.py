@@ -515,18 +515,29 @@ def setFunction():
 
 @app.route("/map", methods=["GET"])
 def getMap():
-    """Retrieve all settlements on the map
-    level, positie, sid, outpostBOOL
-    # get map: [{sid: 1, positie: [x,y], level:2}, {...}, ...]
     """
-    pass
+    Retrieve all settlements on the map with basic info
+
+    JSON Input Format
+    {
+    "sid": <INT> | Identifier of the settlement you are training troops for
+    "sname": <STRING> | Name of soldier
+    }
+
+    JSON Output Format:
+    {
+    LIST: [ {"sid": <INT> , "position": ARRAY INT[2], "level": <INT>, "isOutpost": BOOL } , ... ]
+    }
+    """
+    return jsonify(settlement_data_acces.getMap())
 
 
-@app.route("/getTransfers", methods=["POST"])
+@app.route("/getTransfers", methods=["GET"])
 def getTransfers():
     """
     Returns a list of all points and their current start and end coordinate
     :return:
+
     """
     # Discovered bool UNION ALL Transfers from and to my settlements UNION Transfers from Clans
     # from, to, type (attack, transfer)
