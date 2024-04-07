@@ -91,9 +91,9 @@ function TroopOverviewPage() {
     const { sid, username } = useLocation().state;
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
-        heavyInfantry1: 0,
-        heavyInfantry2: 0,
-        heavyInfantry3: 0,
+        heavyInfantry1: 1,
+        heavyInfantry2: 1,
+        heavyInfantry3: 1,
         spear1: 0,
         spear2: 0,
         spear3: 0,
@@ -128,9 +128,11 @@ function TroopOverviewPage() {
     useEffect(() =>
     {
         API.get_unlockedTroops(sid).then(data => setSoldierAvailable(data))
+        API.get_getTroops(sid).then(data => setSoldierCount(data))
         const intervalId = setInterval(() =>
         {
             API.get_unlockedTroops(sid).then(data => setSoldierAvailable(data))
+            API.get_getTroops(sid).then(data => setSoldierCount(data))
         }, 5 * 60 * 1000); // 15 minutes in milliseconds
         return () => clearInterval(intervalId);
     }, []);
@@ -153,71 +155,71 @@ function TroopOverviewPage() {
                     {soldiersAvailable.heavyInfantry1 ?
                         <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon" onClick={() => handleTroopTrain(1)}/></button>
                         : <button className="button"><div id="wrapper"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"/></div></button>}
-                    <div className="soldierCount">{soldiers.heavyInfantry1}</div>
+                    <div className="soldierCount">{{soldiers:heavyInfantry1} === null ? soldiers.heavyInfantry1 : "0"}</div>
                     {soldiersAvailable.heavyInfantry2 ?
                         <button className="button"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon" onClick={() => handleTroopTrain(2)}/></button>
                         : <button className="button"><div id="wrapper"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"/></div></button>}
-                    <div className="soldierCount">{soldiers.heavyInfantry2}</div>
+                    <div className="soldierCount">{{soldiers:heavyInfantry2} === null ? soldiers.heavyInfantry2 : "0"}</div>
                     {soldiersAvailable.heavyInfantry3 ?
                     <button className="button"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon" onClick={() => handleTroopTrain(3)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.heavyInfantry3}</div>
+                        <div className="soldierCount">{{soldiers:heavyInfantry3} === null ? soldiers.heavyInfantry3 : "0"}</div>
                 </div>
                 <div className="soldierSection">
                     {soldiersAvailable.spear1 ?
                     <button className="button"><img src={spear1} alt="Guardsman" className="soldier-icon" onClick={() => handleTroopTrain(4)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={spear1} alt="Guardsman" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.spear1}</div>
+                        <div className="soldierCount">{{soldiers:spear1} === null ? soldiers.spear1 : "0"}</div>
                     {soldiersAvailable.spear2 ?
                     <button className="button"><img src={spear2} alt="Pike man" className="soldier-icon" onClick={() => handleTroopTrain(5)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={spear2} alt="Pike man" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.spear2}</div>
+                        <div className="soldierCount">{{soldiers:spear2} === null ? soldiers.spear2 : "0"}</div>
                     {soldiersAvailable.spear3 ?
                     <button className="button"><img src={spear3} alt="Halbardier" className="soldier-icon" onClick={() => handleTroopTrain(6)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={spear3} alt="Halbardier" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.spear3}</div>
+                        <div className="soldierCount">{{soldiers:spear3} === null ? soldiers.spear3 : "0"}</div>
                 </div>
                 <div className="soldierSection">
                     {soldiersAvailable.horseman1 ?
                     <button className="button"><img src={horseman1} alt="Horseman" className="soldier-icon" onClick={() => handleTroopTrain(7)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={horseman1} alt="Horseman" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.horseman1}</div>
+                        <div className="soldierCount">{{soldiers:horseman1} === null ? soldiers.horseman1 : "0"}</div>
                     {soldiersAvailable.horseman2 ?
                     <button className="button"><img src={horseman2} alt="Knight" className="soldier-icon" onClick={() => handleTroopTrain(8)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={horseman2} alt="Knight" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.horseman2}</div>
+                        <div className="soldierCount">{{soldiers:horseman2} === null ? soldiers.horseman2 : "0"}</div>
                     {soldiersAvailable.horseman3 ?
                     <button className="button"><img src={horseman3} alt="War elephant" className="soldier-icon" onClick={() => handleTroopTrain(9)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={horseman3} alt="War elephant" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.horseman3}</div>
+                        <div className="soldierCount">{{soldiers:horseman3} === null ? soldiers.horseman3 : "0"}</div>
                 </div>
                 <div className="soldierSection">
                     {soldiersAvailable.bowman1 ?
                     <button className="button"><img src={bowman1} alt="Bowman" className="soldier-icon" onClick={() => handleTroopTrain(10)}/> </button>
                     : <button className="button"><div id="wrapper"><img src={bowman1} alt="Bowman" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.bowman1}</div>
+                        <div className="soldierCount">{{soldiers:bowman1} === null ? soldiers.bowman1 : "0"}</div>
                     {soldiersAvailable.bowman2 ?
                     <button className="button"><img src={bowman2} alt="Longbowman" className="soldier-icon" onClick={() => handleTroopTrain(11)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={bowman2} alt="Longbowman" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.bowman2}</div>
+                        <div className="soldierCount">{{soldiers:bowman2} === null ? soldiers.bowman2 : "0"}</div>
                     {soldiersAvailable.bowman3 ?
                     <button className="button"><img src={bowman3} alt="Crossbowman" className="soldier-icon" onClick={() => handleTroopTrain(12)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={bowman3} alt="Crossbowman" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.bowman3}</div>
+                        <div className="soldierCount">{{soldiers:bowman3} === null ? soldiers.bowman3 : "0"}</div>
                 </div>
                 <div className="soldierSection">
                     {soldiersAvailable.ambush1 ?
                     <button className="button"><img src={ambush1} alt="Bandit" className="soldier-icon" onClick={() => handleTroopTrain(13)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={ambush1} alt="Bandit" className="soldier-icon"/></div></button>}
-                        <div className="soldierCount">{soldiers.ambush1}</div>
+                        <div className="soldierCount">{{soldiers:ambush1} === null ? soldiers.ambush1 : "0"}</div>
                     {soldiersAvailable.ambush2 ?
                     <button className="button"><img src={ambush2} alt="Militia" className="soldier-icon" onClick={() => handleTroopTrain(14)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={ambush2} alt="Militia" className="soldier-icon"/></div></button> }
-                        <div className="soldierCount">{soldiers.ambush2}</div>
+                        <div className="soldierCount">{{soldiers:ambush2} === null ? soldiers.ambush2 : "0"}</div>
                     {soldiersAvailable.ambush3 ?
                     <button className="button"><img src={ambush3} alt="Skirmishers" className="soldier-icon" onClick={() => handleTroopTrain(15)}/> </button>
                         : <button className="button"><div id="wrapper"><img src={ambush3} alt="Skirmishers" className="soldier-icon"/></div></button> }
-                        <div className="soldierCount">{soldiers.ambush3}</div>
+                        <div className="soldierCount">{{soldiers:ambush3} === null ? soldiers.ambush3 : "0"}</div>
                 </div>
             </div>
         </div>

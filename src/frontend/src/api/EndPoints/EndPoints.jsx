@@ -1,5 +1,6 @@
 import GET from "../GET.jsx";
 import POST from "../POST.jsx";
+import {empty} from "leaflet/src/dom/DomUtil.js";
 
 
 export const getGrid = async (sid) =>
@@ -41,6 +42,30 @@ export const get_unlockedTroops = async (sid) =>
             ambush3: data.Skirmisher
         });
 }
+
+export const get_getTroops = async (sid) =>
+{
+    const data = await GET( {"id": sid}, '/getTroops');
+    return (
+        {
+            heavyInfantry1: data.ArmoredFoootman,
+            heavyInfantry2: data.Huskarl,
+            heavyInfantry3: data.OrderKnight,
+            spear1: data.Guardsman,
+            spear2: data.Pikeman,
+            spear3: data.Halbardier,
+            horseman1: data.Horseman,
+            horseman2: data.Knight,
+            horseman3: data.WarElephant,
+            bowman1: data.Bowman,
+            bowman2: data.LongbowMan,
+            bowman3: data.CrossbowMan,
+            ambush1: data.Bandit,
+            ambush2: data.Militia,
+            ambush3: data.Skirmisher
+        });
+}
+
 
 
 export const upgradeBuilding = async (position, sid) =>
