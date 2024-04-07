@@ -1,22 +1,23 @@
 from math import inf
 from .soldier import *
 from .friend import *
+from .timer import Timer, TimerDataAccess
+from .package import *
 from .settlement import *
 
-
 class Transfer:
-    def __init__(self, tid, speed, sidto, discovered, sidfrom, pid, type):
+    def __init__(self, tid: int, discovered: bool, idTo: int, toType: bool, idFrom: int, fromType: bool, pid: int):
         self.id = tid
-        self.speed = speed
-        self.sidto = sidto
         self.discovered = discovered
-        self.sidfrom = sidfrom
+        self.idTo = idTo
+        self.toType = toType
+        self.idFrom = idFrom
+        self.fromType = fromType
         self.pid = pid
-        self.type = type
 
     def to_dct(self):
-        return dict(id=self.id, speed=self.speed, sidto=self.sidto, discovered=self.discovered, sidfrom=self.sidfrom,
-                    pid=self.pid, type=self.type)
+        return dict(id=self.id, sidto=self.idTo, discovered=self.discovered, sidfrom=self.idFrom,
+                    pid=self.pid, toType=self.toType, fromType=self.fromType)
 
 
 class TransferDataAccess:
