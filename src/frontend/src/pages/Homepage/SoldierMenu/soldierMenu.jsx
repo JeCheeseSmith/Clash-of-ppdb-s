@@ -125,10 +125,10 @@ function TroopOverviewPage() {
         ambush2: false,
         ambush3: false
     });
-    // Function that gets the availability of every soldier and sends a request for the soldier counts by calling the API
-    useEffect(() =>
-    {
-        API.get_unlockedTroops(sid).then(data => setSoldierAvailable({
+
+    function APIcalls(sid){
+    API.get_unlockedTroops(sid).then(data => setSoldierAvailable(
+        {
             heavyInfantry1: data.ArmoredFootman,
             heavyInfantry2: data.Huskarl,
             heavyInfantry3: data.OrderKnight,
@@ -143,12 +143,35 @@ function TroopOverviewPage() {
             bowman3: data.CrossbowMan,
             ambush1: data.Bandit,
             ambush2: data.Militia,
-            ambush3: data.Skirmisher}))
-        API.get_getTroops(sid).then(data => setSoldierCount(data))
+            ambush3: data.Skirmisher
+        }))
+        API.get_getTroops(sid).then(data => setSoldierCount(
+            {
+            heavyInfantry1: data.ArmoredFootman,
+            heavyInfantry2: data.Huskarl,
+            heavyInfantry3: data.OrderKnight,
+            spear1: data.Guardsman,
+            spear2: data.Pikeman,
+            spear3: data.Halbardier,
+            horseman1: data.Horseman,
+            horseman2: data.Knight,
+            horseman3: data.WarElephant,
+            bowman1: data.Bowman,
+            bowman2: data.LongbowMan,
+            bowman3: data.CrossbowMan,
+            ambush1: data.Bandit,
+            ambush2: data.Militia,
+            ambush3: data.Skirmisher
+        }))
+
+}
+    // Function that gets the availability of every soldier and sends a request for the soldier counts by calling the API
+    useEffect(() =>
+    {
+        APIcalls(sid);
         const intervalId = setInterval(() =>
         {
-            API.get_unlockedTroops(sid).then(data => setSoldierAvailable(data))
-            API.get_getTroops(sid).then(data => setSoldierCount(data))
+            APIcalls(sid)
         }, 5 * 60 * 1000); // 15 minutes in milliseconds
         return () => clearInterval(intervalId);
     }, []);
