@@ -175,7 +175,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | Name       | Type | Explanation                                                                  |
 |------------|------|------------------------------------------------------------------------------|
 | id         | INT  | PRIMARY KEY                                                                  |
-| speed      | INT  | Base speed of the transfer                                                   |
 | sidto      | INT  | settlement ID where the transfer goes to: To Relation                        |
 | discovered | BOOL | Saying if the transfer has been spotted by others                            |
 | sidfrom    | INT  | settlement ID where the transfer comes from: From Relation                   |

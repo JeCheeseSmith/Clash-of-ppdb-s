@@ -581,7 +581,7 @@ def transfer():
     "sidTo": <INT> | Identifier of the object going to ('receiver')
     "sidFrom": <INT> | Identifier of the object going from ('sender')
     "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
-    "resources": <LIST>: [ (resourceType <INT> , amount <INT>) , ... ]: Similar as soldiers, but now with resource ID's: 1: Stone, 2: Wood, 3: Steel, 4: Food, 12: Stone & Wood
+    "resources": <LIST>: [ amount <INT> , ... ]: Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
     }
 
     JSON Output Format:

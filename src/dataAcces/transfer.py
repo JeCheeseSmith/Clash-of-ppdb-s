@@ -35,6 +35,19 @@ class TransferDataAccess:
     def interceptPosition(self, tid, tid2):
         pass
 
+    def determineSpeed(self, package: Package):
+        """
+        For bigger transfer amounts, another base speed is determined
+        :param package:
+        :return:
+        """
+        speed = 1
+        speed += package.stone % 1000
+        speed += package.wood % 1000
+        speed += package.food % 1000
+        speed += package.steel % 1000
+        return speed
+
     def calculateDistance(self, to: list, start: list):
         """
         Calc grid distance between 2 grid Coordinates (Euclidean distance)
@@ -68,10 +81,25 @@ class TransferDataAccess:
 
     def createTransfer(self, sidTo, sidFrom, soldiers, resources, timer_data_access: TimerDataAccess, soldier_data_acces: SoldierDataAccess, package_data_acces: PackageDataAccess):
         try:
-            cursor = self.dbconnect.get_cursor()
+            cursor = self.dbconnect.get_cursor()  # DB Acces
 
-            duration = self.calculateDuration(soldiers,soldier_data_acces,  self.translatePosition(sidTo), self.translatePosition(sidFrom))
-            package_data_acces.add_resources(Package())
+            tp = Package(resources)  # Make a transferPackage
+            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sidFrom,))
+            pid = cursor.fetchone()[0]
+            sp = package_data_acces.get_resources(pid)  # Instantiate a package for the settlement
+
+            sp -= tp
+            if sp.hasNegativeBalance():
+                raise Exception(sp.deficitString())
+
+            pid = package_data_acces.add_resources(tp)  # Add the package in the database
+
+            cursor.execute('INSERT INTO transfer(sidto, discovered, sidfrom, pid) VALUES (%s,%s,%s,%s)', (sidTo,False,sidFrom,pid))
+            cursor.execute('SELECT max(id) FROM transfer;')
+            tid = cursor.fetchone()
+
+            duration = self.calculateDuration(soldiers, soldier_data_acces,  self.translatePosition(sidTo), self.translatePosition(sidFrom)) * self.determineSpeed(tp)
+            timer_data_access.insertTimer(Timer(None,))
 
             self.dbconnect.commit()
             return True, ""
@@ -81,6 +109,9 @@ class TransferDataAccess:
             return False, e
 
     def createEspionage(self):
+        # Spionage fails at random -> Notify person being spionaged on
+        # Spionaging a settlement also gives all resource transfers
+        # Spionaging an attack gives soldier infos
         pass
 
     def createAttack(self):
