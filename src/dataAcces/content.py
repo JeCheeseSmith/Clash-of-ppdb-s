@@ -33,11 +33,6 @@ class ClanRequestDataAccess:
         self.dbconnect = dbconnect
 
 
-class TransferRequestDataAccess:
-    def __init__(self, dbconnect):
-        self.dbconnect = dbconnect
-
-
 class FriendRequestDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
