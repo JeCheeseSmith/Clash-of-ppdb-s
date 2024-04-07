@@ -66,7 +66,7 @@ Transfer, uniquely identified by their ID (Serial) have a base speed. In the bac
 
 The discovered bool is used for the same purpose.
 
-Transfer move from a settlement towards another settlement. Transfers can be captured/intercepted by other transfers. 
+Transfer move from a settlement/transfer towards another settlement/transfer. Transfers can be captured/intercepted by other transfers. 
 
 As should be clear, a transfer also contains a package.
 

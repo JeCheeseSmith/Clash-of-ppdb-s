@@ -175,9 +175,11 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | Name       | Type | Explanation                                                                  |
 |------------|------|------------------------------------------------------------------------------|
 | id         | INT  | PRIMARY KEY                                                                  |
-| sidto      | INT  | settlement ID where the transfer goes to: To Relation                        |
+| idTo       | INT  | settlement ID where the transfer goes to: To Relation                        |
+ | toType     | BOOL | False: Going to a Settlement, True: Going to a Transfer                      |
 | discovered | BOOL | Saying if the transfer has been spotted by others                            |
-| sidfrom    | INT  | settlement ID where the transfer comes from: From Relation                   |
+| idFrom     | INT  | settlement ID where the transfer comes from: From Relation                   |
+| fromType   | BOOL | Specifies the type we're going from, similar as toType                       |
 | pid        | INT  | Referring a Package ID; Contains Relation (The associated package/resources) |
 
 ### buildable
