@@ -21,6 +21,16 @@ export const update = async (sid) =>
     return await GET({"sid":sid}, '/update')
 }
 
+export const getMap = async () =>
+{
+    return await GET({}, '/map')
+}
+
+export const getTransfers = async () =>
+{
+    return await GET({}, '/getTransfers')
+}
+
 export const update_groupchat = async (username, receiver, message, API_Request) =>
 {
     if (API_Request === "GET")

@@ -1,10 +1,10 @@
-import React, {Suspense, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
 import './map.css';
-import Settlement1 from "./modals/Settlement1.jsx";
+import * as API from "../../api/EndPoints/EndPoints.jsx"
 import Ground from "./modals/Ground.jsx";
 import RequestMassagePopUp from "../../globalComponents/popupMessage/popup.jsx";
 import Arrow from "./modals/Arrow.jsx";
@@ -13,7 +13,14 @@ function Map()
     const { sid, username } = useLocation().state;
     const mapSize = 50;
     const [menuOpen, setMenuOpen] = useState(false)
+    const [settlements, setSettlements] = useState([])
+    const [transfers, setTransfers] = useState([])
 
+    useEffect(() =>
+    {
+        API.getTransfers().then(data => setTransfers(data))
+        API.getMap().then(data => setSettlements(data))
+    }, []);
 
     const handleSettlement = (rowIndex, colIndex) =>
     {

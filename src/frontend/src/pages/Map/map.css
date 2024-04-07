@@ -5,9 +5,4 @@
   width: 100vw; /* Set width equal to viewport width */
   height: 100vh; /* Set height equal to viewport height */
   overflow: hidden; /* Hide overflow of the image */
-  background-image: url('assets/green.jpg'); /* Set the background image */
-  background-size: cover; /* Cover the container while maintaining aspect ratio */
-  background-repeat: no-repeat; /* Do not repeat the background */
-  background-position: right top;
-  background-color: rgba(0, 0, 0, 2); /* Darken the background color (adjust the last value to change darkness) */
 }
