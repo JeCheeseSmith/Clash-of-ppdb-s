@@ -88,8 +88,15 @@ def get_login():
                         logout=None, pid=None)
     Controle = player_data_access.get_login(Player_obj)
     if Controle:
-        # package_data_acces.calc_resources(Controle[1], datetime.now())
+        # Update all data for this player
+        cursor = package_data_acces.dbconnect.get_cursor()
+        cursor.execute('SELECT id FROM settlement WHERE pname=%s;', (player_name,))
+        settlements = cursor.fetchall()
+        for sid in settlements:
+            package_data_acces.calc_resources(sid, None, datetime.now())
+
         update()
+
         return jsonify({"success": Controle[0], "message": "Login successful", "sid": Controle[1]})
     else:
         return jsonify({"success": Controle[0], "message": "Login failed", "sid": Controle[1]})
@@ -219,7 +226,7 @@ def get_resources():
    """
     data = request.json
     id = data.get("id")
-    package_data_acces.calc_resources(id, datetime.now())
+    package_data_acces.calc_resources(id, None, datetime.now())
     packageDict = settlement_data_acces.getResources(Settlement(id))
     return jsonify(packageDict)
 
@@ -247,6 +254,7 @@ def update():
     sid = data.get('sid')
 
     if sid is not None:
+        package_data_acces.calc_resources(sid, None, datetime.now())
         timers = timer_data_acces.retrieveTimers(sid)
         return jsonify(timers)
 
@@ -383,7 +391,7 @@ def upgradeBuilding():
     building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
                                             data.get('sid'))  # Reform data
     success, timer = settlement_data_acces.upgradeBuilding(building, package_data_acces, timer_data_acces,
-                                                          building_data_acces)  # Execute actual functionality
+                                                           building_data_acces)  # Execute actual functionality
 
     if success:
         dct = timer.to_dct()
@@ -392,6 +400,7 @@ def upgradeBuilding():
         dct = dict(success=success)
         dct["error"] = str(timer)  # In this case, timer is an error message
     return jsonify(dct)
+
 
 @app.route("/unlockedTroops", methods=["GET"])
 def unlockedTroops():
@@ -412,6 +421,7 @@ def unlockedTroops():
     data = soldier_data_acces.getUnlockedSoldiers(data.get("sid"))
     return jsonify(data)
 
+
 @app.route("/trainTroop", methods=["POST"])
 def trainTroop():
     """
@@ -431,11 +441,11 @@ def trainTroop():
     """
     data = request.json
 
-    package_data_acces.calc_resources(data.get('sid'), datetime.now())  # Re evaluate the amount of resources
+    package_data_acces.calc_resources(data.get('sid'), None, datetime.now())  # Re evaluate the amount of resources
 
     success, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
-                                                     package_data_acces,
-                                                     timer_data_acces)  # Execute actual functionality
+                                                      package_data_acces,
+                                                      timer_data_acces)  # Execute actual functionality
     if success:
         dct = timer.to_dct()
         dct["success"] = success
