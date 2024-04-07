@@ -117,6 +117,15 @@ class SettlementDataAcces:
 
         self.dbconnect.commit()
 
+    def getOwner(self, sid):
+        """
+        Returns the player name of the settlement owner
+        :param sid: Identifier
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (sid,))
+        return cursor.fetchone()[0]
 
     def initialise(self, sid):
         """

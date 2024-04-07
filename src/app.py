@@ -439,7 +439,9 @@ def getTroops():
     }
     """
     data = request.args
-    return jsonify(soldier_data_acces.getTroops(data.get("id"), data.get("type")))
+    soldiers = soldier_data_acces.getTroops(data.get("id"), data.get("type"))  # Exec functionality
+    return jsonify(soldiers)
+
 
 @app.route("/getConsumption", methods=["GET"])
 def getConsumption():
@@ -459,6 +461,7 @@ def getConsumption():
     data = request.args
     amount = package_data_acces.calc_consumption(data.get('sid'))
     return jsonify({"consumption": amount})
+
 
 @app.route("/trainTroop", methods=["POST"])
 def trainTroop():
@@ -509,20 +512,25 @@ def setFunction():
     """
     pass
 
+
 @app.route("/map", methods=["GET"])
 def getMap():
     """Retrieve all settlements on the map
+    level, positie, sid, outpostBOOL
+    # get map: [{sid: 1, positie: [x,y], level:2}, {...}, ...]
     """
     pass
 
-@app.route("/getVisibleTransfer", methods=["GET"])
-def getVisibleTransfer():
+
+@app.route("/getTransfers", methods=["POST"])
+def getTransfers():
     """
-    Retrieve all transfers and info visible for a player
+    Returns a list of all points and their current start and end coordinate
     :return:
     """
+    # Discovered bool UNION ALL Transfers from and to my settlements UNION Transfers from Clans
+    # from, to, type (attack, transfer)
     pass
-
 
 @app.route("/attack", methods=["POST"])
 def attack():
@@ -531,11 +539,10 @@ def attack():
 
     JSON Input Format
     {
-    "sidTo": <INT> | Identifier of the object going to ('defendant')
+    "idTo": <INT> | Identifier of the object going to ('defendant')
     "sidFrom": <INT> | Identifier of the object going from ('attacker')
-    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>) , ... ] : List of : soldier names and the amount of soldiers for that type
-    "intercept": <BOOL>: Bool specifying if this transfer will attack/intercept another transfer (True) or a settlement (False)
-    "tid": <INT> | Optional transfer id which we want to intercept
+    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
+    "type": <STRING> | type = 'settlement' or 'transfer'
     }
 
     JSON Output Format:
@@ -545,8 +552,16 @@ def attack():
     "error": <STRING> | Optional error message if success=False
     }
     """
-    data = request.json
-    success = TransferDataAccess.createAttack()
+    pass
+    # data = request.json
+    # success = TransferDataAccess.createAttack()
+
+    # TODO get map: [{sid: 1, positie: [x,y], level:2}, {...}, ...] (bewerkt)
+    # [19:47]
+    # # TODO get transfer: [{from: [x,y], to: [x,y], type: "attack"}, {...}, ...] (bewerkt)
+
+    # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
+    # Transferable should be set to TRUE FOR ATTACKS
 
 
 @app.route("/espionage", methods=["POST"])
@@ -571,6 +586,7 @@ def espionage():
 
     pass
 
+
 @app.route("/transfer", methods=["POST"])
 def transfer():
     """
@@ -581,7 +597,7 @@ def transfer():
     "sidTo": <INT> | Identifier of the object going to ('receiver')
     "sidFrom": <INT> | Identifier of the object going from ('sender')
     "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
-    "resources": <LIST>: [ amount <INT> , ... ]: Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
+    "resources": <LIST>: [ amount <INT> , ... ]: Index 0: 0, Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
     }
 
     JSON Output Format:
@@ -592,8 +608,19 @@ def transfer():
     }
     """
     data = request.json
-    success = transfer_data_acces.createTransfer(data.get('sidTo'), data.get('sidFrom'), data.get('soldiers'), data.get('resources'))
-    pass
+    success, timer = transfer_data_acces.createTransfer(data.get('sidTo'), data.get('sidFrom'), data.get('soldiers'),
+                                                        data.get('resources'), timer_data_acces,
+                                                        package_data_acces, clan_data_acces,
+                                                        friend_data_access, settlement_data_acces, soldier_data_acces)
+
+    if success:
+        dct = timer.to_dct()
+        dct["success"] = success
+    else:
+        dct = dict(success=success)
+        dct["error"] = str(timer)  # In this case, timer is an error message
+    return jsonify(dct)
+
 
 @app.route("/createOutpost", methods=["POST"])
 def createOutpost():
@@ -603,12 +630,14 @@ def createOutpost():
     """
     pass
 
-@app.route("/getTransfers", methods=["POST"])
-def getTransfers():
-    """
-    Returns a list of all points and their current start and end coordinate
-    :return:
-    """
+
+@app.route("/getTransferInfo", methods=["GET"])
+def getTransferInfo():
+    pass
+
+
+@app.route("/getSettlementInfo", methods=["GET"])
+def getSettlementInfo():
     pass
 
 
@@ -634,6 +663,7 @@ def createClan():
     success = clan_data_acces.add_clan(
         Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
     return jsonify({"success": success})
+
 
 @app.route("/joinClan", methods=["POST"])
 def joinClan():
@@ -800,10 +830,10 @@ def accept_general_requests():
     id = data.get("id")
 
     if content_data_access.isFriendRequest(id):  # Depending on the type of request
-        Controle = friend_data_access.accept_Friendrequest(state, id, pname, sname)  # Execute functionality
+        friend_data_access.accept_Friendrequest(state, id, pname, sname)  # Execute functionality
 
     elif content_data_access.isClanRequest(id):
-        Controle = clan_data_acces.accept_clanrequest(state, id, pname, sname)  # Execute functionality
+        clan_data_acces.accept_clanrequest(state, id, pname, sname)  # Execute functionality
 
     # Send a message back to the user from the admin account
     if state:

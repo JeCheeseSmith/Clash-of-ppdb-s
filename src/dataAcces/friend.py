@@ -53,14 +53,7 @@ class FriendDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         # Check if they're not already friends
-        Query = """SELECT *
-                  FROM friend
-                  WHERE (pname1 = %s AND pname2 = %s) OR (pname1 = %s AND pname2 = %s);
-        """
-        cursor.execute(Query, (pname, request.sender, request.sender, pname))
-        Controle = cursor.fetchone()
-        # If there already friends it will not send a request
-        if Controle is not None:
+        if self.areFriends(pname, request.sender):
             return False
 
         # You can't befriend yourself
@@ -136,3 +129,17 @@ class FriendDataAccess:
             print("Error:", e)
             self.dbconnect.rollback()
             return False
+
+    def areFriends(self, pname1, pname2):
+        cursor = self.dbconnect.get_cursor()
+
+        # Check if they're not already friends
+        Query = """SELECT *
+                  FROM friend
+                  WHERE (pname1 = %s AND pname2 = %s) OR (pname1 = %s AND pname2 = %s);
+        """
+        cursor.execute(Query, (pname1, pname2, pname2, pname1))
+        Controle = cursor.fetchone()
+        if Controle is None:
+            return False
+        return True

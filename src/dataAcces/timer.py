@@ -54,6 +54,7 @@ class TimerDataAccess:
                 raise Exception('We dont support this timer type!!!! ' + timer.type)
 
     def simulateTransfer(self, timer: Timer):
+        # TODO Notify the user at the end of a transfer
         pass
 
     def simulateTroopTraining(self, timer: Timer):

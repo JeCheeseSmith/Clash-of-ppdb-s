@@ -98,9 +98,11 @@ CREATE TABLE IF NOT EXISTS quest(
 
 CREATE TABLE IF NOT EXISTS transfer(
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    sidto INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- To Relation
     discovered BOOL NOT NULL,
-    sidfrom INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- From Relation
+    idto INT NOT NULL,
+    toType BOOL NOT NULL, -- False: Settlement, True: Transfer
+    idfrom INT NOT NULL,
+    fromType BOOL NOT NULL, -- False: Settlement, True: Transfer
     pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
 );
 
@@ -147,12 +149,6 @@ CREATE TABLE IF NOT EXISTS shared(
     mid INT REFERENCES content(id) ON DELETE CASCADE ON UPDATE CASCADE,
     cname VARCHAR REFERENCES clan(name) ON DELETE CASCADE ON UPDATE CASCADE,
     PRIMARY KEY (mid,cname)
-);
-
-CREATE TABLE IF NOT EXISTS intercept(
-    tid1 INT REFERENCES transfer(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    tid2 INT REFERENCES transfer(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY(tid1,tid2)
 );
 
 CREATE TABLE IF NOT EXISTS troops(

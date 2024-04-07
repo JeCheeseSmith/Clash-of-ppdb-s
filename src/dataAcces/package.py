@@ -1,6 +1,6 @@
 from numpy import polyval
 from numpy import exp2
-
+from abc import abstractmethod
 
 class Package:
     def __init__(self, args):
@@ -20,6 +20,7 @@ class Package:
         return dict(id=self.id, stone=self.stone, wood=self.wood, steel=self.steel, food=self.food, gems=self.gems,
                     xp=self.xp)
 
+    @abstractmethod
     def deficitString(self):
         """
         Helper function to make an error message for the lack of resources
@@ -38,6 +39,7 @@ class Package:
             error += " Steel: " + str(self.steel)
         return error
 
+    @abstractmethod
     def __add__(self, other):
         """
         Overload of + operator to calculate the sum of packages
@@ -52,6 +54,7 @@ class Package:
         self.xp += other.xp
         return self
 
+    @abstractmethod
     def __neg__(self):
         """
         Overloaded negation operator
@@ -65,6 +68,7 @@ class Package:
         self.xp *= -1
         return self
 
+    @abstractmethod
     def __sub__(self, other):
         """
         Overload of - operator to calculate the difference of packages
@@ -98,6 +102,7 @@ class Package:
         elif upgradeResource == 12:  # E.g. Stone AND Wood
             return Package([0, amount, amount, 0, 0, 0, 0])
 
+    @abstractmethod
     def hasNegativeBalance(self):
         """
         Returns True if any of the resource has a negative amount
@@ -113,6 +118,65 @@ class Package:
             return True
         else:
             return False
+
+class PackageWithSoldier():
+    """
+    Specialised Class to ease arithmetic with Soldier Amounts
+
+    We chose to implemented this as a composition class do certainly not disturb any other functionality which was already written
+    """
+    def __init__(self, package: Package, soldiers):
+        """
+        :param package: See Package Class
+        :param soldiers: Dict: [soldier.name]: {amount}
+        It is important that all possible soldiers are present in this dict!
+        """
+        self.package = package
+        self.soldiers = soldiers
+
+    def hasNegativeBalance(self):
+        if self.package.hasNegativeBalance():
+            return True
+        else:
+            for name in self.soldiers.keys():
+                if self.soldiers[name]['amount'] < 0:
+                    return True
+        return False
+
+    def deficitString(self):
+        deficitString = "You lack the following amounts of soldiers: "
+        for name in self.soldiers.keys():
+            amount = self.soldiers[name]['amount']
+            if amount < 0:
+                deficitString += name + ", " + str(amount) + " "
+
+        if self.package.hasNegativeBalance():
+            deficitString += " | " + self.package.deficitString()
+
+        return deficitString
+
+    def __neg__(self):
+        self.package = -self.package
+        for name in self.soldiers.keys():
+            self.soldiers[name]["amount"] = - self.soldiers[name]["amount"]
+        return self
+
+    def __add__(self, other):
+        """
+        If transferable = True, the troops may be adjusted
+        :param other:
+        :return:
+        """
+        self.package += other.package
+        for name in self.soldiers.keys():
+            if other.soldiers[name]['transferable']:
+                self.soldiers[name]["amount"] += other.soldiers[name]["amount"]
+        return self
+
+    def __sub__(self, other):
+        self + (-other)
+        other = - other  # Reset negation of other
+        return self
 
 
 class PackageDataAccess:
@@ -132,19 +196,40 @@ class PackageDataAccess:
     def add_resources(self, package):
         """
         Creates a new package in the database
+        Possible add all troops
         :param package: Package Object
         :return: ID of the package in the database
         """
-
-        # Insert into the database
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,%s,%s);',
-                       (package.stone, package.wood, package.steel, package.food, package.xp, package.gems))
+
+        # Insert resources into the database
+        if isinstance(package, PackageWithSoldier):
+            cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,%s,%s);',
+                           (package.package.stone, package.package.wood, package.package.steel, package.package.food, package.package.xp, package.package.gems))
+        elif isinstance(package, Package):
+            cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,%s,%s);',
+                           (package.stone, package.wood, package.steel, package.food, package.xp, package.gems))
 
         # Retrieved pid
         cursor.execute('SELECT max(id) FROM package;')
         pid = cursor.fetchone()
-        package.id = pid
+
+        # Set pid
+        if isinstance(package, PackageWithSoldier):
+            package.package.id = pid
+        elif isinstance(package, Package):
+            package.id = pid
+
+        # Insert data for each soldier
+        if isinstance(package, PackageWithSoldier):
+            for soldier in package.soldiers.keys():
+                amount = package.soldiers[soldier]['amount']
+                discovered = package.soldiers[soldier]['discovered']
+                transferable = package.soldiers[soldier]['transferable']
+                if amount != 0:
+                    cursor.execute(
+                        'INSERT INTO troops(pid, sname, amount, transferable, discovered) VALUES (%s, %s, %s, %s, %s);',
+                        (package.package.id, soldier, amount, transferable, discovered))
 
         self.dbconnect.commit()
 
@@ -156,11 +241,30 @@ class PackageDataAccess:
         :param package: Package Object
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s , gems = %s , '
-                       'xp = %s WHERE id=%s;',
-                       (package.stone, package.wood, package.steel, package.food, package.gems, package.xp,
-                        package.id))
+
+        if isinstance(package, Package):
+            cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s , gems = %s , '
+                           'xp = %s WHERE id=%s;',
+                           (package.stone, package.wood, package.steel, package.food, package.gems, package.xp,
+                            package.id))
+        elif isinstance(package, PackageWithSoldier):
+            self.update_resources(package.package)
+            for soldier in package.soldiers.keys():  # Update data for each soldier
+                amount = package.soldiers[soldier]['amount']
+                discovered = package.soldiers[soldier]['discovered']
+                transferable = package.soldiers[soldier]['transferable']
+
+                if amount != 0: # Don't insert useless info
+                    # Check if we need to insert or update this troop!
+                    cursor.execute('SELECT EXISTS(SELECT sname,pid FROM troops WHERE sname=%s AND pid=%s);', (soldier, package.package.id))
+
+                    if cursor.fetchone()[0]:  # It exists, so update
+                        cursor.execute('UPDATE troops SET amount = %s , transferable = %s, discovered = %s WHERE pid=%s AND sname=%s;', (amount, transferable, discovered, package.package.id,soldier))
+                    else:  # Insert
+                        cursor.execute('INSERT INTO troops(pid, sname, amount, transferable, discovered) VALUES (%s, %s, %s, %s, %s);', (package.package.id, soldier, amount, transferable, discovered))
+
         self.dbconnect.commit()
+
 
     def calc_consumption(self, sid, calculated_time=1):
         """

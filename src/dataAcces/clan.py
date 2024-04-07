@@ -73,6 +73,33 @@ class ClanDataAccess:
         queryCheckclan = cursor.fetchone()[0]
         return queryCheckclan and queryCheckmember
 
+    def areAllies(self, pname1, pname2):
+        """
+        Verify if 2 persons are in the same clan
+        :param pname1: player name
+        :param pname2:
+        :return:
+        """
+        if not (self.__isMember(pname1) and self.__isMember(pname2)):  # If they're not both members of a clan
+            return False
+
+        cursor = self.dbconnect.get_cursor()
+
+        # Retrieve clan names
+        cursor.execute('SELECT cname FROM member WHERE pname=%s;', (pname1,))
+        cname1 = cursor.fetchone()[0]
+        if cname1 is None:  # player1 is clanLeader
+            cursor.execute('SELECT name FROM clan WHERE pname=%s;', (pname1,))
+            cname1 = cursor.fetchone()[0]
+
+        cursor.execute('SELECT cname FROM member WHERE pname=%s;', (pname2,))
+        cname2 = cursor.fetchone()[0]
+        if cname2 is None:  # player2 is clanLeader
+            cursor.execute('SELECT name FROM clan WHERE pname=%s;', (pname2,))
+            cname2 = cursor.fetchone()[0]
+
+        return cname1 == cname2  # Check if they're in the same clan
+
     def add_clan(self, obj):
         """
         Insert a clan (+ clanLeader) into the database and verify the integrity
