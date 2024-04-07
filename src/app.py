@@ -418,7 +418,9 @@ def unlockedTroops():
     }
     """
     data = request.args
+    print(data)
     data = soldier_data_acces.getUnlockedSoldiers(data.get("sid"))
+    print(data)
     return jsonify(data)
 
 
