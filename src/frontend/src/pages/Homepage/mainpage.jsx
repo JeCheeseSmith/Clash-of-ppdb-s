@@ -10,6 +10,7 @@ import * as API from "../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"
+import PlaySound from "../../globalComponents/audioComponent/audio.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -20,8 +21,26 @@ function MainPage()
     const { sid, username } = useLocation().state;
     const [buildings, setBuildings] = useState([])
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
+    const [timers, setTimers] = useState([])
     const randomArray = useMemo(getRandomArray, []); // Memoize the random array
 
+    const updateTimers = () =>
+    {
+        API.update(sid).then(data => {setTimers(data)})
+    }
+    const getTimer = (ID, type) =>
+    {
+        if (type === "building")
+        {
+            let duration = [false, 0, 0]
+            for (let timer of timers) {
+                if (timer.ID[0] === ID[0] && timer.ID[1] === ID[1]) {
+                    return [true, timer.duration, timer.totalDuration]
+                }
+            }
+            return duration
+        }
+    }
     const updateResources = () =>
     {
         API.get_resources(sid).then(data =>
@@ -34,6 +53,37 @@ function MainPage()
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
     }
+
+    useEffect(() =>
+    {
+        if (timers.length > 0)
+        {
+            const timerInterval = setInterval(() =>
+            {
+                const updatedTimers = [];
+                for (let i = 0; i < timers.length; i++)
+                {
+                    const timer = timers[i];
+                    if (timer.duration > 0)
+                    {
+                        if (timer.duration === timer.totalDuration)
+                        {
+                            updateResources()
+                        }
+                        updatedTimers.push({ ...timer, duration: timer.duration - 1 });
+                    }
+                    else
+                    {
+                        let promise  = PlaySound("BuildingUpgraded")
+                        updateResources()
+                        updateTimers()
+                    }
+                }
+                setTimers(updatedTimers);
+            }, 1000); // Decrease duration every second
+            return () => clearInterval(timerInterval); // Clean up interval on component unmount
+        }
+    }, [timers]);
 
     /*useEffect(() =>
     {
@@ -51,9 +101,11 @@ function MainPage()
     {
         API.getGrid(sid).then(data => setBuildings(data.grid))
         updateResources() // do this twice, because without the first time, resources are going to be 0
+        updateTimers()
         const intervalId = setInterval(() =>
         {
             updateResources()
+            updateTimers()
         }, 15 * 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);
@@ -64,10 +116,10 @@ function MainPage()
             <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
             <div className={"grid"}>
-                <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray}/>
+                <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray} updateTimers={updateTimers} getTimer={getTimer}/>
             </div>
             <ResourceBar resources={resources} updateResources={updateResources}/>
-            <MapButton/>
+            <MapButton timers={timers} updateTimers={updateTimers}/>
         </div>
     );
 }

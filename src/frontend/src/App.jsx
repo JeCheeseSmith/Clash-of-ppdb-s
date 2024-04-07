@@ -17,7 +17,7 @@ function App()
 {
     return (
         // Wrapping the entire application with a div having a specific CSS class
-        <div className="background-login">
+        <div className="background">
             {/* BrowserRouter component to enable routing */}
             <Router>
                 {/* Routes component to define different routes */}

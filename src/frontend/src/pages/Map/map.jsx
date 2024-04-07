@@ -8,48 +8,75 @@ import * as API from "../../api/EndPoints/EndPoints.jsx"
 import Ground from "./modals/Ground.jsx";
 import RequestMassagePopUp from "../../globalComponents/popupMessage/popup.jsx";
 import Arrow from "./modals/Arrow.jsx";
+import Settlement1 from "./modals/Settlement1.jsx";
+
+
+const mapSize = 50;
 function Map()
 {
-    const { sid, username } = useLocation().state;
-    const mapSize = 50;
+    const { sid, username, timers } = useLocation().state;
     const [menuOpen, setMenuOpen] = useState(false)
     const [settlements, setSettlements] = useState([])
-    const [transfers, setTransfers] = useState([])
+    const [outpostChosen, setOutpostChosen] = useState(false)
 
     useEffect(() =>
     {
-        API.getTransfers().then(data => setTransfers(data))
-        API.getMap().then(data => setSettlements(data))
+        API.getMap().then(data => {setSettlements(data); console.log(data)})
     }, []);
 
     const handleSettlement = (rowIndex, colIndex) =>
     {
         setMenuOpen(true)
     }
-    const renderCell = (rowIndex, colIndex) =>
+    const renderSettlement = (rowIndex, colIndex) =>
     {
-        if (rowIndex === 0 && colIndex === 0)
+        let settlementFound = false
+        for (let settlement of settlements)
+        {
+            if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
+            {
+                settlementFound = true
+                return (
+                    <mesh key={`${rowIndex}-${colIndex}`}
+                          position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
+                          onClick={() => handleSettlement(rowIndex, colIndex)}
+                    >
+                        <Settlement1/>
+                    </mesh>
+                );
+            }
+        }
+        if (!settlementFound && outpostChosen)
         {
             return (
-                <mesh key={`${rowIndex}-${colIndex}`}
-                      position={[colIndex - mapSize / 2, 0, rowIndex - mapSize / 2]}
-                      onClick={() => handleSettlement(rowIndex, colIndex)}
-                >
-                    <Arrow destinationPosition={[25,25]}/>
-                </mesh>
+                <gridHelper
+                    key={`${rowIndex}-${colIndex}`}
+                    position={[colIndex - mapSize / 2, 6.1, rowIndex - mapSize / 2]}
+                    args={[1, 1]}
+                    material={new THREE.MeshBasicMaterial({color: 0x0ff000})}
+                />
             );
         }
-        else {
-            return (
-                <>
-                    <gridHelper
-                        key={`${rowIndex}-${colIndex}`}
-                        position={[colIndex - mapSize / 2, 6.1, rowIndex - mapSize / 2]}
-                        args={[1, 1]}
-                        material={new THREE.MeshBasicMaterial({color: 0x0ff000})}
-                    />
-                </>
-            );
+    };
+
+    const renderTransfers = (rowIndex, colIndex) =>
+    {
+        for (let timer of timers)
+        {
+            if (timer.type === "transfer")
+            {
+                if (timer.from[0] === rowIndex && timer.from[1] === colIndex && timer.discovered)
+                {
+                    return (
+                        <mesh key={`${rowIndex}-${colIndex}`}
+                              position={[colIndex + 0.5 - mapSize / 2, 0, rowIndex + 1 - mapSize / 2]}
+                              onClick={() => handleSettlement(rowIndex, colIndex)}
+                        >
+                            <Arrow destinationPosition={timer.to}/>
+                        </mesh>
+                    );
+                }
+            }
         }
     };
 
@@ -62,7 +89,7 @@ function Map()
                     enableZoom={true}
                     zoomSpeed={0.5}
                     maxDistance={35}
-                    minDistance={30}
+                    minDistance={20}
                     panSpeed={0.25}
                     minPolarAngle={Math.PI / 6}
                     maxPolarAngle={Math.PI - Math.PI / 6}
@@ -75,22 +102,43 @@ function Map()
                         RIGHT: THREE.MOUSE.ROTATE
                     }} // Change mouse buttons configuration
                 />
-                {(() => {
-                    const renderedCells = [];
-                    for (let i = 0; i < mapSize; i++) {
-                        const renderedRow = [];
-                        for (let j = 0; j < mapSize; j++) {
-                            renderedRow.push(renderCell(i, j));
-                        }
-                        renderedCells.push(renderedRow);
-                    }
-                    return renderedCells;
-                })()}
+                {createSettlements(renderSettlement)}
+                {createTransfers(renderTransfers)}
                 <Ground/>
             </Canvas>
             {menuOpen && <RequestMassagePopUp message={"This is a settlement!"} setPopup={setMenuOpen}/>}
         </Suspense>
     );
+}
+
+function createSettlements(renderSettlement)
+{
+    const renderedCells = [];
+    for (let i = 0; i < mapSize; i++)
+    {
+        const renderedRow = [];
+        for (let j = 0; j < mapSize; j++)
+        {
+            renderedRow.push(renderSettlement(i, j));
+        }
+        renderedCells.push(renderedRow);
+    }
+    return renderedCells;
+}
+
+function createTransfers(renderTransfers)
+{
+    const renderedCells = [];
+    for (let i = 0; i < mapSize; i++)
+    {
+        const renderedRow = [];
+        for (let j = 0; j < mapSize; j++)
+        {
+            renderedRow.push(renderTransfers(i, j));
+        }
+        renderedCells.push(renderedRow);
+    }
+    return renderedCells;
 }
 
 export default Map;

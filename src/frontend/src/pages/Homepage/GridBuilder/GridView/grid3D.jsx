@@ -22,64 +22,14 @@ import Cobblestones from "./models/Objects/Cobblestones.jsx";
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings, updateResources, randomArray})
+function Grid({buildings, updateResources, randomArray, updateTimers, getTimer})
 {
     const { sid, username } = useLocation().state;
     const [selectedBuilding, setSelectedBuilding] =
         useState([[] /* building */,false /* selected or floating */, 0x006f00 /* shadowColor */])
     const [oldPosition, setOldPosition] = useState([])
-    const [timers, setTimers] = useState([])
     const gridSize = 40;
 
-    const updateTimers = () =>
-    {
-        API.update(sid).then(data => {setTimers(data)})
-    }
-    useEffect(() =>
-    {
-        updateTimers()
-        const intervalId = setInterval(() =>
-        {
-            updateTimers()
-        }, 15 * 60 * 1000);
-        return () => clearInterval(intervalId);
-    }, []);
-
-    useEffect(() =>
-    {
-        if (timers.length > 0)
-        {
-            const timerInterval = setInterval(() =>
-            {
-                const updatedTimers = [];
-                for (let i = 0; i < timers.length; i++)
-                {
-                    const timer = timers[i];
-                    if (timer.duration > 0)
-                    {
-                        if (timer.duration === timer.totalDuration)
-                        {
-                            updateResources()
-                        }
-                        updatedTimers.push({ ...timer, duration: timer.duration - 1 });
-                    }
-                    else
-                    {
-                        let promise  = PlaySound("BuildingUpgraded")
-                        updateResources()
-                        updateTimers()
-                    }
-                }
-                setTimers(updatedTimers);
-            }, 1000); // Decrease duration every second
-            return () => clearInterval(timerInterval); // Clean up interval on component unmount
-        }
-    }, [timers]);
-
-    const addTimer = (ID, duration, totalDuration) =>
-    {
-        setTimers([...timers, {ID, duration, totalDuration}])
-    }
     const checkTechnicalCollisions = (position) =>  // checkt de technische positie (de linksboven posities checken)
     {
         for (let building of buildings)
@@ -242,16 +192,17 @@ function Grid({buildings, updateResources, randomArray})
                     shadow-bias={-0.01} // Shadow bias to reduce artifacts
                 />
                 <ambientLight intensity={0.5}/>
-                <OrbitControls enableZoom={true}
-                               enablePan={false}
-                               zoomSpeed={0.2}
-                               rotateSpeed={0.1}
-                               maxDistance={45}
-                               minDistance={25}
-                               maxPolarAngle={Math.PI / 2.5}
-                               minPolarAngle={Math.PI / 10}
-                               maxAzimuthAngle={Math.PI / 3}
-                               minAzimuthAngle={Math.PI / 5}
+                <OrbitControls
+                    enableZoom={true}
+                    enablePan={false}
+                    zoomSpeed={0.2}
+                    rotateSpeed={0.1}
+                    maxDistance={45}
+                    minDistance={25}
+                    maxPolarAngle={Math.PI / 3}
+                    minPolarAngle={Math.PI / 10}
+                    maxAzimuthAngle={Math.PI / 3}
+                    minAzimuthAngle={Math.PI / 5}
                 />
                 {
                     (() =>
@@ -283,10 +234,10 @@ function Grid({buildings, updateResources, randomArray})
             </Canvas>
             {selectedBuilding[1] &&
                 <UpgradeBuilding selectedBuilding={selectedBuilding}
-                                 timers={timers}
-                                 addTimer={addTimer}
                                  updateResources={updateResources}
+                                 updateTimers={updateTimers}
                                  oldPosition={oldPosition}
+                                 getTimer={getTimer}
                 />}
         </Suspense>
     );
