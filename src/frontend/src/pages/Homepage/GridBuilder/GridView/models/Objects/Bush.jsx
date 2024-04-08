@@ -10,11 +10,11 @@ import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 import bush from '../../assets/small_stylised_bush.glb'
 
-function Bush(props) {
+function Bush({position}) {
   const { nodes, materials } = useGLTF(bush);
   return (
-    <group {...props} dispose={null}>
-        <group scale={0.005}>
+    <group dispose={null}>
+        <group scale={0.02} position={position}>
             <mesh
               castShadow
               receiveShadow

@@ -1,11 +1,14 @@
-.background {
+.mainpage {
   position: fixed;        /* Position the container fixed to the viewport */
-  top: 0px;             /* Shift the background image 20px above the top of the viewport */
+  top: 0;             /* Shift the background image 20px above the top of the viewport */
   left: 0;                /* Align to the left of the viewport */
   width: 100vw;           /* Set width to viewport width */
   height: 100vh;          /* Set height to viewport height */
-  overflow: hidden;       /* Hide any overflow from the image */
-  background-image: url('../../assets/medieval.jpg');  /* Set the background image */
-  background-size: 100%;   /* Zoom out the background image */
-  background-position: center center;
+}
+
+.grid {
+    position: absolute;        /* Position the container fixed to the viewport */
+    width: 100vw;           /* Set width to viewport width */
+    height: 100vh;
+    z-index: 2;
 }

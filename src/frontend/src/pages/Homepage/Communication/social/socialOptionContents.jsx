@@ -59,7 +59,7 @@ function CreateClanPage()
             pname: clanLeader
         }, "/createClan");
         setPopUp(true)
-        if (data.succes)
+        if (data.success)
         {
             setPopUpMessage("Clan Created!")
         }

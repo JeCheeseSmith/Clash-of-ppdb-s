@@ -5,6 +5,7 @@
   right: 250px;
   top: 100px; /* You can adjust this value */
   padding: 10px;
+  z-index: 1;
   background-color: #261717;
   border: #0e0049 solid 5px;
   border-radius: 10px;
