@@ -316,7 +316,7 @@ class PackageDataAccess:
         # Calculated difference in timestamp
         calculated_time = abs(start - stop)
         calculated_time = int(calculated_time.total_seconds())
-        calculated_time = int(calculated_time / 3600)
+        calculated_time = calculated_time / 3600
 
         # Generated resources
         Generated_wood = 0
@@ -420,18 +420,20 @@ class PackageDataAccess:
         cursor.execute('SELECT * FROM troops WHERE pid=%s;', (pid,))
         Soldiers = cursor.fetchall()
 
-        Total_Consumption = self.calc_consumption(sid, calculated_time)
+        Total_Consumption = int(self.calc_consumption(sid, calculated_time))
 
         # Update the resources in the right way
-        Newp_wood = min((Generated_wood + Pwood), Wood)
-        Newp_stone = min((Generated_stone + Pstone), Stone)
-        Newp_steel = min((Generated_steel + Psteel), Steel)
+        Newp_wood = min(Generated_wood + Pwood, Wood)
+        Newp_stone = min(Generated_stone + Pstone, Stone)
+        Newp_steel = min(Generated_steel + Psteel, Steel)
         Newp_food = min(Generated_food + Pfood - Total_Consumption, Food)
 
         # Check for possible troop starvation
         for soldier in Soldiers:
             cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
             Consumption = cursor.fetchone()[0]
+            if Newp_food >= 0:
+                break
             for i in range(1, soldier[2] + 1):
                 Newp_food += Consumption
                 if i == soldier[2]:
