@@ -39,7 +39,8 @@ function LocalTimers({setResources, timers, setTimers})
                     {
                         let promise  = PlaySound("BuildingUpgraded")
                         updateResources(sid, setResources)
-                        updateTimers(username, setTimers) // todo: this line creates problems, is useless maybe
+                        updateTimers(username, setTimers)
+                        break
                     }
                 }
                 setTimers(updatedTimers);

@@ -68,7 +68,7 @@ function Map()
     {
         for (let timer of timers)
         {
-            if (timer.type === "transfer")
+            if (timer.type === "transfer" || timer.type === "attack" || timer.type === "outpost")
             {
                 if (timer.from[0] === rowIndex && timer.from[1] === colIndex/* && timer.discovered*/)
                 {
