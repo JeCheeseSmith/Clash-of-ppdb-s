@@ -234,7 +234,6 @@ def get_resources():
 
 @app.route("/update", methods=["POST"])
 def update():
-    # TODO ABU : Change sid to pname in update! - Greetings watson
     """
     Tell the server to re-evaluate its timers
 
@@ -251,11 +250,10 @@ def update():
     Timer objects related to transfer have the following extra info: {"from": <ARRAY INT[2]> , "to": <ARRAY INT[2]>, "discovered": <BOOL> }
     }
     """
-    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access)
+    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces)
 
     data = request.json
     pname = data.get('pname')
-    print(pname)
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces, package_data_acces)

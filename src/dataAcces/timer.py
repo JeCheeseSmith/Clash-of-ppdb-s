@@ -41,7 +41,7 @@ class TimerDataAccess:
         timer.id = id
         return id
 
-    def evaluateTimers(self, settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access):
+    def evaluateTimers(self, settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces):
         """
         Evaluate all timers passed their done time
         :return:
@@ -58,16 +58,16 @@ class TimerDataAccess:
             elif timer.type == 'building':
                 self.simulateUpgrade(timer, settlement_data_acces)
             elif timer.type == 'transfer':
-                self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access)
+                self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces)
             elif timer.type == 'espionage':
                 pid = self.simulateEspionage(timer, transfer_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
                 cursor.execute('DELETE FROM package WHERE id=%s;', (pid,))
             elif timer.type == 'attack':
-                self.simulateAttack(timer)
+                self.simulateAttack(timer, transfer_data_acces)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
             elif timer.type == 'outpost':
-                self.simulateOutpost(timer)
+                self.simulateOutpost(timer,transfer_data_acces, settlement_data_acces)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
 
             cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
@@ -220,7 +220,7 @@ SELECT id FROM transfer WHERE discovered=True
 
         return newInfo
 
-    def simulateTransfer(self, timer: Timer, transfer_data_acces, package_data_acces, content_data_access):
+    def simulateTransfer(self, timer: Timer, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces):
         """
         Execute an actual succeeding resource transfer
         :param timer: Transfer Timer Object
@@ -230,7 +230,7 @@ SELECT id FROM transfer WHERE discovered=True
 
         # Instanstiate Usable Data Objects
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
-        tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid)  # Transfer package
+        tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid, soldier_data_acces, package_data_acces)  # Transfer package
         # TODO Add support to allow transfers to transfers
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
         spid = cursor.fetchone()[0]
@@ -322,14 +322,21 @@ SELECT id FROM transfer WHERE discovered=True
                                         transfer.pname)  # Notify sender
         return transfer.pid
 
-    def simulateAttack(self, timer: Timer):
-        # Check if object still exists, else: troops get lost; notify the player
+    def simulateAttack(self, timer: Timer, transfer_data_acces):
+        #
         # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
+
+        # Instantiate Usable Data Objects
+        success = choice([True, False])  # Espionage fails at random
+        transfer = transfer_data_acces.instantiateTransfer(timer.oid)
+        cursor = self.dbconnect.get_cursor()
 
         # Choose a random winner
         # Loser: all troops die
         # Winner: continious transfer
-        # If done < transfer.done: All troops get lost and will not return
+        # If done < transfer.done: All troops get lost and will not return: Check if object still exists, else: troops get lost; notify the player
+
+        # Return all transfer to this transfer back to sender
 
         # TODO also deleted associated package, transfer, other timers and other transfer
         pass
