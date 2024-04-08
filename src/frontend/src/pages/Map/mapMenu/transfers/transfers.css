@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.menu-navbar {
+    padding: 20px 20px 20px 4%;
+    border: 2px solid #ffd700; /* Golden border color */
+    border-radius: 10px; /* Match border-radius of message box */
+    background-color: #b26616;
+    color: white;
+}
+
+.menu-navbar-links {
+    list-style: none;
+    display: flex;
+}
+
+.menu-navbar-links li {
+    margin-right: 7rem; /* Increase the right margin to create larger spaces */
+}
+
+.transferOption {
+    background-color: #8B4513;
+    color: #fff;
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #CD853F;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.transferOption:hover {
+    background-color: #A0522D;
+    border-color: #A0522D;
+}
+
+.transferOption:focus {
+    outline: none;
+    background-color: #A0522D;
+    border-color: #A0522D;
+    box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.4);
+}

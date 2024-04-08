@@ -5,7 +5,8 @@ import SignUp from "./pages/Loginpage/SignUp/signUp.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from "react";
 import './App.css';
-import Map from "./pages/Map/map.jsx";
+import Map from "./pages/Map/map/map.jsx";
+import MapMainpage from "./pages/Map/mapMainpage.jsx";
 /**
  * Main application component responsible for routing and rendering different pages.
  * @component
@@ -25,7 +26,7 @@ function App()
                     <Route path="/" element={<LoginPage />} />
                     <Route path="/SignUp" element={<SignUp />} />
                     <Route path="/MainPage" element={<MainPage />} />
-                    <Route path="/Map" element={<Map />} />
+                    <Route path="/Map" element={<MapMainpage />} />
                 </Routes>
             </Router>
         </div>

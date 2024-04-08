@@ -3,15 +3,14 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
-import './map.css';
-import * as API from "../../api/EndPoints/EndPoints.jsx"
+import * as API from "../../../api/EndPoints/EndPoints.jsx"
 import Ground from "./modals/Ground.jsx";
-import RequestMassagePopUp from "../../globalComponents/popupMessage/popup.jsx";
 import Arrow from "./modals/Arrow.jsx";
 import Settlement1 from "./modals/Settlement1.jsx";
-import {updateResources, updateTimers} from "../../globalComponents/backgroundFunctions/helperFunctions.jsx";
-import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
-import ResourceBar from "../Homepage/RecourceBar/resourcebar.jsx";
+import {updateResources, updateTimers} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
+import LocalTimers from "../../../globalComponents/backgroundFunctions/localTimers.jsx";
+import ResourceBar from "../../Homepage/RecourceBar/resourcebar.jsx";
+import TransferMenu from "../mapMenu/transfers/transfers.jsx";
 
 
 const mapSize = 50;
@@ -31,14 +30,17 @@ function Map()
 
     const handleSettlement = (rowIndex, colIndex) =>
     {
-        setMenuOpen(true)
+        setMenuOpen(!menuOpen)
+        console.log("here")
     }
     const renderSettlement = (rowIndex, colIndex) =>
     {
+        let found = false
         for (let settlement of settlements)
         {
             if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
             {
+                found = true
                 return (
                     <mesh key={`${rowIndex}-${colIndex}`}
                           position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
@@ -49,7 +51,7 @@ function Map()
                 );
             }
         }
-        if (outpostChosen)
+        if (!found || outpostChosen)
         {
             return (
                 <gridHelper
@@ -85,7 +87,7 @@ function Map()
 
     return (
         <Suspense fallback={null}>
-            <Canvas camera={{position: [-0, 300, 30]}} className={'canvas'}>
+            <Canvas camera={{position: [-0, 300, 30]}}>
                 <color attach="background" args={['lightblue']}/>
                 <ambientLight intensity={3}/>
                 <OrbitControls
@@ -109,7 +111,6 @@ function Map()
                 {createTransfers(renderTransfers)}
                 <Ground/>
             </Canvas>
-            {menuOpen && <RequestMassagePopUp message={"This is a settlement!"} setPopup={setMenuOpen}/>}
             <ResourceBar resources={resources} updateResources={() => updateResources(sid, setResources)}/>
             <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
         </Suspense>
