@@ -5,7 +5,8 @@ from .settlement import *
 
 
 class Transfer:
-    def __init__(self, tid: int, discovered: bool, idTo: int, toType: bool, idFrom: int, fromType: bool, pid: int):
+    def __init__(self, tid: int, discovered: bool, idTo: int, toType: bool, idFrom: int, fromType: bool, pid: int,
+                 pname: str):
         self.id = tid
         self.discovered = discovered
         self.idTo = idTo
@@ -13,10 +14,11 @@ class Transfer:
         self.idFrom = idFrom
         self.fromType = fromType
         self.pid = pid
+        self.pname = pname
 
     def to_dct(self):
         return dict(id=self.id, sidto=self.idTo, discovered=self.discovered, sidfrom=self.idFrom,
-                    pid=self.pid, toType=self.toType, fromType=self.fromType)
+                    pid=self.pid, toType=self.toType, fromType=self.fromType, pname=self.pname)
 
 
 class TransferDataAccess:
@@ -38,7 +40,7 @@ class TransferDataAccess:
             speed += package.steel % 1000
         return speed
 
-    def __extent(self, soldierDict, discovered, transferable):
+    def __extent(self, soldierDict, discovered):
         """
         Helper function to add soldiers with amount 0 to the dictionary
         :param soldierDict:
@@ -49,10 +51,10 @@ class TransferDataAccess:
         names = cursor.fetchall()
         for name in names:
             if soldierDict.get(name[0]) is None:
-                soldierDict[name[0]] = dict(amount=0, transferable=transferable, discovered=discovered)
+                soldierDict[name[0]] = dict(amount=0, discovered=discovered)
         return soldierDict
 
-    def __restructure(self, soldiers: list, discovered, transferable):
+    def __restructure(self, soldiers: list, discovered):
         """
         Helper function to reformat the list from frontend to a backend usable format
         :param soldiers:
@@ -61,8 +63,8 @@ class TransferDataAccess:
         """
         soldierDct = dict()
         for soldier in soldiers:
-            soldierDct[soldier[0]] = dict(amount=soldier[1], transferable=soldier[2], discovered=discovered)
-        return self.__extent(soldierDct, discovered, transferable)
+            soldierDct[soldier[0]] = dict(amount=soldier[1], discovered=discovered)
+        return self.__extent(soldierDct, discovered)
 
     def translatePosition(self, oid, transfer):
         """
@@ -169,14 +171,30 @@ class TransferDataAccess:
 
         return start, stop, int(duration)  # Return time
 
+    def instantiatePackageWithSoldiers(self, pid, soldier_data_acces, package_data_acces):
+        """
+        Helper function to create PackageWithSoldier from database info
+        :param pid:
+        :param soldier_data_acces:
+        :param package_data_acces:
+        :return:
+        """
+        return PackageWithSoldier(package_data_acces.get_resources(pid),
+                                  self.__extent(soldier_data_acces.getTroops(pid, 'package'), False))
+
+    def instantiateTransfer(self, tid):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT * FROM transfer WHERE id=%s;', (tid,))
+        data = cursor.fetchone()
+        return Transfer(tid, data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+
     def updateResourceTroops(self, sidFrom: int, soldiers: dict, resources: list, package_data_acces: PackageDataAccess,
-                             soldier_data_acces: SoldierDataAccess, discovered: bool, transferable: bool):
+                             soldier_data_acces: SoldierDataAccess, discovered: bool):
         """
         Helper function to update the resource and soldiers amounts in the settlement and insert the new correct data into the database
-        :param transferable:
         :param discovered:
         :param sidFrom: Settlement Identifier we will subtract the soldiers from
-        :param soldiers: Soldier Dict in backend format; item in dict is of the following format: {soldier_name: {'transferable': bool, 'amount': int, 'discovered': bool}}
+        :param soldiers: Soldier Dict in backend format; item in dict is of the following format: {soldier_name: {'amount': int, 'discovered': bool}}
         :param resources: Array of amounts 0: id, 1: stone , ...
         :param package_data_acces: DB Acces
         :param soldier_data_acces: DB Acces
@@ -190,8 +208,7 @@ class TransferDataAccess:
         # Instantiate packages
         tp = PackageWithSoldier(Package(resources), soldiers)  # transferPackage
         sp = PackageWithSoldier(package_data_acces.get_resources(pid),
-                                self.__extent(soldier_data_acces.getTroops(sidFrom, 'settlement'), discovered,
-                                              transferable))  # settlementPackage
+                                self.__extent(soldier_data_acces.getTroops(sidFrom, 'settlement'), discovered))  # settlementPackage
 
         # Do arithmetic and verify result
         sp -= tp
@@ -209,21 +226,18 @@ class TransferDataAccess:
                        package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
                        friend_data_acces: FriendDataAccess,
                        soldier_data_acces: SoldierDataAccess):
-        #try:
+        # try:
         cursor = self.dbconnect.get_cursor()  # DB Acces
-        transferable = False
 
         if tType == 'attack':  # You can only attack enemies!
             if not self.areEnemies(idFrom, fromType, idTo, toType, friend_data_acces, clan_data_acces):
                 raise Exception("You can't attack your allies!")
-            transferable = True
 
         # Restructure to a backend format
-        soldiers = self.__restructure(soldiers, False, transferable)
+        soldiers = self.__restructure(soldiers, False)
 
         # Adjust resource & troop info
-        tp = self.updateResourceTroops(idFrom, soldiers, resources, package_data_acces, soldier_data_acces, False,
-                                       transferable)
+        tp = self.updateResourceTroops(idFrom, soldiers, resources, package_data_acces, soldier_data_acces, False)
 
         # Insert transfer into the database
         cursor.execute(

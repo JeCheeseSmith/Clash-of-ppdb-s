@@ -59,12 +59,13 @@ class TimerDataAccess:
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer)
             elif timer.type == 'espionage':
-                continue
+                self.simulateEspionage(timer)
             elif timer.type == 'attack':
-                pass
-            else:
-                continue
-                raise Exception('We dont support this timer type!!!! ' + timer.type)
+                self.simulateAttack(timer)
+            elif timer.type == 'outpost':
+                self.simulateOutpost(timer)
+
+            cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
 
     def simulateTroopTraining(self, timer: Timer):
         """
@@ -89,10 +90,8 @@ class TimerDataAccess:
                                (pid, sname))  # Increment the troop amount
             else:  # Insert into the package
                 cursor.execute(
-                    'INSERT INTO troops(pid, sname, amount, transferable, discovered) VALUES(%s,%s,%s,%s,%s);',
-                    (pid, sname, 1, True, True))
-
-            cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
+                    'INSERT INTO troops(pid, sname, amount, discovered) VALUES(%s,%s,%s,%s);',
+                    (pid, sname, 1, False))
 
             self.dbconnect.commit()
         except Exception as e:
@@ -126,7 +125,7 @@ class TimerDataAccess:
             print('error', e)
             self.dbconnect.rollback()
 
-    def retrieveTimers(self, pname: str, transfer_data_acces):
+    def retrieveTimers(self, pname: str, transfer_data_acces, package_data_acces):
         """
         Get all timers for a certain settlement and convert to a frontend usable format
         :param transfer_data_acces:
@@ -196,6 +195,13 @@ SELECT id FROM transfer WHERE discovered=True
         return newData
 
     def addTransferTimerInfo(self, newInfo: dict, timer: Timer, transfer_data_acces):
+        """
+        Helper function to add needed info for frontend to a transfer timer
+        :param newInfo:
+        :param timer:
+        :param transfer_data_acces:
+        :return:
+        """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT * FROM transfer WHERE id=%s;', (timer.oid,))
         transfer = cursor.fetchone()  # tid, discovered, idTo, toType, idFrom, fromType, pid
@@ -208,11 +214,29 @@ SELECT id FROM transfer WHERE discovered=True
 
         return newInfo
 
-    def simulateTransfer(self, timer: Timer):
-        # TODO Notify the user at the end of a transfer
-        pass
+    def simulateTransfer(self, timer: Timer, transfer_data_acces, package_data_acces, content_data_access):
+        """
+        Execute an actual succeeding resource transfer
+        :param timer: Transfer Timer Object
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
 
-    def simulateEspionage(self):
+        # Instanstiate Usable Data Objects
+        transfer = transfer_data_acces.instantiateTransfer(timer.oid)
+        tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid)  # Transfer package
+        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo))
+        spid = cursor.fetchone()[0]
+        sp = transfer_data_acces.instantiatePackageWithSoldiers(spid)  # Soldier Package
+
+        # Update correct data in the database
+        sp += tp
+        package_data_acces.update_resources(sp)
+
+        # TODO Notify the user at the end of a transfer
+        # content_data_access
+
+    def simulateEspionage(self, timer: Timer):
         """
         retrieve building info and soldiers: full reports
         :return:
@@ -226,12 +250,16 @@ SELECT id FROM transfer WHERE discovered=True
 
         pass
 
-    def simulateAttack(self):
+    def simulateAttack(self, timer: Timer):
+        # Check if object still exists, else: troops get lost
+
         # Choose a random winner
         # Loser: all troops die
+        # Winner: continious transfer
+        # If done < transfer.done: All troops get lost and will not return
         pass
 
-    def simulateOutpost(self):
+    def simulateOutpost(self, timer: Timer):
         # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
 
         # Change ownership of admin to user

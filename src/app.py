@@ -569,7 +569,7 @@ def transfer():
     "toType": <BOOL> | Specifies if we're going to a settlement (False) or another transfer (True)
     "idFrom": <INT> | Identifier of the settlement going from ('sender')
     "fromType": <BOOL> | Specifies if we're going to a settlement (False) or another transfer (True)
-    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
+    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
     "resources": <LIST>: [ amount <INT> , ... ]: Index 0: 0, Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
     "tType": <STRING> | 'attack' or 'transfer'; specifies the sort of transfer we're doing
     "pname": <STRING> | Player who starts/owns the transfer
@@ -607,7 +607,7 @@ def createOutpost():
     "coordTo": <ARRAY INT[2]> | Coordinate of the place the new outpost needs to be created
     "sidFrom": <INT> | Identifier of the settlement going from ('sender')
     "outpostName": <STRING> | Name of the new outpost
-    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
+    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
     "resources": <LIST>: [ amount <INT> , ... ]: Index 0: 0, Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
     }
 

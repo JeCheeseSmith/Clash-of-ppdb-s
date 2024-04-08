@@ -57,8 +57,8 @@ A building costs resources to build, which are specified in the upgradeFunction.
 A package is an entity to store resources. It is purely for technical convenience and hasn't anything to do for the user.
 Uniquely identified with an id. All other parts are optional and are amounts. e.g. Stone is the amount of stone in the package.
 
-Soldiers are linked to the package via the Troops relation in the database. An amount is specified, as well as a boolean: Discovered & Transferable.
-Users can specify if they want to transfer the troops attached to a package or transfer or let them return home. The discovered boolean is used to determine if the soldier is spotted/spied on by a rivaling player.
+Soldiers are linked to the package via the Troops relation in the database. An amount is specified, as well as a boolean: Discovered.
+The discovered boolean is used to determine if the soldier is spotted/spied on by a rivaling player.
 
 ### Transfer
 

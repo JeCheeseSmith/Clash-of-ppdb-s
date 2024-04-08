@@ -155,7 +155,6 @@ CREATE TABLE IF NOT EXISTS troops(
     pid INT REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE,
     sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     amount INT NOT NULL,
-    transferable BOOL NOT NULL,
     discovered BOOL NOT NULL,
     PRIMARY KEY (pid,sname)
 );

@@ -78,11 +78,11 @@ SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FR
             pid = cursor.fetchone()[0]
             return self.getTroops(pid, 'package')
         else:  # type == 'package':
-            cursor.execute('SELECT sname, amount, transferable, discovered FROM troops WHERE pid=%s;', (oid,))
+            cursor.execute('SELECT sname, amount, discovered FROM troops WHERE pid=%s;', (oid,))
 
             data = cursor.fetchall()
 
             dct = dict()  # reformat to frontend format
             for soldier in data:
-                dct[str(soldier[0])] = dict(amount=soldier[1], transferable=soldier[2], discovered=soldier[3])
+                dct[str(soldier[0])] = dict(amount=soldier[1], discovered=soldier[2])
             return dct
