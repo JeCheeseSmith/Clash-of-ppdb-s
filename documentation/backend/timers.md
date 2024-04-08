@@ -10,8 +10,6 @@ UNION
 -- All clan members
 SELECT pname FROM member WHERE cname='c'
 UNION
-SELECT pname FROM clan WHERE name='c'
-UNION
 -- Player its self
 SELECT 'a'
 -- Except the admin (since everyone is a friend with admin
@@ -32,3 +30,5 @@ UNION
 -- Someone's Transfers going to friendly settlements
 SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlement WHERE pname IN (friendly))
 );
+
+SELECT name FROM clan WHERE pname='a';
