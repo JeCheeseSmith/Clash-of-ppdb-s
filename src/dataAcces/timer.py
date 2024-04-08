@@ -1,4 +1,5 @@
 from datetime import datetime
+from random import choice
 
 
 class Timer:
@@ -57,15 +58,20 @@ class TimerDataAccess:
             elif timer.type == 'building':
                 self.simulateUpgrade(timer, settlement_data_acces)
             elif timer.type == 'transfer':
-                self.simulateTransfer(timer,transfer_data_acces, package_data_acces, content_data_access)
+                self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access)
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
             elif timer.type == 'espionage':
-                self.simulateEspionage(timer)
+                self.simulateEspionage(timer, transfer_data_acces, content_data_access)
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
             elif timer.type == 'attack':
                 self.simulateAttack(timer)
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
             elif timer.type == 'outpost':
                 self.simulateOutpost(timer)
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
 
             cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
+            self.dbconnect.commit()
 
     def simulateTroopTraining(self, timer: Timer):
         """
@@ -225,7 +231,7 @@ SELECT id FROM transfer WHERE discovered=True
         # Instanstiate Usable Data Objects
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid)  # Transfer package
-        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo))
+        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
         spid = cursor.fetchone()[0]
         sp = transfer_data_acces.instantiatePackageWithSoldiers(spid)  # Soldier Package
 
@@ -234,26 +240,80 @@ SELECT id FROM transfer WHERE discovered=True
         package_data_acces.update_resources(sp)
 
         # Notify the users at the end of a transfer
-        from .content import Content # We need to do this locally otherwise other functionality will breack due to circular includes
+        from .content import \
+            Content  # We need to do this locally otherwise other functionality will break due to circular includes
 
-        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo))
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
         receiver = cursor.fetchone()[0]
-        content_data_access.add_message(Content(None, datetime.now(), "Accept my gift for you! Please make sure to take care of my men! - "+transfer.pname, 'admin'), receiver)  # Notify receiver
-        content_data_access.add_message(Content(None, datetime.now(), f"""Your transfer to {receiver} succeeded.""", 'admin' ), transfer.pname)  # Notify sender
+        content_data_access.add_message(Content(None, datetime.now(),
+                                                "Accept my gift for you! Please make sure to take care of my men! - " + transfer.pname,
+                                                'admin'), receiver)  # Notify receiver
+        content_data_access.add_message(
+            Content(None, datetime.now(), f"""Your transfer to {receiver} succeeded.""", 'admin'),
+            transfer.pname)  # Notify sender
 
-    def simulateEspionage(self, timer: Timer):
+    def setTransfersDiscovered(self, pname):
         """
-        retrieve building info and soldiers: full reports
-        :return:
+        Turns all transfers owned by a person to discovered
+        :param pname: Name of the player
         """
-        # Espionage fails at random -> Notify person being spied on
-        # Espionage a settlement sets all resource transfers to discovered
-        # Espionage an attack gives soldier infos
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('UPDATE transfer SET discovered=True WHERE pname=%s;', (pname,))
+        self.dbconnect.commit()
 
-        # Settlement Spionage
-        # Transfer Spionage
+    def setTroopsDiscovered(self, pid):
+        """
+        Sets all troops in a package to Discovered
+        :param pid: Package id
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('UPDATE troops SET discovered=True WHERE pid=%s;', (pid,))
+        self.dbconnect.commit()
 
-        pass
+    def simulateEspionage(self, timer: Timer, transfer_data_acces, content_data_access):
+        """
+        Simulates an espionage. By succes, the sender will be updated with info
+
+        # Espionage a settlement sets all transfers to discovered
+        # Espionage an attack sets soldier info to discovered
+        # Sender and/or receiver may be notified
+        """
+        # Instantiate Usable Data Objects
+        success = choice([True, False])  # Espionage fails at random
+        transfer = transfer_data_acces.instantiateTransfer(timer.oid)
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT pname,name FROM settlement WHERE id=%s;', (transfer.idTo,))
+        data = cursor.fetchone()
+        receiver, receiverCastle = data[0], data[1]
+
+        if transfer.toType:  # If you spied on a transfer, verify if it still exists
+            cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.id,))
+            if not cursor.fetchone()[0]:  # Doesn't exist anymore
+                return
+
+        # We need to do this locally otherwise other functionality will break due to circular includes
+        from .content import Content
+
+        if success:  # Espionage worked out
+            if transfer.toType:  # To a Transfer
+                self.setTroopsDiscovered(transfer.pid)
+                receiverMessage = ""
+                senderMessage = f"""You successfully spied on a transfer of {receiver}. Their info is now visible on the map!"""""
+            else:  # To a settlement
+                self.setTroopsDiscovered(transfer.pid)  # Set the troops of the settlement to discovered
+                self.setTransfersDiscovered(receiver)  # Set transfers owned by the receiver to discovered
+                receiverMessage = ""
+                senderMessage = f"""You successfully spied on {receiverCastle}. Their info is now visible on the map!"""""
+        else:  # Spy has been found!
+            receiverMessage = f"""{transfer.pname} tried to spy on you! How dishonorable!"""""
+            senderMessage = f"""Your spy to {receiver} got caught! Be mindful of the consequences."""""
+
+        # Notify both players
+        if receiverMessage != "":
+            content_data_access.add_message(Content(None, datetime.now(), receiverMessage, 'admin'),
+                                        receiver)  # Notify receiver
+        content_data_access.add_message(Content(None, datetime.now(), senderMessage, 'admin'),
+                                        transfer.pname)  # Notify sender
 
     def simulateAttack(self, timer: Timer):
         # Check if object still exists, else: troops get lost
