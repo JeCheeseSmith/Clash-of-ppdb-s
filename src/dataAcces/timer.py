@@ -131,40 +131,42 @@ class TimerDataAccess:
         cursor = self.dbconnect.get_cursor()
 
 
-
-        friendly = """
+        # Get all befriended players incl yourself withouth 'admin'
+        friendly = f"""
 -- Subquery to get all players friendly associated with player 'a'
-SELECT pname2 AS pname FROM friend WHERE pname1 = %s UNION SELECT pname1 AS pname FROM friend WHERE pname2 = %s -- All friends
+SELECT pname2 AS pname FROM friend WHERE pname1 = '{pname}' UNION SELECT pname1 AS pname FROM friend WHERE pname2 = '{pname}' -- All friends
 UNION
 -- All clan members
-SELECT pname FROM member WHERE cname=%s
-UNION
-SELECT pname FROM clan WHERE name=%s
+SELECT pname FROM member WHERE cname IN (SELECT cname FROM member WHERE pname='{pname}' )
 UNION
 -- Player its self
-SELECT %s
+SELECT '{pname}'
 -- Except the admin (since everyone is a friend with admin
 EXCEPT
-SELECT 'admin';"""
+SELECT 'admin'
+"""
 
-
-        query = """SELECT * FROM timer WHERE sid=1
+        query = """SELECT * FROM timer WHERE sid IN -- Get all timers for my settlements
+(SELECT id FROM settlement WHERE pname=%s) -- All my settlements
 UNION
-SELECT * FROM timer WHERE type='transfer' OR type='espionage' OR type='attack' OR type = 'outpost' AND oid IN (
-
--- Transfers interacting with my settlements
-SELECT id FROM transfer WHERE idto=%s and toType=false -- Resource transfers to my sids
+-- Timers interacting with friendly
+SELECT * FROM timer WHERE type='transfer' OR type='espionage' OR type='attack' OR type = 'outpost' AND oid IN
+( -- Transfer interacting with friendly
+SELECT id FROM transfer WHERE pname IN(%s) -- Transfer owned by friendly
 UNION
-SELECT id FROM transfer WHERE idfrom=%s -- Transfers from my sids
+-- Someone's Transfers interacting with friendly transfers
+SELECT id FROM transfer WHERE totype=True and idto IN (SELECT id FROM transfer WHERE pname IN(%s))
 UNION
--- Transfers interacting with my transfers: the transfers going to any ID departing from me(sidfrom)
-SELECT id FROM transfer WHERE idto IN(SELECT idto FROM transfer WHERE idfrom=%s)
+-- Someone's Transfers going to friendly settlements
+SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlement WHERE pname IN (%s))
 );"""
-        # TODO Rewrite this monster query
-        sid = 0
-        cursor.execute(query, (sid, sid, sid,))
+
+        cursor.execute(query, (pname, friendly, friendly, friendly))
         data = cursor.fetchall()
         newData = []
+        sid=0
+
+        print(data)
 
         for info in data:
             timer = Timer(info[0], info[1], info[2], info[3], info[4], info[5],

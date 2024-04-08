@@ -8,7 +8,7 @@ CREATE VIEW friendly AS(
 SELECT pname2 AS pname FROM friend WHERE pname1 = 'a' UNION SELECT pname1 AS pname FROM friend WHERE pname2 = 'a' -- All friends
 UNION
 -- All clan members
-SELECT pname FROM member WHERE cname='c'
+SELECT pname FROM member WHERE cname IN (SELECT cname FROM member WHERE pname='a')
 UNION
 -- Player its self
 SELECT 'a'
@@ -30,5 +30,3 @@ UNION
 -- Someone's Transfers going to friendly settlements
 SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlement WHERE pname IN (friendly))
 );
-
-SELECT name FROM clan WHERE pname='a';

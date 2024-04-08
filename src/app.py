@@ -232,7 +232,7 @@ def get_resources():
     return jsonify(packageDict)
 
 
-@app.route("/update", methods=["GET"])
+@app.route("/update", methods=["POST"])
 def update():
     # TODO ABU : Change sid to pname in update! - Greetings watson
     """
@@ -253,10 +253,9 @@ def update():
     """
     timer_data_acces.evaluateTimers(settlement_data_acces)
 
-    data = request.args
+    data = request.json
     pname = data.get('pname')
-
-    # TODO UNION Transfers from Clans & Friends
+    print(pname)
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
