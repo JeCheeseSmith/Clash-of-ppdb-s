@@ -14,11 +14,10 @@ import TransferMenu from "../mapMenu/transfers/transfers.jsx";
 
 
 const mapSize = 50;
-function Map()
+function Map({setMenuVisible, setSelectedSettlement})
 {
     const { sid, username} = useLocation().state;
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
-    const [menuOpen, setMenuOpen] = useState(false)
     const [settlements, setSettlements] = useState([])
     const [timers, setTimers] = useState([])
     const [outpostChosen, setOutpostChosen] = useState(false)
@@ -30,8 +29,9 @@ function Map()
 
     const handleSettlement = (rowIndex, colIndex) =>
     {
-        setMenuOpen(!menuOpen)
-        console.log("here")
+        setMenuVisible(true)
+        console.log("is true now")
+        setSelectedSettlement([rowIndex,colIndex])
     }
     const renderSettlement = (rowIndex, colIndex) =>
     {

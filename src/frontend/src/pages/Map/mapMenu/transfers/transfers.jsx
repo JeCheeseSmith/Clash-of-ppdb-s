@@ -1,11 +1,16 @@
 import React, {useState} from 'react';
 import "./transfers.css"
 import TransferOption from "./transferOptionContents.jsx";
-function TransferMenu({menuVisible, setMenuVisible})
+function TransferMenu({setMenuVisible})
 {
     return(
         <div>
             <Navbar/>
+            <button className={"close-transfer-menu"} onClick={() => setMenuVisible(false)}>
+                <span className="transition"></span>
+                <span className="gradient"></span>
+                <span className="label">CLOSE</span>
+            </button>
         </div>
     )
 }
@@ -21,7 +26,7 @@ function Navbar() {
     };
 
     return (
-        <div className="menu-navbar-container">
+        <div>
             {
                 <nav className="menu-navbar">
                     <ul className="menu-navbar-links">
@@ -33,6 +38,9 @@ function Navbar() {
                         </li>
                         <li>
                             <button onClick={() => handleButtonClick('Espionage')} className={"transferOption"}>Espionage</button>
+                        </li>
+                        <li>
+                            <button onClick={() => handleButtonClick('Information')} className={"transferOption"}>Information</button>
                         </li>
                     </ul>
                 </nav>
