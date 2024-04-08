@@ -58,6 +58,10 @@ class TimerDataAccess:
                 self.simulateUpgrade(timer, settlement_data_acces)
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer)
+            elif timer.type == 'espionage':
+                continue
+            elif timer.type == 'attack':
+                pass
             else:
                 continue
                 raise Exception('We dont support this timer type!!!! ' + timer.type)
@@ -131,7 +135,6 @@ class TimerDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
 
-
         # Get all befriended players incl yourself withouth 'admin'
         friendly = f"""
 -- Subquery to get all players friendly associated with player 'a'
@@ -160,12 +163,13 @@ SELECT id FROM transfer WHERE totype=True and idto IN (SELECT id FROM transfer W
 UNION
 -- Someone's Transfers going to friendly settlements
 SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlement WHERE pname IN (%s))
+-- And add all other visible transfers too
+UNION
+SELECT id FROM transfer WHERE discovered=True
 );"""
-
         cursor.execute(query, (pname, friendly, friendly, friendly))
         data = cursor.fetchall()
         newData = []
-        sid=0
 
         print(data)
 
@@ -175,9 +179,9 @@ SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlemen
             newInfo = {}
 
             if timer.type == 'building':  # Retrieve building id in frontend = position
-                cursor.execute('SELECT gridX,gridY FROM building WHERE id=%s and sid=%s;', (timer.oid, sid))
+                cursor.execute('SELECT gridX,gridY FROM building WHERE id=%s and sid=%s;', (timer.oid, timer.sid))
                 newInfo["ID"] = cursor.fetchone()
-            elif timer.type == 'transfer':
+            elif timer.type == 'transfer' or timer.type == 'attack' or timer.type == 'outpost':
                 newInfo = self.addTransferTimerInfo(newInfo, timer, transfer_data_acces)
                 newInfo["ID"] = timer.oid
             else:

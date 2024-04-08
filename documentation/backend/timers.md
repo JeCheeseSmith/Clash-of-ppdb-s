@@ -29,4 +29,7 @@ SELECT id FROM transfer WHERE totype=True and idto IN (SELECT id FROM transfer W
 UNION
 -- Someone's Transfers going to friendly settlements
 SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlement WHERE pname IN (friendly))
+-- And add all other visible transfers too
+UNION
+SELECT id FROM transfer WHERE discovered=True
 );
