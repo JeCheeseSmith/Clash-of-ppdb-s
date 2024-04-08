@@ -635,6 +635,7 @@ def createOutpost():
 @app.route("/getTransferInfo", methods=["GET"])
 def getTransferInfo():
     # IN: tid
+    # IF allied: show more/less
     pass
 
 
@@ -642,6 +643,7 @@ def getTransferInfo():
 def getSettlementInfo():
     # IN: sid
     # check if friend, ally, enemy
+    # IF allied: show more/less
     pass
 
 

@@ -317,7 +317,7 @@ SELECT id FROM transfer WHERE discovered=True
         # Notify both players
         if receiverMessage != "":
             content_data_access.add_message(Content(None, datetime.now(), receiverMessage, 'admin'),
-                                        receiver)  # Notify receiver
+                                            receiver)  # Notify receiver
         content_data_access.add_message(Content(None, datetime.now(), senderMessage, 'admin'),
                                         transfer.pname)  # Notify sender
         return transfer.pid
@@ -334,7 +334,7 @@ SELECT id FROM transfer WHERE discovered=True
         # TODO also deleted associated package, transfer, other timers and other transfer
         pass
 
-    def simulateOutpost(self, timer: Timer, transfer_data_acces):
+    def simulateOutpost(self, timer: Timer, transfer_data_acces, settlement_data_acces):
         """
         Transfer the created Outpost from the admin account to the new player
         :param timer: Timer Object
@@ -347,8 +347,39 @@ SELECT id FROM transfer WHERE discovered=True
         oldPid = cursor.fetchone()[0]
 
         # Change ownership of admin to user and change pid: store all from transfer
-        cursor.execute('UPDATE settlement SET pname = %s, pid = %s WHERE id=%s;', (transfer.pname, transfer.pid, timer.sid, ) )
+        cursor.execute('UPDATE settlement SET pname = %s, pid = %s WHERE id=%s;',
+                       (transfer.pname, transfer.pid, timer.sid,))
         cursor.execute('DELETE FROM package WHERE id=%s;', (oldPid,))  # Delete the old package
 
-        # TODO Initialise sattelcastle + maxNumberofBuildings
-        pass
+        # Initialise Satellite Castle and preset unlocked Status
+        cursor.execute(
+            'INSERT INTO building(name, level, gridx, gridy, sid, occuppiedcells) VALUES(%s,%s,%s,%s,%s,%s);',
+            ('SatelliteCastle', 1, 6, 6, timer.sid,[[6, 6], [6, 7], [6, 8], [6, 9], [6, 10], [6, 11], [6, 12], [6, 13], [6, 14],
+                                      [6, 15], [6, 16], [6, 17], [6, 18], [6, 19], [6, 20], [7, 6], [7, 7], [7, 8],
+                                      [7, 9], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17],
+                                      [7, 18], [7, 19], [7, 20], [8, 6], [8, 7], [8, 8], [8, 9], [8, 10], [8, 11],
+                                      [8, 12], [8, 13], [8, 14], [8, 15], [8, 16], [8, 17], [8, 18], [8, 19], [8, 20],
+                                      [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 14],
+                                      [9, 15], [9, 16], [9, 17], [9, 18], [9, 19], [9, 20], [10, 6], [10, 7], [10, 8],
+                                      [10, 9], [10, 10], [10, 11], [10, 12], [10, 13], [10, 14], [10, 15], [10, 16],
+                                      [10, 17], [10, 18], [10, 19], [10, 20], [11, 6], [11, 7], [11, 8], [11, 9],
+                                      [11, 10], [11, 11], [11, 12], [11, 13], [11, 14], [11, 15], [11, 16], [11, 17],
+                                      [11, 18], [11, 19], [11, 20], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10],
+                                      [12, 11], [12, 12], [12, 13], [12, 14], [12, 15], [12, 16], [12, 17], [12, 18],
+                                      [12, 19], [12, 20], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11],
+                                      [13, 12], [13, 13], [13, 14], [13, 15], [13, 16], [13, 17], [13, 18], [13, 19],
+                                      [13, 20], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 11], [14, 12],
+                                      [14, 13], [14, 14], [14, 15], [14, 16], [14, 17], [14, 18], [14, 19], [14, 20],
+                                      [15, 6], [15, 7], [15, 8], [15, 9], [15, 10], [15, 11], [15, 12], [15, 13],
+                                      [15, 14], [15, 15], [15, 16], [15, 17], [15, 18], [15, 19], [15, 20], [16, 6],
+                                      [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14],
+                                      [16, 15], [16, 16], [16, 17], [16, 18], [16, 19], [16, 20], [17, 6], [17, 7],
+                                      [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15],
+                                      [17, 16], [17, 17], [17, 18], [17, 19], [17, 20], [18, 6], [18, 7], [18, 8],
+                                      [18, 9], [18, 10], [18, 11], [18, 12], [18, 13], [18, 14], [18, 15], [18, 16],
+                                      [18, 17], [18, 18], [18, 19], [18, 20], [19, 6], [19, 7], [19, 8], [19, 9],
+                                      [19, 10], [19, 11], [19, 12], [19, 13], [19, 14], [19, 15], [19, 16], [19, 17],
+                                      [19, 18], [19, 19], [19, 20], [20, 6], [20, 7], [20, 8], [20, 9], [20, 10],
+                                      [20, 11], [20, 12], [20, 13], [20, 14], [20, 15], [20, 16], [20, 17], [20, 18],
+                                      [20, 19], [20, 20]]))
+        settlement_data_acces.upgradeCastle(timer.sid, True)  # Upgrade the Satellite Castle to level 1
