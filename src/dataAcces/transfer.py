@@ -209,41 +209,41 @@ class TransferDataAccess:
                        package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
                        friend_data_acces: FriendDataAccess,
                        soldier_data_acces: SoldierDataAccess):
-        try:
-            cursor = self.dbconnect.get_cursor()  # DB Acces
-            transferable = False
+        #try:
+        cursor = self.dbconnect.get_cursor()  # DB Acces
+        transferable = False
 
-            if tType == 'attack':  # You can only attack enemies!
-                if self.areEnemies(idFrom, fromType, idTo, toType, friend_data_acces, clan_data_acces):
-                    raise Exception("You can't attack your allies!")
-                transferable = True
+        if tType == 'attack':  # You can only attack enemies!
+            if not self.areEnemies(idFrom, fromType, idTo, toType, friend_data_acces, clan_data_acces):
+                raise Exception("You can't attack your allies!")
+            transferable = True
 
-            # Restructure to a backend format
-            soldiers = self.__restructure(soldiers, False, transferable)
+        # Restructure to a backend format
+        soldiers = self.__restructure(soldiers, False, transferable)
 
-            # Adjust resource & troop info
-            tp = self.updateResourceTroops(idFrom, soldiers, resources, package_data_acces, soldier_data_acces, False,
-                                           transferable)
+        # Adjust resource & troop info
+        tp = self.updateResourceTroops(idFrom, soldiers, resources, package_data_acces, soldier_data_acces, False,
+                                       transferable)
 
-            # Insert transfer into the database
-            cursor.execute(
-                'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid, pname) VALUES (%s,%s,%s,%s,%s,%s,%s)',
-                (idTo, toType, idFrom, fromType, False, tp.package.id, pname))
-            cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
-            tid = cursor.fetchone()[0]
+        # Insert transfer into the database
+        cursor.execute(
+            'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid, pname) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+            (idTo, toType, idFrom, fromType, False, tp.package.id, pname))
+        cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
+        tid = cursor.fetchone()[0]
 
-            # Add a timer
-            start, stop, duration = self.calculateDuration(soldiers, tp.package, self.translatePosition(idTo, toType),
-                                                           self.translatePosition(idFrom, fromType))
-            timer = Timer(None, tid, tType, start, stop, duration, idTo)
-            timer_data_access.insertTimer(timer)
+        # Add a timer
+        start, stop, duration = self.calculateDuration(soldiers, tp.package, self.translatePosition(idTo, toType),
+                                                       self.translatePosition(idFrom, fromType))
+        timer = Timer(None, tid, tType, start, stop, duration, idTo)
+        timer_data_access.insertTimer(timer)
 
-            self.dbconnect.commit()
-            return True, timer
-        except Exception as e:
-            print('error', e)
-            self.dbconnect.rollback()
-            return False, e
+        self.dbconnect.commit()
+        return True, timer
+        # except Exception as e:
+        #     print('error', e)
+        #     self.dbconnect.rollback()
+        #     return False, e
 
     def createEspionage(self, idTo: int, sidFrom: int, toType: bool, timer_data_access: TimerDataAccess):
         cursor = self.dbconnect.get_cursor()

@@ -61,7 +61,7 @@ class SettlementDataAcces:
 
         if not outpost:
             cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("Castle", sid))
-            level = cursor.fetchone()[0]
+            level = cursor.fetchone()
 
             if level == 2:
                 dct = dict(WoodCuttersCamp=2, Quarry=2, Farm=2, GrainSilo=2)
@@ -76,6 +76,8 @@ class SettlementDataAcces:
                 dct = dict(SteelMine=4, Farm=6, WoodStockPile=4, StoneStockPile=4)
             elif level == 7:
                 dct = dict(WoodCuttersCamp=5, Quarry=5, SteelMine=4, Farm=7, Barracks=4, GrainSilo=6)
+            else:
+                dct = dict()
         else:  # Satellite Castle differs from Castle
             cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("SatelliteCastle", sid))
             level = cursor.fetchone()[0]

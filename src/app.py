@@ -666,7 +666,6 @@ def createClan():
     data = request.json
     success = clan_data_acces.add_clan(
         Clan(data.get("name"), data.get("pname"), data.get("description"), data.get("status")))
-    print('success:' , success)
     return jsonify({"success": success})
 
 
