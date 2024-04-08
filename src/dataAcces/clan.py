@@ -59,19 +59,13 @@ class ClanDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         # Check if they're not already in a clan (Member or Leader)
-        cursor.execute('SELECT * FROM player WHERE name=%s;', (pname,))
-        QueryCheckmember = """SELECT 
-               EXISTS(SELECT 1 FROM member WHERE pname=%s);
-               """
-        cursor.execute(QueryCheckmember, (cursor.fetchone()[0],))
+        cursor.execute('SELECT EXISTS(SELECT cname FROM member WHERE pname=%s);', (pname,))
         queryCheckmember = cursor.fetchone()[0]
-        cursor.execute('SELECT * FROM player WHERE name=%s;', (pname,))
-        QueryCheckclan = """SELECT 
-               EXISTS(SELECT 1 FROM clan WHERE pname=%s);
-               """
-        cursor.execute(QueryCheckclan, (cursor.fetchone()[0],))
+
+        cursor.execute('SELECT EXISTS(SELECT name FROM clan WHERE pname=%s);', (pname,))
         queryCheckclan = cursor.fetchone()[0]
-        return queryCheckclan and queryCheckmember
+
+        return queryCheckclan or queryCheckmember
 
     def areAllies(self, pname1, pname2):
         """

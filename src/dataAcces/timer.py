@@ -129,6 +129,25 @@ class TimerDataAccess:
         :return: List of timer object with info
         """
         cursor = self.dbconnect.get_cursor()
+
+
+
+        friendly = """
+-- Subquery to get all players friendly associated with player 'a'
+SELECT pname2 AS pname FROM friend WHERE pname1 = %s UNION SELECT pname1 AS pname FROM friend WHERE pname2 = %s -- All friends
+UNION
+-- All clan members
+SELECT pname FROM member WHERE cname=%s
+UNION
+SELECT pname FROM clan WHERE name=%s
+UNION
+-- Player its self
+SELECT %s
+-- Except the admin (since everyone is a friend with admin
+EXCEPT
+SELECT 'admin';"""
+
+
         query = """SELECT * FROM timer WHERE sid=1
 UNION
 SELECT * FROM timer WHERE type='transfer' OR type='espionage' OR type='attack' OR type = 'outpost' AND oid IN (
