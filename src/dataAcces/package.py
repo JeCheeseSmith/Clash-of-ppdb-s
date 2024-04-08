@@ -191,7 +191,7 @@ class PackageDataAccess:
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT * FROM package WHERE id=%s;', pid)
+        cursor.execute('SELECT * FROM package WHERE id=%s;', (pid,))
         return Package(cursor.fetchone())
 
     def add_resources(self, package):

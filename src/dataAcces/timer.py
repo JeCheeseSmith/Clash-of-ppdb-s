@@ -42,14 +42,16 @@ class TimerDataAccess:
         return id
 
     def evaluateTimers(self, settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
-                       soldier_data_acces):
+                       soldier_data_acces, timer_data_access):
         """
         Evaluate all timers passed their done time
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT * FROM timer WHERE done<now();')
+        cursor.execute('SELECT * FROM timer WHERE done<%s;', (datetime.now(),))
         timersDone = cursor.fetchall()
+
+        print(timersDone)
 
         for timerArray in timersDone:  # Redirect timer functionality to specific function
             timer = Timer(timerArray[0], timerArray[1], timerArray[2], timerArray[3], timerArray[4], timerArray[5],
@@ -67,7 +69,7 @@ class TimerDataAccess:
                 cursor.execute('DELETE FROM package WHERE id=%s;', (pid,))
             elif timer.type == 'attack':
                 self.simulateAttack(timer, transfer_data_acces, content_data_access, package_data_acces,
-                                    soldier_data_acces)
+                                    soldier_data_acces, timer_data_access)
             elif timer.type == 'outpost':
                 self.simulateOutpost(timer, transfer_data_acces, settlement_data_acces)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
@@ -133,7 +135,7 @@ class TimerDataAccess:
             print('error', e)
             self.dbconnect.rollback()
 
-    def retrieveTimers(self, pname: str, transfer_data_acces, package_data_acces):
+    def retrieveTimers(self, pname: str, transfer_data_acces):
         """
         Get all timers for a certain settlement and convert to a frontend usable format
         :param transfer_data_acces:
@@ -244,7 +246,7 @@ SELECT id FROM transfer WHERE discovered=True
         else:  # To a settlement
             cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
             spid = cursor.fetchone()[0]
-        sp = transfer_data_acces.instantiatePackageWithSoldiers(spid)  # Package going to
+        sp = transfer_data_acces.instantiatePackageWithSoldiers(spid, soldier_data_acces, package_data_acces)  # Package going to
 
         # Update correct data in the database
         sp += tp
@@ -337,13 +339,14 @@ SELECT id FROM transfer WHERE discovered=True
         return transfer.pid
 
     def simulateAttack(self, timer: Timer, transfer_data_acces, content_data_access, package_data_acces,
-                       soldier_data_acces):
+                       soldier_data_acces, timer_data_access):
         """
         Simulate an attack towards another player. A winner is chosen randomly.
 
         # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
         # The failed transfers will be sent back to the owner
         # If the attack doesn't reach the transfer is attacking, the soldiers will get 'lost'
+        :param timer_data_access:
         :param soldier_data_acces:
         :param package_data_acces:
         :param content_data_access:
@@ -393,7 +396,7 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s;', (transferDefendant.id,))
                 transfers = cursor.fetchall()
                 for tid in transfers:  # Send them back to where they came from
-                    transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid))
+                    transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid), timer_data_access, soldier_data_acces, package_data_acces)
 
                 attackerMessage = f"""We successfully captured the transfer of {defendant}! Returning home now, my Lord."""
                 defendantMessage = f"""You're transfer has been attacked and captured by {transfer.pname}!"""
@@ -424,7 +427,7 @@ SELECT id FROM transfer WHERE discovered=True
 
                 attackerMessage = f"""We successfully raided the settlement of {defendant}! Returning home now, my Lord."""
                 defendantMessage = f"""You've been attacked by {transfer.pname}!"""
-            transfer_data_acces.returnToBase(transfer)  # Let the original transfer also return to base
+            transfer_data_acces.returnToBase(transfer, timer_data_access, soldier_data_acces, package_data_acces)  # Let the original transfer also return to base
         else:  # Defendant won
             # Delete attack transfer
             cursor.execute('DELETE FROM transfer WHERE id=%s;', (transfer.id,))
