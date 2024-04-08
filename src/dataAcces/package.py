@@ -166,14 +166,12 @@ class PackageWithSoldier:
 
     def __add__(self, other):
         """
-        If transferable = True, the troops may be adjusted
         :param other:
         :return:
         """
         self.package += other.package
         for name in self.soldiers.keys():
-            if other.soldiers[name]['transferable']:
-                self.soldiers[name]["amount"] += other.soldiers[name]["amount"]
+            self.soldiers[name]["amount"] += other.soldiers[name]["amount"]
         return self
 
     def __sub__(self, other):
@@ -229,11 +227,10 @@ class PackageDataAccess:
             for soldier in package.soldiers.keys():
                 amount = package.soldiers[soldier]['amount']
                 discovered = package.soldiers[soldier]['discovered']
-                transferable = package.soldiers[soldier]['transferable']
                 if amount != 0:
                     cursor.execute(
-                        'INSERT INTO troops(pid, sname, amount, transferable, discovered) VALUES (%s, %s, %s, %s, %s);',
-                        (package.package.id, soldier, amount, transferable, discovered))
+                        'INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s, %s, %s, %s);',
+                        (package.package.id, soldier, amount, discovered))
 
         self.dbconnect.commit()
 
@@ -256,7 +253,6 @@ class PackageDataAccess:
             for soldier in package.soldiers.keys():  # Update data for each soldier
                 amount = package.soldiers[soldier]['amount']
                 discovered = package.soldiers[soldier]['discovered']
-                transferable = package.soldiers[soldier]['transferable']
 
                 if amount != 0:  # Don't insert useless info
                     # Check if we need to insert or update this troop!
@@ -265,12 +261,12 @@ class PackageDataAccess:
 
                     if cursor.fetchone()[0]:  # It exists, so update
                         cursor.execute(
-                            'UPDATE troops SET amount = %s , transferable = %s, discovered = %s WHERE pid=%s AND sname=%s;',
-                            (amount, transferable, discovered, package.package.id, soldier))
+                            'UPDATE troops SET amount = %s ,discovered = %s WHERE pid=%s AND sname=%s;',
+                            (amount, discovered, package.package.id, soldier))
                     else:  # Insert
                         cursor.execute(
-                            'INSERT INTO troops(pid, sname, amount, transferable, discovered) VALUES (%s, %s, %s, %s, %s);',
-                            (package.package.id, soldier, amount, transferable, discovered))
+                            'INSERT INTO troops(pid, sname, amount,discovered) VALUES (%s, %s, %s, %s);',
+                            (package.package.id, soldier, amount, discovered))
 
         self.dbconnect.commit()
 

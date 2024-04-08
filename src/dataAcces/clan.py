@@ -50,7 +50,7 @@ class ClanDataAccess:
             cursor.execute('DELETE FROM content WHERE id=%s;', (rid,))
             cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (rid,))
 
-    def __isMember(self, pname):
+    def isMember(self, pname):
         """
         Check if a member is not already in a clan; Helper Function
         :param pname: Player name
@@ -59,19 +59,10 @@ class ClanDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         # Check if they're not already in a clan (Member or Leader)
-        cursor.execute('SELECT * FROM player WHERE name=%s;', (pname,))
-        QueryCheckmember = """SELECT 
-               EXISTS(SELECT 1 FROM member WHERE pname=%s);
-               """
-        cursor.execute(QueryCheckmember, (cursor.fetchone()[0],))
+        cursor.execute('SELECT EXISTS(SELECT cname FROM member WHERE pname=%s);', (pname,))
         queryCheckmember = cursor.fetchone()[0]
-        cursor.execute('SELECT * FROM player WHERE name=%s;', (pname,))
-        QueryCheckclan = """SELECT 
-               EXISTS(SELECT 1 FROM clan WHERE pname=%s);
-               """
-        cursor.execute(QueryCheckclan, (cursor.fetchone()[0],))
-        queryCheckclan = cursor.fetchone()[0]
-        return queryCheckclan and queryCheckmember
+
+        return queryCheckmember
 
     def areAllies(self, pname1, pname2):
         """
@@ -80,7 +71,7 @@ class ClanDataAccess:
         :param pname2:
         :return:
         """
-        if not (self.__isMember(pname1) and self.__isMember(pname2)):  # If they're not both members of a clan
+        if not (self.isMember(pname1) and self.isMember(pname2)):  # If they're not both members of a clan
             return False
 
         cursor = self.dbconnect.get_cursor()
@@ -106,7 +97,7 @@ class ClanDataAccess:
         :param obj: Clan Object
         :return:
         """
-        if not self.__isMember(obj.pname):
+        if not self.isMember(obj.pname):
             try:
                 cursor = self.dbconnect.get_cursor()
 
@@ -176,7 +167,7 @@ class ClanDataAccess:
         :param cname: Name of the clan
         :return:
         """
-        if not self.__isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
+        if not self.isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
             try:
                 cursor = self.dbconnect.get_cursor()
 
