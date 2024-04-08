@@ -1,9 +1,8 @@
 from math import inf
 from .soldier import *
 from .friend import *
-from .timer import Timer, TimerDataAccess
-from .package import *
 from .settlement import *
+
 
 class Transfer:
     def __init__(self, tid: int, discovered: bool, idTo: int, toType: bool, idFrom: int, fromType: bool, pid: int):
@@ -113,6 +112,34 @@ class TransferDataAccess:
         pname2 = settlement_data_acces.getOwner(sidFrom)
         return friend_data_acces.areFriends(pname1, pname2)
 
+    def getNumberOfSettlements(self, sid: int):
+        """
+        Retrieve the number of settlements for a player
+        :param sid: Identifier of the main settlement of a player
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT count(id) FROM settlement WHERE pname IN (SELECT pname FROM settlement WHERE id=%s);',
+                       (sid,))
+        return cursor.fetchone()[0]
+
+    def getMaxNumberOfSettlements(self, sid: int):
+        """
+        Retrieve the maximal number of settlements a user may have (= Chancery level + 1)
+        :param sid: Settlement Identifier
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT level FROM building WHERE sid=%s and name=%s;', (sid, 'Chancery'))
+        return cursor.fetchone()[0] + 1
+
+    def hasChancery(self, sid: int):
+        """
+        Verify if a settlement contains a chancery and may create an outpost
+        :param sid: Settlement ID
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT EXISTS(SELECT id FROM building WHERE sid=%s and name=%s);', (sid, 'Chancery'))
+        return cursor.fetchone()[0]
+
     def doesIntercept(self, tid, tid2):
         # TODO Gives true if an attack on a transfer will succeed (this can change over time!) - see notes
         pass
@@ -178,7 +205,8 @@ class TransferDataAccess:
 
         return tp  # Return Transfer Package with Troops
 
-    def createTransfer(self, idTo: int, toType: bool, idFrom: int, fromType: bool, soldiers: list, resources: list, tType: str,
+    def createTransfer(self, idTo: int, toType: bool, idFrom: int, fromType: bool, soldiers: list, resources: list,
+                       tType: str,
                        timer_data_access: TimerDataAccess,
                        package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
                        friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces,
@@ -186,9 +214,6 @@ class TransferDataAccess:
         try:
             cursor = self.dbconnect.get_cursor()  # DB Acces
             transferable = False
-            print(idTo, toType, idFrom, fromType, soldiers, resources, tType)
-
-            # TODO when an attack returns it might return from a tid, need support for that!
 
             # Verify they have the correct status to each other: friends or allies for transfers, None for outpost, enemies for attacks
             if tType == 'transfer':
@@ -197,7 +222,12 @@ class TransferDataAccess:
                     raise Exception("You can't send a transfer to an enemy")
 
             elif tType == 'attack':
-                if TransferDataAccess.areInSameClan(idTo, idFrom, clan_data_acces, settlement_data_acces) or TransferDataAccess.areFriends(idFrom, idTo, friend_data_acces, settlement_data_acces):
+                # TODO Adjust this to check transfers too
+                if TransferDataAccess.areInSameClan(idTo, idFrom, clan_data_acces,
+                                                    settlement_data_acces) or TransferDataAccess.areFriends(idFrom,
+                                                                                                            idTo,
+                                                                                                            friend_data_acces,
+                                                                                                            settlement_data_acces):
                     raise Exception("You can't attack your allies!")
                 transferable = True
 
@@ -213,11 +243,11 @@ class TransferDataAccess:
                 'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid) VALUES (%s,%s,%s,%s,%s,%s)',
                 (idTo, toType, idFrom, fromType, False, tp.package.id))
             cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
-            tid = cursor.fetchone()
+            tid = cursor.fetchone()[0]
 
             # Add a timer
-            start, stop, duration = self.calculateDuration(soldiers, tp.package, self.translatePosition(idTo, False),
-                                                           self.translatePosition(idFrom, False))
+            start, stop, duration = self.calculateDuration(soldiers, tp.package, self.translatePosition(idTo, toType),
+                                                           self.translatePosition(idFrom, fromType))
             timer = Timer(None, tid, tType, start, stop, duration, idTo)
             timer_data_access.insertTimer(timer)
 
@@ -251,5 +281,55 @@ class TransferDataAccess:
         timer_data_access.insertTimer(timer)
         return timer
 
-    def createOutpost(self):
-        pass
+    def createOutpost(self, sid: int, coordTo: list, outpostName: str, soldiers: list, resources: list,
+                      timer_data_access: TimerDataAccess,
+                      package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
+                      friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces,
+                      soldier_data_acces: SoldierDataAccess):
+        """
+        PRECONDITION: sid refers to the main settlement of the user
+
+        Starts a timer to create an outpost, makes an outpost transfer and presets the outpost settlement data
+
+        :param sid: Identifier of the main settlement
+        :param coordTo: Coordinate the outpost needs to be created
+        :param resources: Resources to give with
+        :param soldiers: Soldiers that go with
+        :param outpostName: Name of the new settlement
+
+        :param soldier_data_acces:
+        :param friend_data_acces:
+        :param package_data_acces:
+        :param timer_data_access:
+        :param clan_data_acces:
+        :param settlement_data_acces:
+        :return: success: Status and timer (error or timer object)
+        """
+        try:
+            if not self.hasChancery(sid):
+                raise Exception('You cannot create an outpost yet. You should first unlock the chancery!')
+            if self.getMaxNumberOfSettlements(sid) < self.getNumberOfSettlements(sid) + 1:
+                raise Exception(
+                    'You reached the maximal number of outposts for your kingdom! Consider upgrading the chancery.')
+            if SettlementDataAcces.getNewCoordinate(coordTo[0], coordTo[1]) != coordTo:  # Coordinate is not excepted
+                raise Exception('Your outpost is too close to others, make sure to remain a safe distance!')
+
+            cursor = self.dbconnect.get_cursor()  # DB Acces
+
+            # Create an empty package
+            pid = package_data_acces.add_resources(Package([0, 0, 0, 0, 0, 0, 0]))
+            # Create a new settlement on admin account, when the timer runs out, this settlement will be added to the player
+            # Note: since every user is befriended with the admin, this settlement can't be attacked yet :)
+            cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES(%s,%s,%s,%s,%s);',
+                           (outpostName, coordTo[0], coordTo[1], pid, 'admin'))
+            cursor.execute('SELECT max(id) FROM settlement;')  # Get the settlement ID
+            sidTo = cursor.fetchone()[0]
+
+            # Create the transfer and return timer
+            return self.createTransfer(sidTo, False, sid, False, soldiers, resources, 'outpost',
+                                       timer_data_access, package_data_acces, clan_data_acces,
+                                       friend_data_acces, settlement_data_acces, soldier_data_acces)
+        except Exception as e:
+            print('error', e)
+            self.dbconnect.rollback()
+            return False, e

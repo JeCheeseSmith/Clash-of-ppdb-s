@@ -199,7 +199,12 @@ SELECT id FROM transfer WHERE idto IN(SELECT idto FROM transfer WHERE idfrom=%s)
         pass
 
     def simulateAttack(self):
+        # Choose a random winner
+        # Loser: all troops die
         pass
 
     def simulateOutpost(self):
+        # Change ownership of admin to user
+        # Store ALL stuff in outpost (even if it goes over the limit)
+        # Initialise sattelcastle + maxNumberofBuildings
         pass

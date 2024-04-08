@@ -103,19 +103,19 @@ class SettlementDataAcces:
         """
         cursor = self.dbconnect.get_cursor()
 
-        cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("Castle", sid))
-        level = cursor.fetchone()[0]
+        cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("Barracks", sid))
+        levels = cursor.fetchall()
+        for level in levels:  # We can have multiple barracks
+            if level == 3:
+                lst = ["Militia", "LongbowMan", "Knight", "Pikeman", "Huskarl"]
+            elif level == 6:
+                lst = ["Skirmishers", "CrossbowMan", "WarElephant", "Halbardier", "OrderKnight"]
+            else:  # Nothing needs to be done
+                lst = []
 
-        if level == 3:
-            lst = ["Militia", "LongbowMan", "Knight", "Pikeman", "Huskarl"]
-        elif level == 6:
-            lst = ["Skirmishers", "CrossbowMan", "WarElephant", "Halbardier", "OrderKnight"]
-        else:  # Nothing needs to be done
-            lst = []
-
-        for soldier in lst:  # Adjust the maxBuilding Number
-            cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', (soldier, sid, -1))
-            # Soldiers don't have a max amount
+            for soldier in lst:  # Adjust the maxBuilding Number
+                cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', (soldier, sid, -1))
+                # Soldiers don't have a max amount
 
         self.dbconnect.commit()
 
@@ -367,14 +367,18 @@ class SettlementDataAcces:
         """
         return sqrt(pow((to[0] - start[0]), 2) + pow((to[1] - start[1]), 2))
 
-    def getNewCoordinate(self):
+    def getNewCoordinate(self, x=-1 , y=-1):
         """
         Generate new unique coordinates for new Settlements on the map
         (0,0) , (2,0) , (0,2) , (2,2) ...
+
+        If x and y are not -1, we can verify for outposts if this coordinate is allowed!
+
         :return:
         """
-        x = randrange(0, 50)
-        y = randrange(0, 50)
+        if x == -1 or y == -1:
+            x = randrange(0, 50)
+            y = randrange(0, 50)
 
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT mapX, mapY FROM settlement;')
@@ -388,7 +392,7 @@ class SettlementDataAcces:
     def getMap(self):
         # sid, gridX,gridY, level, isOutpost
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT id,mapX,mapY FROM settlement;')
+        cursor.execute('SELECT id,mapX,mapY FROM settlement;')  # Outposts to be created are owned by admin
         data = cursor.fetchall()
         sList = []
 

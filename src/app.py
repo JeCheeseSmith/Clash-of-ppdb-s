@@ -572,9 +572,9 @@ def transfer():
     JSON Input Format
     {
     "idTo": <INT> | Identifier of the settlement going to ('receiver')
-    "toType": <BOOL> | Specifieng if we're going to a settlement (False) or another transfer (True)
+    "toType": <BOOL> | Specifies if we're going to a settlement (False) or another transfer (True)
     "idFrom": <INT> | Identifier of the settlement going from ('sender')
-    "fromType": <BOOL> | Specifieng if we're going to a settlement (False) or another transfer (True)
+    "fromType": <BOOL> | Specifies if we're going to a settlement (False) or another transfer (True)
     "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
     "resources": <LIST>: [ amount <INT> , ... ]: Index 0: 0, Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
     "tType": <STRING> | 'attack' or 'transfer'; specifies the sort of transfer we're doing
@@ -608,10 +608,36 @@ def transfer():
 @app.route("/createOutpost", methods=["POST"])
 def createOutpost():
     """
+    Endpoint to start the creation of an outpost
 
-    :return:
+    JSON Input Format
+    {
+    "coordTo": <ARRAY INT[2]> | Coordinate of the place the new outpost needs to be created
+    "sidFrom": <INT> | Identifier of the settlement going from ('sender')
+    "outpostName": <STRING> | Name of the new outpost
+    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
+    "resources": <LIST>: [ amount <INT> , ... ]: Index 0: 0, Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
+    }
+
+    JSON Output Format:
+    {
+    "success": <bool> | State of request
+    If success = True, the timer object will be sent back as well
+    "error": <STRING> | Optional error message if success=False
+    }
     """
-    pass
+    data = request.json
+    success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo'),  data.get('outpostName'), data.get('soldiers') ,data.get('resources'), timer_data_acces,
+                                                        package_data_acces, clan_data_acces,
+                                                        friend_data_access, settlement_data_acces, soldier_data_acces )
+
+    if success:
+        dct = timer.to_dct()
+        dct["success"] = success
+    else:
+        dct = dict(success=success)
+        dct["error"] = str(timer)  # In this case, timer is an error message
+    return jsonify(dct)
 
 
 @app.route("/getTransferInfo", methods=["GET"])
