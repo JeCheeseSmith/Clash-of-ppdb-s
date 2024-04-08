@@ -59,6 +59,7 @@ class TimerDataAccess:
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer)
             else:
+                continue
                 raise Exception('We dont support this timer type!!!! ' + timer.type)
 
     def simulateTroopTraining(self, timer: Timer):
