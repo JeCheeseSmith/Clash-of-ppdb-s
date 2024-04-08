@@ -59,10 +59,10 @@ class TimerDataAccess:
                 self.simulateUpgrade(timer, settlement_data_acces)
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access)
-                cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
             elif timer.type == 'espionage':
-                self.simulateEspionage(timer, transfer_data_acces, content_data_access)
+                pid = self.simulateEspionage(timer, transfer_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
+                cursor.execute('DELETE FROM package WHERE id=%s;', (pid,))
             elif timer.type == 'attack':
                 self.simulateAttack(timer)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
@@ -231,6 +231,7 @@ SELECT id FROM transfer WHERE discovered=True
         # Instanstiate Usable Data Objects
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid)  # Transfer package
+        # TODO Add support to allow transfers to transfers
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
         spid = cursor.fetchone()[0]
         sp = transfer_data_acces.instantiatePackageWithSoldiers(spid)  # Soldier Package
@@ -252,6 +253,11 @@ SELECT id FROM transfer WHERE discovered=True
             Content(None, datetime.now(), f"""Your transfer to {receiver} succeeded.""", 'admin'),
             transfer.pname)  # Notify sender
 
+        # Delete data from database
+        cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
+        cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))
+        cursor.execute('DELETE FROM troops WHERE pid=%s;', (transfer.pid,))
+
     def setTransfersDiscovered(self, pname):
         """
         Turns all transfers owned by a person to discovered
@@ -272,7 +278,7 @@ SELECT id FROM transfer WHERE discovered=True
 
     def simulateEspionage(self, timer: Timer, transfer_data_acces, content_data_access):
         """
-        Simulates an espionage. By succes, the sender will be updated with info
+        Simulates an espionage. By success, the sender will be updated with info
 
         # Espionage a settlement sets all transfers to discovered
         # Espionage an attack sets soldier info to discovered
@@ -289,7 +295,7 @@ SELECT id FROM transfer WHERE discovered=True
         if transfer.toType:  # If you spied on a transfer, verify if it still exists
             cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.id,))
             if not cursor.fetchone()[0]:  # Doesn't exist anymore
-                return
+                return transfer.pid
 
         # We need to do this locally otherwise other functionality will break due to circular includes
         from .content import Content
@@ -314,20 +320,35 @@ SELECT id FROM transfer WHERE discovered=True
                                         receiver)  # Notify receiver
         content_data_access.add_message(Content(None, datetime.now(), senderMessage, 'admin'),
                                         transfer.pname)  # Notify sender
+        return transfer.pid
 
     def simulateAttack(self, timer: Timer):
-        # Check if object still exists, else: troops get lost
+        # Check if object still exists, else: troops get lost; notify the player
+        # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
 
         # Choose a random winner
         # Loser: all troops die
         # Winner: continious transfer
         # If done < transfer.done: All troops get lost and will not return
+
+        # TODO also deleted associated package, transfer, other timers and other transfer
         pass
 
-    def simulateOutpost(self, timer: Timer):
-        # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
+    def simulateOutpost(self, timer: Timer, transfer_data_acces):
+        """
+        Transfer the created Outpost from the admin account to the new player
+        :param timer: Timer Object
+        :return:
+        """
+        # Instantiate Usable Data Objects
+        transfer = transfer_data_acces.instantiateTransfer(timer.oid)
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (timer.sid,))
+        oldPid = cursor.fetchone()[0]
 
-        # Change ownership of admin to user
-        # Store ALL stuff in outpost (even if it goes over the limit)
-        # Initialise sattelcastle + maxNumberofBuildings
+        # Change ownership of admin to user and change pid: store all from transfer
+        cursor.execute('UPDATE settlement SET pname = %s, pid = %s WHERE id=%s;', (transfer.pname, transfer.pid, timer.sid, ) )
+        cursor.execute('DELETE FROM package WHERE id=%s;', (oldPid,))  # Delete the old package
+
+        # TODO Initialise sattelcastle + maxNumberofBuildings
         pass
