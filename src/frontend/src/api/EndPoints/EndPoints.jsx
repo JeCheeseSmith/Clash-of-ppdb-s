@@ -30,6 +30,10 @@ export const get_getTroops = async (sid) =>
     return await GET( {"id": sid}, '/getTroops');
 }
 
+export const get_getConsumption = async (sid) =>
+{
+    return await GET( {"id": sid}, '/getConsumption')
+}
 
 
 export const upgradeBuilding = async (position, sid) =>

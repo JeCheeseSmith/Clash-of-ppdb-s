@@ -90,23 +90,24 @@ function SoldierMenuOptions({pageName, requests, sendData}){
 
 function TroopOverviewPage() {
     const { sid, username } = useLocation().state;
+    const [consumption, setConsumption] = useState(0);
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
-        heavyInfantry1: 1,
-        heavyInfantry2: 1,
-        heavyInfantry3: 1,
-        spear1: 0,
-        spear2: 0,
-        spear3: 0,
-        horseman1: 0,
-        horseman2: 0,
-        horseman3: 0,
-        bowman1: 0,
-        bowman2: 0,
-        bowman3: 0,
-        ambush1: 0,
-        ambush2: 0,
-        ambush3: 0
+        heavyInfantry1: null,
+        heavyInfantry2: null,
+        heavyInfantry3: null,
+        spear1: null,
+        spear2: null,
+        spear3: null,
+        horseman1: null,
+        horseman2: null,
+        horseman3: null,
+        bowman1: null,
+        bowman2: null,
+        bowman3: null,
+        ambush1: null,
+        ambush2: null,
+        ambush3: null
     });
     const [soldiersAvailable, setSoldierAvailable] = useState({
         heavyInfantry1: false,
@@ -145,7 +146,7 @@ function TroopOverviewPage() {
             ambush2: data.Militia,
             ambush3: data.Skirmisher
         }))
-        API.get_getTroops(sid).then(data => setSoldierCount(
+    API.get_getTroops(sid).then(data => setSoldierCount(
             {
             heavyInfantry1: data.ArmoredFootman,
             heavyInfantry2: data.Huskarl,
@@ -163,7 +164,7 @@ function TroopOverviewPage() {
             ambush2: data.Militia,
             ambush3: data.Skirmisher
         }))
-
+    API.get_getConsumption(sid).then(data => setConsumption({consumption: data.consumption}))
 }
     // Function that gets the availability of every soldier and sends a request for the soldier counts by calling the API
     useEffect(() =>
@@ -185,7 +186,7 @@ function TroopOverviewPage() {
         <div className="soldier-primair-input">
             <div className="soldier-primair-input">
                 <nobr className="food-icon"></nobr>
-                consumption: 10
+                consumption: {consumption}
             </div>
             <div className="army-title"> Army</div>
             <div className="soldier-primair-input">
