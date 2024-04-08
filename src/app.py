@@ -259,12 +259,7 @@ def update():
     # TODO UNION Transfers from Clans & Friends
 
     if pname is not None:
-        cursor = connection.get_cursor()
-        cursor.execute('SELECT id FROM settlement WHERE pname=%s;', (pname,))
-        sids = cursor.fetchall()  # Retrieve all settlements owned by this player
-        timers = []
-        for id in sids:  # Extend the dictionary with new timers found
-            timers += timer_data_acces.retrieveTimers(id, transfer_data_acces)
+        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
 
         return jsonify(timers)
 
@@ -578,6 +573,7 @@ def transfer():
     "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
     "resources": <LIST>: [ amount <INT> , ... ]: Index 0: 0, Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
     "tType": <STRING> | 'attack' or 'transfer'; specifies the sort of transfer we're doing
+    "pname": <STRING> | Player who starts/owns the transfer
     }
 
     JSON Output Format:
@@ -589,12 +585,9 @@ def transfer():
     """
     data = request.json
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'), data.get('fromType'), data.get('soldiers'),
-                                                        data.get('resources'), data.get('tType'), timer_data_acces,
+                                                        data.get('resources'), data.get('tType'), data.get('pname'), timer_data_acces,
                                                         package_data_acces, clan_data_acces,
-                                                        friend_data_access, settlement_data_acces, soldier_data_acces)
-
-    # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
-    # TODO Priority
+                                                        friend_data_access, soldier_data_acces)
 
     if success:
         dct = timer.to_dct()
@@ -629,7 +622,7 @@ def createOutpost():
     data = request.json
     success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo'),  data.get('outpostName'), data.get('soldiers') ,data.get('resources'), timer_data_acces,
                                                         package_data_acces, clan_data_acces,
-                                                        friend_data_access, settlement_data_acces, soldier_data_acces )
+                                                        friend_data_access, soldier_data_acces )
 
     if success:
         dct = timer.to_dct()

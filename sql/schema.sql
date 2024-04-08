@@ -102,7 +102,8 @@ CREATE TABLE IF NOT EXISTS transfer(
     toType BOOL NOT NULL, -- False: Settlement, True: Transfer
     idfrom INT NOT NULL,
     fromType BOOL NOT NULL, -- False: Settlement, True: Transfer
-    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
+    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
+    pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE -- OwnedBy Relation
 );
 
 CREATE TABLE IF NOT EXISTS buildable(

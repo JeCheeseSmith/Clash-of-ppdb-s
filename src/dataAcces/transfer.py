@@ -84,33 +84,31 @@ class TransferDataAccess:
             cursor.execute('SELECT mapX,mapY FROM settlement WHERE id=%s;', (oid,))
             return cursor.fetchone()
 
-    @staticmethod
-    def areInSameClan(sidTo, sidFrom, clan_data_acces: ClanDataAccess, settlement_data_acces: SettlementDataAcces):
+    def areEnemies(self, idFrom, fromType, idTo, toType, friend_data_acces, clan_data_acces):
         """
-        Helper function to verify if 2 settlements are allies
-        :param sidTo: Settlement Identifier 1
-        :param sidFrom: Settlement Identifier 2
-        :param clan_data_acces: Access DB
-        :param settlement_data_acces: DB Access
+        Helper function which verifies if 2 objects are befriended or not
+        :param idFrom:
+        :param fromType:
+        :param idTo:
+        :param toType:
+        :param friend_data_acces:
+        :param clan_data_acces:
         :return:
         """
-        pname1 = settlement_data_acces.getOwner(sidTo)
-        pname2 = settlement_data_acces.getOwner(sidFrom)
-        return clan_data_acces.areAllies(pname1, pname2)
+        cursor = self.dbconnect.get_cursor()
+        if toType:  # Going to a transfer; retrieve transfer owner
+            cursor.execute('SELECT pname FROM transfer WHERE id=%s;', (idTo,))
+        else:
+            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (idTo,))
+        pname1 = cursor.fetchone()[0]
 
-    @staticmethod
-    def areFriends(sidTo, sidFrom, friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces):
-        """
-        Helper function to verify if 2 settlements are befriended
-        :param sidTo: Settlement Identifier 1
-        :param sidFrom: Settlement Identifier 2
-        :param friend_data_acces: DB acces
-        :param settlement_data_acces: acces DB
-        :return:
-        """
-        pname1 = settlement_data_acces.getOwner(sidTo)
-        pname2 = settlement_data_acces.getOwner(sidFrom)
-        return friend_data_acces.areFriends(pname1, pname2)
+        if fromType:
+            cursor.execute('SELECT pname FROM transfer WHERE id=%s;', (idFrom,))
+        else:
+            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (idFrom,))
+        pname2 = cursor.fetchone()[0]
+
+        return not (friend_data_acces.areFriends(pname1, pname2) or clan_data_acces.areAllies(pname1, pname2))
 
     def getNumberOfSettlements(self, sid: int):
         """
@@ -206,28 +204,17 @@ class TransferDataAccess:
         return tp  # Return Transfer Package with Troops
 
     def createTransfer(self, idTo: int, toType: bool, idFrom: int, fromType: bool, soldiers: list, resources: list,
-                       tType: str,
+                       tType: str, pname: str,
                        timer_data_access: TimerDataAccess,
                        package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
-                       friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces,
+                       friend_data_acces: FriendDataAccess,
                        soldier_data_acces: SoldierDataAccess):
         try:
             cursor = self.dbconnect.get_cursor()  # DB Acces
             transferable = False
 
-            # Verify they have the correct status to each other: friends or allies for transfers, None for outpost, enemies for attacks
-            if tType == 'transfer':
-                if not (TransferDataAccess.areInSameClan(idTo, idFrom, clan_data_acces, settlement_data_acces)
-                        or TransferDataAccess.areFriends(idFrom, idTo, friend_data_acces, settlement_data_acces)):
-                    raise Exception("You can't send a transfer to an enemy")
-
-            elif tType == 'attack':
-                # TODO Adjust this to check transfers too
-                if TransferDataAccess.areInSameClan(idTo, idFrom, clan_data_acces,
-                                                    settlement_data_acces) or TransferDataAccess.areFriends(idFrom,
-                                                                                                            idTo,
-                                                                                                            friend_data_acces,
-                                                                                                            settlement_data_acces):
+            if tType == 'attack':  # You can only attack enemies!
+                if self.areEnemies(idFrom, fromType, idTo, toType, friend_data_acces, clan_data_acces):
                     raise Exception("You can't attack your allies!")
                 transferable = True
 
@@ -240,8 +227,8 @@ class TransferDataAccess:
 
             # Insert transfer into the database
             cursor.execute(
-                'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid) VALUES (%s,%s,%s,%s,%s,%s)',
-                (idTo, toType, idFrom, fromType, False, tp.package.id))
+                'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid, pname) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+                (idTo, toType, idFrom, fromType, False, tp.package.id, pname))
             cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
             tid = cursor.fetchone()[0]
 
@@ -268,10 +255,14 @@ class TransferDataAccess:
             cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (idTo,))
         pid = cursor.fetchone()[0]  # This will be added in the transfer
 
+        # Retrieve player name
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (sidFrom,))
+        pname = cursor.fetchone()[0]
+
         # Insert transfer into the database
         cursor.execute(
-            'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid) VALUES (%s,%s,%s,%s,%s,%s)',
-            (idTo, toType, sidFrom, False, False, pid))
+            'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid, pname) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+            (idTo, toType, sidFrom, False, False, pid, pname))
         cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
         tid = cursor.fetchone()[0]  # Transfer ID
 
@@ -284,7 +275,7 @@ class TransferDataAccess:
     def createOutpost(self, sid: int, coordTo: list, outpostName: str, soldiers: list, resources: list,
                       timer_data_access: TimerDataAccess,
                       package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
-                      friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces,
+                      friend_data_acces: FriendDataAccess,
                       soldier_data_acces: SoldierDataAccess):
         """
         PRECONDITION: sid refers to the main settlement of the user
@@ -302,7 +293,6 @@ class TransferDataAccess:
         :param package_data_acces:
         :param timer_data_access:
         :param clan_data_acces:
-        :param settlement_data_acces:
         :return: success: Status and timer (error or timer object)
         """
         try:
@@ -316,6 +306,10 @@ class TransferDataAccess:
 
             cursor = self.dbconnect.get_cursor()  # DB Acces
 
+            # Retrieve player name
+            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (sid,))
+            pname = cursor.fetchone()[0]
+
             # Create an empty package
             pid = package_data_acces.add_resources(Package([0, 0, 0, 0, 0, 0, 0]))
             # Create a new settlement on admin account, when the timer runs out, this settlement will be added to the player
@@ -326,9 +320,9 @@ class TransferDataAccess:
             sidTo = cursor.fetchone()[0]
 
             # Create the transfer and return timer
-            return self.createTransfer(sidTo, False, sid, False, soldiers, resources, 'outpost',
+            return self.createTransfer(sidTo, False, sid, False, soldiers, resources, 'outpost', pname,
                                        timer_data_access, package_data_acces, clan_data_acces,
-                                       friend_data_acces, settlement_data_acces, soldier_data_acces)
+                                       friend_data_acces, soldier_data_acces)
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()

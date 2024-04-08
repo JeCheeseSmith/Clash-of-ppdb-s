@@ -121,11 +121,11 @@ class TimerDataAccess:
             print('error', e)
             self.dbconnect.rollback()
 
-    def retrieveTimers(self, sid, transfer_data_acces):
+    def retrieveTimers(self, pname: str, transfer_data_acces):
         """
         Get all timers for a certain settlement and convert to a frontend usable format
         :param transfer_data_acces:
-        :param sid: Settlement Identifier
+        :param pname: User name
         :return: List of timer object with info
         """
         cursor = self.dbconnect.get_cursor()
@@ -141,6 +141,8 @@ UNION
 -- Transfers interacting with my transfers: the transfers going to any ID departing from me(sidfrom)
 SELECT id FROM transfer WHERE idto IN(SELECT idto FROM transfer WHERE idfrom=%s)
 );"""
+        # TODO Rewrite this monster query
+        sid = 0
         cursor.execute(query, (sid, sid, sid,))
         data = cursor.fetchall()
         newData = []
@@ -204,6 +206,8 @@ SELECT id FROM transfer WHERE idto IN(SELECT idto FROM transfer WHERE idfrom=%s)
         pass
 
     def simulateOutpost(self):
+        # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
+
         # Change ownership of admin to user
         # Store ALL stuff in outpost (even if it goes over the limit)
         # Initialise sattelcastle + maxNumberofBuildings

@@ -68,7 +68,7 @@ The discovered bool is used for the same purpose.
 
 Transfer move from a settlement/transfer towards another settlement/transfer. Transfers can be captured/intercepted by other transfers. 
 
-As should be clear, a transfer also contains a package.
+As should be clear, a transfer also contains a package. A transfer is owned by a player.
 
 ### Clan
 
