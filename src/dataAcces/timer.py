@@ -40,7 +40,7 @@ class TimerDataAccess:
         timer.id = id
         return id
 
-    def evaluateTimers(self, settlement_data_acces):
+    def evaluateTimers(self, settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access):
         """
         Evaluate all timers passed their done time
         :return:
@@ -57,7 +57,7 @@ class TimerDataAccess:
             elif timer.type == 'building':
                 self.simulateUpgrade(timer, settlement_data_acces)
             elif timer.type == 'transfer':
-                self.simulateTransfer(timer)
+                self.simulateTransfer(timer,transfer_data_acces, package_data_acces, content_data_access)
             elif timer.type == 'espionage':
                 self.simulateEspionage(timer)
             elif timer.type == 'attack':
@@ -233,8 +233,13 @@ SELECT id FROM transfer WHERE discovered=True
         sp += tp
         package_data_acces.update_resources(sp)
 
-        # TODO Notify the user at the end of a transfer
-        # content_data_access
+        # Notify the users at the end of a transfer
+        from .content import Content # We need to do this locally otherwise other functionality will breack due to circular includes
+
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo))
+        receiver = cursor.fetchone()[0]
+        content_data_access.add_message(Content(None, datetime.now(), "Accept my gift for you! Please make sure to take care of my men! - "+transfer.pname, 'admin'), receiver)  # Notify receiver
+        content_data_access.add_message(Content(None, datetime.now(), f"""Your transfer to {receiver} succeeded.""", 'admin' ), transfer.pname)  # Notify sender
 
     def simulateEspionage(self, timer: Timer):
         """

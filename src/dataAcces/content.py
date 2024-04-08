@@ -54,7 +54,12 @@ class ContentDataAccess:
         result = cursor.fetchone()[0]
         return result
 
-    def add_message(self, obj, pname):
+    def add_message(self, obj: Content, pname):
+        """
+        :param obj:
+        :param pname: Receiver
+        :return:
+        """
         try:
             cursor = self.dbconnect.get_cursor()
 

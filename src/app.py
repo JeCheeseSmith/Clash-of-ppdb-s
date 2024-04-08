@@ -251,14 +251,14 @@ def update():
     Timer objects related to transfer have the following extra info: {"from": <ARRAY INT[2]> , "to": <ARRAY INT[2]>, "discovered": <BOOL> }
     }
     """
-    timer_data_acces.evaluateTimers(settlement_data_acces)
+    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access)
 
     data = request.json
     pname = data.get('pname')
     print(pname)
 
     if pname is not None:
-        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
+        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces, package_data_acces)
 
         return jsonify(timers)
 
