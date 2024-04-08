@@ -542,35 +542,6 @@ def getMap():
     return jsonify(settlement_data_acces.getMap())
 
 
-@app.route("/attack", methods=["POST"])
-def attack():
-    """
-    Endpoint to start an attack towards another settlement or transfer
-
-    JSON Input Format
-    {
-    "idTo": <INT> | Identifier of the object going to ('defendant')
-    "sidFrom": <INT> | Identifier of the object going from ('attacker')
-    "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
-    "type": <STRING> | type = 'settlement' or 'transfer'
-    }
-
-    JSON Output Format:
-    {
-    "success": <bool> | State of request
-    If success = True, the timer object will be sent back as well
-    "error": <STRING> | Optional error message if success=False
-    }
-    """
-    pass
-    # data = request.json
-    # success = TransferDataAccess.createAttack()
-
-    # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
-    # Transferable should be set to TRUE FOR ATTACKS
-    # TODO Priority
-
-
 @app.route("/espionage", methods=["POST"])
 def espionage():
     """
@@ -580,7 +551,7 @@ def espionage():
     {
     "idTo": <INT> | Identifier of the object going to ('defendant')
     "sidFrom": <INT> | Identifier of the object going from ('attacker')
-    "type": <STRING> | type = 'settlement' or 'transfer'
+    "toType": <BOOL> | The type spying on, False = 'settlement' , True =  'transfer'
     }
 
     JSON Output Format:
@@ -589,9 +560,8 @@ def espionage():
     }
     """
     data = request.json
-    TransferDataAccess.createEspionage(data.get('idTo'), )
-    # TODO Priority
-    pass
+    timer = transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'), timer_data_acces)
+    return jsonify(timer.to_dct())
 
 
 @app.route("/transfer", methods=["POST"])
@@ -601,10 +571,13 @@ def transfer():
 
     JSON Input Format
     {
-    "sidTo": <INT> | Identifier of the object going to ('receiver')
-    "sidFrom": <INT> | Identifier of the object going from ('sender')
+    "idTo": <INT> | Identifier of the settlement going to ('receiver')
+    "toType": <BOOL> | Specifieng if we're going to a settlement (False) or another transfer (True)
+    "idFrom": <INT> | Identifier of the settlement going from ('sender')
+    "fromType": <BOOL> | Specifieng if we're going to a settlement (False) or another transfer (True)
     "soldiers": <LIST> : [ (sname <STRING> , amount <INT>, transferable <BOOL> ) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
     "resources": <LIST>: [ amount <INT> , ... ]: Index 0: 0, Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
+    "tType": <STRING> | 'attack' or 'transfer'; specifies the sort of transfer we're doing
     }
 
     JSON Output Format:
@@ -615,10 +588,13 @@ def transfer():
     }
     """
     data = request.json
-    success, timer = transfer_data_acces.createTransfer(data.get('sidTo'), data.get('sidFrom'), data.get('soldiers'),
-                                                        data.get('resources'), timer_data_acces,
+    success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'), data.get('fromType'), data.get('soldiers'),
+                                                        data.get('resources'), data.get('tType'), timer_data_acces,
                                                         package_data_acces, clan_data_acces,
                                                         friend_data_access, settlement_data_acces, soldier_data_acces)
+
+    # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
+    # TODO Priority
 
     if success:
         dct = timer.to_dct()

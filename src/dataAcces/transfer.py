@@ -32,7 +32,7 @@ class TransferDataAccess:
         :return:
         """
         speed = 1
-        if package is not None:
+        if package is not None:  # (None = Espionage or Attack)
             speed += package.stone % 1000
             speed += package.wood % 1000
             speed += package.food % 1000
@@ -117,7 +117,7 @@ class TransferDataAccess:
         # TODO Gives true if an attack on a transfer will succeed (this can change over time!) - see notes
         pass
 
-    def calculateDuration(self, soldiers: dict, package: PackageWithSoldier, to: list, start: list):
+    def calculateDuration(self, soldiers: dict, package: Package, to: list, start: list):
         """
         Calculates the duration for a transfer
         :param package:
@@ -138,7 +138,7 @@ class TransferDataAccess:
 
         distance = SettlementDataAcces.calculateDistance(to, start)  # Calc distance
 
-        duration = distance / speed * self.determineSpeed(package.package)
+        duration = distance / speed * self.determineSpeed(package)
         start = datetime.now()
         stop = start + timedelta(seconds=duration)
 
@@ -178,37 +178,47 @@ class TransferDataAccess:
 
         return tp  # Return Transfer Package with Troops
 
-    def createTransfer(self, sidTo: int, sidFrom: int, soldiers: list, resources: list,
+    def createTransfer(self, idTo: int, toType: bool, idFrom: int, fromType: bool, soldiers: list, resources: list, tType: str,
                        timer_data_access: TimerDataAccess,
                        package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
                        friend_data_acces: FriendDataAccess, settlement_data_acces: SettlementDataAcces,
                        soldier_data_acces: SoldierDataAccess):
         try:
             cursor = self.dbconnect.get_cursor()  # DB Acces
+            transferable = False
+            print(idTo, toType, idFrom, fromType, soldiers, resources, tType)
 
-            # Verify they are friends or allies
-            if not (TransferDataAccess.areInSameClan(sidTo, sidFrom, clan_data_acces, settlement_data_acces)
-                    or TransferDataAccess.areFriends(sidFrom, sidTo, friend_data_acces, settlement_data_acces)):
-                raise Exception("You can't send a transfer to an enemy")
+            # TODO when an attack returns it might return from a tid, need support for that!
+
+            # Verify they have the correct status to each other: friends or allies for transfers, None for outpost, enemies for attacks
+            if tType == 'transfer':
+                if not (TransferDataAccess.areInSameClan(idTo, idFrom, clan_data_acces, settlement_data_acces)
+                        or TransferDataAccess.areFriends(idFrom, idTo, friend_data_acces, settlement_data_acces)):
+                    raise Exception("You can't send a transfer to an enemy")
+
+            elif tType == 'attack':
+                if TransferDataAccess.areInSameClan(idTo, idFrom, clan_data_acces, settlement_data_acces) or TransferDataAccess.areFriends(idFrom, idTo, friend_data_acces, settlement_data_acces):
+                    raise Exception("You can't attack your allies!")
+                transferable = True
 
             # Restructure to a backend format
-            soldiers = self.__restructure(soldiers, False, False)
+            soldiers = self.__restructure(soldiers, False, transferable)
 
             # Adjust resource & troop info
-            tp = self.updateResourceTroops(sidFrom, soldiers, resources, package_data_acces, soldier_data_acces, False,
-                                           False)
+            tp = self.updateResourceTroops(idFrom, soldiers, resources, package_data_acces, soldier_data_acces, False,
+                                           transferable)
 
             # Insert transfer into the database
             cursor.execute(
                 'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid) VALUES (%s,%s,%s,%s,%s,%s)',
-                (sidTo, False, sidFrom, False, False, tp.package.id))
+                (idTo, toType, idFrom, fromType, False, tp.package.id))
             cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
             tid = cursor.fetchone()
 
             # Add a timer
-            start, stop, duration = self.calculateDuration(soldiers, tp, self.translatePosition(sidTo, False),
-                                                           self.translatePosition(sidFrom, False))
-            timer = Timer(None, tid, 'transfer', start, stop, duration, sidTo)
+            start, stop, duration = self.calculateDuration(soldiers, tp.package, self.translatePosition(idTo, False),
+                                                           self.translatePosition(idFrom, False))
+            timer = Timer(None, tid, tType, start, stop, duration, idTo)
             timer_data_access.insertTimer(timer)
 
             self.dbconnect.commit()
@@ -218,12 +228,28 @@ class TransferDataAccess:
             self.dbconnect.rollback()
             return False, e
 
-    def createEspionage(self):
+    def createEspionage(self, idTo: int, sidFrom: int, toType: bool, timer_data_access: TimerDataAccess):
+        cursor = self.dbconnect.get_cursor()
 
-        pass
+        # Retrieve pid from the package we're going to
+        if toType:  # Transfer
+            cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (idTo,))
+        else:  # Settlement
+            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (idTo,))
+        pid = cursor.fetchone()[0]  # This will be added in the transfer
 
-    def createAttack(self):
-        pass
+        # Insert transfer into the database
+        cursor.execute(
+            'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid) VALUES (%s,%s,%s,%s,%s,%s)',
+            (idTo, toType, sidFrom, False, False, pid))
+        cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
+        tid = cursor.fetchone()[0]  # Transfer ID
+
+        start, stop, duration = self.calculateDuration(None, None, self.translatePosition(idTo, toType),
+                                                       self.translatePosition(sidFrom, False))
+        timer = Timer(None, tid, 'espionage', start, stop, duration, idTo)
+        timer_data_access.insertTimer(timer)
+        return timer
 
     def createOutpost(self):
         pass
