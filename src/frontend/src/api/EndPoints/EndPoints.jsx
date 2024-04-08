@@ -16,9 +16,9 @@ export const upgradeBuilding = async (position, sid) =>
     return await POST({"position":position, "sid":sid}, '/upgradeBuilding');
 }
 
-export const update = async (sid) =>
+export const update = async (username) =>
 {
-    return await GET({"sid":sid}, '/update')
+    return await GET({"pname":username}, '/update')
 }
 
 export const getMap = async () =>

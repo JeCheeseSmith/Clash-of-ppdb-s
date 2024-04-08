@@ -9,19 +9,24 @@ import Ground from "./modals/Ground.jsx";
 import RequestMassagePopUp from "../../globalComponents/popupMessage/popup.jsx";
 import Arrow from "./modals/Arrow.jsx";
 import Settlement1 from "./modals/Settlement1.jsx";
+import {updateResources, updateTimers} from "../../globalComponents/backgroundFunctions/helperFunctions.jsx";
+import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
+import ResourceBar from "../Homepage/RecourceBar/resourcebar.jsx";
 
 
 const mapSize = 50;
 function Map()
 {
-    const { sid, username, timers } = useLocation().state;
+    const { sid, username} = useLocation().state;
+    const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [menuOpen, setMenuOpen] = useState(false)
     const [settlements, setSettlements] = useState([])
+    const [timers, setTimers] = useState([])
     const [outpostChosen, setOutpostChosen] = useState(false)
-
     useEffect(() =>
     {
-        API.getMap().then(data => {setSettlements(data); console.log(data)})
+        updateTimers(username, setTimers)
+        API.getMap().then(data => {setSettlements(data)})
     }, []);
 
     const handleSettlement = (rowIndex, colIndex) =>
@@ -30,12 +35,10 @@ function Map()
     }
     const renderSettlement = (rowIndex, colIndex) =>
     {
-        let settlementFound = false
         for (let settlement of settlements)
         {
             if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
             {
-                settlementFound = true
                 return (
                     <mesh key={`${rowIndex}-${colIndex}`}
                           position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
@@ -46,7 +49,7 @@ function Map()
                 );
             }
         }
-        if (!settlementFound && outpostChosen)
+        if (outpostChosen)
         {
             return (
                 <gridHelper
@@ -107,6 +110,8 @@ function Map()
                 <Ground/>
             </Canvas>
             {menuOpen && <RequestMassagePopUp message={"This is a settlement!"} setPopup={setMenuOpen}/>}
+            <ResourceBar resources={resources} updateResources={() => updateResources(sid, setResources)}/>
+            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
         </Suspense>
     );
 }
