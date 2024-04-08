@@ -178,8 +178,6 @@ SELECT id FROM transfer WHERE discovered=True
         data = cursor.fetchall()
         newData = []
 
-        print(data)
-
         for info in data:
             timer = Timer(info[0], info[1], info[2], info[3], info[4], info[5],
                           info[6])

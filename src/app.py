@@ -89,15 +89,6 @@ def get_login():
                         logout=None, pid=None)
     control = player_data_access.get_login(Player_obj)
     if control:
-        # Update all data for this player
-        cursor = package_data_acces.dbconnect.get_cursor()
-        cursor.execute('SELECT id FROM settlement WHERE pname=%s;', (player_name,))
-        settlements = cursor.fetchall()
-        for sid in settlements:
-            package_data_acces.calc_resources(sid, None, datetime.now())
-
-        update()
-
         return jsonify({"success": control[0], "message": "Login successful", "sid": control[1]})
     else:
         return jsonify({"success": control[0], "message": "Login failed", "sid": control[1]})
@@ -946,7 +937,7 @@ def deleteClan():
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
-def catch_all():
+def catch_all(path):
     """
     Standard catch_all to serve each file
     """
