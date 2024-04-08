@@ -140,10 +140,6 @@ class TransferDataAccess:
         cursor.execute('SELECT EXISTS(SELECT id FROM building WHERE sid=%s and name=%s);', (sid, 'Chancery'))
         return cursor.fetchone()[0]
 
-    def doesIntercept(self, tid, tid2):
-        # TODO Gives true if an attack on a transfer will succeed (this can change over time!) - see notes
-        pass
-
     def calculateDuration(self, soldiers: dict, package: Package, to: list, start: list):
         """
         Calculates the duration for a transfer
@@ -187,6 +183,39 @@ class TransferDataAccess:
         cursor.execute('SELECT * FROM transfer WHERE id=%s;', (tid,))
         data = cursor.fetchone()
         return Transfer(tid, data[1], data[2], data[3], data[4], data[5], data[6], data[7])
+
+    def returnToBase(self, transfer, timer_data_access, soldier_data_acces, package_data_acces):
+        """
+        Helper function to delete the current transfer and make a new transfer towards home (idFrom)
+        :param transfer: Old transfer
+        """
+        cursor = self.dbconnect.get_cursor()
+        oldTid = transfer.id
+
+        if transfer.toType:  # If we went to a transfer x, the start location will be the end of x
+            cursor.execute('SELECT idTo FROM transfer WHERE id=%s;', (transfer.idTo,))
+            transfer.idTo = cursor.fetchone()[0]
+            # TODO Unsure if this works in frontend, sinds it goes towards the same settlement now
+        # else:  # We went to a settlement, now leaving from there: transfer data doesn't need to be adjusted
+
+        # Make a resource transfer back home
+        cursor.execute(
+            'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid, pname) VALUES (%s,%s,%s,%s,%s,%s,%s)',
+            (transfer.idFrom, False, transfer.idTo, False, True, transfer.pid, transfer.pname)) # Insert new transfer into the database
+        cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
+        transfer.id = cursor.fetchone()[0]
+
+        # Add a new timer
+        start, stop, duration = self.calculateDuration(soldier_data_acces.getTroops(transfer.pid,'package'), package_data_acces.get_resources(transfer.pid), self.translatePosition(transfer.idTo, transfer.toType),
+                                                       self.translatePosition(transfer.idFrom, transfer.fromType))
+        timer = Timer(None, transfer.id, 'transfer', start, stop, duration, transfer.idTo)
+        timer_data_access.insertTimer(timer)
+
+        # Delete the old transfer in the database
+        cursor.execute('DELETE FROM transfer WHERE id=%s;', (oldTid,))
+
+        # Commit Data
+        self.dbconnect.commit()
 
     def updateResourceTroops(self, sidFrom: int, soldiers: dict, resources: list, package_data_acces: PackageDataAccess,
                              soldier_data_acces: SoldierDataAccess, discovered: bool):
@@ -319,9 +348,6 @@ class TransferDataAccess:
                 raise Exception('Your outpost is too close to others, make sure to remain a safe distance!')
 
             cursor = self.dbconnect.get_cursor()  # DB Acces
-
-            # TODO check and make resource deficit for the Sattelite Castle
-
 
             # Retrieve player name
             cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (sid,))

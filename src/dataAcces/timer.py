@@ -65,7 +65,6 @@ class TimerDataAccess:
                 cursor.execute('DELETE FROM package WHERE id=%s;', (pid,))
             elif timer.type == 'attack':
                 self.simulateAttack(timer, transfer_data_acces)
-                cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
             elif timer.type == 'outpost':
                 self.simulateOutpost(timer,transfer_data_acces, settlement_data_acces)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
@@ -228,13 +227,17 @@ SELECT id FROM transfer WHERE discovered=True
         """
         cursor = self.dbconnect.get_cursor()
 
-        # Instanstiate Usable Data Objects
+        # Instantiate Usable Data Objects
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid, soldier_data_acces, package_data_acces)  # Transfer package
-        # TODO Add support to allow transfers to transfers
-        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
-        spid = cursor.fetchone()[0]
-        sp = transfer_data_acces.instantiatePackageWithSoldiers(spid)  # Soldier Package
+
+        if transfer.toType:  # To a transfer
+            cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (transfer.idTo,))
+            spid = cursor.fetchone()[0]
+        else:  # To a settlement
+            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
+            spid = cursor.fetchone()[0]
+        sp = transfer_data_acces.instantiatePackageWithSoldiers(spid)  # Package going to
 
         # Update correct data in the database
         sp += tp
@@ -288,12 +291,16 @@ SELECT id FROM transfer WHERE discovered=True
         success = choice([True, False])  # Espionage fails at random
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT pname,name FROM settlement WHERE id=%s;', (transfer.idTo,))
-        data = cursor.fetchone()
-        receiver, receiverCastle = data[0], data[1]
+        if transfer.toType:
+            cursor.execute('SELECT pname FROM transfer WHERE id=%s;', (transfer.idTo,))
+            receiver = cursor.fetchone()[0]
+        else:
+            cursor.execute('SELECT pname,name FROM settlement WHERE id=%s;', (transfer.idTo,))
+            data = cursor.fetchone()
+            receiver, receiverCastle = data[0], data[1]
 
         if transfer.toType:  # If you spied on a transfer, verify if it still exists
-            cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.id,))
+            cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
             if not cursor.fetchone()[0]:  # Doesn't exist anymore
                 return transfer.pid
 
@@ -322,24 +329,103 @@ SELECT id FROM transfer WHERE discovered=True
                                         transfer.pname)  # Notify sender
         return transfer.pid
 
-    def simulateAttack(self, timer: Timer, transfer_data_acces):
-        #
-        # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
+    def simulateAttack(self, timer: Timer, transfer_data_acces, content_data_access, package_data_acces, soldier_data_acces):
+        """
+        Simulate an attack towards another player. A winner is chosen randomly.
 
+        # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
+        # The failed transfers will be sent back to the owner
+        # If the attack doesn't reach the transfer is attacking, the soldiers will get 'lost'
+        :param timer: Timer object
+        :param transfer_data_acces:
+        :return:
+        """
         # Instantiate Usable Data Objects
-        success = choice([True, False])  # Espionage fails at random
+        success = choice([True, False])  # Choose a random winner
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
+        defendantMessage = ""
+        attackerMessage = ""
 
-        # Choose a random winner
-        # Loser: all troops die
-        # Winner: continious transfer
-        # If done < transfer.done: All troops get lost and will not return: Check if object still exists, else: troops get lost; notify the player
+        # Retrieve Player name of the defender
+        if transfer.toType:
+            cursor.execute('SELECT pname FROM transfer WHERE id=%s;', (transfer.idTo,))
+        else:
+            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
+        defendant = cursor.fetchone()[0]
 
-        # Return all transfer to this transfer back to sender
+        # We need to do this locally otherwise other functionality will break due to circular includes
+        from .content import Content
+        from .package import Package
 
-        # TODO also deleted associated package, transfer, other timers and other transfer
-        pass
+        if transfer.toType:
+            cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
+            if not cursor.fetchone()[0]:  # Doesn't exist anymore
+                content_data_access.add_message(Content(None, datetime.now(), "Your soldiers could not reach the transfer they we're chasing. Sadly, they got lost in the wilderness..", 'admin'),
+                                                transfer.pname)  # Notify sender
+
+        if success:  # Attacker won
+            if transfer.toType:  # To a transfer
+                # Merge transfer resource amounts into current transfer
+                transferDefendant = transfer_data_acces.instantiateTransfer(transfer.idTo)
+                ap = package_data_acces.get_resources(transfer.pid)  # Attacker package
+                dp = package_data_acces.get_resources(transferDefendant.pid)  # Defendant package
+                ap += dp
+                package_data_acces.update_resources(ap)  # Update database
+
+                # Delete defendant transfer and package
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (transferDefendant.id,))
+                cursor.execute('DELETE FROM package WHERE id=%s;', (transferDefendant.pid,))
+                cursor.execute('DELETE FROM troops WHERE pid=%s;', (transferDefendant.pid,))
+
+                # Get transfer going to the transfer that doesn't exist anymore now
+                cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s;', (transferDefendant.id,))
+                transfers = cursor.fetchall()
+                for tid in transfers:  # Send them back to where they came from
+                    transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid))
+
+                attackerMessage = f"""We successfully captured the transfer of {defendant}! Returning home now, my Lord."""
+                defendantMessage = f"""You're transfer has been attacked and captured by {transfer.pname}!"""
+            else:  # Attack to a settlement
+                package_data_acces.calc_resources(transfer.idTo, None, datetime.now())  # Re-evaluate resources of defendant
+
+                #Retrieve package of defendant
+                cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
+                pidTo = cursor.fetchone()[0]
+                cursor.execute('SELECT * FROM package WHERE id=%s;', (pidTo,))
+                dp = cursor.fetchone()  # Defendant resources
+
+                # Calculate amount that will be stolen
+                ap = package_data_acces.get_resources(transfer.pid)  # Attacker package
+                capacity = soldier_data_acces.getCapacity(transfer.pid)  # Amount an attacker can take with
+                resourceStolen = choice([1, 2, 3, 4])  # Choose a random resource
+                stolen = min(capacity, dp[resourceStolen])  # Amount that will be stolen
+                dp[resourceStolen] -= stolen
+                dp = Package(dp)
+
+                # Adjust new resources to database
+                package_data_acces.update_resources(dp)
+                package_data_acces.update_resources(ap)
+
+                #Kill all soldiers in defendant settlement :(
+                cursor.execute('DELETE FROM troops WHERE pid=%s;', (pidTo))
+
+                attackerMessage = f"""We successfully raided the settlement of {defendant}! Returning home now, my Lord."""
+                defendantMessage = f"""You've been attacked by {transfer.pname}!"""
+            transfer_data_acces.returnToBase(transfer)  # Let the original transfer also return to base
+        else:  # Defendant won
+            # Delete attack transfer
+            cursor.execute('DELETE FROM transfer WHERE id=%s;', (transfer.id,))
+            cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))
+            cursor.execute('DELETE FROM troops WHERE pid=%s;', (transfer.pid,))
+
+            # Create messages
+            defendantMessage = f"""We successfully defended ourself to an attack of {transfer.pname} !"""
+            attackerMessage = f"""You lost the attack battle against {defendant}."""
+
+        # Notify both users
+        content_data_access.add_message(Content(None, datetime.now(),attackerMessage,'admin'),transfer.pname)  # Notify attacker
+        content_data_access.add_message(Content(None, datetime.now(),defendantMessage,'admin'),defendant)  # Notify defendant
 
     def simulateOutpost(self, timer: Timer, transfer_data_acces, settlement_data_acces):
         """
