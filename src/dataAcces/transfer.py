@@ -187,6 +187,9 @@ class TransferDataAccess:
     def returnToBase(self, transfer, timer_data_access, soldier_data_acces, package_data_acces):
         """
         Helper function to delete the current transfer and make a new transfer towards home (idFrom)
+        :param package_data_acces:
+        :param soldier_data_acces:
+        :param timer_data_access:
         :param transfer: Old transfer
         """
         cursor = self.dbconnect.get_cursor()
@@ -195,18 +198,21 @@ class TransferDataAccess:
         if transfer.toType:  # If we went to a transfer x, the start location will be the end of x
             cursor.execute('SELECT idTo FROM transfer WHERE id=%s;', (transfer.idTo,))
             transfer.idTo = cursor.fetchone()[0]
-            # TODO Unsure if this works in frontend, sinds it goes towards the same settlement now
+            # TODO Unsure if this works in frontend, since it goes towards the same settlement now
         # else:  # We went to a settlement, now leaving from there: transfer data doesn't need to be adjusted
 
         # Make a resource transfer back home
         cursor.execute(
             'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid, pname) VALUES (%s,%s,%s,%s,%s,%s,%s)',
-            (transfer.idFrom, False, transfer.idTo, False, True, transfer.pid, transfer.pname)) # Insert new transfer into the database
+            (transfer.idFrom, False, transfer.idTo, False, True, transfer.pid,
+             transfer.pname))  # Insert new transfer into the database
         cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
         transfer.id = cursor.fetchone()[0]
 
         # Add a new timer
-        start, stop, duration = self.calculateDuration(soldier_data_acces.getTroops(transfer.pid,'package'), package_data_acces.get_resources(transfer.pid), self.translatePosition(transfer.idTo, transfer.toType),
+        start, stop, duration = self.calculateDuration(soldier_data_acces.getTroops(transfer.pid, 'package'),
+                                                       package_data_acces.get_resources(transfer.pid),
+                                                       self.translatePosition(transfer.idTo, transfer.toType),
                                                        self.translatePosition(transfer.idFrom, transfer.fromType))
         timer = Timer(None, transfer.id, 'transfer', start, stop, duration, transfer.idTo)
         timer_data_access.insertTimer(timer)
@@ -237,7 +243,8 @@ class TransferDataAccess:
         # Instantiate packages
         tp = PackageWithSoldier(Package(resources), soldiers)  # transferPackage
         sp = PackageWithSoldier(package_data_acces.get_resources(pid),
-                                self.__extent(soldier_data_acces.getTroops(sidFrom, 'settlement'), discovered))  # settlementPackage
+                                self.__extent(soldier_data_acces.getTroops(sidFrom, 'settlement'),
+                                              discovered))  # settlementPackage
 
         # Do arithmetic and verify result
         sp -= tp

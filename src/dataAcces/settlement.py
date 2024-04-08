@@ -369,7 +369,7 @@ class SettlementDataAcces:
         """
         return sqrt(pow((to[0] - start[0]), 2) + pow((to[1] - start[1]), 2))
 
-    def getNewCoordinate(self, x=-1 , y=-1):
+    def getNewCoordinate(self, x=-1, y=-1):
         """
         Generate new unique coordinates for new Settlements on the map
         (0,0) , (2,0) , (0,2) , (2,2) ...

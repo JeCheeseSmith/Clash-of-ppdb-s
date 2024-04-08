@@ -250,7 +250,8 @@ def update():
     Timer objects related to transfer have the following extra info: {"from": <ARRAY INT[2]> , "to": <ARRAY INT[2]>, "discovered": <BOOL> }
     }
     """
-    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces)
+    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
+                                    soldier_data_acces)
 
     data = request.json
     pname = data.get('pname')
@@ -552,7 +553,8 @@ def espionage():
     }
     """
     data = request.json
-    timer = transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'), timer_data_acces)
+    timer = transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'),
+                                                timer_data_acces)
     return jsonify(timer.to_dct())
 
 
@@ -581,8 +583,10 @@ def transfer():
     }
     """
     data = request.json
-    success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'), data.get('fromType'), data.get('soldiers'),
-                                                        data.get('resources'), data.get('tType'), data.get('pname'), timer_data_acces,
+    success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
+                                                        data.get('fromType'), data.get('soldiers'),
+                                                        data.get('resources'), data.get('tType'), data.get('pname'),
+                                                        timer_data_acces,
                                                         package_data_acces, clan_data_acces,
                                                         friend_data_access, soldier_data_acces)
 
@@ -617,9 +621,11 @@ def createOutpost():
     }
     """
     data = request.json
-    success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo'),  data.get('outpostName'), data.get('soldiers') ,data.get('resources'), timer_data_acces,
-                                                        package_data_acces, clan_data_acces,
-                                                        friend_data_access, soldier_data_acces )
+    success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo'),
+                                                       data.get('outpostName'), data.get('soldiers'),
+                                                       data.get('resources'), timer_data_acces,
+                                                       package_data_acces, clan_data_acces,
+                                                       friend_data_access, soldier_data_acces)
 
     if success:
         dct = timer.to_dct()
@@ -940,7 +946,7 @@ def deleteClan():
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
-def catch_all(path):
+def catch_all():
     """
     Standard catch_all to serve each file
     """

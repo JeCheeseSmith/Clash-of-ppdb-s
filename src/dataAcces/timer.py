@@ -41,7 +41,8 @@ class TimerDataAccess:
         timer.id = id
         return id
 
-    def evaluateTimers(self, settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces):
+    def evaluateTimers(self, settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
+                       soldier_data_acces):
         """
         Evaluate all timers passed their done time
         :return:
@@ -58,15 +59,17 @@ class TimerDataAccess:
             elif timer.type == 'building':
                 self.simulateUpgrade(timer, settlement_data_acces)
             elif timer.type == 'transfer':
-                self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces)
+                self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access,
+                                      soldier_data_acces)
             elif timer.type == 'espionage':
                 pid = self.simulateEspionage(timer, transfer_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
                 cursor.execute('DELETE FROM package WHERE id=%s;', (pid,))
             elif timer.type == 'attack':
-                self.simulateAttack(timer, transfer_data_acces)
+                self.simulateAttack(timer, transfer_data_acces, content_data_access, package_data_acces,
+                                    soldier_data_acces)
             elif timer.type == 'outpost':
-                self.simulateOutpost(timer,transfer_data_acces, settlement_data_acces)
+                self.simulateOutpost(timer, transfer_data_acces, settlement_data_acces)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
 
             cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
@@ -134,12 +137,12 @@ class TimerDataAccess:
         """
         Get all timers for a certain settlement and convert to a frontend usable format
         :param transfer_data_acces:
-        :param pname: User name
+        :param pname: Username
         :return: List of timer object with info
         """
         cursor = self.dbconnect.get_cursor()
 
-        # Get all befriended players incl yourself withouth 'admin'
+        # Get all befriended players incl yourself without 'admin'
         friendly = f"""
 -- Subquery to get all players friendly associated with player 'a'
 SELECT pname2 AS pname FROM friend WHERE pname1 = '{pname}' UNION SELECT pname1 AS pname FROM friend WHERE pname2 = '{pname}' -- All friends
@@ -219,9 +222,14 @@ SELECT id FROM transfer WHERE discovered=True
 
         return newInfo
 
-    def simulateTransfer(self, timer: Timer, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces):
+    def simulateTransfer(self, timer: Timer, transfer_data_acces, package_data_acces, content_data_access,
+                         soldier_data_acces):
         """
         Execute an actual succeeding resource transfer
+        :param soldier_data_acces:
+        :param content_data_access:
+        :param package_data_acces:
+        :param transfer_data_acces:
         :param timer: Transfer Timer Object
         :return:
         """
@@ -229,7 +237,8 @@ SELECT id FROM transfer WHERE discovered=True
 
         # Instantiate Usable Data Objects
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
-        tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid, soldier_data_acces, package_data_acces)  # Transfer package
+        tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid, soldier_data_acces,
+                                                                package_data_acces)  # Transfer package
 
         if transfer.toType:  # To a transfer
             cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (transfer.idTo,))
@@ -329,13 +338,17 @@ SELECT id FROM transfer WHERE discovered=True
                                         transfer.pname)  # Notify sender
         return transfer.pid
 
-    def simulateAttack(self, timer: Timer, transfer_data_acces, content_data_access, package_data_acces, soldier_data_acces):
+    def simulateAttack(self, timer: Timer, transfer_data_acces, content_data_access, package_data_acces,
+                       soldier_data_acces):
         """
         Simulate an attack towards another player. A winner is chosen randomly.
 
         # Keep in mind that an attack towards another transfer could result in a transfer failure of another one!
         # The failed transfers will be sent back to the owner
         # If the attack doesn't reach the transfer is attacking, the soldiers will get 'lost'
+        :param soldier_data_acces:
+        :param package_data_acces:
+        :param content_data_access:
         :param timer: Timer object
         :param transfer_data_acces:
         :return:
@@ -344,8 +357,6 @@ SELECT id FROM transfer WHERE discovered=True
         success = choice([True, False])  # Choose a random winner
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
-        defendantMessage = ""
-        attackerMessage = ""
 
         # Retrieve Player name of the defender
         if transfer.toType:
@@ -361,7 +372,9 @@ SELECT id FROM transfer WHERE discovered=True
         if transfer.toType:
             cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
             if not cursor.fetchone()[0]:  # Doesn't exist anymore
-                content_data_access.add_message(Content(None, datetime.now(), "Your soldiers could not reach the transfer they we're chasing. Sadly, they got lost in the wilderness..", 'admin'),
+                content_data_access.add_message(Content(None, datetime.now(),
+                                                        "Your soldiers could not reach the transfer they we're chasing. Sadly, they got lost in the wilderness..",
+                                                        'admin'),
                                                 transfer.pname)  # Notify sender
 
         if success:  # Attacker won
@@ -387,9 +400,10 @@ SELECT id FROM transfer WHERE discovered=True
                 attackerMessage = f"""We successfully captured the transfer of {defendant}! Returning home now, my Lord."""
                 defendantMessage = f"""You're transfer has been attacked and captured by {transfer.pname}!"""
             else:  # Attack to a settlement
-                package_data_acces.calc_resources(transfer.idTo, None, datetime.now())  # Re-evaluate resources of defendant
+                package_data_acces.calc_resources(transfer.idTo, None,
+                                                  datetime.now())  # Re-evaluate resources of defendant
 
-                #Retrieve package of defendant
+                # Retrieve package of defendant
                 cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
                 pidTo = cursor.fetchone()[0]
                 cursor.execute('SELECT * FROM package WHERE id=%s;', (pidTo,))
@@ -407,8 +421,8 @@ SELECT id FROM transfer WHERE discovered=True
                 package_data_acces.update_resources(dp)
                 package_data_acces.update_resources(ap)
 
-                #Kill all soldiers in defendant settlement :(
-                cursor.execute('DELETE FROM troops WHERE pid=%s;', (pidTo))
+                # Kill all soldiers in defendant settlement :(
+                cursor.execute('DELETE FROM troops WHERE pid=%s;', (pidTo,))
 
                 attackerMessage = f"""We successfully raided the settlement of {defendant}! Returning home now, my Lord."""
                 defendantMessage = f"""You've been attacked by {transfer.pname}!"""
@@ -424,12 +438,16 @@ SELECT id FROM transfer WHERE discovered=True
             attackerMessage = f"""You lost the attack battle against {defendant}."""
 
         # Notify both users
-        content_data_access.add_message(Content(None, datetime.now(),attackerMessage,'admin'),transfer.pname)  # Notify attacker
-        content_data_access.add_message(Content(None, datetime.now(),defendantMessage,'admin'),defendant)  # Notify defendant
+        content_data_access.add_message(Content(None, datetime.now(), attackerMessage, 'admin'),
+                                        transfer.pname)  # Notify attacker
+        content_data_access.add_message(Content(None, datetime.now(), defendantMessage, 'admin'),
+                                        defendant)  # Notify defendant
 
     def simulateOutpost(self, timer: Timer, transfer_data_acces, settlement_data_acces):
         """
         Transfer the created Outpost from the admin account to the new player
+        :param settlement_data_acces:
+        :param transfer_data_acces:
         :param timer: Timer Object
         :return:
         """
@@ -447,32 +465,33 @@ SELECT id FROM transfer WHERE discovered=True
         # Initialise Satellite Castle and preset unlocked Status
         cursor.execute(
             'INSERT INTO building(name, level, gridx, gridy, sid, occuppiedcells) VALUES(%s,%s,%s,%s,%s,%s);',
-            ('SatelliteCastle', 1, 6, 6, timer.sid,[[6, 6], [6, 7], [6, 8], [6, 9], [6, 10], [6, 11], [6, 12], [6, 13], [6, 14],
-                                      [6, 15], [6, 16], [6, 17], [6, 18], [6, 19], [6, 20], [7, 6], [7, 7], [7, 8],
-                                      [7, 9], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17],
-                                      [7, 18], [7, 19], [7, 20], [8, 6], [8, 7], [8, 8], [8, 9], [8, 10], [8, 11],
-                                      [8, 12], [8, 13], [8, 14], [8, 15], [8, 16], [8, 17], [8, 18], [8, 19], [8, 20],
-                                      [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 14],
-                                      [9, 15], [9, 16], [9, 17], [9, 18], [9, 19], [9, 20], [10, 6], [10, 7], [10, 8],
-                                      [10, 9], [10, 10], [10, 11], [10, 12], [10, 13], [10, 14], [10, 15], [10, 16],
-                                      [10, 17], [10, 18], [10, 19], [10, 20], [11, 6], [11, 7], [11, 8], [11, 9],
-                                      [11, 10], [11, 11], [11, 12], [11, 13], [11, 14], [11, 15], [11, 16], [11, 17],
-                                      [11, 18], [11, 19], [11, 20], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10],
-                                      [12, 11], [12, 12], [12, 13], [12, 14], [12, 15], [12, 16], [12, 17], [12, 18],
-                                      [12, 19], [12, 20], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11],
-                                      [13, 12], [13, 13], [13, 14], [13, 15], [13, 16], [13, 17], [13, 18], [13, 19],
-                                      [13, 20], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 11], [14, 12],
-                                      [14, 13], [14, 14], [14, 15], [14, 16], [14, 17], [14, 18], [14, 19], [14, 20],
-                                      [15, 6], [15, 7], [15, 8], [15, 9], [15, 10], [15, 11], [15, 12], [15, 13],
-                                      [15, 14], [15, 15], [15, 16], [15, 17], [15, 18], [15, 19], [15, 20], [16, 6],
-                                      [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14],
-                                      [16, 15], [16, 16], [16, 17], [16, 18], [16, 19], [16, 20], [17, 6], [17, 7],
-                                      [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15],
-                                      [17, 16], [17, 17], [17, 18], [17, 19], [17, 20], [18, 6], [18, 7], [18, 8],
-                                      [18, 9], [18, 10], [18, 11], [18, 12], [18, 13], [18, 14], [18, 15], [18, 16],
-                                      [18, 17], [18, 18], [18, 19], [18, 20], [19, 6], [19, 7], [19, 8], [19, 9],
-                                      [19, 10], [19, 11], [19, 12], [19, 13], [19, 14], [19, 15], [19, 16], [19, 17],
-                                      [19, 18], [19, 19], [19, 20], [20, 6], [20, 7], [20, 8], [20, 9], [20, 10],
-                                      [20, 11], [20, 12], [20, 13], [20, 14], [20, 15], [20, 16], [20, 17], [20, 18],
-                                      [20, 19], [20, 20]]))
+            ('SatelliteCastle', 1, 6, 6, timer.sid,
+             [[6, 6], [6, 7], [6, 8], [6, 9], [6, 10], [6, 11], [6, 12], [6, 13], [6, 14],
+              [6, 15], [6, 16], [6, 17], [6, 18], [6, 19], [6, 20], [7, 6], [7, 7], [7, 8],
+              [7, 9], [7, 10], [7, 11], [7, 12], [7, 13], [7, 14], [7, 15], [7, 16], [7, 17],
+              [7, 18], [7, 19], [7, 20], [8, 6], [8, 7], [8, 8], [8, 9], [8, 10], [8, 11],
+              [8, 12], [8, 13], [8, 14], [8, 15], [8, 16], [8, 17], [8, 18], [8, 19], [8, 20],
+              [9, 6], [9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 14],
+              [9, 15], [9, 16], [9, 17], [9, 18], [9, 19], [9, 20], [10, 6], [10, 7], [10, 8],
+              [10, 9], [10, 10], [10, 11], [10, 12], [10, 13], [10, 14], [10, 15], [10, 16],
+              [10, 17], [10, 18], [10, 19], [10, 20], [11, 6], [11, 7], [11, 8], [11, 9],
+              [11, 10], [11, 11], [11, 12], [11, 13], [11, 14], [11, 15], [11, 16], [11, 17],
+              [11, 18], [11, 19], [11, 20], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10],
+              [12, 11], [12, 12], [12, 13], [12, 14], [12, 15], [12, 16], [12, 17], [12, 18],
+              [12, 19], [12, 20], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11],
+              [13, 12], [13, 13], [13, 14], [13, 15], [13, 16], [13, 17], [13, 18], [13, 19],
+              [13, 20], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 11], [14, 12],
+              [14, 13], [14, 14], [14, 15], [14, 16], [14, 17], [14, 18], [14, 19], [14, 20],
+              [15, 6], [15, 7], [15, 8], [15, 9], [15, 10], [15, 11], [15, 12], [15, 13],
+              [15, 14], [15, 15], [15, 16], [15, 17], [15, 18], [15, 19], [15, 20], [16, 6],
+              [16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14],
+              [16, 15], [16, 16], [16, 17], [16, 18], [16, 19], [16, 20], [17, 6], [17, 7],
+              [17, 8], [17, 9], [17, 10], [17, 11], [17, 12], [17, 13], [17, 14], [17, 15],
+              [17, 16], [17, 17], [17, 18], [17, 19], [17, 20], [18, 6], [18, 7], [18, 8],
+              [18, 9], [18, 10], [18, 11], [18, 12], [18, 13], [18, 14], [18, 15], [18, 16],
+              [18, 17], [18, 18], [18, 19], [18, 20], [19, 6], [19, 7], [19, 8], [19, 9],
+              [19, 10], [19, 11], [19, 12], [19, 13], [19, 14], [19, 15], [19, 16], [19, 17],
+              [19, 18], [19, 19], [19, 20], [20, 6], [20, 7], [20, 8], [20, 9], [20, 10],
+              [20, 11], [20, 12], [20, 13], [20, 14], [20, 15], [20, 16], [20, 17], [20, 18],
+              [20, 19], [20, 20]]))
         settlement_data_acces.upgradeCastle(timer.sid, True)  # Upgrade the Satellite Castle to level 1
