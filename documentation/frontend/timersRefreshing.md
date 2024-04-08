@@ -1,5 +1,5 @@
-timer.type: building -> update(), updateResources(), getNewTimers(), getTroops()
+timer.type: building -> update(), updateResources(), getTroops()
 
-timer.type : soldier ->  updateResources(), getNewTimers(), getTroops()
+timer.type : soldier ->  updateResources(), getTroops()
 
-timer.type: outpost, attack, transfer, espionage -> update(), updateResources(), getTroops(), getNewTimers(), getMap() + refreshMap()
+timer.type: outpost, attack, transfer, espionage -> update(), updateResources(), getTroops(), getMap() + refreshMap()
