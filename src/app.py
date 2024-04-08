@@ -250,11 +250,10 @@ def update():
     Timer objects related to transfer have the following extra info: {"from": <ARRAY INT[2]> , "to": <ARRAY INT[2]>, "discovered": <BOOL> }
     }
     """
-    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access)
+    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces)
 
     data = request.args
     pname = data.get('pname')
-    print(pname)
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces, package_data_acces)
@@ -634,6 +633,7 @@ def createOutpost():
 @app.route("/getTransferInfo", methods=["GET"])
 def getTransferInfo():
     # IN: tid
+    # IF allied: show more/less
     pass
 
 
@@ -641,6 +641,7 @@ def getTransferInfo():
 def getSettlementInfo():
     # IN: sid
     # check if friend, ally, enemy
+    # IF allied: show more/less
     pass
 
 
