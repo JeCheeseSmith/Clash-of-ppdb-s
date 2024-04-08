@@ -72,5 +72,6 @@ transfer_data_acces.createEspionage(4, 1, False, timer_data_acces)
 # a attacks the transfer attack to d
 transfer_data_acces.createTransfer(2, True, 1, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'a',  timer_data_acces, package_data_acces, clan_data_acces, friend_data_access, soldier_data_acces)
 
+cursor.execute('UPDATE transfer SET discovered=True;')
 
-
+connection.commit()
