@@ -8,10 +8,10 @@ function MapMainpage()
 {
     return (
         <div className={"map-mainpage"}>
-            <div className={"menu-info-container"}>
+            {/*<div className={"menu-info-container"}>
                 <TransferMenu/>
                 <InformationTab/>
-            </div>
+            </div>*/}
             <Map/>
         </div>
     );

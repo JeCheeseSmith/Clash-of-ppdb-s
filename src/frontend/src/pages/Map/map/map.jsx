@@ -70,7 +70,7 @@ function Map()
         {
             if (timer.type === "transfer")
             {
-                if (timer.from[0] === rowIndex && timer.from[1] === colIndex && timer.discovered)
+                if (timer.from[0] === rowIndex && timer.from[1] === colIndex/* && timer.discovered*/)
                 {
                     return (
                         <mesh key={`${rowIndex}-${colIndex}`}

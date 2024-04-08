@@ -232,9 +232,8 @@ def get_resources():
     return jsonify(packageDict)
 
 
-@app.route("/update", methods=["POST"])
+@app.route("/update", methods=["GET"])
 def update():
-    # TODO ABU : Change sid to pname in update! - Greetings watson
     """
     Tell the server to re-evaluate its timers
 
@@ -253,7 +252,7 @@ def update():
     """
     timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access)
 
-    data = request.json
+    data = request.args
     pname = data.get('pname')
     print(pname)
 
