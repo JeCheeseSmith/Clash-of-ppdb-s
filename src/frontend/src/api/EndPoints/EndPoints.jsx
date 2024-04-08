@@ -1,5 +1,6 @@
 import GET from "../GET.jsx";
 import POST from "../POST.jsx";
+import {empty} from "leaflet/src/dom/DomUtil.js";
 
 
 export const getGrid = async (sid) =>
@@ -10,6 +11,22 @@ export const get_resources = async (sid) =>
 {
     return await POST({"id": sid}, '/resources');
 }
+
+export const get_unlockedTroops = async (sid) =>
+{
+    return await GET( {"id": sid}, '/unlockedTroops');
+}
+
+export const get_getTroops = async (sid) =>
+{
+    return await GET( {"id": sid}, '/getTroops');
+}
+
+export const get_getConsumption = async (sid) =>
+{
+    return await GET( {"id": sid}, '/getConsumption')
+}
+
 
 export const upgradeBuilding = async (position, sid) =>
 {

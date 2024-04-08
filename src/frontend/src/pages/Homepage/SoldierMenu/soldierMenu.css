@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+.button {
+    display: inline-block;
+    background: transparent;
+    border: transparent;
+    margin-bottom: 30px ;
+    padding: 0;
+
+}
+
+
+.trainingQueue {
+    margin-top: 30px;
+    position: absolute;
+    width: 840px;
+    height: 80px;
+    z-index: 9; /* Ensure it appears above other elements */
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #1c1c1c;
+}
+
+
+.soldier-icon {
+      position: absolute;
+      padding: 10px;
+      background-image: linear-gradient(to right, rgb(96, 53, 4), rgb(154, 93, 44), #673909);
+      background-size: cover;
+      width: 50px;
+      border-radius: 10px;
+      border: 3px solid #593811;
+      margin-bottom: 40px;
+}
+
+.soldier-icon:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+#wrapper {
+    opacity: 0.1;
+    filter: alpha(opacity=40);
+    background-color: #000;
+}
+
+.soldierSection {
+  flex: 1;
+  margin-bottom: 40px;
+  float: left;
+  width: 20%;
+}
+
+.soldierCount {
+    margin-left: 90px;
+    margin-top: -15px;
+    font-size: 28px;
+    height: 100%;
+    width: 100%;
+    height: 20px;
+}
+
+
+.army-title {
+    position: relative;
+    font-size: 30px;
+    z-index: 1;
+    overflow: hidden;
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Anton', sans-serif;
+}
+
+.army-title:before, .army-title:after {
+    position: absolute;
+    top: 51%;
+    overflow: hidden;
+    width: 48%;
+    height: 1px;
+    content: '\a0';
+    background-color: #cccccc;
+    margin-left: 2%;
+}
+
+.army-title:before {
+    margin-left: -50%;
+    text-align: right;
+}
+
+.soldierMenuButton-icon {
+    width: 50px; /* Set width of the image container */
+    height: 50px; /* Set height of the image container */
+    background-image: url(assets/swords.png); /* Ensure the image path is correct */
+    background-repeat: no-repeat;
+    background-size: cover; /* Adjust the size of the image */
+    border-radius: 20%; /* Apply border-radius to create a circular shape */
+    margin-left: 43px; /* Add more margin between image and text */
+    z-index: 2;
+    padding-right: 50px;
+    padding-top: 50px;
+    align-items: center;
+}
+
+.food-icon {
+    width: 35px; /* Set width of the image container */
+    height: 35px; /* Set height of the image container */
+    background-image: url(assets/food.png); /* Ensure the image path is correct */
+    background-repeat: no-repeat;
+    background-size: cover; /* Adjust the size of the image */
+    border-radius: 0; /* Apply border-radius to create a circular shape */
+    margin-left: 10px; /* Add more margin between image and text */
+    z-index: 2;
+    padding-right: 50px;
+}
+
+.soldier-primair-input{
+    margin: 20px;
+    color: #ffffff;
+    font-size: 30px;
+    font-family: 'Anton', sans-serif;
+
+}
+
+.navbar {
+    padding: 20px 20px 20px 4%;
+    border: 2px solid #ffd700; /* Golden border color */
+    border-radius: 10px; /* Match border-radius of message box */
+    background-color: #b26616;
+    color: white;
+}
+
+.visible {
+    opacity: 1;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+}
+
+.navbar-links li {
+  margin-right: 6rem; /* Increase the right margin to create larger spaces */
+}
+
+.soldier-page-content {
+    background-color: #1f1a18;
+    border: 2px solid #ffd700;
+    height: 540px;
+    border-radius: 10px;
+    margin-top: 2px;
+}
+
+.box-container {
+    position: absolute;
+    left: 500px; /* Adjust this value as needed */
+    top: 80px; /* Adjust this value as needed */
+    width: 1350px;
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+.soldierMenuOption {
+    background-color: #8B4513;
+    color: #fff;
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #CD853F;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.socialOption:hover {
+    background-color: #A0522D;
+    border-color: #A0522D;
+}
+
+.socialOption:focus {
+    outline: none;
+    background-color: #A0522D;
+    border-color: #A0522D;
+    box-shadow: 0 0 0 3px rgba(160, 82, 45, 0.4);
+}
+
+.SoldierMenubox {
+    position: absolute;
+    left: 500px; /* Adjust this value as needed */
+    top: 80px; /* Adjust this value as needed */
+    width: 880px;
+    height: 650px;
+    z-index: 9999; /* Ensure it appears above other elements */
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #CD853F;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.trainMenu {
+    z-index: 999;
+    position: absolute;
+    bottom: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    padding: 10px 20px;
+    border-radius: 15px;
+    border: 2px solid rgb(213, 185, 185);
+    font-family: MedievalSharp, cursive;
+    font-size: 25px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 2px;
+    background: rgba(133, 43, 0, 0.57);
+    color: #fff;
+    overflow: hidden;
+    box-shadow: 0 0 0 0 transparent;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+}
+
+.center {
+    text-align: center;
+}
+
+.trainMenu:hover {
+    background: rgb(25, 0, 115);
+    box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+    border: 2px solid rgba(31, 19, 0, 0.25);
+}
+
+.trainMenu:hover::before {
+    -webkit-animation: sh02 0.5s 0s linear;
+    -moz-animation: sh02 0.5s 0s linear;
+    animation: sh02 0.5s 0s linear;
+}
+
+.trainMenu::before {
+    content: '';
+    display: block;
+    height: 86%;
+    position: absolute;
+    top: 7%;
+    left: 0;
+    opacity: 0;
+    background: #fff;
+    box-shadow: 0 0 50px 30px #fff;
+    -webkit-transform: skewX(-20deg);
+    -moz-transform: skewX(-20deg);
+    -ms-transform: skewX(-20deg);
+    -o-transform: skewX(-20deg);
+    transform: skewX(-20deg);
+}
+
+@keyframes sh02 {
+  from {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    left: 100%;
+  }
+}
+
+.trainMenu:active {
+    box-shadow: 0 0 0 0 transparent;
+    -webkit-transition: box-shadow 0.2s ease-in;
+    -moz-transition: box-shadow 0.2s ease-in;
+    transition: box-shadow 0.2s ease-in;
+}
+
