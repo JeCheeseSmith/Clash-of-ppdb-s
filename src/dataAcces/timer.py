@@ -51,8 +51,6 @@ class TimerDataAccess:
         cursor.execute('SELECT * FROM timer WHERE done<%s;', (datetime.now(),))
         timersDone = cursor.fetchall()
 
-        print(timersDone)
-
         for timerArray in timersDone:  # Redirect timer functionality to specific function
             timer = Timer(timerArray[0], timerArray[1], timerArray[2], timerArray[3], timerArray[4], timerArray[5],
                           timerArray[6])
@@ -214,6 +212,7 @@ SELECT id FROM transfer WHERE discovered=True
         cursor.execute('SELECT * FROM transfer WHERE id=%s;', (timer.oid,))
         transfer = cursor.fetchone()  # tid, discovered, idTo, toType, idFrom, fromType, pid
 
+
         # Add info to dict
         newInfo["to"] = transfer_data_acces.translatePosition(transfer[2], transfer[3])
         newInfo["from"] = transfer_data_acces.translatePosition(transfer[4], transfer[5])
@@ -362,9 +361,10 @@ SELECT id FROM transfer WHERE discovered=True
         # Retrieve Player name of the defender
         if transfer.toType:
             cursor.execute('SELECT pname FROM transfer WHERE id=%s;', (transfer.idTo,))
+            defendant = cursor.fetchone()[0]
         else:
             cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
-        defendant = cursor.fetchone()[0]
+            defendant = cursor.fetchone()[0]
 
         # We need to do this locally otherwise other functionality will break due to circular includes
         from .content import Content
@@ -387,16 +387,12 @@ SELECT id FROM transfer WHERE discovered=True
                 ap += dp
                 package_data_acces.update_resources(ap)  # Update database
 
-                # Delete defendant transfer and package
-                cursor.execute('DELETE FROM transfer WHERE id=%s;', (transferDefendant.id,))
-                cursor.execute('DELETE FROM package WHERE id=%s;', (transferDefendant.pid,))
-                cursor.execute('DELETE FROM troops WHERE pid=%s;', (transferDefendant.pid,))
-
                 # Get transfer going to the transfer that doesn't exist anymore now
-                cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s;', (transferDefendant.id,))
+                cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s EXCEPT SELECT %s;', (transferDefendant.id,transfer.id))
                 transfers = cursor.fetchall()
                 for tid in transfers:  # Send them back to where they came from
-                    transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid), timer_data_access, soldier_data_acces, package_data_acces)
+                    transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access, soldier_data_acces, package_data_acces)
+                    self.dbconnect.commit()
 
                 attackerMessage = f"""We successfully captured the transfer of {defendant}! Returning home now, my Lord."""
                 defendantMessage = f"""You're transfer has been attacked and captured by {transfer.pname}!"""
@@ -408,7 +404,7 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
                 pidTo = cursor.fetchone()[0]
                 cursor.execute('SELECT * FROM package WHERE id=%s;', (pidTo,))
-                dp = cursor.fetchone()  # Defendant resources
+                dp = list(cursor.fetchone())  # Defendant resources
 
                 # Calculate amount that will be stolen
                 ap = package_data_acces.get_resources(transfer.pid)  # Attacker package
@@ -427,7 +423,13 @@ SELECT id FROM transfer WHERE discovered=True
 
                 attackerMessage = f"""We successfully raided the settlement of {defendant}! Returning home now, my Lord."""
                 defendantMessage = f"""You've been attacked by {transfer.pname}!"""
+
             transfer_data_acces.returnToBase(transfer, timer_data_access, soldier_data_acces, package_data_acces)  # Let the original transfer also return to base
+            if transfer.toType:  # Delete defendant transfer, timer and package
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (transferDefendant.id,))
+                cursor.execute('DELETE FROM package WHERE id=%s;', (transferDefendant.pid,))
+                cursor.execute('DELETE FROM troops WHERE pid=%s;', (transferDefendant.pid,))
+                cursor.execute("DELETE FROM timer WHERE oid=%s AND type IN('transfer','espionage','outpost','attack');", (transferDefendant.id,))
         else:  # Defendant won
             # Delete attack transfer
             cursor.execute('DELETE FROM transfer WHERE id=%s;', (transfer.id,))
@@ -443,6 +445,7 @@ SELECT id FROM transfer WHERE discovered=True
                                         transfer.pname)  # Notify attacker
         content_data_access.add_message(Content(None, datetime.now(), defendantMessage, 'admin'),
                                         defendant)  # Notify defendant
+        self.dbconnect.commit()
 
     def simulateOutpost(self, timer: Timer, transfer_data_acces, settlement_data_acces):
         """

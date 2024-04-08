@@ -17,7 +17,7 @@ class Transfer:
         self.pname = pname
 
     def to_dct(self):
-        return dict(id=self.id, sidto=self.idTo, discovered=self.discovered, sidfrom=self.idFrom,
+        return dict(id=self.id, idTo=self.idTo, discovered=self.discovered, idFrom=self.idFrom,
                     pid=self.pid, toType=self.toType, fromType=self.fromType, pname=self.pname)
 
 
@@ -178,13 +178,13 @@ class TransferDataAccess:
         return PackageWithSoldier(package_data_acces.get_resources(pid),
                                   self.__extent(soldier_data_acces.getTroops(pid, 'package'), False))
 
-    def instantiateTransfer(self, tid):
+    def instantiateTransfer(self, tid: int):
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT * FROM transfer WHERE id=%s;', (tid,))
         data = cursor.fetchone()
         return Transfer(tid, data[1], data[2], data[3], data[4], data[5], data[6], data[7])
 
-    def returnToBase(self, transfer, timer_data_access, soldier_data_acces, package_data_acces):
+    def returnToBase(self, transfer: Transfer, timer_data_access, soldier_data_acces, package_data_acces):
         """
         Helper function to delete the current transfer and make a new transfer towards home (idFrom)
         :param package_data_acces:
@@ -194,6 +194,8 @@ class TransferDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
         oldTid = transfer.id
+        cursor.execute("SELECT id FROM timer WHERE oid=%s and type IN('attack','outpost','transfer')", (oldTid,))
+        originalTimerID = cursor.fetchone()[0]  # Already get the original timer ID before we make any changes
 
         if transfer.toType:  # If we went to a transfer x, the start location will be the end of x
             cursor.execute('SELECT idTo FROM transfer WHERE id=%s;', (transfer.idTo,))
@@ -217,8 +219,9 @@ class TransferDataAccess:
         timer = Timer(None, transfer.id, 'transfer', start, stop, duration, transfer.idTo)
         timer_data_access.insertTimer(timer)
 
-        # Delete the old transfer in the database
+        # Delete the old transfer and old timer in the database (package is recycled)
         cursor.execute('DELETE FROM transfer WHERE id=%s;', (oldTid,))
+        cursor.execute('DELETE FROM timer WHERE id=%s;', (originalTimerID,))
 
         # Commit Data
         self.dbconnect.commit()
