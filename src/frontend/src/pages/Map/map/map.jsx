@@ -30,7 +30,6 @@ function Map({setMenuVisible, setSelectedSettlement})
     const handleSettlement = (rowIndex, colIndex) =>
     {
         setMenuVisible(true)
-        console.log("is true now")
         setSelectedSettlement([rowIndex,colIndex])
     }
     const renderSettlement = (rowIndex, colIndex) =>
@@ -77,7 +76,7 @@ function Map({setMenuVisible, setSelectedSettlement})
                               position={[colIndex + 0.5 - mapSize / 2, 0, rowIndex + 1 - mapSize / 2]}
                               onClick={() => handleSettlement(rowIndex, colIndex)}
                         >
-                            <Arrow destinationPosition={timer.to}/>
+                            <Arrow position={[rowIndex, colIndex]} destinationPosition={timer.to}/>
                         </mesh>
                     );
                 }
