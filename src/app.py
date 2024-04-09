@@ -89,15 +89,6 @@ def get_login():
                         logout=None, pid=None)
     control = player_data_access.get_login(Player_obj)
     if control:
-        # Update all data for this player
-        cursor = package_data_acces.dbconnect.get_cursor()
-        cursor.execute('SELECT id FROM settlement WHERE pname=%s;', (player_name,))
-        settlements = cursor.fetchall()
-        for sid in settlements:
-            package_data_acces.calc_resources(sid, None, datetime.now())
-
-        update()
-
         return jsonify({"success": control[0], "message": "Login successful", "sid": control[1]})
     else:
         return jsonify({"success": control[0], "message": "Login failed", "sid": control[1]})
@@ -232,7 +223,7 @@ def get_resources():
     return jsonify(packageDict)
 
 
-@app.route("/update", methods=["GET"])
+@app.route("/update", methods=["POST"])
 def update():
     """
     Tell the server to re-evaluate its timers
@@ -250,13 +241,14 @@ def update():
     Timer objects related to transfer have the following extra info: {"from": <ARRAY INT[2]> , "to": <ARRAY INT[2]>, "discovered": <BOOL> }
     }
     """
-    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access, soldier_data_acces)
+    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
+                                    soldier_data_acces, timer_data_acces)
 
-    data = request.args
+    data = request.json
     pname = data.get('pname')
 
     if pname is not None:
-        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces, package_data_acces)
+        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
 
         return jsonify(timers)
 
@@ -554,7 +546,8 @@ def espionage():
     }
     """
     data = request.json
-    timer = transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'), timer_data_acces)
+    timer = transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'),
+                                                timer_data_acces)
     return jsonify(timer.to_dct())
 
 
@@ -583,8 +576,10 @@ def transfer():
     }
     """
     data = request.json
-    success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'), data.get('fromType'), data.get('soldiers'),
-                                                        data.get('resources'), data.get('tType'), data.get('pname'), timer_data_acces,
+    success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
+                                                        data.get('fromType'), data.get('soldiers'),
+                                                        data.get('resources'), data.get('tType'), data.get('pname'),
+                                                        timer_data_acces,
                                                         package_data_acces, clan_data_acces,
                                                         friend_data_access, soldier_data_acces)
 
@@ -619,9 +614,11 @@ def createOutpost():
     }
     """
     data = request.json
-    success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo'),  data.get('outpostName'), data.get('soldiers') ,data.get('resources'), timer_data_acces,
-                                                        package_data_acces, clan_data_acces,
-                                                        friend_data_access, soldier_data_acces )
+    success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo'),
+                                                       data.get('outpostName'), data.get('soldiers'),
+                                                       data.get('resources'), timer_data_acces,
+                                                       package_data_acces, clan_data_acces,
+                                                       friend_data_access, soldier_data_acces)
 
     if success:
         dct = timer.to_dct()

@@ -86,3 +86,18 @@ SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FR
             for soldier in data:
                 dct[str(soldier[0])] = dict(amount=soldier[1], discovered=soldier[2])
             return dct
+
+    def getCapacity(self, pid):
+        """
+        Retrieve the total capacity of soldiers connected to a package
+        :param pid: ID of the package
+        :return: INT
+        """
+        cursor = self.dbconnect.get_cursor()
+        troops = self.getTroops(pid, 'package')
+        capacity = 0
+
+        for soldier in troops.keys():
+            cursor.execute('SELECT capacity FROM soldier WHERE name=%s;', (soldier,))
+            capacity += cursor.fetchone()[0]
+        return capacity
