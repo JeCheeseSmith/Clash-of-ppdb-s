@@ -22,6 +22,7 @@ import {empty} from "leaflet/src/dom/DomUtil.js";
 /**
  * React component for the troop screen button
  */
+
 function SoldierMenuButton(props) {
     const [soldierVisible, setsoldierVisible] = useState(false);
     return (
@@ -47,11 +48,11 @@ function SoldierMenuBox(soldierVisible) {
 
 function SoldierNavbar(soldierVisible) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
+    const [TroopAmount, setTroopAmount] = useState(0);
 
     const handleButtonClick = (pageName) => {
       setCurrentPage(pageName);
-      //playOption();
-
+      console.log(TroopAmount);
     };
 
     return (
@@ -74,11 +75,12 @@ function SoldierNavbar(soldierVisible) {
             soldierVisible && currentPage &&
             (<SoldierMenuOptions pageName={currentPage}/>)
         }
+        <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount}/>
         </div>
     )
 }
 
-function SoldierMenuOptions({pageName, requests, sendData}){
+function SoldierMenuOptions({pageName, TroopAmount ,requests, sendData}){
     return (
         <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage/>}
@@ -87,8 +89,28 @@ function SoldierMenuOptions({pageName, requests, sendData}){
     )
 }
 
+function SoldierAmountSelectBar({soldierVisible, TroopAmount}) {
+     const handleButtonClick = (amount) => {
+      TroopAmount = amount;
+    };
 
-function TroopOverviewPage() {
+    return (
+        <div className="TroopAmountbar">
+            <table>
+                <td>
+                    <button onClick={() => handleButtonClick(1)} className={"AmountMenuOption"}>1x</button>
+                    <button onClick={() => handleButtonClick(5)} className={"AmountMenuOption"}>5x</button>
+                    <button onClick={() => handleButtonClick(10)} className={"AmountMenuOption"}>10x</button>
+                    <button onClick={() => handleButtonClick(25)} className={"AmountMenuOption"}>25x</button>
+                    <button onClick={() => handleButtonClick(100)} className={"AmountMenuOption"}>100x</button>
+                </td>
+            </table>
+        </div>
+    )
+}
+
+
+function TroopOverviewPage({TroopAmount}) {
     const { sid, username } = useLocation().state;
     const [consumption, setConsumption] = useState(0);
     // default value for soldier counts
@@ -179,7 +201,7 @@ function TroopOverviewPage() {
 
     // Function that sends a request for a soldier to be trained
     const handleTroopTrain = (troop) => {
-        console.log(troop)
+        console.log(troop,TroopAmount)
     };
 
     return (
@@ -263,7 +285,6 @@ function TroopOverviewPage() {
                 </div>
             </div>
         </div>
-
     )
 }
 

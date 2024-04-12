@@ -1,5 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
+.TroopAmountbar {
+    padding: 20px 20px 20px 4%;
+    border: 2px solid #ffd700; /* Golden border color */
+    border-radius: 10px; /* Match border-radius of message box */
+    background-color: #b26616;
+    color: white;
+    position: absolute;
+    bottom: 0;
+    top: 140px;
+    width: 40px;
+    right: 285px;
+}
+
+.AmountMenuOption {
+    background-color: #8B4513;
+    color: #fff;
+    font-family: 'Anton', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px; /* Adding letter spacing */
+    border: 2px solid #CD853F;
+    border-radius: 10px;
+    padding: 15px 30px;
+    cursor: pointer;
+    text-transform: uppercase;
+    position: relative;
+    margin-top: 10px;
+    margin-left: -50px;
+    width: 100px;
+}
+
+.AmountMenuOption:hover {
+    cursor:pointer;
+    opacity: 0.7;
+}
+
+
 .button {
     display: inline-block;
     background: transparent;
@@ -64,7 +101,6 @@
     margin-left: 90px;
     margin-top: -15px;
     font-size: 28px;
-    height: 100%;
     width: 100%;
     height: 20px;
 }
@@ -181,6 +217,11 @@
     transition: all 0.3s ease;
     text-transform: uppercase;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.soldierMenuOption:hover {
+    opacity: 0.7;
+    cursor: pointer;
 }
 
 .socialOption:hover {
