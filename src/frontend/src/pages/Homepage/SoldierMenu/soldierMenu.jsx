@@ -48,12 +48,15 @@ function SoldierMenuBox(soldierVisible) {
 
 function SoldierNavbar(soldierVisible) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
-    const [TroopAmount, setTroopAmount] = useState(0);
+    const [TroopAmount, setTroopAmount] = useState(1);
 
     const handleButtonClick = (pageName) => {
       setCurrentPage(pageName);
-      console.log(TroopAmount);
     };
+
+    const handleTroopAmountChange = (amount) => {
+        setTroopAmount(amount);
+    }
 
     return (
         <div className="navbar-container">
@@ -73,9 +76,9 @@ function SoldierNavbar(soldierVisible) {
         )}
         {
             soldierVisible && currentPage &&
-            (<SoldierMenuOptions pageName={currentPage}/>)
+            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount}/>)
         }
-        <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount}/>
+        <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
         </div>
     )
 }
@@ -83,15 +86,15 @@ function SoldierNavbar(soldierVisible) {
 function SoldierMenuOptions({pageName, TroopAmount ,requests, sendData}){
     return (
         <div className="soldier-page-content">
-            {pageName === 'troopOverview' && <TroopOverviewPage/>}
+            {pageName === 'troopOverview' && <TroopOverviewPage TroopAmount={TroopAmount}/>}
             {pageName === 'trainTroopOverview' && <TroopTrainPage/>}
         </div>
     )
 }
 
-function SoldierAmountSelectBar({soldierVisible, TroopAmount}) {
+function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChange}) {
      const handleButtonClick = (amount) => {
-      TroopAmount = amount;
+      onTroopAmountChange(amount);
     };
 
     return (
