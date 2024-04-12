@@ -295,7 +295,11 @@ function TroopTrainPage() {
     return (
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
-            <div className="trainingQueue"></div>
+            <div className="trainingQueue">
+                <table>
+                    <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="training-icon"/><span className="caption">102</span></button>
+                </table>
+            </div>
         </div>
     )
 }

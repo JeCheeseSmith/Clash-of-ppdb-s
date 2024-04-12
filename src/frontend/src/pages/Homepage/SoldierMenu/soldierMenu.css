@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
+.caption {
+    display: block;
+    color: #fff;
+    font-size: 20px;
+}
+
 .TroopAmountbar {
     padding: 20px 20px 20px 4%;
     border: 2px solid #ffd700; /* Golden border color */
@@ -51,7 +57,7 @@
     margin-top: 30px;
     position: absolute;
     width: 840px;
-    height: 80px;
+    height: 100px;
     z-index: 9; /* Ensure it appears above other elements */
     font-family: 'Anton', sans-serif;
     font-size: 18px;
@@ -77,6 +83,21 @@
       border-radius: 10px;
       border: 3px solid #593811;
       margin-bottom: 40px;
+}
+
+.training-icon {
+      position: relative;
+      padding: 10px;
+      background-image: linear-gradient(to right, rgb(96, 53, 4), rgb(154, 93, 44), #673909);
+      background-size: cover;
+      width: 50px;
+      border-radius: 10px;
+      border: 3px solid #593811;
+}
+
+.training-icon:hover {
+    opacity: 0.7;
+    cursor: pointer;
 }
 
 .soldier-icon:hover {
