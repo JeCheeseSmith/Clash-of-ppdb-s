@@ -39,3 +39,8 @@
   background-color: lightskyblue; /* Vulkleur van de XP balk */
   border-radius: 4px; /* Maakt de hoeken van de gevulde XP balk afgerond */
 }
+
+.level-container:hover {
+  transform: scale(1.1); /* Maakt de cirkel 10% groter tijdens hover */
+  cursor: pointer;
+}
