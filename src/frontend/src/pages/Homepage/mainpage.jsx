@@ -8,6 +8,7 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
+import Leaderbord from "./Leaderbord/leaderbord.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -32,6 +33,8 @@ function MainPage()
             <Grid buildings={buildings} position={position} setPosition={setPosition}/>
             <ResourceBar/>
             <SoldierMenu/>
+             <Leaderbord/>
+
 
             {/*<Map/>*/}
         </div>
