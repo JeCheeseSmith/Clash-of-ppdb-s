@@ -1,9 +1,19 @@
+.box-container {
+    position: absolute;
+    left: 500px; /* Adjust this value as needed */
+    top: 80px; /* Adjust this value as needed */
+    width: 1350px;
+    z-index: 9999; /* Ensure it appears above other elements */
+}
+
+
+
 .toggle-leaderbord-button {
     position: fixed;
     bottom: 40%;
     transform: translateY(-50%);
     height: 70px;
-    width: 65px;
+    width: 70px;
     z-index: 1; /* Decreased z-index to bring it down in the background */
     padding: 0px;
     background-color: #262826;
@@ -25,4 +35,17 @@
 .toggle-leaderbord-button:hover {
     background-color: #d96b00;
     transition: 0.5s ; /* Slide animation */
+}
+
+.menu {
+  /* Menu styles */
+  display: block;
+}
+
+.menu ul {
+  /* Menu list styles */
+}
+
+.menu li {
+  /* Menu item styles */
 }
