@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+.level-xp-container {
+  display: flex;
+  align-items: center;
+}
+
+.level-container {
+  width: 60px;
+  height: 60px;
+  background-color: lightskyblue;
+  border-radius: 50px;
+  display: flex; /* Items in the container will be centered */
+  justify-content: center; /* Horizontally centered */
+  align-items: center; /* Vertically centered */
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  margin: 10px;
+  border: 1px solid white;
+  font-family: 'MedievalSharp', cursive;
+}
+
+.xp-bar-container {
+  height: 20px;
+  width: 200px;
+  background-color: transparent;
+  margin-left: 0; /* Space between level and xp-bar */
+  border-radius: 5px;
+  border: 1px solid white;
+}
+
+.xp-bar {
+  height: 100%;
+  background-color: lightskyblue;
+  border-radius: 4px;
+}
+
+.level-container:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
