@@ -6,14 +6,17 @@
     z-index: 9999; /* Ensure it appears above other elements */
 }
 
-
 .toggle-leaderbord-button {
-    background: url("assets/Foto.png") no-repeat center center;
-    background-size: contain;
-    width: 50px;
-    height: 50px;
-    border: none;
-    cursor: pointer;
+    background-image: url("assets/trophy-Photoroom.png-Photoroom.png");
+    background-size: contain; /* Adjust the size of the background image */
+    position: fixed;
+    bottom: 40%;
+    transform: translateY(-50%);
+    height: 70px;
+    width: 70px;
+    z-index: 1; /* Decreased z-index to bring it down in the background */
+    border:none;
+    cursor:pointer;
     outline: none;
     transition: transform 0.3s ease;
 }
@@ -23,6 +26,7 @@
     transform: scale(1,2);
     cursor: pointer;
 }
+
 
 .leaderboardmenu {
     display: block;

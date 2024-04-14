@@ -11,7 +11,7 @@ function Leaderboard() {
 
   return (
       <div>
-            <button onClick={toggleMenu} className="toggle-leaderbord-button">Leaderboard</button>
+            <button onClick={toggleMenu} className="toggle-leaderbord-button"></button>
           {isMenuOpen && (
             <div className={`bo-container ${isMenuOpen  ? 'visible' : 'hidden'}`}>
                 <div className="leaderboardmenu">
