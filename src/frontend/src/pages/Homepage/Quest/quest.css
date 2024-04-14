@@ -1,48 +1,35 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
 .quest-container {
-    left: 0;
-    top: 0;
-    padding: 10px; /* Adjust the padding as needed */
+    padding-left: 10px;
     margin-top: 100px;
 }
 
 .quest-button {
     background: url(assets/quest.png) no-repeat center center;
     background-size: contain;
-    width: 50px; /* Adjust the size as needed */
-    height: 50px; /* Adjust the size as needed */
+    width: 50px;
+    height: 50px;
     border: none;
     cursor: pointer;
     outline: none;
-    transition: transform 0.3s ease; /* Gladde overgang toevoegen */
+    transition: transform 0.3s ease;
 }
 
 .quest-button:hover {
-    transform: scale(1.2); /* Maakt de cirkel 10% groter tijdens hover */
+    transform: scale(1.2);
     cursor: pointer;
 }
-/* vanaf hier voor questpage */
 
 .questpage-box {
     position: absolute;
-    left: 500px; /* Adjust this value as needed */
-    top: 80px; /* Adjust this value as needed */
-    z-index: 9999; /* Ensure it appears above other elements */
-    top: 80px; /* Adjust this value as needed */
+    left: 500px;
+    top: 100px;
+    z-index: 9999;
     width: 880px;
     height: 650px;
-    font-family: 'Anton', sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-    letter-spacing: 2px; /* Adding letter spacing */
-    border: 2px solid #CD853F;
-    border-radius: 10px;
-    padding: 15px 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #ffd700;
+    border-radius: 15px;
     background-color: #1c1c1c;
 }
 
@@ -50,16 +37,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50px; /* De hoogte van je bar, pas dit aan zoals nodig */
-    background-color: #DAA520; /* Of welke kleur je ook kiest voor de balk */
-    color: white; /* De tekstkleur */
+    height: 50px;
+    background-color: #DAA520;
+    color: white;
     border-radius: 10px;
     border: 2px solid #ffd700;
-}
-
-.bar-text {
-    color: white;  /* Tekstkleur */
-    font-size: 1.5em;  /* Tekstgrootte */
+    font-size: 1.5em;
     font-family: 'MedievalSharp', sans-serif;
-
 }

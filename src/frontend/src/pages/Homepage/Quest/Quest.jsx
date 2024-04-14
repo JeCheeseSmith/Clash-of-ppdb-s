@@ -3,8 +3,10 @@ import './quest.css'
 
 function QuestButton() {
 
+    // Variable to check if the quest-button has been clicked, initially set to false
     const [click, setClick] = useState(false);
 
+    // This function handles the quest-button click
     function HandleQuestClick() {
         setClick(!click);
     }
@@ -12,29 +14,22 @@ function QuestButton() {
     return (
         <div className="quest-container">
             <button className="quest-button" onClick={HandleQuestClick}></button>
-            {click && <QuestPageBox/>}
+            {/* If click is true (quest-button has been clicked), then the quest log will open up */}
+            {click && <QuestLog/>}
         </div>
     );
 }
 
 export default QuestButton;
 
-function QuestPageBox() {
+// This function is for the quest-log
+function QuestLog() {
 
     return (
         <div className="questpage-box">
-            <QuestPageBar/>
+          <div className="questpage-bar">Quest Log</div>
         </div>
-
-    );
+  );
 }
 
-function QuestPageBar() {
-
-    return (
-        <div className="questpage-bar">
-            <div className="bar-text">Questlog</div>
-        </div>
-    );
-}
 
