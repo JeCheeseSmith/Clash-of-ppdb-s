@@ -633,6 +633,7 @@ def createOutpost():
 def getTransferInfo():
     # IN: tid
     # IF allied: show more/less
+    # dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25}
     pass
 
 
@@ -641,6 +642,7 @@ def getSettlementInfo():
     # IN: sid
     # check if friend, ally, enemy
     # IF allied: show more/less
+    # dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25}
     pass
 
 
