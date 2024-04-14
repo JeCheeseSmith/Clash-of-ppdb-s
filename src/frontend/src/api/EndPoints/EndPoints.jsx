@@ -27,9 +27,9 @@ export const get_getConsumption = async (sid) =>
     return await GET( {"id": sid}, '/getConsumption')
 }
 
-export const trainTroop = async (sid, soldierName) =>
+export const trainTroop = async (sid, soldierName, amount) =>
 {
-    return await POST( {"id": sid, "sname": soldierName}, '/trainTroop')
+    return await POST( {"id": sid, "sname": soldierName, "amount": amount}, '/trainTroop')
 }
 
 

@@ -209,7 +209,7 @@ function TroopOverviewPage({TroopAmount}) {
 
     // Function that sends a request for a soldier to be trained
     const handleTroopTrain = (troop) => {
-        API.trainTroop(sid, troop).then();
+        API.trainTroop(sid, troop, 1).then();
     };
 
     return (

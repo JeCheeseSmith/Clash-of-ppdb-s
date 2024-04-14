@@ -24,6 +24,7 @@ class SoldierDataAccess:
     def calculateTrainTime(self, sname):
         """
         Helper function to retrieve the start,stop and duration for a timer to train a soldier
+        REMEMBER: Troop training may not work in parallel; will retrieve
         :param sname: Name of the soldier
         :return: start: now() , stop: datetime, duration: int
         """
@@ -44,10 +45,10 @@ class SoldierDataAccess:
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT EXISTS(SELECT * FROM unlocked WHERE name=%s and sid=%s);', (sname, sid))
         unlocked = cursor.fetchone()[0]
-        if unlocked:
-            return True
-        else:
-            return False
+
+        cursor.execute('SELECT EXISTS(SELECT name FROM building WHERE name=%s and sid=%s);', ("Barracks", sid))
+        unlockedBarracks = cursor.fetchone()[0]
+        return unlockedBarracks and unlocked
 
     def getUnlockedSoldiers(self, sid):
         """
@@ -101,3 +102,16 @@ SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FR
             cursor.execute('SELECT capacity FROM soldier WHERE name=%s;', (soldier,))
             capacity += cursor.fetchone()[0]
         return capacity
+
+    def getBarrackLevelSum(self, sid):
+        """
+        Retrieves the sum of the levels of all barracks in a settlement. This is used to let the user know it can train this amount in parallel.
+        :param sid: Settlement ID
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT SUM(level) FROM building WHERE sid=%s and name=%s;', (sid, 'Barracks'))
+        amount = cursor.fetchone()[0]
+        if amount is None:
+            amount = 0
+        return amount

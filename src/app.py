@@ -445,16 +445,36 @@ def getConsumption():
 
     JSON Input Format
     {
-    "id": <INT> | Identifier of the type referring to
+    "id": <INT> | Identifier of the settlement referring to
     }
 
     JSON Output Format:
     {
-    "consumption": <INT> | consumption
+    <INT> | consumption
     }
     """
     data = request.args
     amount = package_data_acces.calc_consumption(data.get('id'))
+    return jsonify(amount)
+
+
+@app.route("/getBarrackLevelSum", methods=["POST"])
+def getBarrackLevelSum():
+    """
+    Retrieve the food consumption per time unit for a settlement
+
+    JSON Input Format
+    {
+    "id": <INT> | Identifier of the settlement referring to
+    }
+
+    JSON Output Format:
+    {
+    <INT> | sum of level of each barrack
+    }
+    """
+    data = request.json
+    amount = soldier_data_acces.getBarrackLevelSum(data.get('id'))
     return jsonify(amount)
 
 
@@ -467,6 +487,7 @@ def trainTroop():
     {
     "id": <INT> | Identifier of the settlement you are training troops for
     "sname": <STRING> | Name of soldier
+    "amount": <INT> | Amount of troops you want to train in parallel
     }
 
     JSON Output Format:
@@ -477,18 +498,18 @@ def trainTroop():
     }
     """
     data = request.json
-    print(data)
-    success, timer = settlement_data_acces.trainTroop(data.get('id'), data.get('sname'), soldier_data_acces,
+
+    success, timers = settlement_data_acces.trainTroop(data.get('id'), data.get('sname'), data.get('amount'), soldier_data_acces,
                                                       package_data_acces,
                                                       timer_data_acces)  # Execute actual functionality
     if success:
-        dct = timer.to_dct()
-        dct["success"] = success
-        dct["sname"] = data.get('sname')
+        dct = dict(succes=success, sname=data.get('sname'))
+        for timer in timers:
+            dct[str(timer.id)] = timer.to_dct()
         print(dct)
     else:
         dct = dict(success=success)
-        dct["error"] = str(timer)  # In this case, timer is an error message
+        dct["error"] = str(timers)  # In this case, timer is an error message
     return jsonify(dct)
 
 

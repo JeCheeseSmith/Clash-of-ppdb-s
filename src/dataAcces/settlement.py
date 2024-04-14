@@ -294,7 +294,7 @@ class SettlementDataAcces:
             self.dbconnect.rollback()
             return False, e
 
-    def trainTroop(self, sid, sname, soldier_data_acces, package_data_acces, timer_data_acces):
+    def trainTroop(self, sid, sname, amount, soldier_data_acces, package_data_acces, timer_data_acces):
         """
         If the soldier is unlocked: Tries to adjust the resource amount and creates a timer.
         Verifies conditions too (unlocked, enough resources)
@@ -308,14 +308,17 @@ class SettlementDataAcces:
         """
         try:
             if not soldier_data_acces.unlocked(sid, sname):
-                raise Exception("You have not yet unlocked this soldier! Consider upgrading your Castle.")
+                raise Exception("You have not yet unlocked this soldier! Consider upgrading your Castle or building Barracks.")
+            print(sid)
+            if amount > soldier_data_acces.getBarrackLevelSum(sid):  # Verify amount correctness
+                raise Exception(f"You can only train {soldier_data_acces.getBarrackLevelSum(sid)} in parallel!")
 
             cursor = self.dbconnect.get_cursor()  # Get DB acces
 
             # Retrieve training cost
             cursor.execute('SELECT cost, id FROM soldier WHERE name=%s;', (sname,))
             data = cursor.fetchone()
-            cost = data[0]
+            cost = data[0] * amount
             soldierId = data[1]  # ID of the soldier
 
             # Make a Resource Deficit
@@ -329,10 +332,14 @@ class SettlementDataAcces:
                 raise Exception(total.deficitString())
             package_data_acces.update_resources(total)  # Adjust resource amount
 
-            start, stop, duration = soldier_data_acces.calculateTrainTime(sname)  # Create Timer
-            timer = Timer(None, soldierId, 'soldier', start, stop, duration, sid)
-            timer_data_acces.insertTimer(timer)  # When the timer stops, soldier will be inserted
-            return True, timer
+            start, stop, duration = soldier_data_acces.calculateTrainTime(sname)  # Create Timer(s)
+            timerList = []
+            for i in range(0, amount):
+                timer = Timer(None, soldierId, 'soldier', start, stop, duration, sid)
+                timer_data_acces.insertTimer(timer)  # When the timer stops, soldier will be inserted
+                timerList.append(timer)
+            print('trained: ', len(timerList))
+            return True, timerList
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
