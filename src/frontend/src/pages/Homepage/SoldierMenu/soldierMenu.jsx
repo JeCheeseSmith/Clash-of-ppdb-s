@@ -18,12 +18,13 @@ import spear3 from "./assets/Halbardier.png"
 import * as API from "../../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import {empty} from "leaflet/src/dom/DomUtil.js";
+import {updateResources} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
 
 /**
  * React component for the troop screen button
  */
 
-function SoldierMenuButton(props) {
+function SoldierMenuButton({setResources}) {
     const [soldierVisible, setsoldierVisible] = useState(false);
     return (
         <>
@@ -32,21 +33,21 @@ function SoldierMenuButton(props) {
             }} className={"trainMenu"}>Troop Menu
                 <div className="soldierMenuButton-icon"></div>
             </button>
-            {soldierVisible ? SoldierMenuBox(soldierVisible):null}
+            {soldierVisible ? <SoldierMenuBox soldierVisible={soldierVisible} setResources={setResources} /> : null}
         </>
     );
 }
 export default SoldierMenuButton;
 
-function SoldierMenuBox(soldierVisible) {
+function SoldierMenuBox({soldierVisible, setResources}) {
     return (
         <div className="box-container">
-            <SoldierNavbar soldierVisible={soldierVisible}/>
+            <SoldierNavbar soldierVisible={soldierVisible} setResources={setResources}/>
         </div>
     )
 }
 
-function SoldierNavbar(soldierVisible) {
+function SoldierNavbar({soldierVisible,setResources}) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
     const [TroopAmount, setTroopAmount] = useState(1);
 
@@ -76,17 +77,17 @@ function SoldierNavbar(soldierVisible) {
         )}
         {
             soldierVisible && currentPage &&
-            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount}/>)
+            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} setResources={setResources}/>)
         }
         <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
         </div>
     )
 }
 
-function SoldierMenuOptions({pageName, TroopAmount ,requests, sendData}){
+function SoldierMenuOptions({pageName, TroopAmount ,requests, sendData, setResources}){
     return (
         <div className="soldier-page-content">
-            {pageName === 'troopOverview' && <TroopOverviewPage TroopAmount={TroopAmount}/>}
+            {pageName === 'troopOverview' && <TroopOverviewPage TroopAmount={TroopAmount} setResources={setResources}/>}
             {pageName === 'trainTroopOverview' && <TroopTrainPage/>}
         </div>
     )
@@ -99,21 +100,17 @@ function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChang
 
     return (
         <div className="TroopAmountbar">
-            <table>
-                <td>
-                    <button onClick={() => handleButtonClick(1)} className={"AmountMenuOption"}>1x</button>
-                    <button onClick={() => handleButtonClick(5)} className={"AmountMenuOption"}>5x</button>
-                    <button onClick={() => handleButtonClick(10)} className={"AmountMenuOption"}>10x</button>
-                    <button onClick={() => handleButtonClick(25)} className={"AmountMenuOption"}>25x</button>
-                    <button onClick={() => handleButtonClick(100)} className={"AmountMenuOption"}>100x</button>
-                </td>
-            </table>
+            <button onClick={() => handleButtonClick(1)} className={"AmountMenuOption"}>1x</button>
+            <button onClick={() => handleButtonClick(5)} className={"AmountMenuOption"}>5x</button>
+            <button onClick={() => handleButtonClick(10)} className={"AmountMenuOption"}>10x</button>
+            <button onClick={() => handleButtonClick(25)} className={"AmountMenuOption"}>25x</button>
+            <button onClick={() => handleButtonClick(100)} className={"AmountMenuOption"}>100x</button>
         </div>
     )
 }
 
 
-function TroopOverviewPage({TroopAmount}) {
+function TroopOverviewPage({TroopAmount, setResources}) {
     const { sid, username } = useLocation().state;
     const [consumption, setConsumption] = useState(0);
     // default value for soldier counts
@@ -212,8 +209,9 @@ function TroopOverviewPage({TroopAmount}) {
         API.trainTroop(sid, troop, 1).then( data => {
             console.log(data)
         }
-
         );
+        updateResources(sid, setResources)
+
     };
 
     return (
@@ -305,9 +303,7 @@ function TroopTrainPage() {
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
             <div className="trainingQueue">
-                <table>
-                    <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="training-icon"/><span className="caption">102</span></button>
-                </table>
+                <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="training-icon"/><span className="caption">102</span></button>
             </div>
         </div>
     )
