@@ -9,6 +9,7 @@ import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
 import Leaderbord from "./Leaderbord/leaderbord.jsx";
+import WheelOfFortune from "./Wheel of fortune /wheel.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -33,7 +34,8 @@ function MainPage()
             <Grid buildings={buildings} position={position} setPosition={setPosition}/>
             <ResourceBar/>
             <SoldierMenu/>
-             <Leaderbord/>
+            <Leaderbord/>
+            <WheelOfFortune/>
 
 
             {/*<Map/>*/}

@@ -3,10 +3,8 @@ import './leaderbord.css'
 
 
 function Leaderboard() {
-  // State to manage the visibility of the menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Function to toggle the menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -15,15 +13,17 @@ function Leaderboard() {
       <div>
             <button onClick={toggleMenu} className="toggle-leaderbord-button">Leaderboard</button>
           {isMenuOpen && (
-            <div className={`box-container ${isMenuOpen  ? 'visible' : 'hidden'}`}>
-                <h1 className="chat-title">CHAT</h1>
-                <ul>
-                    <li>Menu Item 1</li>
-                    <li>Menu Item 2</li>
-                    <li>Menu Item 3</li>
-                </ul>
+            <div className={`bo-container ${isMenuOpen  ? 'visible' : 'hidden'}`}>
+                <div className="leaderboardmenu">
+                    <h1 className="Lchat-title">Leaderboard</h1>
+                    <ul>
+                        <li>Player 1</li>
+                        <li>player 2</li>
+                        <li>Player 3</li>
+                    </ul>
+                </div>
             </div>
-               )}
+            )}
         </div>
     );
 }

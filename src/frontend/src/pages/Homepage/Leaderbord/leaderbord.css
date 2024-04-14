@@ -1,8 +1,8 @@
-.box-container {
+.bo-container {
     position: absolute;
-    left: 500px; /* Adjust this value as needed */
-    top: 80px; /* Adjust this value as needed */
-    width: 1350px;
+    left: 100px; /* Adjust this value as needed */
+    top: 250px; /* Adjust this value as needed */
+    width: 400px;
     z-index: 9999; /* Ensure it appears above other elements */
 }
 
@@ -34,18 +34,34 @@
 
 .toggle-leaderbord-button:hover {
     background-color: #d96b00;
-    transition: 0.5s ; /* Slide animation */
+    transition: 0.5s ;
 }
 
-.menu {
-  /* Menu styles */
-  display: block;
+.leaderboardmenu {
+    display: block;
+    border: 2px solid #FFD700;
+    background-color: #b26616;
+    padding: 10px;
+    color: white;
 }
 
-.menu ul {
-  /* Menu list styles */
+.leaderboardmenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.menu li {
-  /* Menu item styles */
+.leaderboardmenu li {
+
+}
+
+.Lchat-title {
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: black;
+    color: rgb(255, 221, 0);
+    padding-top: 35px;
+    padding-bottom: 35px;
+    border-radius: 10px;
+    font-size: 50px;
 }
