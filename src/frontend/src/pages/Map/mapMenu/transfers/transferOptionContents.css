@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.option-content
+{
+    background-color: #1f1a18;
+    border: 2px solid #ffd700;
+    height: 500px;
+    border-radius: 10px;
+    margin-top: 2px;
+}
+
+

@@ -9,7 +9,7 @@ import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/po
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
 
-function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
+function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTimer, oldPosition}) {
 
     const { sid, username } = useLocation().state;
     const [click, setClick] = useState(false);
@@ -18,19 +18,8 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
     const [currentTimeValue, setCurrentTimeValue] = useState(null)
     const [currentTotalDuration, setCurrentTotalDuration] = useState(null)
 
-    const getTimer = (ID) =>
-    {
-        let duration = [false, 0, 0]
-        for (let timer of timers) {
-            if (timer.ID[0] === ID[0] && timer.ID[1] === ID[1]) {
-                return [true, timer.duration, timer.totalDuration]
-            }
-        }
-        return duration
-    }
-
     useEffect(() => {
-        const timer = getTimer(selectedBuilding[0].position)
+        const timer = getTimer(selectedBuilding[0].position, "building")
         if (timer[0])
         {
             setClick(true)
@@ -40,13 +29,14 @@ function UpgradeBuilding({selectedBuilding, timers, addTimer}) {
     }, []);
 
     function HandleUpgradeClick() {
+        updateResources()
         if (!click)
         {
-            API.upgradeBuilding(selectedBuilding[0].position, sid).then(data =>
+            API.upgradeBuilding(oldPosition, sid).then(data =>
             {
                 if (data.success)
                 {
-                    addTimer(selectedBuilding[0].position, data.duration, data.duration)
+                    updateTimers()
                     setCurrentTimeValue(data.duration)
                     setCurrentTotalDuration(data.duration)
                     setClick(true)
