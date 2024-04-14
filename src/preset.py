@@ -1,8 +1,15 @@
 from app import *
+from querry import query
 
 """
-This script will load some preset information into the game, providing a very basic example of the workings of the game. We recommend you to actually try it out, not all features are (fully) used.
+WARNING: DATA WILL BE LOST
+This script will delete all current data and load some preset information into the game, providing a very basic example of the workings of the game. We recommend you to actually try it out, not all features are (fully) used.
 """
+
+# Reset database
+cursor = connection.get_cursor()
+cursor.execute(query)
+connection.commit()
 
 Player_obj = Player(name='a', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
 player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
@@ -17,7 +24,6 @@ Player_obj = Player(name='d', password='', avatar=None, gems=50, xp=0, level=0, 
 player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
 
 # Make a and b friends
-cursor = connection.get_cursor()
 cursor.execute('INSERT INTO friend(pname1, pname2) VALUES(%s,%s);', ('a', 'b'))
 connection.commit()
 
