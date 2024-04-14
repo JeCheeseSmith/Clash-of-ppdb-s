@@ -1,46 +1,42 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
-.level-container {
-  width: 60px; /* Dit is de diameter van de cirkel. */
-  height: 60px; /* Dit moet gelijk zijn aan de breedte voor een perfecte cirkel. */
-  background-color: lightskyblue; /* De kleur van de cirkel. */
-  border-radius: 50%; /* Dit maakt de div rond als een cirkel. */
-  display: flex; /* Stel de display in op flex om de items binnen de container te centreren. */
-  justify-content: center; /* Dit centreert de content horizontaal in de flex container. */
-  align-items: center; /* Dit centreert de content verticaal in de flex container. */
-  color: white; /* De kleur van de tekst binnen de cirkel. */
-  font-size: 20px; /* De grootte van het levelnummer. Pas aan afhankelijk van je voorkeur. */
-  font-weight: bold; /* Maakt het levelnummer vetgedrukt. */
-  margin: 10px;
-  border: 1px solid white; /* Voegt een witte rand toe */
-}
-
-.level-count {
-  font-family: 'MedievalSharp', cursive;
-  font-size: 25px;
-}
-
 .level-xp-container {
   display: flex;
   align-items: center;
 }
 
+.level-container {
+  width: 60px;
+  height: 60px;
+  background-color: lightskyblue;
+  border-radius: 50px;
+  display: flex; /* Items in the container will be centered */
+  justify-content: center; /* Horizontally centered */
+  align-items: center; /* Vertically centered */
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  margin: 10px;
+  border: 1px solid white;
+  font-family: 'MedievalSharp', cursive;
+}
+
 .xp-bar-container {
-  height: 20px; /* Hoogte van de XP balk */
-  width: 200px; /* Breedte van de XP balk */
-  background-color: transparent; /* Achtergrondkleur van de XP balk */
-  margin-left: 0; /* Ruimte tussen de level cirkel en de XP balk */
-  border-radius: 5px; /* Maakt de hoeken van de XP balk afgerond */
-  border: 1px solid white; /* Voegt een witte rand toe */
+  height: 20px;
+  width: 200px;
+  background-color: transparent;
+  margin-left: 0; /* Space between level and xp-bar */
+  border-radius: 5px;
+  border: 1px solid white;
 }
 
 .xp-bar {
   height: 100%;
-  background-color: lightskyblue; /* Vulkleur van de XP balk */
-  border-radius: 4px; /* Maakt de hoeken van de gevulde XP balk afgerond */
+  background-color: lightskyblue;
+  border-radius: 4px;
 }
 
 .level-container:hover {
-  transform: scale(1.1); /* Maakt de cirkel 10% groter tijdens hover */
+  transform: scale(1.1);
   cursor: pointer;
 }
