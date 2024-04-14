@@ -79,8 +79,7 @@ CREATE TABLE IF NOT EXISTS settlement(
     name VARCHAR UNIQUE NOT NULL,
     mapX INT NOT NULL, -- Coordinate on the map
     mapY INT NOT NULL,
-    --UNIQUE (mapX,mapY), -- There cannot be settlements with the same coordinates
-    level SMALLINT NOT NULL,
+    UNIQUE (mapX,mapY), -- There cannot be settlements with the same coordinates
     pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Has Relation: Resources currently in the settlement
     pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE -- Owns Relation
 );
@@ -98,10 +97,13 @@ CREATE TABLE IF NOT EXISTS quest(
 
 CREATE TABLE IF NOT EXISTS transfer(
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    sidto INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- To Relation
     discovered BOOL NOT NULL,
-    sidfrom INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- From Relation
-    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
+    idto INT NOT NULL,
+    toType BOOL NOT NULL, -- False: Settlement, True: Transfer
+    idfrom INT NOT NULL,
+    fromType BOOL NOT NULL, -- False: Settlement, True: Transfer
+    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
+    pname VARCHAR NOT NULL REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE -- OwnedBy Relation
 );
 
 CREATE TABLE IF NOT EXISTS buildable(
@@ -149,17 +151,10 @@ CREATE TABLE IF NOT EXISTS shared(
     PRIMARY KEY (mid,cname)
 );
 
-CREATE TABLE IF NOT EXISTS intercept(
-    tid1 INT REFERENCES transfer(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    tid2 INT REFERENCES transfer(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY(tid1,tid2)
-);
-
 CREATE TABLE IF NOT EXISTS troops(
     pid INT REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE,
     sname VARCHAR REFERENCES soldier(name) ON DELETE CASCADE ON UPDATE CASCADE,
     amount INT NOT NULL,
-    transferable BOOL NOT NULL,
     discovered BOOL NOT NULL,
     PRIMARY KEY (pid,sname)
 );
@@ -240,5 +235,3 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3,9,40);
 
 INSERT INTO player(name,password) VALUES('admin','1234');
-
-

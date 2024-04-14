@@ -57,8 +57,8 @@ class PlayerDataAccess:
 
             # Create a settlement & link the package
             location = settlement_data_acces.getNewCoordinate()
-            cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname,level) VALUES(%s,%s,%s,%s,%s,%s);',
-                           (obj.name + " Castle", location[0], location[1], pid, obj.name, 1))
+            cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES(%s,%s,%s,%s,%s);',
+                           (obj.name + " Castle", location[0], location[1], pid, obj.name))
 
             # Get the settlement ID
             cursor.execute('SELECT max(id) FROM settlement;')

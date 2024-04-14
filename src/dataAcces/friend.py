@@ -21,7 +21,7 @@ class FriendDataAccess:
             if state:
                 cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);',
                                (pname, sname,))  # Insert the pname and sname as friends in the database table friend
-            # Delete the request that was send after it is accepted or declined
+            # Delete the request that was sent after it is accepted or declined
             cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
             cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
             cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
@@ -53,14 +53,7 @@ class FriendDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         # Check if they're not already friends
-        Query = """SELECT *
-                  FROM friend
-                  WHERE (pname1 = %s AND pname2 = %s) OR (pname1 = %s AND pname2 = %s);
-        """
-        cursor.execute(Query, (pname, request.sender, request.sender, pname))
-        Controle = cursor.fetchone()
-        # If there already friends it will not send a request
-        if Controle is not None:
+        if self.areFriends(pname, request.sender):
             return False
 
         # You can't befriend yourself
@@ -136,3 +129,17 @@ class FriendDataAccess:
             print("Error:", e)
             self.dbconnect.rollback()
             return False
+
+    def areFriends(self, pname1, pname2):
+        cursor = self.dbconnect.get_cursor()
+
+        # Check if they're not already friends
+        Query = """SELECT *
+                  FROM friend
+                  WHERE (pname1 = %s AND pname2 = %s) OR (pname1 = %s AND pname2 = %s);
+        """
+        cursor.execute(Query, (pname1, pname2, pname2, pname1))
+        control = cursor.fetchone()
+        if control is None:
+            return False
+        return True

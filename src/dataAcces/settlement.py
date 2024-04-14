@@ -1,10 +1,12 @@
+from random import randrange
+from math import sqrt
 from .building import *
 from .timer import *
 
 
 class Settlement:
-    def __init__(self, id, name=None, mapX=None, mapY=None, pid=None, pname=None):
-        self.id = id
+    def __init__(self, sid, name=None, mapX=None, mapY=None, pid=None, pname=None):
+        self.id = sid
         self.name = name
         self.mapX = mapX
         self.mapY = mapY
@@ -18,7 +20,6 @@ class Settlement:
 class SettlementDataAcces:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
-        self.latestMap = (2, 4)
 
     def getResources(self, obj):
         """
@@ -41,12 +42,12 @@ class SettlementDataAcces:
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT level FROM building WHERE sid=%s AND name=%s;', (sid, 'Castle'))
-        level = cursor.fetchone()
+        level = cursor.fetchone()[0]
 
         if level is None:
             cursor.execute('SELECT level FROM building WHERE sid=%s AND name=%s;',
                            (sid, 'SatelliteCastle'))  # An outpost online has a SatelliteCastle
-            level = cursor.fetchone()
+            level = cursor.fetchone()[0]
 
         return level
 
@@ -60,7 +61,7 @@ class SettlementDataAcces:
 
         if not outpost:
             cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("Castle", sid))
-            level = cursor.fetchone()[0]
+            level = cursor.fetchone()
 
             if level == 2:
                 dct = dict(WoodCuttersCamp=2, Quarry=2, Farm=2, GrainSilo=2)
@@ -69,11 +70,14 @@ class SettlementDataAcces:
             elif level == 4:
                 dct = dict(WoodCuttersCamp=3, Quarry=3, SteelMine=3, Farm=4, GrainSilo=4)
             elif level == 5:
-                dct = dict(WoodCuttersCamp=4, Quarry=4, Farm=5, Barracks=3, WoodStockPile=3, StoneStockPile=3, Armory=3,  GrainSilo=5)
+                dct = dict(WoodCuttersCamp=4, Quarry=4, Farm=5, Barracks=3, WoodStockPile=3, StoneStockPile=3, Armory=3,
+                           GrainSilo=5)
             elif level == 6:
                 dct = dict(SteelMine=4, Farm=6, WoodStockPile=4, StoneStockPile=4)
             elif level == 7:
                 dct = dict(WoodCuttersCamp=5, Quarry=5, SteelMine=4, Farm=7, Barracks=4, GrainSilo=6)
+            else:
+                dct = dict()
         else:  # Satellite Castle differs from Castle
             cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("SatelliteCastle", sid))
             level = cursor.fetchone()[0]
@@ -101,22 +105,31 @@ class SettlementDataAcces:
         """
         cursor = self.dbconnect.get_cursor()
 
-        cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("Castle", sid))
-        level = cursor.fetchone()[0]
+        cursor.execute('SELECT level FROM building WHERE name=%s and sid=%s;', ("Barracks", sid))
+        levels = cursor.fetchall()
+        for level in levels:  # We can have multiple barracks
+            if level == 3:
+                lst = ["Militia", "LongbowMan", "Knight", "Pikeman", "Huskarl"]
+            elif level == 6:
+                lst = ["Skirmishers", "CrossbowMan", "WarElephant", "Halbardier", "OrderKnight"]
+            else:  # Nothing needs to be done
+                lst = []
 
-        if level == 3:
-            lst = ["Militia", "LongbowMan", "Knight", "Pikeman", "Huskarl"]
-        elif level == 6:
-            lst = ["Skirmishers", "CrossbowMan", "WarElephant", "Halbardier", "OrderKnight"]
-        else:  # Nothing needs to be done
-            lst = []
-
-        for soldier in lst:  # Adjust the maxBuilding Number
-            cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', (soldier, sid, -1))
-            # Soldiers don't have a max amount
+            for soldier in lst:  # Adjust the maxBuilding Number
+                cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);', (soldier, sid, -1))
+                # Soldiers don't have a max amount
 
         self.dbconnect.commit()
 
+    def getOwner(self, sid):
+        """
+        Returns the player name of the settlement owner
+        :param sid: Identifier
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (sid,))
+        return cursor.fetchone()[0]
 
     def initialise(self, sid):
         """
@@ -303,7 +316,7 @@ class SettlementDataAcces:
             cursor.execute('SELECT cost, id FROM soldier WHERE name=%s;', (sname,))
             data = cursor.fetchone()
             cost = data[0]
-            id = data[1]  # ID of the soldier
+            soldierId = data[1]  # ID of the soldier
 
             # Make a Resource Deficit
             cursor.execute('SELECT * FROM package WHERE id IN (SELECT pid FROM settlement WHERE id=%s);',
@@ -317,7 +330,7 @@ class SettlementDataAcces:
             package_data_acces.update_resources(total)  # Adjust resource amount
 
             start, stop, duration = soldier_data_acces.calculateTrainTime(sname)  # Create Timer
-            timer = Timer(None, id, 'soldier', start, stop, duration, sid)
+            timer = Timer(None, soldierId, 'soldier', start, stop, duration, sid)
             timer_data_acces.insertTimer(timer)  # When the timer stops, soldier will be inserted
             return True, timer
         except Exception as e:
@@ -341,23 +354,52 @@ class SettlementDataAcces:
             grid.append({"type": building[1], "position": [building[3], building[4]], "occupiedCells": building[6]})
         return grid
 
-    def createOutPost(self):
-        pass
+    def isOutPost(self, sid: int):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT EXISTS(SELECT name FROM building WHERE sid=%s AND name=%s);', (sid, 'SatelliteCastle'))
+        return cursor.fetchone()[0]
 
-    def getNewCoordinate(self):
+    @staticmethod
+    def calculateDistance(to: list, start: list):
+        """
+        Calc grid distance between 2 grid Coordinates (Euclidean distance)
+        :param to: (x <INT> ,y <INT>)
+        :param start: (x <INT> ,y <INT>)
+        :return: int value expressing the distance
+        """
+        return sqrt(pow((to[0] - start[0]), 2) + pow((to[1] - start[1]), 2))
+
+    def getNewCoordinate(self, x=-1, y=-1):
         """
         Generate new unique coordinates for new Settlements on the map
         (0,0) , (2,0) , (0,2) , (2,2) ...
+
+        If x and y are not -1, we can verify for outposts if this coordinate is allowed!
+
         :return:
         """
-        x = self.latestMap[0]
-        y = self.latestMap[1]
-        if x == y:
-            x += 2
-        elif x > y:
-            x = y
-            y = self.latestMap[0]
-        elif x < y:
-            x += 2
-        self.latestMap = (x, y)
-        return self.latestMap
+        if x == -1 or y == -1:
+            x = randrange(0, 50)
+            y = randrange(0, 50)
+
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT mapX, mapY FROM settlement;')
+        coordinates = cursor.fetchall()
+
+        for coord in coordinates:
+            if SettlementDataAcces.calculateDistance(coord, [x, y]) < 2:
+                return self.getNewCoordinate()
+        return [x, y]
+
+    def getMap(self):
+        # sid, gridX,gridY, level, isOutpost
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT id,mapX,mapY FROM settlement;')  # Outposts to be created are owned by admin
+        data = cursor.fetchall()
+        sList = []
+
+        for settlement in data:
+            sList.append(dict(sid=settlement[0], position=[settlement[1], settlement[2]],
+                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0])))
+        print(sList)
+        return sList
