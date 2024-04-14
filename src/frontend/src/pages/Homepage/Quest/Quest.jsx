@@ -22,7 +22,7 @@ function QuestButton() {
 
 export default QuestButton;
 
-// This function is for the quest-log
+// This function is for the quest log
 function QuestLog() {
 
     return (
