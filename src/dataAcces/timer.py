@@ -189,6 +189,10 @@ SELECT id FROM transfer WHERE discovered=True
             elif timer.type == 'transfer' or timer.type == 'attack' or timer.type == 'outpost':
                 newInfo = self.addTransferTimerInfo(newInfo, timer, transfer_data_acces)
                 newInfo["ID"] = timer.oid
+            elif timer.type == 'soldier':
+                newInfo["ID"] = timer.oid
+                cursor.execute('SELECT name FROM soldier WHERE id=%s;', (timer.oid,))
+                newInfo["sname"] = cursor.fetchone()[0]
             else:
                 newInfo["ID"] = timer.oid
 

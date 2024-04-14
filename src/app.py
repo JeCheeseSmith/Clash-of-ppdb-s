@@ -249,7 +249,7 @@ def update():
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
-
+        print(timers)
         return jsonify(timers)
 
 
@@ -413,7 +413,6 @@ def unlockedTroops():
     """
     data = request.args
     data = soldier_data_acces.getUnlockedSoldiers(data.get("sid"))
-    print(data)
     return jsonify(data)
 
 
@@ -436,8 +435,6 @@ def getTroops():
     data = request.args
     soldiers = soldier_data_acces.getTroops(data.get("id"), data.get("type"))  # Exec functionality
     soldiers = transfer_data_acces.extent(soldiers, True)
-    print(soldiers)
-
     return jsonify(soldiers)
 
 
@@ -458,8 +455,6 @@ def getConsumption():
     """
     data = request.args
     amount = package_data_acces.calc_consumption(data.get('id'))
-    print(dict(consumption=amount))
-    print(jsonify(dict(consumption=amount)))
     return jsonify(amount)
 
 
@@ -470,7 +465,7 @@ def trainTroop():
 
     JSON Input Format
     {
-    "sid": <INT> | Identifier of the settlement you are training troops for
+    "id": <INT> | Identifier of the settlement you are training troops for
     "sname": <STRING> | Name of soldier
     }
 
@@ -482,13 +477,15 @@ def trainTroop():
     }
     """
     data = request.json
-
-    success, timer = settlement_data_acces.trainTroop(data.get('sid'), data.get('sname'), soldier_data_acces,
+    print(data)
+    success, timer = settlement_data_acces.trainTroop(data.get('id'), data.get('sname'), soldier_data_acces,
                                                       package_data_acces,
                                                       timer_data_acces)  # Execute actual functionality
     if success:
         dct = timer.to_dct()
         dct["success"] = success
+        dct["sname"] = data.get('sname')
+        print(dct)
     else:
         dct = dict(success=success)
         dct["error"] = str(timer)  # In this case, timer is an error message
