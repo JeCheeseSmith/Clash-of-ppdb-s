@@ -360,6 +360,11 @@ class SettlementDataAcces:
         return grid
 
     def isOutPost(self, sid: int):
+        """
+        Helper function to verify if a settlement is an outpost or not
+        :param sid:
+        :return:
+        """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT EXISTS(SELECT name FROM building WHERE sid=%s AND name=%s);', (sid, 'SatelliteCastle'))
         return cursor.fetchone()[0]
@@ -397,6 +402,10 @@ class SettlementDataAcces:
         return [x, y]
 
     def getMap(self):
+        """
+        Retrieve the info about the map; aka settlement coordinates
+        :return:
+        """
         # sid, gridX,gridY, level, isOutpost
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT id,mapX,mapY FROM settlement;')  # Outposts to be created are owned by admin

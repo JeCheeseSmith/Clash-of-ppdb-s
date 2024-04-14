@@ -1,5 +1,6 @@
 import psycopg2
 
+# TODO Talk about database.py in backend docu
 
 class DBConnection:
     """

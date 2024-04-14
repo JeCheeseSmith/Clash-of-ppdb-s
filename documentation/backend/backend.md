@@ -6,6 +6,8 @@ In app.py we created a list of API function the frontend is able to call and ret
 
 Also, a lot of data_accesses are setup as Singleton Services
 
+
+
 >We made some classes that are imported in the api file(app.py).
 
 
