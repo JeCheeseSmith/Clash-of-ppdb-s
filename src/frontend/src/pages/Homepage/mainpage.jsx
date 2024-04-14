@@ -75,11 +75,11 @@ function MainPage()
             audio.pause(); // Pause the audio when component unmounts
         };
     }, [backgroundMusic]);*/
+
     return (
-        <div className="background"> {/* Container for the background image */}
+        <div className="mainpage">
             <LevelBar/>
             <QuestButton/>
-        <div className="mainpage">
             <Chat/>
             <SocialBox/>
             <Account/>
@@ -105,5 +105,6 @@ function getRandomArray()
     }
     return randomArray
 }
+
 
 export default MainPage; // Exporting the MainPage component
