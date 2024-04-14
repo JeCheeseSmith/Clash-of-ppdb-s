@@ -249,7 +249,6 @@ def update():
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
-        print(timers)
         return jsonify(timers)
 
 
@@ -506,7 +505,6 @@ def trainTroop():
         dct = dict(succes=success, sname=data.get('sname'))
         for timer in timers:
             dct[str(timer.id)] = timer.to_dct()
-        print(dct)
     else:
         dct = dict(success=success)
         dct["error"] = str(timers)  # In this case, timer is an error message

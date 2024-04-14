@@ -309,7 +309,6 @@ class SettlementDataAcces:
         try:
             if not soldier_data_acces.unlocked(sid, sname):
                 raise Exception("You have not yet unlocked this soldier! Consider upgrading your Castle or building Barracks.")
-            print(sid)
             if amount > soldier_data_acces.getBarrackLevelSum(sid):  # Verify amount correctness
                 raise Exception(f"You can only train {soldier_data_acces.getBarrackLevelSum(sid)} in parallel!")
 
@@ -338,7 +337,6 @@ class SettlementDataAcces:
                 timer = Timer(None, soldierId, 'soldier', start, stop, duration, sid)
                 timer_data_acces.insertTimer(timer)  # When the timer stops, soldier will be inserted
                 timerList.append(timer)
-            print('trained: ', len(timerList))
             return True, timerList
         except Exception as e:
             print('error', e)
