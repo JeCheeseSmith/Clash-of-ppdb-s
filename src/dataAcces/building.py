@@ -111,3 +111,33 @@ class BuildingDataAccess:
             print('error', e)
             self.dbconnect.rollback()
             return False
+
+    def getFunctions(self):
+        """
+        Retrieves all functions from the database
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT name,function FROM buildable;')
+        buildables = cursor.fetchall()
+        dct = dict()
+        for buildable in buildables:
+            dct[buildable[0]] = buildable[1]
+        return dct
+
+    def setFunction(self, bname, function: list):
+        """
+        Sets a new function in the database for a given building
+        :return:
+        """
+        try:
+            cursor = self.dbconnect.get_cursor()
+            cursor.execute('UPDATE buildable SET function = %s WHERE name=%s;', (function, bname))
+            self.dbconnect.commit()
+            return True
+        except Exception as e:
+            print(e)
+            return False
+
+
+

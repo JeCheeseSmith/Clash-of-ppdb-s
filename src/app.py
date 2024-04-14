@@ -512,22 +512,43 @@ def trainTroop():
     return jsonify(dct)
 
 
-@app.route("/getFunction", methods=["GET"])
-def getFunction():
+@app.route("/getFunctions", methods=["GET"])
+def getFunctions():
     """
-    VERIFY ADMIN STATUS
-    :return:
+    Retrieves the 'production' functions for all buildings from the database
+
+    JSON Input Format
+    {
+    "bname": <STRING> | Name of the buildable
+    }
+
+    JSON Output Format:
+    {
+    Dict{"bname": "function"}
+    }
     """
-    pass
+    return jsonify(building_data_acces.getFunctions())
 
 
 @app.route("/setFunction", methods=["POST"])
 def setFunction():
     """
-    VERIFY ADMIN STATUS
-    :return:
+    Set a new production function for a certain building
+
+    JSON Input Format
+    {
+    "function": ARRAY INT | Polynomial function, e.g. [500,0] = 500x + 0
+    "bname": <STRING> | Name of the building to upgrade
+    }
+
+    JSON Output Format:
+    {
+    "success": <BOOL> | State of the action
+    }
     """
-    pass
+    data = request.json
+    success = building_data_acces.setFunction(data.get('bname'), data.get('function'))
+    return jsonify({"success": success})
 
 
 @app.route("/map", methods=["GET"])
