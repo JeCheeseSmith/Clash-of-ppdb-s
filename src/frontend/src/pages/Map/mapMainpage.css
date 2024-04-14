@@ -1,0 +1,16 @@
+.map-mainpage {
+    position: absolute;        /* Position the container fixed to the viewport */
+    top: 0;             /* Shift the background image 20px above the top of the viewport */
+    left: 0;                /* Align to the left of the viewport */
+    width: 100vw;           /* Set width to viewport width */
+    height: 100vh;          /* Set height to viewport height */
+}
+
+.menu-info-container {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    left: 320px; /* Adjust this value as needed */
+    top: 150px; /* Adjust this value as needed */
+}

@@ -22,7 +22,6 @@ function SocialBox()
     return (
         <div>
             <CommunicationButton type={"social"} buttonFunction={toggleSocialVisibility}/>
-            <div className="social-container"></div>
             <Box socialVisible={socialVisible}/>
         </div>
     );

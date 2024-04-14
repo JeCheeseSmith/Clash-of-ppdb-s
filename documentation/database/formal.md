@@ -7,7 +7,7 @@ We would like to store the majority of our information in the database. This all
 1. Each Clan Request is a message and has a status. It is created by a NonMember and SendTo the ClanLeader and so on shared with the Guild.
 2. Transfer Request is created by a friended Member (incl. Guild)| send to another person.
 3. An Update/Report should be created by the system/admin user.
-4. A package consists of resources and troops. The troops themselves can be transferable or not. All troops are used to defend the package.
+4. A package consists of resources and troops. All troops are used to defend the package.
 5. A transfer has a relation from and a relation to| to a settlement. This way a transfer can be easily changed to be captured by another nation.
 6. The format we use for polynomial functions is e.g.: [50,5,10] which translates to f(x)=50x^2 + 5x + 10. The array length is undefined, however it may not start with a **0**!
 7. The format we use for exponantial function is e.g.: [0,50,1] which translates to: 50* **2^x** + 1. This form can only be expressed in an array of length 2.
@@ -172,13 +172,16 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### transfer
 
-| Name       | Type | Explanation                                                                  |
-|------------|------|------------------------------------------------------------------------------|
-| id         | INT  | PRIMARY KEY                                                                  |
-| sidto      | INT  | settlement ID where the transfer goes to: To Relation                        |
-| discovered | BOOL | Saying if the transfer has been spotted by others                            |
-| sidfrom    | INT  | settlement ID where the transfer comes from: From Relation                   |
-| pid        | INT  | Referring a Package ID; Contains Relation (The associated package/resources) |
+| Name       | Type    | Explanation                                                                  |
+|------------|---------|------------------------------------------------------------------------------|
+| id         | INT     | PRIMARY KEY                                                                  |
+| idTo       | INT     | settlement ID where the transfer goes to: To Relation                        |
+| toType     | BOOL    | False: Going to a Settlement, True: Going to a Transfer                      |
+| discovered | BOOL    | Saying if the transfer has been spotted by others                            |
+| idFrom     | INT     | settlement ID where the transfer comes from: From Relation                   |
+| fromType   | BOOL    | Specifies the type we're going from, similar as toType                       |
+| pid        | INT     | Referring a Package ID; Contains Relation (The associated package/resources) |
+| pname      | VARCHAR | Player who owns the package                                                  |  
 
 ### buildable
 
@@ -256,7 +259,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | pid          | INT     | Package ID the soldier belongs to                                                      |
 | sname        | VARCHAR | Identifier for the soldier                                                             |
 | amount       | INT     | Number of soldiers of type sname                                                       |
-| transferable | BOOL    | Indicating if the soldiers should go back home or join the settlement they're going to |
 | discovered   | BOOL    | Indicating if soldiers are spotted by another settlement                               |
 
 ### unlocked

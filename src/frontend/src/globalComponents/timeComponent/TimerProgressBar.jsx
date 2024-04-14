@@ -37,7 +37,7 @@ const TimerProgressBar = ({timeValue, totalTimeValue, finished}) => {
 
   return (
     <div className="progressBarContainer">
-      <div className={`progressBar ${getProgressBarClass()}`} style={{ width: `${percentage}%` }}></div>
+      <div className={`progressBar ${getProgressBarClass()}`} style={{ width: `${percentage}%` }}>{seconds}</div>
     </div>
   );
 };
