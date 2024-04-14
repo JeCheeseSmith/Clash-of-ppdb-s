@@ -1034,18 +1034,18 @@ def preset():
     transfer_data_acces.createTransfer(2, False, 1, False, soldiers, resources, 'transfer', 'a', timer_data_acces,
                                        package_data_acces, clan_data_acces, friend_data_access, soldier_data_acces)
 
-    # d attacks a
-    transfer_data_acces.createTransfer(1, False, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
-                                       timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
-                                       soldier_data_acces)
-
-    # a spies on d
-    transfer_data_acces.createEspionage(4, 1, False, timer_data_acces)
-
-    # a attacks the transfer attack to d
-    transfer_data_acces.createTransfer(2, True, 1, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'a',
-                                       timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
-                                       soldier_data_acces)
+    # # d attacks a
+    # transfer_data_acces.createTransfer(1, False, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
+    #                                    timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
+    #                                    soldier_data_acces)
+    #
+    # # a spies on d
+    # transfer_data_acces.createEspionage(4, 1, False, timer_data_acces)
+    #
+    # # a attacks the transfer attack to d
+    # transfer_data_acces.createTransfer(2, True, 1, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'a',
+    #                                    timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
+    #                                    soldier_data_acces)
 
     cursor.execute('UPDATE transfer SET discovered=True;')
 
