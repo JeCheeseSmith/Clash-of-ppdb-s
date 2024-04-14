@@ -40,7 +40,7 @@ class TransferDataAccess:
             speed += package.steel % 1000
         return speed
 
-    def __extent(self, soldierDict, discovered):
+    def extent(self, soldierDict, discovered):
         """
         Helper function to add soldiers with amount 0 to the dictionary
         :param soldierDict:
@@ -64,7 +64,7 @@ class TransferDataAccess:
         soldierDct = dict()
         for soldier in soldiers:
             soldierDct[soldier[0]] = dict(amount=soldier[1], discovered=discovered)
-        return self.__extent(soldierDct, discovered)
+        return self.extent(soldierDct, discovered)
 
     def translatePosition(self, oid, transfer):
         """
@@ -176,7 +176,7 @@ class TransferDataAccess:
         :return:
         """
         return PackageWithSoldier(package_data_acces.get_resources(pid),
-                                  self.__extent(soldier_data_acces.getTroops(pid, 'package'), False))
+                                  self.extent(soldier_data_acces.getTroops(pid, 'package'), False))
 
     def instantiateTransfer(self, tid: int):
         cursor = self.dbconnect.get_cursor()
@@ -246,8 +246,8 @@ class TransferDataAccess:
         # Instantiate packages
         tp = PackageWithSoldier(Package(resources), soldiers)  # transferPackage
         sp = PackageWithSoldier(package_data_acces.get_resources(pid),
-                                self.__extent(soldier_data_acces.getTroops(sidFrom, 'settlement'),
-                                              discovered))  # settlementPackage
+                                self.extent(soldier_data_acces.getTroops(sidFrom, 'settlement'),
+                                            discovered))  # settlementPackage
 
         # Do arithmetic and verify result
         sp -= tp

@@ -412,7 +412,6 @@ def unlockedTroops():
     }
     """
     data = request.args
-    print(data)
     data = soldier_data_acces.getUnlockedSoldiers(data.get("sid"))
     print(data)
     return jsonify(data)
@@ -436,6 +435,9 @@ def getTroops():
     """
     data = request.args
     soldiers = soldier_data_acces.getTroops(data.get("id"), data.get("type"))  # Exec functionality
+    soldiers = transfer_data_acces.extent(soldiers, True)
+    print(soldiers)
+
     return jsonify(soldiers)
 
 
@@ -446,7 +448,7 @@ def getConsumption():
 
     JSON Input Format
     {
-    "sid": <INT> | Identifier of the type referring to
+    "id": <INT> | Identifier of the type referring to
     }
 
     JSON Output Format:
@@ -455,8 +457,10 @@ def getConsumption():
     }
     """
     data = request.args
-    amount = package_data_acces.calc_consumption(data.get('sid'))
-    return jsonify({"consumption": amount})
+    amount = package_data_acces.calc_consumption(data.get('id'))
+    print(dict(consumption=amount))
+    print(jsonify(dict(consumption=amount)))
+    return jsonify(amount)
 
 
 @app.route("/trainTroop", methods=["POST"])

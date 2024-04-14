@@ -118,21 +118,21 @@ function TroopOverviewPage({TroopAmount}) {
     const [consumption, setConsumption] = useState(0);
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
-        heavyInfantry1: null,
-        heavyInfantry2: null,
-        heavyInfantry3: null,
-        spear1: null,
-        spear2: null,
-        spear3: null,
-        horseman1: null,
-        horseman2: null,
-        horseman3: null,
-        bowman1: null,
-        bowman2: null,
-        bowman3: null,
-        ambush1: null,
-        ambush2: null,
-        ambush3: null
+        heavyInfantry1: 0,
+        heavyInfantry2: 0,
+        heavyInfantry3: 0,
+        spear1: 0,
+        spear2: 0,
+        spear3: 0,
+        horseman1: 0,
+        horseman2: 0,
+        horseman3: 0,
+        bowman1: 0,
+        bowman2: 0,
+        bowman3: 0,
+        ambush1: 0,
+        ambush2: 0,
+        ambush3: 0
     });
     const [soldiersAvailable, setSoldierAvailable] = useState({
         heavyInfantry1: false,
@@ -173,23 +173,28 @@ function TroopOverviewPage({TroopAmount}) {
         }))
     API.get_getTroops(sid).then(data => setSoldierCount(
             {
-            heavyInfantry1: data.ArmoredFootman,
-            heavyInfantry2: data.Huskarl,
-            heavyInfantry3: data.OrderKnight,
-            spear1: data.Guardsman,
-            spear2: data.Pikeman,
-            spear3: data.Halbardier,
-            horseman1: data.Horseman,
-            horseman2: data.Knight,
-            horseman3: data.WarElephant,
-            bowman1: data.Bowman,
-            bowman2: data.LongbowMan,
-            bowman3: data.CrossbowMan,
-            ambush1: data.Bandit,
-            ambush2: data.Militia,
-            ambush3: data.Skirmisher
+            heavyInfantry1: data.ArmoredFootman.amount,
+            heavyInfantry2: data.Huskarl.amount,
+            heavyInfantry3: data.OrderKnight.amount,
+            spear1: data.Guardsman.amount,
+            spear2: data.Pikeman.amount,
+            spear3: data.Halbardier.amount,
+            horseman1: data.Horseman.amount,
+            horseman2: data.Knight.amount,
+            horseman3: data.WarElephant.amount,
+            bowman1: data.Bowman.amount,
+            bowman2: data.LongbowMan.amount,
+            bowman3: data.CrossbowMan.amount,
+            ambush1: data.Bandit.amount,
+            ambush2: data.Militia.amount,
+            ambush3: data.Skirmisher.amount
         }))
-    API.get_getConsumption(sid).then(data => setConsumption({consumption: data.consumption}))
+    API.get_getConsumption(sid).then(
+
+
+        data => {setConsumption(data),
+        console.log(data)}
+    )
 }
     // Function that gets the availability of every soldier and sends a request for the soldier counts by calling the API
     useEffect(() =>

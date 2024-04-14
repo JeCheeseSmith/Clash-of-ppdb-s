@@ -77,8 +77,8 @@ sudo npm run build
 
 #### B. Install packages & Build the files using vite
 ```bash
-sudo npm install
-sudo npm run build
+npm install
+npm run build
 ```
 
 #### 5. Create user to run application
