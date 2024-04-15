@@ -218,6 +218,7 @@ SELECT id FROM transfer WHERE discovered=True
         newInfo["from"] = transfer_data_acces.translatePosition(transfer[4], transfer[5])
         newInfo["discovered"] = transfer[1]
         newInfo["tid"] = transfer[0]
+        newInfo["toType"] = transfer[3]
 
         return newInfo
 

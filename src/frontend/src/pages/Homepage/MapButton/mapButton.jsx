@@ -10,7 +10,7 @@ function MapButton()
         navigate('/Map', { state: { sid, username}});
     };
     return (
-        <button className={"map-button"} onClick={handleMapButton}>Open Map</button>
+        <button className={"map-button"} onClick={handleMapButton}>Map</button>
     );
 }
 

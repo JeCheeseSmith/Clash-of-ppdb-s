@@ -223,7 +223,7 @@ def get_resources():
     return jsonify(packageDict)
 
 
-@app.route("/update", methods=["POST"])
+@app.route("/update", methods=["GET"])
 def update():
     """
     Tell the server to re-evaluate its timers
@@ -244,7 +244,7 @@ def update():
     timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
                                     soldier_data_acces, timer_data_acces)
 
-    data = request.json
+    data = request.args
     pname = data.get('pname')
 
     if pname is not None:

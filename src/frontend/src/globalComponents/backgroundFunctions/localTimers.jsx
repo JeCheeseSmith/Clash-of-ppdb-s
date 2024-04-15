@@ -5,7 +5,7 @@ import {updateResources, updateTimers} from "./helperFunctions.jsx";
 
 function LocalTimers({setResources, timers, setTimers})
 {
-    const { sid, username } = useLocation().state;
+    const { sid, username } = useLocation().state
     useEffect(() =>
     {
         updateResources(sid, setResources) // do this twice, because without the first time, resources are going to be 0
@@ -17,7 +17,7 @@ function LocalTimers({setResources, timers, setTimers})
         }, 15 * 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);
-    useEffect(() =>
+    /*useEffect(() =>
     {
         if (timers.length > 0)
         {
@@ -39,6 +39,8 @@ function LocalTimers({setResources, timers, setTimers})
                     {
                         let promise  = PlaySound("BuildingUpgraded")
                         updateResources(sid, setResources)
+                        console.log("Timer finished: ", timer)
+                        console.log("Username on the moment of the finished timer: ", timer)
                         updateTimers(username, setTimers)
                         break
                     }
@@ -47,7 +49,7 @@ function LocalTimers({setResources, timers, setTimers})
             }, 1000); // Decrease duration every second
             return () => clearInterval(timerInterval); // Clean up interval on component unmount
         }
-    }, [timers]);
+    }, [timers]);*/
     return null
 }
 export default LocalTimers; // Exporting the MainPage component
