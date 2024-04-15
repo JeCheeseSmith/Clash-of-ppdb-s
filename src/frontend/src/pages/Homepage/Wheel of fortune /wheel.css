@@ -1,0 +1,128 @@
+.maincontainer {
+    position: absolute;
+    left: 900px; /* Adjust this value as needed */
+    top: 400px; /* Adjust this value as needed */
+    width: 400px;
+    height: 400px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.spin-button {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    background-color: #b26616;
+    color: white;
+    border-radius: 50%;
+    border: 4px solid dimgrey;
+    cursor: pointer;
+    user-select: none;
+    text-transform: uppercase;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.spin-button::before {
+    content:' ';
+    position: absolute;
+    top: -42px;
+    width: 40px;
+    height: 45px;
+    background: #b26616;
+    clip-path: polygon(50% 0%,15% 100%,85% 100%);
+}
+
+.wheel-container {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 0 15px white, 0 0 0 18px black;
+    transform: translate(-50%, -50%); /* Center the wheel container */
+    transition: transform 5s ease-in-out;
+}
+
+.segments-wheel{
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: var(--clr);
+    transform-origin: bottom right;
+    transform: rotate(calc(36deg * var(--i)));
+    clip-path: polygon(0% 0%,56% 0%,100% 100%,0% 56%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+}
+
+.segments-wheel span{
+    position: absolute;
+    transform: rotate(45deg);
+    font-size: 2em;
+    font-weight: 700;
+    color: white;
+    text-shadow: 3px 5px 2px rgb(0,0,0,0.15);
+}
+
+
+
+
+
+
+
+
+
+.toggle-wheel-button {
+    background: url("assets/wheel-Photoroom.png-Photoroom.png") no-repeat center center;
+    background-size: contain; /* Adjust the size of the background image */
+    position: fixed;
+    bottom: -20%;
+    left:-50px;
+    transform: translateY(-50%);
+    height: 250px;
+    width: 250px;
+    z-index: 1;
+    border:none;
+    cursor:pointer;
+    outline: none;
+    transition: transform 0.3s ease;
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+  z-index: 9999;
+}
+
+.popup-content {
+  text-align: center;
+}
+
+.popup-content .close {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+}
+
+
+
