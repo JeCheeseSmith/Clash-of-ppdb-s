@@ -14,6 +14,9 @@ import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"
 import PlaySound from "../../globalComponents/audioComponent/audio.jsx";
 import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
+import Leaderbord from "./Leaderbord/leaderbord.jsx";
+import WheelOfFortune from "./Wheel of fortune /wheel.jsx";
+
 
 import QuestButton from "./Quest/Quest.jsx";
 /**
@@ -82,11 +85,11 @@ function MainPage()
             <QuestButton/>
             <Chat/>
             <SocialBox/>
+            <Leaderbord/>
+            <WheelOfFortune/>
             <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
-            <div className={"grid"}>
-                <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray} updateTimers={updateTimers} getTimer={getTimer}/>
-            </div>
+            <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray} updateTimers={updateTimers} getTimer={getTimer}/>
             <ResourceBar resources={resources} updateResources={updateResources}/>
             <MapButton/>
             <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
