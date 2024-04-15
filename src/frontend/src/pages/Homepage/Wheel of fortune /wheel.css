@@ -7,6 +7,7 @@
     justify-content: center;
     align-items: center;
     display: flex;
+    z-index: 9999;
 }
 
 .spin-button {
