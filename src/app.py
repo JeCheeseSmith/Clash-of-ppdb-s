@@ -672,7 +672,7 @@ def createOutpost():
     return jsonify(dct)
 
 
-@app.route("/getInfo", methods=["POST"])
+@app.route("/getInfo", methods=["GET"])
 def getInfo():
     """
     Endpoint to retrieve visible information for an active transfer or settlement for a specific user
@@ -691,21 +691,18 @@ def getInfo():
     dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25}
     }
     """
-    data = request.json
+    data = request.args
     type = bool(data.get('type'))
     if type:  # Transfer
-        print('transfer')
         transfer = transfer_data_acces.instantiateTransfer(data.get('oid'))
         pid = transfer.pid
         customer = transfer.pname
     else:  # Settlement
-        print('settlement')
         cursor = connection.get_cursor()
         cursor.execute('SELECT pid,pname FROM settlement WHERE id=%s;', (data.get('oid'),))
         info = cursor.fetchone()
         pid = info[0]
         customer = info[1]
-        print(customer, data.get('pname'))
     return jsonify(TransferDataAccess.getInfo(pid, data.get('pname'), customer, soldier_data_acces, clan_data_acces, friend_data_access, package_data_acces))
 
 
