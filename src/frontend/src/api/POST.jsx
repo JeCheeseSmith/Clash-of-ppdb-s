@@ -12,7 +12,7 @@
  */
 const local = "http://127.0.0.1:5000"
 const remote = "https://team8.ua-ppdb.me/"
-const POST = async (local, endpoint) =>
+const POST = async (data, endpoint) =>
 {
     let returnData;
     await fetch(local+endpoint, {
