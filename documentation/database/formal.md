@@ -10,7 +10,7 @@ We would like to store the majority of our information in the database. This all
 4. A package consists of resources and troops. All troops are used to defend the package.
 5. A transfer has a relation from and a relation to| to a settlement. This way a transfer can be easily changed to be captured by another nation.
 6. The format we use for polynomial functions is e.g.: [50,5,10] which translates to f(x)=50x^2 + 5x + 10. The array length is undefined, however it may not start with a **0**!
-7. The format we use for exponantial function is e.g.: [0,50,1] which translates to: 50* **2^x** + 1. This form can only be expressed in an array of length 2.
+7. The format we use for exponential function is e.g.: [0,50,1] which translates to: 50* **2^x** + 1. This form can only be expressed in an array of length 2.
 
 A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole current database and creates a new one.
 
@@ -48,8 +48,7 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | [friend](#friend)                 | Stores the friended relation between users                |
 | [member](#member)                 | Stores the members of a clan                              |
 | [retrieved](#retrieved)           | Keeps track of the messages delivered to a receiving user |
-| [shared](#shared)                 | Messages displayed in a groupschat from a clan            |
-| [intercept](#intercept)           | Contains the transfers that intercept each other          |
+| [shared](#shared)                 | Messages displayed in a groups chat from a clan           |
 | [troops](#troops)                 | Relation to stores troops connected to a package          |
 | [unlocked](#unlocked)             | Relation to express if a building or soldier is unlocked  |
 | [wheelofFortune](#wheelofFortune) | Interactive relation for the spin on the Wheel of Fortune |
@@ -167,7 +166,7 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 | Name     | Type      | Explanation                                 |
 |----------|-----------|---------------------------------------------|
-| name     | VARCHAR   | PRIMARY KEY; Specilisation of Achievement   |
+| name     | VARCHAR   | PRIMARY KEY; Specialisation of Achievement  |
 | deadline | TIMESTAMP | Latest time the quest needs to be fulfilled |
 
 ### transfer
@@ -185,25 +184,25 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### buildable
 
-| Name            | Type     | Explanation                                                                                        |
-|-----------------|----------|----------------------------------------------------------------------------------------------------|
-| name            | VARCHAR  | PRIMARY KEY                                                                                        |
-| type            | VARCHAR  | The type of the building; Political,  Decoration, Resources, ...                                   |
-| function        | TEXT     | The mathematical function to evaluate the resource function with                                   |
-| upgradeFunction | TEXT     | Mathematical formula that takes the level as input to calculate upgrade resource                   |
+| Name            | Type     | Explanation                                                                                         |
+|-----------------|----------|-----------------------------------------------------------------------------------------------------|
+| name            | VARCHAR  | PRIMARY KEY                                                                                         |
+| type            | VARCHAR  | The type of the building; Political,  Decoration, Resources, ...                                    |
+| function        | TEXT     | The mathematical function to evaluate the resource function with                                    |
+| upgradeFunction | TEXT     | Mathematical formula that takes the level as input to calculate upgrade resource                    |
 | upgradeResource | SMALLINT | Defines which resources are needed to build: 1: Stone, 2: Wood, 3: Steel, 4: Food, 12: Stone & Wood |
-| timeFunction    | TEXT     | Mathematical formula that describes the building time needed                                       |
+| timeFunction    | TEXT     | Mathematical formula that describes the building time needed                                        |
 
 ### building
 
-| Name  | Type    | Explanation                                                              |
-|-------|---------|--------------------------------------------------------------------------|
-| id    | INT     | Unqiue Identifier (Multiple same buildables can be placed)               |
-| name  | VARCHAR | Name of the buildable                                                    |
-| level | INT     | Level of the building                                                    |
-| gridX | INT     | X Coordinate on the settlement grid  (Upper Left corner of the building) |
-| gridY | INT     | Y Coordinate on the settlement grid  (Upper Left corner of the building) |
-| sid   | INT     | Contains Relation; Expressing which buildings are in which settlement    |
+| Name          | Type    | Explanation                                                              |
+|---------------|---------|--------------------------------------------------------------------------|
+| id            | INT     | Unique Identifier (Multiple same buildables can be placed)               |
+| name          | VARCHAR | Name of the buildable                                                    |
+| level         | INT     | Level of the building                                                    |
+| gridX         | INT     | X Coordinate on the settlement grid  (Upper Left corner of the building) |
+| gridY         | INT     | Y Coordinate on the settlement grid  (Upper Left corner of the building) |
+| sid           | INT     | Contains Relation; Expressing which buildings are in which settlement    |
 | occupiedCells | INT[][] | Contains the cells a Building occupies on the grid                       |
 
 ### timer
@@ -245,13 +244,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | mid   | INT     | Content ID                                    |
 | cname | VARCHAR | Name of the clan the messages are shared with |
 
-### intercept
-
-| Name | Type | Explanation                        |
-|------|------|------------------------------------|
-| tid1 | INT  | Transfer being intercepted by tid2 |
-| tid2 | INT  | The transfer which attacks tid1    |
-
 ### troops
 
 | Name         | Type    | Explanation                                                                            |
@@ -271,11 +263,10 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### wheelofFortune
 
-
-| Name        | Type    | Explanation                                                                        |
-|-------------|---------|-----------
-|    pname | VARCHAR | Name of the player spinning the wheel
-    pid | INT     | Packages/Rewards associated
+| Name  | Type    | Explanation                           |
+|-------|---------|---------------------------------------|
+| pname | VARCHAR | Name of the player spinning the wheel |
+| pid   | INT     | Packages/Rewards associated           |
 
 ### achieved
 
