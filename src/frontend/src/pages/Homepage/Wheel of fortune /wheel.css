@@ -1,7 +1,7 @@
 .maincontainer {
     position: absolute;
-    left: 900px; /* Adjust this value as needed */
-    top: 400px; /* Adjust this value as needed */
+    left: 900px;
+    top: 400px;
     width: 400px;
     height: 400px;
     justify-content: center;
@@ -48,8 +48,8 @@
     height: 100%;
     border-radius: 50%;
     overflow: hidden;
-    box-shadow: 0 0 0 15px white, 0 0 0 18px black;
-    transform: translate(-50%, -50%); /* Center the wheel container */
+    box-shadow: 0 0 0 15px #b26616, 0 0 0 18px black;
+    transform: translate(-50%, -50%);
     transition: transform 5s ease-in-out;
 }
 
@@ -71,57 +71,54 @@
 .segments-wheel span{
     position: absolute;
     transform: rotate(45deg);
-    font-size: 2em;
-    font-weight: 700;
-    color: white;
+    font-size: 1.20em;
+    font-weight: bold;
+    color: black;
     text-shadow: 3px 5px 2px rgb(0,0,0,0.15);
 }
 
-
-
-
-
-
-
-
-
 .toggle-wheel-button {
     background: url("assets/wheel-Photoroom.png-Photoroom.png") no-repeat center center;
-    background-size: contain; /* Adjust the size of the background image */
+    background-size: contain;
     position: fixed;
-    bottom: -20%;
-    left:-50px;
-    transform: translateY(-50%);
-    height: 250px;
-    width: 250px;
-    z-index: 1;
+    bottom: -3%;
+    left: -70px;
     border:none;
+    z-index: 1;
     cursor:pointer;
     outline: none;
+    width: 300px;
+    height: 220px;
     transition: transform 0.3s ease;
 }
 
-.popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 20px;
-  border-radius: 5px;
-  z-index: 9999;
+.toggle-wheel-button:hover{
+    transform: scale(1.1);
+    cursor: pointer;
 }
 
-.popup-content {
-  text-align: center;
+.prize {
+    position: fixed;
+    width: 400px;
+    height: 70px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    display: block;
+    border: 5px solid black;
+    background-color: #b26616;
+    padding: 10px;
+    color: gold;
+    border-radius: 10px;
+    z-index: 9999;
+    text-align: center;
 }
 
-.popup-content .close {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  cursor: pointer;
+.prize-content {
+    text-align: center;
+    text-shadow: black;
+    font-size: 35px;
 }
 
 
