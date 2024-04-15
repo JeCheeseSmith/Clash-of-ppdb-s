@@ -17,7 +17,7 @@ function LocalTimers({setResources, timers, setTimers})
         }, 15 * 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);
-    /*useEffect(() =>
+    useEffect(() =>
     {
         if (timers.length > 0)
         {
@@ -49,7 +49,7 @@ function LocalTimers({setResources, timers, setTimers})
             }, 1000); // Decrease duration every second
             return () => clearInterval(timerInterval); // Clean up interval on component unmount
         }
-    }, [timers]);*/
+    }, [timers]);
     return null
 }
 export default LocalTimers; // Exporting the MainPage component

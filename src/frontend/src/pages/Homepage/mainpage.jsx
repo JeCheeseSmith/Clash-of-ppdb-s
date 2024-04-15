@@ -61,7 +61,7 @@ function MainPage()
         API.getGrid(sid).then(data => setBuildings(data.grid))
     }, []);
 
-    /*useEffect(() =>
+    useEffect(() =>
     {
         //todo: compress size of main page mp3, or download new ones
         const audio = new Audio(backgroundMusic);
@@ -71,7 +71,7 @@ function MainPage()
         {
             audio.pause(); // Pause the audio when component unmounts
         };
-    }, [backgroundMusic]);*/
+    }, [backgroundMusic]);
     return (
         <div className="mainpage">
             <Chat/>
