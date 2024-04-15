@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from "react";
 import './App.css';
 import MapMainpage from "./pages/Map/mapMainpage.jsx";
+import AdminPage from "./pages/Adminpage/adminpage.jsx";
 /**
  * Main application component responsible for routing and rendering different pages.
  * @component
@@ -24,6 +25,7 @@ function App()
                 <Routes>
                     <Route path="/" element={<LoginPage />} />
                     <Route path="/SignUp" element={<SignUp />} />
+                    <Route path="/AdminPage" element={<AdminPage />} />
                     <Route path="/MainPage" element={<MainPage />} />
                     <Route path="/Map" element={<MapMainpage />} />
                 </Routes>
