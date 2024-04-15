@@ -17,6 +17,7 @@ import spear2 from "./assets/Pikeman.png"
 import spear3 from "./assets/Halbardier.png"
 import * as API from "../../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
+import RequestMassagePopUp from "../../../globalComponents/popupMessage/popup.jsx";
 import {empty} from "leaflet/src/dom/DomUtil.js";
 import {updateResources} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
 
@@ -24,7 +25,7 @@ import {updateResources} from "../../../globalComponents/backgroundFunctions/hel
  * React component for the troop screen button
  */
 
-function SoldierMenuButton({setResources}) {
+function SoldierMenuButton(getTimer,{setResources}) {{
     const [soldierVisible, setsoldierVisible] = useState(false);
     return (
         <>
@@ -33,21 +34,22 @@ function SoldierMenuButton({setResources}) {
             }} className={"trainMenu"}>Troop Menu
                 <div className="soldierMenuButton-icon"></div>
             </button>
-            {soldierVisible ? <SoldierMenuBox soldierVisible={soldierVisible} setResources={setResources} /> : null}
+            {soldierVisible ? SoldierMenuBox(soldierVisible, getTimer):null}
+            {soldierVisible ? <SoldierMenuBox soldierVisible={soldierVisible} setResources={setResources} getTimer={getTimer} /> : null}
         </>
     );
 }
 export default SoldierMenuButton;
 
-function SoldierMenuBox({soldierVisible, setResources}) {
+function SoldierMenuBox(soldierVisible, timer, setResources) {
     return (
         <div className="box-container">
-            <SoldierNavbar soldierVisible={soldierVisible} setResources={setResources}/>
+            <SoldierNavbar soldierVisible={soldierVisible} timer={timer} setResources={setResources}/>
         </div>
     )
 }
 
-function SoldierNavbar({soldierVisible,setResources}) {
+function SoldierNavbar(soldierVisible, timer, setResources) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
     const [TroopAmount, setTroopAmount] = useState(1);
 
@@ -77,18 +79,18 @@ function SoldierNavbar({soldierVisible,setResources}) {
         )}
         {
             soldierVisible && currentPage &&
-            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} setResources={setResources}/>)
+            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} timer={timer} setResources={setResources}/>)
         }
         <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
         </div>
     )
 }
 
-function SoldierMenuOptions({pageName, TroopAmount ,requests, sendData, setResources}){
+function SoldierMenuOptions({pageName, TroopAmount, timer ,requests, sendData, setResources}){
     return (
         <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage TroopAmount={TroopAmount} setResources={setResources}/>}
-            {pageName === 'trainTroopOverview' && <TroopTrainPage/>}
+            {pageName === 'trainTroopOverview' && <TroopTrainPage getTimer={timer}/>}
         </div>
     )
 }
@@ -113,6 +115,8 @@ function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChang
 function TroopOverviewPage({TroopAmount, setResources}) {
     const { sid, username } = useLocation().state;
     const [consumption, setConsumption] = useState(0);
+    const [errorMessage, setErrorMessage] = useState("")
+    const [popup, setPopup] = useState(false)
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
         heavyInfantry1: 0,
@@ -206,12 +210,13 @@ function TroopOverviewPage({TroopAmount, setResources}) {
 
     // Function that sends a request for a soldier to be trained
     const handleTroopTrain = (troop) => {
-        API.trainTroop(sid, troop, 1).then( data => {
-            console.log(data)
+        const data = API.trainTroop(sid, troop).then();
+        if (data.success) {updateResources(sid, setResources)}
+        else
+        {
+            setErrorMessage(data.error);
+            setPopup(true)
         }
-        );
-        updateResources(sid, setResources)
-
     };
 
     return (
@@ -294,16 +299,21 @@ function TroopOverviewPage({TroopAmount, setResources}) {
                         <p className="soldierCount">{soldiers.ambush3}</p>
                 </div>
             </div>
+            {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     )
 }
 
-function TroopTrainPage() {
+function TroopTrainPage(getTimer) {
+
+    useEffect(() => {
+        //const timer = getTimer(1, "soldier")
+    }, []);
     return (
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
             <div className="trainingQueue">
-                <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="training-icon"/><span className="caption">102</span></button>
+                    <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="training-icon"/><span className="caption"></span></button>
             </div>
         </div>
     )

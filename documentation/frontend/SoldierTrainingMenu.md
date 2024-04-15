@@ -9,5 +9,5 @@ Each column denotes a different soldier type (horseman, archers, ...), clicking 
 begin training an amount of soldiers. Next to the icon of a soldier is the amount of soldiers you have corresponding to that icon.
 The numbers are automatically updated using API calls. Finally, the total food consumption of your army is also retrieved using API calls and displayed at the top.
 
-The second main menu called the troop training page is a page where you can view the current soldier type in training and the amount. Clicking on the icon
-will cancel the the training of x amount of troops (Decided by the amount selected in amount selector page). Retrieval and cancelling is done via API calls.
+The second main menu called the troop training page is a page where you can view the current soldier type in training and the amount.
+Retrieval is done via API calls.
