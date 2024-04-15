@@ -56,6 +56,10 @@ class TimerDataAccess:
                 timerDone) != 0:  # Since timers might be removed upon attack, we have to refresh the timerDone after each simulation
             timer = Timer(timerDone[0], timerDone[1], timerDone[2], timerDone[3], timerDone[4], timerDone[5],
                           timerDone[6])
+
+            if timer.id == 5:
+                print(timer.to_dct())
+
             if timer.type == 'soldier':
                 self.simulateTroopTraining(timer)
             elif timer.type == 'building':
@@ -381,6 +385,9 @@ SELECT id FROM transfer WHERE discovered=True
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
 
+        if transfer.id == 5:
+            print('no')
+
         # We need to do this locally otherwise other functionality will break due to circular includes
         from .content import Content
         from .package import Package
@@ -388,7 +395,7 @@ SELECT id FROM transfer WHERE discovered=True
         if transfer.toType:
             cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
             status = cursor.fetchone()
-            print(status[0])
+            print(status[0], transfer.id)
             if not status[0]:  # Doesn't exist anymore
                 content_data_access.add_message(Content(None, datetime.now(),
                                                         "Your soldiers could not reach the transfer they we're chasing. Sadly, they got lost in the wilderness..",
@@ -398,7 +405,7 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (transfer.id,))
                 cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))
                 cursor.execute('DELETE FROM troops WHERE pid=%s;', (transfer.pid,))
-
+                self.dbconnect.commit()
                 return
 
         # Retrieve Player name of the defender
