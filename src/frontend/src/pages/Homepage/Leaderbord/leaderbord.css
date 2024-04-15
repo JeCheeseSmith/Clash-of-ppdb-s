@@ -7,14 +7,15 @@
 }
 
 .toggle-leaderbord-button {
-    background-image: url("assets/trophy-Photoroom.png-Photoroom.png");
+    background: url("assets/Tes.png") no-repeat center center;
     background-size: contain; /* Adjust the size of the background image */
     position: fixed;
     bottom: 40%;
+    left: -15px;
     transform: translateY(-50%);
     height: 70px;
-    width: 70px;
-    z-index: 1; /* Decreased z-index to bring it down in the background */
+    width: 100px;
+    z-index: 1;
     border:none;
     cursor:pointer;
     outline: none;
@@ -23,8 +24,6 @@
 
 
 .toggle-leaderbord-button:hover {
-    transform: scale(1,2);
-    cursor: pointer;
 }
 
 

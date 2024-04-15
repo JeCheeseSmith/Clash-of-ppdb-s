@@ -6,80 +6,80 @@ import './wheel.css'
 
 const WheelOfFortune = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [rotation, setRotation] = useState(0);
+   const [showPopup, setShowPopup] = useState(false);
+     const [prize, setPrize] = useState('');
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  const [spinning, setSpinning] = useState(false);
-
-
 
   const spinWheel = () => {
-    if (spinning) return;
+    const newValue = Math.ceil(Math.random() * 3600);
+    const newRotation = (rotation + newValue)  // Limit rotation to 0-359 degrees
+    setRotation(newRotation);
+    const newPrize = getPrize(newRotation);
+    setPrize(newPrize);
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 3000); // Close popup after 3 seconds
+};
 
-    setSpinning(true);
+  const getPrize = (angle) => {
+    angle %= 360;
+    const segmentAngle = 360 / 10; // Divide the wheel into 10 equal segments
+    let prize = '';
 
-    // Simulate spinning for 5 seconds, adjust as needed
-    setTimeout(() => {
-      setSpinning(false);
-      const prizes = ["1000 wood", "1000 metal", "1000 food", "1000 stone", "1000 xp", "free update"];
-      const randomIndex = Math.floor(Math.random() * prizes.length);
-      const prize = prizes[randomIndex];
-      alert(`You won: ${prize}`);
-    }, 5000);
+    if (angle >= 0 && angle < segmentAngle) {
+      prize = 'You won 100!';
+    } else if (angle >= segmentAngle && angle < 2 * segmentAngle) {
+      prize = 'You won 200!';
+    } else if (angle >= 2 * segmentAngle && angle < 3 * segmentAngle) {
+      prize = 'You won 300!';
+    } else if (angle >= 3 * segmentAngle && angle < 4 * segmentAngle) {
+      prize = 'You won 400!';
+    } else if (angle >= 4 * segmentAngle && angle < 5 * segmentAngle) {
+      prize = 'You won 500!';
+    } else if (angle >= 5 * segmentAngle && angle < 6 * segmentAngle) {
+      prize = 'You won 600!';
+    } else if (angle >= 6 * segmentAngle && angle < 7 * segmentAngle) {
+      prize = 'You won 700!';
+    } else if (angle >= 7 * segmentAngle && angle < 8 * segmentAngle) {
+      prize = 'You won 800!';
+    } else if (angle >= 8 * segmentAngle && angle < 9 * segmentAngle) {
+      prize = 'You won 900!';
+    } else {
+      prize = 'You won 1000!';
+    }
+
+    return prize;
   };
-
-  const renderSegments = () => {
-  const numSegments = 8;
-  const segmentAngle = (2 * Math.PI) / numSegments;
-
-  const segments = [];
-  for (let i = 0; i < numSegments; i++) {
-    const startAngle = i * segmentAngle;
-    const endAngle = (i + 1) * segmentAngle;
-
-    const startX = 50 + 40 * Math.cos(startAngle);
-    const startY = 50 + 40 * Math.sin(startAngle);
-    const endX = 50 + 40 * Math.cos(endAngle);
-    const endY = 50 + 40 * Math.sin(endAngle);
-
-    const largeArcFlag = endAngle - startAngle <= Math.PI ? 0 : 1;
-
-    const d = `M 50 50 L ${startX} ${startY} A 40 40 0 ${largeArcFlag} 1 ${endX} ${endY} Z`;
-
-    const textAngle = startAngle + (segmentAngle / 2);
-    const textX = 50 + 30 * Math.cos(textAngle);
-    const textY = 50 + 30 * Math.sin(textAngle);
-
-    segments.push(
-      <g key={i}>
-        <path d={d} fill={`hsl(${i * (360 / numSegments)}, 50%, 50%)`} />
-        <text x={textX} y={textY} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="5px">
-          Prize {i + 1}
-        </text>
-      </g>
-    );
-  }
-
-  return segments;
-  };
-
   return (
       <div>
-        <button onClick={toggleMenu} className="toggle-wheel-button">Wheel</button>
+        <button onClick={toggleMenu} className="toggle-wheel-button"></button>
         {isMenuOpen && (
-            <div className="wheel-container">
-              <svg className={`wheel ${spinning ? 'spinning' : ''}`} viewBox="0 0 100 100">
-                <g className="segments">
-                  {renderSegments()}
-                </g>
-              </svg>
-              <button className="spin-button" onClick={spinWheel}>
-                <span className={`arrow ${spinning ? 'spin-animation' : ''}`}>&#x27f3;</span>
-                Spin
-              </button>
+            <div className={"maincontainer"}>
+              <div className={"spin-button"} onClick={spinWheel}>Spin</div>
+              <div className={"wheel-container"} style={{ transform: `rotate(${rotation}deg)` }}>
+                <div className={"segments-wheel"} style={{ "--i": 1, "--clr": "#ff0000" }}><span>100</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 2, "--clr": "#ffff00" }}><span>200</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 3, "--clr": "#0000FF" }}><span>300</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 4, "--clr": "#008000" }}><span>400</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 5, "--clr": "#800080" }}><span>500</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 6, "--clr": "#dc143c" }}><span>600</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 7, "--clr": "#008b8b" }}><span>700</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 8, "--clr": "#ff8c00" }}><span>800</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 9, "--clr": "#ff1493" }}><span>900</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 10, "--clr": "#00bfff" }}><span>1000</span></div>
+              </div>
             </div>
         )}
+        {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <p>{prize}</p>
+          </div>
+        </div>
+      )}
       </div>
   );
 };
