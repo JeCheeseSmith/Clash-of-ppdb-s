@@ -25,7 +25,7 @@ import {updateResources} from "../../../globalComponents/backgroundFunctions/hel
  * React component for the troop screen button
  */
 
-function SoldierMenuButton(getTimer,{setResources}) {{
+function SoldierMenuButton({getTimer,setResources}) {
     const [soldierVisible, setsoldierVisible] = useState(false);
     return (
         <>
@@ -34,14 +34,13 @@ function SoldierMenuButton(getTimer,{setResources}) {{
             }} className={"trainMenu"}>Troop Menu
                 <div className="soldierMenuButton-icon"></div>
             </button>
-            {soldierVisible ? SoldierMenuBox(soldierVisible, getTimer):null}
-            {soldierVisible ? <SoldierMenuBox soldierVisible={soldierVisible} setResources={setResources} getTimer={getTimer} /> : null}
+            {soldierVisible ? <SoldierMenuBox soldierVisible={soldierVisible} setResources={setResources} getTimer={getTimer} />: null}
         </>
     );
 }
 export default SoldierMenuButton;
 
-function SoldierMenuBox(soldierVisible, timer, setResources) {
+function SoldierMenuBox({soldierVisible, timer, setResources}) {
     return (
         <div className="box-container">
             <SoldierNavbar soldierVisible={soldierVisible} timer={timer} setResources={setResources}/>
@@ -49,7 +48,7 @@ function SoldierMenuBox(soldierVisible, timer, setResources) {
     )
 }
 
-function SoldierNavbar(soldierVisible, timer, setResources) {
+function SoldierNavbar({soldierVisible, timer, setResources}) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
     const [TroopAmount, setTroopAmount] = useState(1);
 
@@ -191,12 +190,10 @@ function TroopOverviewPage({TroopAmount, setResources}) {
             ambush3: data.Skirmisher.amount
         }))
     API.get_getConsumption(sid).then(
-
-
-        data => {setConsumption(data),
-        console.log(data)}
+        data => {setConsumption(data)}
     )
-}
+    }
+
     // Function that gets the availability of every soldier and sends a request for the soldier counts by calling the API
     useEffect(() =>
     {
@@ -210,13 +207,18 @@ function TroopOverviewPage({TroopAmount, setResources}) {
 
     // Function that sends a request for a soldier to be trained
     const handleTroopTrain = (troop) => {
-        const data = API.trainTroop(sid, troop).then();
-        if (data.success) {updateResources(sid, setResources)}
-        else
-        {
-            setErrorMessage(data.error);
-            setPopup(true)
+        API.trainTroop(sid, troop, 1).then(data =>  {
+            if (data.success) {
+                updateResources(sid, setResources)
+            }else
+            {
+                setErrorMessage(data.error);
+                setPopup(true)
+            }
         }
+
+        );
+
     };
 
     return (
@@ -304,6 +306,7 @@ function TroopOverviewPage({TroopAmount, setResources}) {
     )
 }
 
+
 function TroopTrainPage(getTimer) {
 
     useEffect(() => {
@@ -313,8 +316,11 @@ function TroopTrainPage(getTimer) {
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
             <div className="trainingQueue">
-                    <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="training-icon"/><span className="caption"></span></button>
+                    <button className="button"><img src={heavyInfantry1} alt="Armored footman"
+                                                    className="training-icon"/><span className="caption"></span>
+                    </button>
             </div>
         </div>
     )
 }
+
