@@ -81,6 +81,15 @@ function MainPage()
 
     return (
         <div className="mainpage">
+
+            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
+            <div className={"grid"}>
+                <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray} updateTimers={updateTimers} getTimer={getTimer}/>
+            </div>
+            <ResourceBar resources={resources} updateResources={updateResources}/>
+            <MapButton/>
+            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
+            <SoldierMenu setResources={setResources}/>
             <LevelBar/>
             <QuestButton/>
             <Chat/>
@@ -88,12 +97,6 @@ function MainPage()
             <Leaderboard/>
             <WheelOfFortune/>
             <Account/>
-            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
-            <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray} updateTimers={updateTimers} getTimer={getTimer}/>
-            <ResourceBar resources={resources} updateResources={updateResources}/>
-            <MapButton/>
-            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
-            <SoldierMenu setResources={setResources}/>
         </div>
     );
 }

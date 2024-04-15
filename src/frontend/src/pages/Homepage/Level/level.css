@@ -1,8 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
 .level-xp-container {
+  top: 0;
+  left: 0;
+  position: fixed;
   display: flex;
   align-items: center;
+  z-index: 100000000000;
 }
 
 .level-container {

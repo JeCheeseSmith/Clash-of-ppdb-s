@@ -7,8 +7,10 @@
 }
 
 .grid {
-    position: absolute;        /* Position the container fixed to the viewport */
+    /*position: absolute;        !* Position the container fixed to the viewport *!*/
     width: 100vw;           /* Set width to viewport width */
     height: 100vh;
     z-index: 2;
+    display: block;
 }
+
