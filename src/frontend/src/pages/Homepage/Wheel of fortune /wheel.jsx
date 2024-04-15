@@ -49,6 +49,7 @@ const WheelOfFortune = () => {
     const segmentAngle=360/10;
     let prize='';
 
+    // Assign prizes based on the angle
     if(angle>=0&&angle<segmentAngle){
       prize='You won 1000 wood!';
     } else if (angle >= segmentAngle && angle < 2 * segmentAngle) {
