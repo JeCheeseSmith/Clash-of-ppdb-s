@@ -301,6 +301,7 @@ class SettlementDataAcces:
         Gives back error messages if a condition is not met.
         :param sid: Identifier of the settlement
         :param sname: Name of the soldier
+        :param amount: Number of troops needed to train in parallel
         :param soldier_data_acces: DB Acces
         :param package_data_acces: DB Acces
         :param timer_data_acces: DB Acces

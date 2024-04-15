@@ -512,8 +512,8 @@ def trainTroop():
     return jsonify(dct)
 
 
-@app.route("/getFunctions", methods=["GET"])
-def getFunctions():
+@app.route("/getFunction", methods=["GET"])
+def getFunction():
     """
     Retrieves the 'production' functions for all buildings from the database
 
@@ -524,10 +524,11 @@ def getFunctions():
 
     JSON Output Format:
     {
-    Dict{"bname": "function"}
+    function array
     }
     """
-    return jsonify(building_data_acces.getFunctions())
+    data = request.args
+    return jsonify(building_data_acces.getFunction(data.get('bname')))
 
 
 @app.route("/setFunction", methods=["POST"])
@@ -671,21 +672,41 @@ def createOutpost():
     return jsonify(dct)
 
 
-@app.route("/getTransferInfo", methods=["GET"])
-def getTransferInfo():
-    # IN: tid
-    # IF allied: show more/less
-    # dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25}
-    pass
+@app.route("/getInfo", methods=["POST"])
+def getInfo():
+    """
+    Endpoint to retrieve visible information for an active transfer or settlement for a specific user
 
+    JSON Input Format
+    {
+    "oid": <INT> | Identifier of the transfer or settlement
+    "pname": <STRING> | Player asking the info
+    PRECONDITION: The player requesting info could see the transfer or settlement on the map!
+    "type": <BOOL> | True = Transfer, False = Settlement
+    }
 
-@app.route("/getSettlementInfo", methods=["GET"])
-def getSettlementInfo():
-    # IN: sid
-    # check if friend, ally, enemy
-    # IF allied: show more/less
-    # dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25}
-    pass
+    JSON Output Format:
+    {
+    dict containing soldiers and their amount + resources, e.g.:
+    dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25}
+    }
+    """
+    data = request.json
+    type = bool(data.get('type'))
+    if type:  # Transfer
+        print('transfer')
+        transfer = transfer_data_acces.instantiateTransfer(data.get('oid'))
+        pid = transfer.pid
+        customer = transfer.pname
+    else:  # Settlement
+        print('settlement')
+        cursor = connection.get_cursor()
+        cursor.execute('SELECT pid,pname FROM settlement WHERE id=%s;', (data.get('oid'),))
+        info = cursor.fetchone()
+        pid = info[0]
+        customer = info[1]
+        print(customer, data.get('pname'))
+    return jsonify(TransferDataAccess.getInfo(pid, data.get('pname'), customer, soldier_data_acces, clan_data_acces, friend_data_access, package_data_acces))
 
 
 @app.route("/createClan", methods=["POST"])

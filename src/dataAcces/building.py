@@ -112,18 +112,14 @@ class BuildingDataAccess:
             self.dbconnect.rollback()
             return False
 
-    def getFunctions(self):
+    def getFunction(self, bname):
         """
-        Retrieves all functions from the database
+        :param bname: Name of the building
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT name,function FROM buildable;')
-        buildables = cursor.fetchall()
-        dct = dict()
-        for buildable in buildables:
-            dct[buildable[0]] = buildable[1]
-        return dct
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', (bname,))
+        return cursor.fetchone()[0]
 
     def setFunction(self, bname, function: list):
         """

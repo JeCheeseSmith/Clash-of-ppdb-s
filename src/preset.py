@@ -43,8 +43,8 @@ settlement_data_acces.upgradeCastle(1)
 cursor.execute('UPDATE building SET level=6 WHERE name=%s and sid=%s;', ('Castle', 1))
 settlement_data_acces.upgradeCastle(1)
 cursor.execute('UPDATE package SET stone=100000000, wood=1000000, food=1000000, steel=100000000 WHERE id=1;')
-cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (1, 'Halbardier', 500, True))
-cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (1, 'Bandit', 500, True))
+cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (1, 'Halbardier', 500, False))
+cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (1, 'Bandit', 500, False))
 
 # Set very high values for settlement d
 cursor.execute('UPDATE building SET level=2 WHERE name=%s and sid=%s;', ('Castle', 4))
@@ -58,8 +58,8 @@ settlement_data_acces.upgradeCastle(1)
 cursor.execute('UPDATE building SET level=6 WHERE name=%s and sid=%s;', ('Castle', 4))
 settlement_data_acces.upgradeCastle(1)
 cursor.execute('UPDATE package SET stone=100000000, wood=1000000, food=1000000, steel=100000000 WHERE id=4;')
-cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (4, 'Halbardier', 500, True))
-cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (4, 'Bandit', 500, True))
+cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (4, 'Halbardier', 500, False))
+cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (4, 'Bandit', 500, False))
 
 connection.commit()
 

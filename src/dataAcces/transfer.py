@@ -380,3 +380,28 @@ class TransferDataAccess:
             print('error', e)
             self.dbconnect.rollback()
             return False, e
+
+    @staticmethod
+    def getInfo(pid: int, pname: str, customer: str, soldier_data_acces: SoldierDataAccess, clan_data_acces: ClanDataAccess,
+                friend_data_acces: FriendDataAccess, package_data_acces: PackageDataAccess):
+        """
+        Retrieve the visible soldiers from a transfer + the resource in the transfer
+        :param package_data_acces:
+        :param friend_data_acces:
+        :param clan_data_acces:
+        :param pid: ID of the package
+        :param pname: Name of the player info is retrieved from
+        :param customer: Name of the player wanting info on the transfer
+        :param soldier_data_acces:
+        :return:
+        """
+        # Retrieve needed data
+        dct = dict()
+        package = package_data_acces.get_resources(pid)
+        troops = soldier_data_acces.getTroops(pid, 'package')
+        allied = (friend_data_acces.areFriends(pname, customer) or clan_data_acces.areAllies(pname, customer))
+
+        for troop in troops.keys():  # Reform to frontend format
+            if troops[troop]["discovered"] or allied:  # Add the troop info if they are discovered or if allied
+                dct[troop] = troops[troop]["amount"]
+        return dct | package.to_dct()  # Return the merge of the 2 dicts
