@@ -15,6 +15,8 @@ This API call sets a new (production) function for a certain buildable in the da
 
 The database Connection from ```building_data_acces``` is used to call setFunction() to execute the actual functionality.
 
+Make sure to comply with the format of each function, they need to be polynmials expressed in an array. e.g. [5,2] is 5x + 2
+
 #### preset():
 
 This function executes the [preset.py](../../src/preset.py) script upon called. It includes the query from [schema.sql](../../sql/schema.sql) as string, specified in [querry.py](../../src/querry.py)

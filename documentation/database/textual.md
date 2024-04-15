@@ -73,7 +73,7 @@ As should be clear, a transfer also contains a package. A transfer is owned by a
 ### Clan
 
 A clan is uniquely identified by their name. They have a status, like an oneliner/headline and a more formal description, specified by the clan Leader: a player.
-Players can optionally join a guild. 
+Players can optionally join a clan. 
 
 Allied players can transfer goods to support each other and bring peace to their alliance: they can't attack each-other.
 

@@ -399,7 +399,7 @@ class TransferDataAccess:
         dct = dict()
         package = package_data_acces.get_resources(pid)
         troops = soldier_data_acces.getTroops(pid, 'package')
-        allied = (friend_data_acces.areFriends(pname, customer) or clan_data_acces.areAllies(pname, customer))
+        allied = (friend_data_acces.areFriends(pname, customer) or clan_data_acces.areAllies(pname, customer) or pname == customer )
 
         for troop in troops.keys():  # Reform to frontend format
             if troops[troop]["discovered"] or allied:  # Add the troop info if they are discovered or if allied

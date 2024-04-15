@@ -1,39 +1,30 @@
-**-def add\_player()**
+# Social
+> This parts explains the working of the social backend in our game: Managing clans, friends & chats.
 
-This function is made to sign up a new player. So the frontend can do a post to store
+#### add_player()
 
-a new player in the backend.
-
-
-For this function we use another function from the class PlayerDataAccess called
-
-add\_user. It inserts the new player in the correct way in the database.
-
-For this function we use another function from the class FriendDataAccess called
-
-add\_admin. It is a function that makes you and the admin automatically friends.
-
-*API method=POST*
-
-
-
-**-def get\_login():**
-
-This function is made to log in a player. So the frontend can do a post to check if the
-
-player really exists in the backend.
-
-
+This API is made to sign up a new player. 
 
 For this function we use another function from the class PlayerDataAccess called
 
-get\_login. It checks if the player really exists.
+add_user(). It inserts and initialises the new player data in the correct way in the database.
 
-*API method=POST*
+In this function we also use another function from the class FriendDataAccess called
+
+add_admin. It is a function that makes you and the admin automatically friends.
+
+####  def get_login()
+
+This function is made to log in a player. So the frontend can do a post to check if the player really exists in the backend.
+
+For this function we use another function from the class PlayerDataAccess called
+
+get_login. It checks if the player really exists.
 
 
 
-**-def update\_chat():**
+
+**update_chat():**
 
 This function is made to control the chat of a player. So the frontend can do a post to
 
@@ -49,7 +40,7 @@ another function called get\_chatbox. It returns the chat between two players.
 
 
 
-**-def update\_groupchat():**
+**update_groupchat():**
 
 This function is made to control the chat of a clan. So the frontend can do a post to
 
@@ -67,7 +58,7 @@ chat of a clan.
 
 
 
-**-def get\_resources():**
+**get_resources()**
 
 This function is made to get the resources of a player. So the frontend can do a post
 
@@ -81,7 +72,7 @@ getResources. It returns all resources of a player.
 
 
 
-**-def createClan():**
+**createClan():**
 
 This function is made to create a new clan with a unique name and a clan leader. So
 
@@ -97,7 +88,7 @@ add\_clan. It inserts a new clan in the correct way in the database.
 
 
 
-**-def joinClan():**
+**joinClan()**
 
 This function is made to join a clan as a player. So the frontend can do a post to send
 
@@ -111,7 +102,7 @@ sendRequest. It sends a request to the clan leader of that clan as a message.
 
 
 
-**-def searchClan():**
+**searchClan():**
 
 This function is made to find a clan with a unique name. So the frontend can do a
 
@@ -124,7 +115,7 @@ get\_clan. It returns the right clan with a unique name.
 *API method=POST*
 
 
-**-def search\_player():**
+**search_player():**
 
 This function is made to find a player with a unique name. So the frontend can do a
 
@@ -136,7 +127,7 @@ search\_player. It returns the right player with a unique name.
 
 *API method=POST*
 
-**-def send\_friend\_request():**
+**send_friend_request():**
 
 This function is made to send another player a friend request. So the frontend can do
 
@@ -148,7 +139,7 @@ send\_Friendrequest. It inserts the request correctly into the database.
 
 *API method=POST*
 
-**-def get\_general\_requests():**
+**get_general_requests():**
 
 This function is made to get all your requests like friend or clan requests. So the
 
@@ -167,7 +158,7 @@ get\_clanrequest. It gets all the clan requests out of the database.
 
 
 
-**-def accept\_general\_requests():**
+**accept_general_requests():**
 
 This function is made to accept all your requests like friend or clan requests. So the
 
@@ -193,7 +184,7 @@ request.
 
 
 
-**-def removeFriend():**
+**removeFriend()**
 
 This function is made to remove a friend. So the frontend can do a post to remove a
 
@@ -207,7 +198,7 @@ removeFriend. It removes a friend of the player and sets back the database corre
 
 
 
-**-def getChats():**
+**getChats()**
 
 This function is made to retrieve all friends of a player and a clan if the player is a
 
@@ -227,7 +218,7 @@ retrieveClan. It checks if the player is a member and returns the clan name.
 
 
 
-**-def leaveClan():**
+**leaveClan()**
 
 This function is made to leave a clan. So the frontend can do a post to remove a
 
@@ -240,7 +231,7 @@ leaveClan. It removes a player out of a clan and sets back the database correctl
 *API method=POST*
 
 
-**-def deleteClan():**
+**deleteClan()**
 
 This function is made to delete a clan. So the frontend can do a post to delete a clan
 

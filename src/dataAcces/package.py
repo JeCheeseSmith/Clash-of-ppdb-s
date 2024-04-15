@@ -445,6 +445,8 @@ class PackageDataAccess:
             if Newp_food >= 0:
                 break
 
+        Newp_food = min(Newp_wood, 0)  # Food can't be negative
+
         # Update all resources
         cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
                        (Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))

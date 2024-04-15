@@ -688,7 +688,8 @@ def getInfo():
     JSON Output Format:
     {
     dict containing soldiers and their amount + resources, e.g.:
-    dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25}
+    dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25, me: False}
+    "me" specifies if the settlement or transfer is owned by myself.
     }
     """
     data = request.args
@@ -703,7 +704,11 @@ def getInfo():
         info = cursor.fetchone()
         pid = info[0]
         customer = info[1]
-    return jsonify(TransferDataAccess.getInfo(pid, data.get('pname'), customer, soldier_data_acces, clan_data_acces, friend_data_access, package_data_acces))
+
+    info = TransferDataAccess.getInfo(pid, data.get('pname'), customer, soldier_data_acces, clan_data_acces,
+                                       friend_data_access, package_data_acces)
+    info["me"] = customer == data.get('pname')
+    return jsonify(info)
 
 
 @app.route("/createClan", methods=["POST"])

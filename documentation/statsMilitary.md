@@ -70,13 +70,6 @@ Defensive building → Lookout tower
 
 Each defensive buildings gives a **10%** fight bonus for the linked soldier type in **DEFENSE POSITION**.
 
-### Townhall & Level Unlocks
-
-Een hoger Town Hall level ontgrendeld meer gebouwen van een bepaald type, bijvoorbeeld meer farms of nieuwe gebouwen zoals een steelmine.
-
-Hogere levels ontgrendelen meer decoratieve gebouwen of betere soldaten.
-
-
 ### Exp gained
 |                      |                                    |
 |----------------------|------------------------------------|
@@ -95,5 +88,3 @@ Hogere levels ontgrendelen meer decoratieve gebouwen of betere soldaten.
 | 5     |           |
 | 6     | T3 Units  |
 | 7     |           |
-
-Level f(x) = (x-1) * 5000

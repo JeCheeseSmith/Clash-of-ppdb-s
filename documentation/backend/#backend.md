@@ -4,6 +4,8 @@
 Our goal was to minimise the server load, and try to offload functionality to the clients. Thus, using the resources of the server in an efficient manner.  
 That is why we created the game upon a user-interactive basis. Functionality on the server will only be executed when a user interacts with the frontend of the website.
 
+> We strongly recommend you to read the documentation to get a hang about the game. If you want to get in details, also read the comments and the code.
+
 | File Overview    | Use Case                                                                                                          |
 |------------------|-------------------------------------------------------------------------------------------------------------------|
 | app.py           | Root file in which the actual Flask app is set up, where all APIs are listed and where functionality is delegated |

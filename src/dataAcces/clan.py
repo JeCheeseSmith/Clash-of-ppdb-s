@@ -1,3 +1,14 @@
+class Clan:
+    def __init__(self, name, pname, description, status):
+        self.name = name
+        self.pname = pname
+        self.description = description
+        self.status = status
+
+    def to_dct(self):
+        return {'name': self.name, 'pname': self.pname, 'description': self.description, 'status': self.status}
+
+
 class ClanDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect

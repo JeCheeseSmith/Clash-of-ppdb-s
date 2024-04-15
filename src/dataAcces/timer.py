@@ -48,7 +48,7 @@ class TimerDataAccess:
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT * FROM timer WHERE done<%s;', (datetime.now(),))
+        cursor.execute('SELECT * FROM timer WHERE done<%s;', (datetime.now(),)) # TODO Sort by due time
         timersDone = cursor.fetchall()
 
         for timerArray in timersDone:  # Redirect timer functionality to specific function
@@ -245,7 +245,7 @@ SELECT id FROM transfer WHERE discovered=True
 
         if transfer.toType:  # To a transfer
             cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (transfer.idTo,))
-            spid = cursor.fetchone()[0]
+            spid = cursor.fetchone()[0]  # TODO What if the transfer doesn't exists anymore?
         else:  # To a settlement
             cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
             spid = cursor.fetchone()[0]
@@ -373,6 +373,8 @@ SELECT id FROM transfer WHERE discovered=True
         # We need to do this locally otherwise other functionality will break due to circular includes
         from .content import Content
         from .package import Package
+
+        # TODO If the attack was to a outpost transfer, the settlement should get deleted
 
         if transfer.toType:
             cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
