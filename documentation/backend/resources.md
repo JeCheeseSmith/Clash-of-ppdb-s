@@ -7,3 +7,6 @@ So the calc_resources() function is made to update the resources between two tim
 * 5. calculate all resources production and update it for a given time interval 
 * 6. calculate all food production and update it for a given time interval
 * 7. After calculation, it is possible that food is negative, so we insert a system for troop starvation
+
+@app.route("/resources", methods=["POST"])
+def get_resources():

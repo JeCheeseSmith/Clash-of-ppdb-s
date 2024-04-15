@@ -1,5 +1,7 @@
 time management
 
+@app.route("/update", methods=["POST"])
+def update():
 
 Monster query:
 
@@ -33,3 +35,4 @@ SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlemen
 UNION
 SELECT id FROM transfer WHERE discovered=True
 );
+
