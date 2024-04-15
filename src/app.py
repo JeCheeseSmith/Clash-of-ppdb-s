@@ -503,7 +503,7 @@ def trainTroop():
                                                       package_data_acces,
                                                       timer_data_acces)  # Execute actual functionality
     if success:
-        dct = dict(succes=success, sname=data.get('sname'))
+        dct = dict(success=success, sname=data.get('sname'))
         for timer in timers:
             dct[str(timer.id)] = timer.to_dct()
     else:
