@@ -17,13 +17,13 @@ import spear2 from "./assets/Pikeman.png"
 import spear3 from "./assets/Halbardier.png"
 import * as API from "../../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
-import {empty} from "leaflet/src/dom/DomUtil.js";
+import RequestMassagePopUp from "../../../globalComponents/popupMessage/popup.jsx";
 
 /**
  * React component for the troop screen button
  */
 
-function SoldierMenuButton(props) {
+function SoldierMenuButton(getTimer) {
     const [soldierVisible, setsoldierVisible] = useState(false);
     return (
         <>
@@ -32,21 +32,21 @@ function SoldierMenuButton(props) {
             }} className={"trainMenu"}>Troop Menu
                 <div className="soldierMenuButton-icon"></div>
             </button>
-            {soldierVisible ? SoldierMenuBox(soldierVisible):null}
+            {soldierVisible ? SoldierMenuBox(soldierVisible, getTimer):null}
         </>
     );
 }
 export default SoldierMenuButton;
 
-function SoldierMenuBox(soldierVisible) {
+function SoldierMenuBox(soldierVisible, timer) {
     return (
         <div className="box-container">
-            <SoldierNavbar soldierVisible={soldierVisible}/>
+            <SoldierNavbar soldierVisible={soldierVisible} timer={timer}/>
         </div>
     )
 }
 
-function SoldierNavbar(soldierVisible) {
+function SoldierNavbar(soldierVisible, timer) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
     const [TroopAmount, setTroopAmount] = useState(1);
 
@@ -76,18 +76,18 @@ function SoldierNavbar(soldierVisible) {
         )}
         {
             soldierVisible && currentPage &&
-            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount}/>)
+            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} timer={timer}/>)
         }
         <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
         </div>
     )
 }
 
-function SoldierMenuOptions({pageName, TroopAmount ,requests, sendData}){
+function SoldierMenuOptions({pageName, TroopAmount, timer ,requests, sendData}){
     return (
         <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage TroopAmount={TroopAmount}/>}
-            {pageName === 'trainTroopOverview' && <TroopTrainPage/>}
+            {pageName === 'trainTroopOverview' && <TroopTrainPage getTimer={timer}/>}
         </div>
     )
 }
@@ -116,6 +116,8 @@ function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChang
 function TroopOverviewPage({TroopAmount}) {
     const { sid, username } = useLocation().state;
     const [consumption, setConsumption] = useState(0);
+    const [errorMessage, setErrorMessage] = useState("")
+    const [popup, setPopup] = useState(false)
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
         heavyInfantry1: 0,
@@ -209,7 +211,13 @@ function TroopOverviewPage({TroopAmount}) {
 
     // Function that sends a request for a soldier to be trained
     const handleTroopTrain = (troop) => {
-        API.trainTroop(sid, troop).then();
+        const data = API.trainTroop(sid, troop).then();
+        if (data.success) {}
+        else
+        {
+            setErrorMessage(data.error);
+            setPopup(true)
+        }
     };
 
     return (
@@ -292,17 +300,22 @@ function TroopOverviewPage({TroopAmount}) {
                         <p className="soldierCount">{soldiers.ambush3}</p>
                 </div>
             </div>
+            {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     )
 }
 
-function TroopTrainPage() {
+function TroopTrainPage(getTimer) {
+
+    useEffect(() => {
+        //const timer = getTimer(1, "soldier")
+    }, []);
     return (
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
             <div className="trainingQueue">
                 <table>
-                    <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="training-icon"/><span className="caption">102</span></button>
+                    <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="training-icon"/><span className="caption"></span></button>
                 </table>
             </div>
         </div>
