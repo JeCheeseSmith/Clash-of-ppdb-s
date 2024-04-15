@@ -43,7 +43,8 @@ settlement_data_acces.upgradeCastle(1)
 cursor.execute('UPDATE building SET level=6 WHERE name=%s and sid=%s;', ('Castle', 1))
 settlement_data_acces.upgradeCastle(1)
 cursor.execute('UPDATE package SET stone=100000000, wood=1000000, food=1000000, steel=100000000 WHERE id=1;')
-cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (1, 'Halbardier', 500, False))
+cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);',
+               (1, 'Halbardier', 500, False))
 cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (1, 'Bandit', 500, False))
 
 # Set very high values for settlement d
@@ -58,7 +59,8 @@ settlement_data_acces.upgradeCastle(1)
 cursor.execute('UPDATE building SET level=6 WHERE name=%s and sid=%s;', ('Castle', 4))
 settlement_data_acces.upgradeCastle(1)
 cursor.execute('UPDATE package SET stone=100000000, wood=1000000, food=1000000, steel=100000000 WHERE id=4;')
-cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (4, 'Halbardier', 500, False))
+cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);',
+               (4, 'Halbardier', 500, False))
 cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (4, 'Bandit', 500, False))
 
 connection.commit()
@@ -67,16 +69,27 @@ resources = [0, 5000, 5000, 5000, 5000, 0, 0, 0]
 soldiers = [["Halbardier", 15, "True"], ["Bandit", 5, "False"]]
 
 # a gives resources to friend b
-transfer_data_acces.createTransfer(2, False, 1, False, soldiers, resources, 'transfer', 'a', timer_data_acces, package_data_acces, clan_data_acces, friend_data_access, soldier_data_acces)
+transfer_data_acces.createTransfer(2, False, 1, False, soldiers, resources, 'transfer', 'a', timer_data_acces,
+                                   package_data_acces, clan_data_acces, friend_data_access, soldier_data_acces)
 
 # d attacks a
-transfer_data_acces.createTransfer(1, False, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',  timer_data_acces, package_data_acces, clan_data_acces, friend_data_access, soldier_data_acces)
+transfer_data_acces.createTransfer(1, False, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
+                                   timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
+                                   soldier_data_acces)
 
 # a spies on d
 transfer_data_acces.createEspionage(4, 1, False, timer_data_acces)
 
 # a attacks the transfer attack to d
-transfer_data_acces.createTransfer(2, True, 1, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'a',  timer_data_acces, package_data_acces, clan_data_acces, friend_data_access, soldier_data_acces)
+transfer_data_acces.createTransfer(2, True, 1, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'a',
+                                   timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
+                                   soldier_data_acces)
+
+# a creates an outpost
+cursor.execute("INSERT INTO building(name,level,gridX,gridy,sid, occuppiedcells) VALUES ('Chancery', 1, 28,2,1,'{{1,2}}');")
+transfer_data_acces.createOutpost(1, settlement_data_acces.getNewCoordinate(0, 0), 'Outpost of a', soldiers, resources, timer_data_acces, package_data_acces,
+                                  clan_data_acces, friend_data_access, soldier_data_acces, settlement_data_acces)
+cursor.execute('UPDATE timer SET done = %s;', (datetime.now(), ))
 
 cursor.execute('UPDATE transfer SET discovered=True;')
 

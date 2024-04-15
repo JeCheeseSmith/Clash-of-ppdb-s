@@ -48,12 +48,14 @@ class TimerDataAccess:
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT * FROM timer WHERE done<%s;', (datetime.now(),)) # TODO Sort by due time
-        timersDone = cursor.fetchall()
+        cursor.execute('SELECT * FROM timer WHERE done<%s ORDER BY done LIMIT 1;',
+                       (datetime.now(),))  # Sort by earliest done time
+        timerDone = cursor.fetchone()
 
-        for timerArray in timersDone:  # Redirect timer functionality to specific function
-            timer = Timer(timerArray[0], timerArray[1], timerArray[2], timerArray[3], timerArray[4], timerArray[5],
-                          timerArray[6])
+        while timerDone is not None and len(
+                timerDone) != 0:  # Since timers might be removed upon attack, we have to refresh the timerDone after each simulation
+            timer = Timer(timerDone[0], timerDone[1], timerDone[2], timerDone[3], timerDone[4], timerDone[5],
+                          timerDone[6])
             if timer.type == 'soldier':
                 self.simulateTroopTraining(timer)
             elif timer.type == 'building':
@@ -69,11 +71,16 @@ class TimerDataAccess:
                 self.simulateAttack(timer, transfer_data_acces, content_data_access, package_data_acces,
                                     soldier_data_acces, timer_data_access)
             elif timer.type == 'outpost':
-                self.simulateOutpost(timer, transfer_data_acces, settlement_data_acces)
+                self.simulateOutpost(timer, transfer_data_acces, settlement_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
 
             cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
             self.dbconnect.commit()
+
+            # Check for more timers
+            cursor.execute('SELECT * FROM timer WHERE done<%s ORDER BY done LIMIT 1;',
+                           (datetime.now(),))  # Sort by earliest done time
+            timerDone = cursor.fetchone()
 
     def simulateTroopTraining(self, timer: Timer):
         """
@@ -216,7 +223,6 @@ SELECT id FROM transfer WHERE discovered=True
         cursor.execute('SELECT * FROM transfer WHERE id=%s;', (timer.oid,))
         transfer = cursor.fetchone()  # tid, discovered, idTo, toType, idFrom, fromType, pid
 
-
         # Add info to dict
         newInfo["to"] = transfer_data_acces.translatePosition(transfer[2], transfer[3])
         newInfo["from"] = transfer_data_acces.translatePosition(transfer[4], transfer[5])
@@ -242,25 +248,38 @@ SELECT id FROM transfer WHERE discovered=True
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid, soldier_data_acces,
                                                                 package_data_acces)  # Transfer package
-
-        if transfer.toType:  # To a transfer
-            cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (transfer.idTo,))
-            spid = cursor.fetchone()[0]  # TODO What if the transfer doesn't exists anymore?
-        else:  # To a settlement
-            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
-            spid = cursor.fetchone()[0]
-        sp = transfer_data_acces.instantiatePackageWithSoldiers(spid, soldier_data_acces, package_data_acces)  # Package going to
-
-        # Update correct data in the database
-        sp += tp
-        package_data_acces.update_resources(sp)
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
+        receiver = cursor.fetchone()[0]  # Get receivers name
 
         # Notify the users at the end of a transfer
         from .content import \
             Content  # We need to do this locally otherwise other functionality will break due to circular includes
 
-        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
-        receiver = cursor.fetchone()[0]
+        if transfer.toType:  # To a transfer
+            cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (transfer.idTo,))
+            spid = cursor.fetchone()[0]
+            if spid is None:  # Transfer couldn't be met; return to base
+                content_data_access.add_message(
+                    Content(None, datetime.now(), f"""Your transfer to {receiver} couldn't be made. It got lost!""",
+                            'admin'),
+                    transfer.pname)  # Notify sender
+
+                # Delete data from database
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
+                cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))
+                cursor.execute('DELETE FROM troops WHERE pid=%s;', (transfer.pid,))
+                return
+
+        else:  # To a settlement
+            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
+            spid = cursor.fetchone()[0]
+        sp = transfer_data_acces.instantiatePackageWithSoldiers(spid, soldier_data_acces,
+                                                                package_data_acces)  # Package going to
+
+        # Update correct data in the database
+        sp += tp
+        package_data_acces.update_resources(sp)
+
         content_data_access.add_message(Content(None, datetime.now(),
                                                 "Accept my gift for you! Please make sure to take care of my men! - " + transfer.pname,
                                                 'admin'), receiver)  # Notify receiver
@@ -362,6 +381,26 @@ SELECT id FROM transfer WHERE discovered=True
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
 
+        # We need to do this locally otherwise other functionality will break due to circular includes
+        from .content import Content
+        from .package import Package
+
+        if transfer.toType:
+            cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
+            status = cursor.fetchone()
+            print(status[0])
+            if not status[0]:  # Doesn't exist anymore
+                content_data_access.add_message(Content(None, datetime.now(),
+                                                        "Your soldiers could not reach the transfer they we're chasing. Sadly, they got lost in the wilderness..",
+                                                        'admin'),
+                                                transfer.pname)  # Notify sender
+                # Delete attack transfer
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (transfer.id,))
+                cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))
+                cursor.execute('DELETE FROM troops WHERE pid=%s;', (transfer.pid,))
+
+                return
+
         # Retrieve Player name of the defender
         if transfer.toType:
             cursor.execute('SELECT pname FROM transfer WHERE id=%s;', (transfer.idTo,))
@@ -369,20 +408,6 @@ SELECT id FROM transfer WHERE discovered=True
         else:
             cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
             defendant = cursor.fetchone()[0]
-
-        # We need to do this locally otherwise other functionality will break due to circular includes
-        from .content import Content
-        from .package import Package
-
-        # TODO If the attack was to a outpost transfer, the settlement should get deleted
-
-        if transfer.toType:
-            cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
-            if not cursor.fetchone()[0]:  # Doesn't exist anymore
-                content_data_access.add_message(Content(None, datetime.now(),
-                                                        "Your soldiers could not reach the transfer they we're chasing. Sadly, they got lost in the wilderness..",
-                                                        'admin'),
-                                                transfer.pname)  # Notify sender
 
         if success:  # Attacker won
             if transfer.toType:  # To a transfer
@@ -394,10 +419,13 @@ SELECT id FROM transfer WHERE discovered=True
                 package_data_acces.update_resources(ap)  # Update database
 
                 # Get transfer going to the transfer that doesn't exist anymore now
-                cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s EXCEPT SELECT %s;', (transferDefendant.id,transfer.id))
+                cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s EXCEPT SELECT %s;',
+                               (transferDefendant.id, transfer.id))
                 transfers = cursor.fetchall()
+                print("transfers which will be send back to base:", transfers)
                 for tid in transfers:  # Send them back to where they came from
-                    transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access, soldier_data_acces, package_data_acces)
+                    transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access,
+                                                     soldier_data_acces, package_data_acces)
                     self.dbconnect.commit()
 
                 attackerMessage = f"""We successfully captured the transfer of {defendant}! Returning home now, my Lord."""
@@ -430,12 +458,16 @@ SELECT id FROM transfer WHERE discovered=True
                 attackerMessage = f"""We successfully raided the settlement of {defendant}! Returning home now, my Lord."""
                 defendantMessage = f"""You've been attacked by {transfer.pname}!"""
 
-            transfer_data_acces.returnToBase(transfer, timer_data_access, soldier_data_acces, package_data_acces)  # Let the original transfer also return to base
+            transfer_data_acces.returnToBase(transfer, timer_data_access, soldier_data_acces,
+                                             package_data_acces)  # Let the original transfer also return to base
             if transfer.toType:  # Delete defendant transfer, timer and package
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (transferDefendant.id,))
                 cursor.execute('DELETE FROM package WHERE id=%s;', (transferDefendant.pid,))
                 cursor.execute('DELETE FROM troops WHERE pid=%s;', (transferDefendant.pid,))
-                cursor.execute("DELETE FROM timer WHERE oid=%s AND type IN('transfer','espionage','outpost','attack');", (transferDefendant.id,))
+                cursor.execute("DELETE FROM timer WHERE oid=%s AND type IN('transfer','espionage','outpost','attack');",
+                               (transferDefendant.id,))
+                if defendant == 'admin':  # We attack an outpost transfer
+                    cursor.execute('DELETE FROM settlement WHERE id=%s AND pname=%s;', (transferDefendant.sid, 'admin'))
         else:  # Defendant won
             # Delete attack transfer
             cursor.execute('DELETE FROM transfer WHERE id=%s;', (transfer.id,))
@@ -453,7 +485,7 @@ SELECT id FROM transfer WHERE discovered=True
                                         defendant)  # Notify defendant
         self.dbconnect.commit()
 
-    def simulateOutpost(self, timer: Timer, transfer_data_acces, settlement_data_acces):
+    def simulateOutpost(self, timer: Timer, transfer_data_acces, settlement_data_acces, content_data_access):
         """
         Transfer the created Outpost from the admin account to the new player
         :param settlement_data_acces:
@@ -505,3 +537,11 @@ SELECT id FROM transfer WHERE discovered=True
               [20, 11], [20, 12], [20, 13], [20, 14], [20, 15], [20, 16], [20, 17], [20, 18],
               [20, 19], [20, 20]]))
         settlement_data_acces.upgradeCastle(timer.sid, True)  # Upgrade the Satellite Castle to level 1
+
+        # We need to do this locally otherwise other functionality will break due to circular includes
+        from .content import Content
+
+        content_data_access.add_message(Content(None, datetime.now(),
+                                                "You succesfully established an outpost! Come take a look :)",
+                                                'admin'),
+                                        transfer.pname)  # Notify user

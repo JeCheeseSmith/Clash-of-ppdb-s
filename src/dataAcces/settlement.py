@@ -370,7 +370,6 @@ class SettlementDataAcces:
         cursor.execute('SELECT EXISTS(SELECT name FROM building WHERE sid=%s AND name=%s);', (sid, 'SatelliteCastle'))
         return cursor.fetchone()[0]
 
-    @staticmethod
     def calculateDistance(to: list, start: list):
         """
         Calc grid distance between 2 grid Coordinates (Euclidean distance)

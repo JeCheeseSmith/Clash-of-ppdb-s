@@ -182,6 +182,8 @@ class TransferDataAccess:
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT * FROM transfer WHERE id=%s;', (tid,))
         data = cursor.fetchone()
+        if data is None:
+            return None
         return Transfer(tid, data[1], data[2], data[3], data[4], data[5], data[6], data[7])
 
     def returnToBase(self, transfer: Transfer, timer_data_access, soldier_data_acces, package_data_acces):
@@ -329,7 +331,7 @@ class TransferDataAccess:
                       timer_data_access: TimerDataAccess,
                       package_data_acces: PackageDataAccess, clan_data_acces: ClanDataAccess,
                       friend_data_acces: FriendDataAccess,
-                      soldier_data_acces: SoldierDataAccess):
+                      soldier_data_acces: SoldierDataAccess, settlement_data_acces: SettlementDataAcces):
         """
         PRECONDITION: sid refers to the main settlement of the user
 
@@ -348,38 +350,39 @@ class TransferDataAccess:
         :param clan_data_acces:
         :return: success: Status and timer (error or timer object)
         """
-        try:
-            if not self.hasChancery(sid):
-                raise Exception('You cannot create an outpost yet. You should first unlock the chancery!')
-            if self.getMaxNumberOfSettlements(sid) < self.getNumberOfSettlements(sid) + 1:
-                raise Exception(
-                    'You reached the maximal number of outposts for your kingdom! Consider upgrading the chancery.')
-            if SettlementDataAcces.getNewCoordinate(coordTo[0], coordTo[1]) != coordTo:  # Coordinate is not excepted
-                raise Exception('Your outpost is too close to others, make sure to remain a safe distance!')
+        # try:
+        if not self.hasChancery(sid):
+            raise Exception('You cannot create an outpost yet. You should first unlock the chancery!')
+        if self.getMaxNumberOfSettlements(sid) < self.getNumberOfSettlements(sid) + 1:
+            raise Exception(
+                'You reached the maximal number of outposts for your kingdom! Consider upgrading the chancery.')
+        if settlement_data_acces.getNewCoordinate(coordTo[0], coordTo[1]) != coordTo:  # Coordinate is not excepted
+            raise Exception('Your outpost is too close to others, make sure to remain a safe distance!')
 
-            cursor = self.dbconnect.get_cursor()  # DB Acces
+        cursor = self.dbconnect.get_cursor()  # DB Acces
 
-            # Retrieve player name
-            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (sid,))
-            pname = cursor.fetchone()[0]
+        # Retrieve player name
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (sid,))
+        pname = cursor.fetchone()[0]
 
-            # Create an empty package
-            pid = package_data_acces.add_resources(Package([0, 0, 0, 0, 0, 0, 0]))
-            # Create a new settlement on admin account, when the timer runs out, this settlement will be added to the player
-            # Note: since every user is befriended with the admin, this settlement can't be attacked yet :)
-            cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES(%s,%s,%s,%s,%s);',
-                           (outpostName, coordTo[0], coordTo[1], pid, 'admin'))
-            cursor.execute('SELECT max(id) FROM settlement;')  # Get the settlement ID
-            sidTo = cursor.fetchone()[0]
+        # Create an empty package
+        pid = package_data_acces.add_resources(Package([0, 0, 0, 0, 0, 0, 0]))
+        # Create a new settlement on admin account, when the timer runs out, this settlement will be added to the player
+        # Note: since every user is befriended with the admin, this settlement can't be attacked yet :)
+        cursor.execute('INSERT INTO settlement(name,mapx,mapy,pid,pname) VALUES(%s,%s,%s,%s,%s);',
+                       (outpostName, coordTo[0], coordTo[1], pid, 'admin'))
+        cursor.execute('SELECT max(id) FROM settlement;')  # Get the settlement ID
+        sidTo = cursor.fetchone()[0]
+        print(sidTo)
 
-            # Create the transfer and return timer
-            return self.createTransfer(sidTo, False, sid, False, soldiers, resources, 'outpost', pname,
-                                       timer_data_access, package_data_acces, clan_data_acces,
-                                       friend_data_acces, soldier_data_acces)
-        except Exception as e:
-            print('error', e)
-            self.dbconnect.rollback()
-            return False, e
+        # Create the transfer and return timer
+        return self.createTransfer(sidTo, False, sid, False, soldiers, resources, 'outpost', pname,
+                                   timer_data_access, package_data_acces, clan_data_acces,
+                                   friend_data_acces, soldier_data_acces)
+        # except Exception as e:
+        #     print('error', e)
+        #     self.dbconnect.rollback()
+        #     return False, e
 
     @staticmethod
     def getInfo(pid: int, pname: str, customer: str, soldier_data_acces: SoldierDataAccess, clan_data_acces: ClanDataAccess,

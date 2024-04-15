@@ -661,7 +661,7 @@ def createOutpost():
                                                        data.get('outpostName'), data.get('soldiers'),
                                                        data.get('resources'), timer_data_acces,
                                                        package_data_acces, clan_data_acces,
-                                                       friend_data_access, soldier_data_acces)
+                                                       friend_data_access, soldier_data_acces,settlement_data_acces)
 
     if success:
         dct = timer.to_dct()
