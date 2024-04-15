@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import './leaderbord.css'
+import './leaderboard.css'
 
 
 function Leaderboard() {
@@ -11,11 +11,11 @@ function Leaderboard() {
 
   return (
       <div>
-            <button onClick={toggleMenu} className="toggle-leaderbord-button"></button>
+            <button onClick={toggleMenu} className="toggle-leaderboard-button"></button>
           {isMenuOpen && (
-            <div className={`bo-container ${isMenuOpen  ? 'visible' : 'hidden'}`}>
+            <div className={`leaderboard-container ${isMenuOpen  ? 'visible' : 'hidden'}`}>
                 <div className="leaderboardmenu">
-                    <h1 className="Lchat-title">Leaderboard</h1>
+                    <h1 className="leaderboard-title">Leaderboard</h1>
                     <ul>
                         <li>Player 1</li>
                         <li>player 2</li>

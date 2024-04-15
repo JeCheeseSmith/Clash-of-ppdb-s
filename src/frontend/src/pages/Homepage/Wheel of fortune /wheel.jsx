@@ -66,7 +66,7 @@ const WheelOfFortune = () => {
       <div>
         <button onClick={toggleMenu} className="toggle-wheel-button"></button>
         {isMenuOpen && (
-            <div className={"maincontainer"}>
+            <div className={"spin-container"}>
               <div className={"spin-button"} onClick={spinWheel}>Spin</div>
               <div className={"wheel-container"} style={{ transform: `rotate(${rotation}deg)` }}>
                 <div className={"segments-wheel"} style={{ "--i": 1, "--clr": "#ff0000" }}><span>1000 wood</span></div>

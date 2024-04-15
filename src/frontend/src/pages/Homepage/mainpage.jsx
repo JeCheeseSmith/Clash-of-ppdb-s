@@ -8,7 +8,7 @@ import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Map from "./Map/map.jsx";
 import Account from "./Account/account.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
-import Leaderbord from "./Leaderbord/leaderbord.jsx";
+import Leaderbord from "./Leaderbord/leaderboard.jsx";
 import WheelOfFortune from "./Wheel of fortune /wheel.jsx";
 
 /**

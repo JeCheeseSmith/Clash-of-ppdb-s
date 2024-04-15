@@ -1,4 +1,4 @@
-.bo-container {
+.leaderboard-container {
     position: absolute;
     left: 100px;
     top: 250px;
@@ -6,7 +6,7 @@
     z-index: 9999;
 }
 
-.toggle-leaderbord-button {
+.toggle-leaderboard-button {
     background: url("assets/Tes.png") no-repeat center center;
     background-size: contain;
     position: fixed;
@@ -22,7 +22,7 @@
 }
 
 
-.toggle-leaderbord-button:hover {
+.toggle-leaderboard-button:hover {
     transform: scale(1.1);
     cursor: pointer;
 }
@@ -38,7 +38,7 @@
 }
 
 
-.Lchat-title {
+.leaderboard-title {
     text-align: center;
     margin-bottom: 10px;
     background-color: black;
