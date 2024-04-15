@@ -28,8 +28,7 @@ class PlayerDataAccess:
         control = cursor.fetchone()
 
         if control:
-            # Get the settlement ID
-            cursor.execute('SELECT min(id) FROM settlement WHERE settlement.pname=%s;', (obj.name,))
+            cursor.execute('SELECT min(id) FROM settlement WHERE settlement.pname=%s;', (obj.name,))  # Get the first settlement ID
             sid = cursor.fetchone()[0]
             return True, sid
         else:

@@ -1,14 +1,11 @@
-@app.route("/placeBuilding", methods=["POST"])
-def placeBuilding():
-
-@app.route("/upgradeBuilding", methods=["POST"])
-def upgradeBuilding():
+# Buildings
 
 
 
+placeBuilding():
 
-@app.route("/moveBuilding", methods=["POST"])
-def moveBuilding():
+upgradeBuilding():
 
-@app.route("/getBuildingInfo", methods=["GET"])
-def getBuildingInfo():
+moveBuilding():
+
+getBuildingInfo():

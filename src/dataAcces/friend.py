@@ -1,15 +1,6 @@
 from .clan import *
 
 
-class Friend:
-    def __init__(self, pname1, pname2):
-        self.pname1 = pname1
-        self.pname2 = pname2
-
-    def to_dct(self):
-        return {'name': self.pname1, 'friend': self.pname2}
-
-
 class FriendDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect

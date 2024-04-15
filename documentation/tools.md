@@ -20,7 +20,7 @@
 
 > From frontend to backend
 > 
-<img src="#include/tools.png" alt="drawing" width="200"/>
+<img src="#include/tools.png" alt="drawing" width="300"/>
 
 1. HTML
 2. CSS (Boostrap)

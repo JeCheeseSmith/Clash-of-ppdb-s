@@ -19,25 +19,6 @@ class Request(Content):
                 'accept': self.accept}
 
 
-class Retrieve:
-    def __init__(self, id, sname):
-        self.id = id
-        self.sname = sname
-
-    def to_dct(self):
-        return {'id': self.id, 'sname': self.sname}
-
-
-class ClanRequestDataAccess:
-    def __init__(self, dbconnect):
-        self.dbconnect = dbconnect
-
-
-class FriendRequestDataAccess:
-    def __init__(self, dbconnect):
-        self.dbconnect = dbconnect
-
-
 class ContentDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect

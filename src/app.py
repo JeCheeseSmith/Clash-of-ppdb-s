@@ -1096,7 +1096,7 @@ def preset():
 @app.route("/<path:path>")
 def catch_all(path):
     """
-    Standard catch_all to serve each file
+    Standard catch_all to make sure the site doesn't crash when a file isn't found
     """
     return render_template("index.html")
 

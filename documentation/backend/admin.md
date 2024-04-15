@@ -1,5 +1,23 @@
-@app.route("/getFunction", methods=["GET"])
-def getFunction():
+# Admin
+> Our projects allow the game administrator to manipulate certain values about to game. This makes it e.g. possible to introduces seasons in the game.
 
-@app.route("/setFunction", methods=["POST"])
-def setFunction():
+In the backend the following API functions are made:
+
+#### getFunction():
+
+This API call receives a buildable name and returns the current (production) function from the database.
+
+The database Connection from ```building_data_acces``` is used to call getFunction() to execute the actual functionality.
+
+#### setFunction():
+
+This API call sets a new (production) function for a certain buildable in the database. 
+
+The database Connection from ```building_data_acces``` is used to call setFunction() to execute the actual functionality.
+
+#### preset():
+
+This function executes the [preset.py](../../src/preset.py) script upon called. It includes the query from [schema.sql](../../sql/schema.sql) as string, specified in [querry.py](../../src/querry.py)
+For debug purposes, it will return any data send so you can verify it executed correctly.
+
+Since it may be used for debug purposes only, a 'raw' connection is used instead of a dataAcces Component.
