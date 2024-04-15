@@ -14,7 +14,7 @@ import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"
 import PlaySound from "../../globalComponents/audioComponent/audio.jsx";
 import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
-import Leaderbord from "./Leaderbord/leaderbord.jsx";
+import Leaderboard from "./Leaderbord/leaderboard.jsx";
 import WheelOfFortune from "./Wheel of fortune /wheel.jsx";
 
 
@@ -85,7 +85,7 @@ function MainPage()
             <QuestButton/>
             <Chat/>
             <SocialBox/>
-            <Leaderbord/>
+            <Leaderboard/>
             <WheelOfFortune/>
             <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>

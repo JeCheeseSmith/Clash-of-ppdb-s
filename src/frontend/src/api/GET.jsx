@@ -13,7 +13,7 @@
 const local = "http://127.0.0.1:5000"
 const remote = "https://team8.ua-ppdb.me/"
 
-const GET = async (data,endpoint) =>
+const GET = async (data, endpoint) =>
 {
     try
     {
