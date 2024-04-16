@@ -76,3 +76,8 @@ export const update_chat = async (username, receiver, message, API_Request) =>
         return await POST({"content": message, "pname": username, "cname":receiver}, "/groupchat")
     }
 }
+
+export const getBarrackLevelSum = async(sid) =>
+{
+    return await POST({"id": sid}, "/getBarrackLevelSum")
+}

@@ -131,7 +131,8 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
         ambush3: 0
     });
     const handleTraineeAmountChange = (change) => {
-        console.log(change[0], "g")
+        console.log(change, "g")
+
         setTraineeCount({heavyInfantry1: change[0]})
     }
     const [soldiersAvailable, setSoldierAvailable] = useState({
@@ -207,24 +208,34 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
         <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage timers={timers} TroopAmount={TroopAmount} setResources={setResources} soldiers={soldiers
             } setTimers={setTimers} soldiersAvailable={soldiersAvailable} consumption={consumption} trainees={trainees} TraineesUpdate={handleTraineeAmountChange}/>}
-            {pageName === 'trainTroopOverview' && <TroopTrainPage setTimers={setTimers} timers={timers} traineesAvailable={soldiersAvailable} 
+            {pageName === 'trainTroopOverview' && <TroopTrainPage setTimers={setTimers} timers={timers} traineesAvailable={soldiersAvailable}
                                                                   traineesAmount={trainees} />}
         </div>
     )
 }
 
 function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChange}) {
-     const handleButtonClick = (amount) => {
+    const { sid,  } = useLocation().state;
+    const [amount, setAmount] = useState(1)
+
+     const handleButtonClick = () => {
       onTroopAmountChange(amount);
+      //getBarrackSum()
     };
+
+     // const getBarrackSum = () => {
+     //    API.getBarrackLevelSum(sid).then(data => setAmount(
+     //    {
+     //        amount: data.amount
+     //    })
+     //    )
+     // }
+     //
+     // console.log(amount)
 
     return (
         <div className="TroopAmountbar">
-            <button onClick={() => handleButtonClick(1)} className={"AmountMenuOption"}>1x</button>
-            <button onClick={() => handleButtonClick(5)} className={"AmountMenuOption"}>5x</button>
-            <button onClick={() => handleButtonClick(10)} className={"AmountMenuOption"}>10x</button>
-            <button onClick={() => handleButtonClick(25)} className={"AmountMenuOption"}>25x</button>
-            <button onClick={() => handleButtonClick(100)} className={"AmountMenuOption"}>100x</button>
+            <button onClick={() => handleButtonClick()} className={"AmountMenuOption"}>{amount} x</button>
         </div>
     )
 }
@@ -244,11 +255,14 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
                 console.log(SoldierTimers)
                 console.log(timers)
                 console.log('settimers:')
+
                 console.log(setTimers)
+                console.log('traineeeupdate:')
+                console.log(TraineesUpdate)
                 updateTimers(username, setTimers)
                 updateResources(sid, setResources)
                 console.log(timers)
-                calcTrainees(timers, trainees, TraineesUpdate)
+                calcTrainees(timers={timers}, trainees={trainees}, TraineesUpdate={TraineesUpdate})
                 console.log('updated')
             }else
             {
@@ -344,21 +358,23 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
     )
 }
 
-function calcTrainees(timers, trainees, handleAmountChange){
-
-    console.log('z')
-
+function calcTrainees(timers, trainees, TraineesUpdate){
+    console.log('zA1')
+    console.log(TraineesUpdate)
+    console.log(timers)
     const countById2 = {};
-    timers.forEach(obj => {
-        if (obj.type === "soldier"){
-            countById2[obj.sname] = (countById2[obj.sname] || 0) + 1;
+
+    for (let timer of timers.timers)
+    {
+        if (timer.type === "soldier")
+        {
+            console.log(timer)
+            countById2[timer.sname] = (countById2[timer.sname] || 0) + 1;
         }
     }
 
-    );
-    console.log(countById2)
-    handleAmountChange(countById2)
-    console.log('z')
+    TraineesUpdate.TraineesUpdate(countById2)
+    console.log('zB2')
 }
 
 function TroopTrainPage({setTimers, timers, traineesAvailable, traineesAmount}) {
