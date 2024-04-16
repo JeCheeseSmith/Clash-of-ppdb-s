@@ -8,7 +8,6 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 // Code for login page
 function LoginPage() {
 
-    // States for username, password & error
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
