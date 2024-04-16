@@ -319,7 +319,7 @@ function TroopTrainPage({setTimers, timers, soldiersAvailable}) {
                     <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"/></div></button>}
-                <p className="soldierCount">{timers.totalDuration}</p>
+                <p className="soldierCount"></p>
                 {soldiersAvailable.heavyInfantry2 ?
                     <button className="button"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"/></button>
                     : <button className="button">
