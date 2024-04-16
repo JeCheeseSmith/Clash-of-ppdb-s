@@ -6,7 +6,7 @@
   position: fixed;
   display: flex;
   align-items: center;
-  z-index: 100000000000;
+  z-index: 1;
 }
 
 .level-container {

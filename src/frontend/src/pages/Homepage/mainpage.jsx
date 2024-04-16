@@ -11,6 +11,11 @@ import {useLocation} from "react-router-dom";
 import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"
 import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
+import Level from "./Level/Level.jsx";
+import QuestButton from "./Quest/Quest.jsx";
+import Leaderboard from "./Leaderbord/leaderboard.jsx";
+import WheelOfFortune from "./Wheeloffortune/wheel.jsx";
+import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -73,8 +78,12 @@ function MainPage()
     }, [backgroundMusic]);
     return (
         <div className="mainpage">
+            <Level/>
+            <QuestButton/>
+            <Leaderboard/>
             <Chat/>
             <SocialBox/>
+            <WheelOfFortune/>
             <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
             <div className={"grid"}>
@@ -82,6 +91,7 @@ function MainPage()
             </div>
             <ResourceBar resources={resources} updateResources={updateResources}/>
             <MapButton/>
+            <SoldierMenu/>
             <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
         </div>
     );

@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
 .quest-container {
-      top: 8%;
+  top: 0;
   left: 0;
   position: fixed;
-  z-index: 100000000000;
+  z-index: 1;
     padding-left: 10px;
     margin-top: 100px;
 }
