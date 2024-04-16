@@ -25,9 +25,8 @@ function AdminPage() {
 
     // Handles click on submit button
     const handleSubmitClick = async () => {
-        let buildingFunctionString = buildingfunction;
         // Convert the string to an array of integers
-        let buildingFunctionArray = JSON.parse(buildingFunctionString);
+        let buildingFunctionArray = JSON.parse(buildingfunction);
         // Calls the 'setFunction' API and stores the returned value in data
         const data = await POST({bname: building, function: buildingFunctionArray}, "/setFunction"); // The function of the building will be updated in the database
 
@@ -47,7 +46,7 @@ function AdminPage() {
     // Handles click on preset-button
     const handlePresetClick = async () => {
         // Calls the 'preset' API
-        await POST("/preset");
+        await POST({}, "/preset");
     }
 
     return (

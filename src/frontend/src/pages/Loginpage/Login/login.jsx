@@ -36,9 +36,6 @@ function LoginPage() {
         if (username) {
             // Calls the 'login' API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/login");
-            if (username === "admin") {
-                await POST({name: username, password: password}, "/preset"); // When tyring to login to admin, we will call preset functionality
-            }
             // When the admin is logging in, navigate to admin-page
             if (username === "admin" && password === "1234") {
                 navigate('/AdminPage');
