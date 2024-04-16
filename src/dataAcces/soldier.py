@@ -30,7 +30,7 @@ class SoldierDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT trainingTime from soldier where name=%s;', (sname,))
-        duration = cursor.fetchone()[0]
+        duration = cursor.fetchone()[0] * 200
         start = datetime.now()
         stop = start + timedelta(seconds=duration)
         return start, stop, duration

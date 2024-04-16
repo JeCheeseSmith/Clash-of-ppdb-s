@@ -178,7 +178,7 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
     }, []);
     return (
         <div className="soldier-page-content">
-            {pageName === 'troopOverview' && <TroopOverviewPage TroopAmount={TroopAmount} setResources={setResources} soldiers={soldiers
+            {pageName === 'troopOverview' && <TroopOverviewPage timers={timers} TroopAmount={TroopAmount} setResources={setResources} soldiers={soldiers
             } setTimers={setTimers} soldiersAvailable={soldiersAvailable} consumption={consumption}/>}
             {pageName === 'trainTroopOverview' && <TroopTrainPage setTimers={setTimers} timers={timers} soldiersAvailable={soldiersAvailable} />}
         </div>
@@ -202,8 +202,8 @@ function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChang
 }
 
 
-function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldiers, consumption, username, setTimers}) {
-    const { sid,  } = useLocation().state;
+function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldiers, consumption, setTimers, timers}) {
+    const { sid, username  } = useLocation().state;
     const [errorMessage, setErrorMessage] = useState("")
     const [popup, setPopup] = useState(false)
 
@@ -211,9 +211,11 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
     const handleTroopTrain = (troop) => {
         API.trainTroop(sid, troop, 1).then(data =>  {
             if (data.success) {
+                console.log(username)
+                updateTimers(username, setTimers)
                 updateResources(sid, setResources)
-                // updateTimers(username, setTimers)
-                // data.success = false
+                calcTrainees(timers)
+                console.log('updated')
             }else
             {
                 setErrorMessage(data.error);
@@ -308,14 +310,25 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
     )
 }
 
+function calcTrainees({timers}){
+
+    console.log(timers)
+
+    const countById2 = {};
+    timers.forEach(obj => {
+        if (type === "soldier"){
+            countById2[obj.id] = (countById2[obj.id] || 0) + 1;
+        }
+    }
+
+    );
+    console.log(countById2)
+}
 
 function TroopTrainPage({setTimers, timers, soldiersAvailable }) {
     const { sid, username } = useLocation().state
 
-    console.log(username)
 
-    //updateTimers(username, setTimers)
-    console.log(timers)
 
     // useEffect(() => {
     //     //updateTimers(username, setTimers)

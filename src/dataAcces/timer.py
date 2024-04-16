@@ -164,26 +164,27 @@ EXCEPT
 SELECT 'admin'
 """
 
-        query = """SELECT * FROM timer WHERE sid IN -- Get all timers for my settlements
-(SELECT id FROM settlement WHERE pname=%s) -- All my settlements
+        query = f"""SELECT * FROM timer WHERE sid IN -- Get all timers for my settlements
+(SELECT id FROM settlement WHERE pname='{pname}') -- All my settlements
 UNION
 -- Timers interacting with friendly
 SELECT * FROM timer WHERE type='transfer' OR type='espionage' OR type='attack' OR type = 'outpost' AND oid IN
 ( -- Transfer interacting with friendly
-SELECT id FROM transfer WHERE pname IN(%s) -- Transfer owned by friendly
+SELECT id FROM transfer WHERE pname IN({friendly}) -- Transfer owned by friendly
 UNION
 -- Someone's Transfers interacting with friendly transfers
-SELECT id FROM transfer WHERE totype=True and idto IN (SELECT id FROM transfer WHERE pname IN(%s))
+SELECT id FROM transfer WHERE totype=True and idto IN (SELECT id FROM transfer WHERE pname IN({friendly}))
 UNION
 -- Someone's Transfers going to friendly settlements
-SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlement WHERE pname IN (%s))
+SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlement WHERE pname IN ({friendly}))
 -- And add all other visible transfers too
 UNION
 SELECT id FROM transfer WHERE discovered=True
 );"""
-        cursor.execute(query, (pname, friendly, friendly, friendly))
+        cursor.execute(query)
         data = cursor.fetchall()
         newData = []
+        print(data)
 
         for info in data:
             timer = Timer(info[0], info[1], info[2], info[3], info[4], info[5],
@@ -209,6 +210,7 @@ SELECT id FROM transfer WHERE discovered=True
                 (timer.done - datetime.now()).total_seconds())  # Give back time format from frontEnd
 
             newData.append(newInfo)
+        print(newData)
         return newData
 
     def addTransferTimerInfo(self, newInfo: dict, timer: Timer, transfer_data_acces):
