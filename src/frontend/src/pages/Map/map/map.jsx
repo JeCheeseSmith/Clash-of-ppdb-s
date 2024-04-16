@@ -12,7 +12,15 @@ import ResourceBar from "../../Homepage/RecourceBar/resourcebar.jsx";
 import Environment from "./modals/Environment.jsx";
 import Landscape from "./modals/Landscape.jsx";
 
-
+/**
+ * Represents a component for displaying and interacting with a map.
+ * @param {object} props - The props object.
+ * @param {Function} props.setMenuVisible - A function to set the visibility of the menu.
+ * @param {Function} props.setSelectedObject - A function to set the selected object.
+ * @param {boolean} props.outpostChosen - A boolean indicating if an outpost is chosen.
+ * @param {Function} props.setOutpostChosen - A function to set if an outpost is chosen.
+ * @returns {JSX.Element} Map component.
+ */
 const mapSize = 50;
 function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen})
 {

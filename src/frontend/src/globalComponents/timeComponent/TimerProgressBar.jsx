@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './TimerProgressBar.css';
 
+/**
+ * Represents a timer progress bar component.
+ * @param {object} props - The props object.
+ * @param {number} props.timeValue - The current time value.
+ * @param {number} props.totalTimeValue - The total time value.
+ * @param {Function} props.finished - A function to indicate if the timer is finished.
+ * @returns {JSX.Element} TimerProgressBar component.
+ */
+
 const TimerProgressBar = ({timeValue, totalTimeValue, finished}) => {
 
   const [seconds, setSeconds] = useState(timeValue);

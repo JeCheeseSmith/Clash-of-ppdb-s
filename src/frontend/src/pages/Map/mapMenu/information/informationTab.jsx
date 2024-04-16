@@ -8,7 +8,12 @@ import food from "../assets/food.png";
 import * as API from '../../../../api/EndPoints/EndPoints.jsx'
 import {useLocation} from "react-router-dom";
 
-
+/**
+ * Represents a component for displaying information about a selected object.
+ * @param {object} props - The props object.
+ * @param {object} props.selectedObject - The selected object.
+ * @returns {JSX.Element} InformationTab component.
+ */
 function InformationTab({selectedObject})
 {
     const [dictionary, setDictionary] = useState({})

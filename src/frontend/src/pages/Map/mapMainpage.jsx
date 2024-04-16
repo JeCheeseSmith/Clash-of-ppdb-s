@@ -4,6 +4,10 @@ import './mapMainpage.css'
 import TransferMenu from "./mapMenu/transfers/transfers.jsx";
 import Outpost from "./outpost/outpost.jsx";
 
+/**
+ * Represents the main page of the map component.
+ * @returns {JSX.Element} MapMainpage component.
+ */
 function MapMainpage()
 {
     const [menuVisible, setMenuVisible] = useState(false)
