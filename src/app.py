@@ -253,6 +253,8 @@ def update():
         print(timers)
         return jsonify(timers)
     else:
+        timers = timer_data_acces.retrieveTimers('a', transfer_data_acces)
+        print(timers)
         return jsonify('')
 
 
@@ -478,7 +480,9 @@ def getBarrackLevelSum():
     """
     data = request.json
     amount = soldier_data_acces.getBarrackLevelSum(data.get('id'))
-    return jsonify(amount)
+    print({"amount": amount})
+    print(data.get('id'))
+    return jsonify({"amount": amount})
 
 
 @app.route("/trainTroop", methods=["POST"])
@@ -695,8 +699,15 @@ def getInfo():
     }
     """
     data = request.args
-    type = bool(data.get('type'))
-    if type:  # Transfer
+
+    typee = data.get('type')
+    if isinstance(typee, str):
+        if typee == 'False' or typee == 'false':
+            typee = False
+        else:
+            typee = True
+
+    if typee:  # Transfer
         transfer = transfer_data_acces.instantiateTransfer(data.get('oid'))
         pid = transfer.pid
         customer = transfer.pname
