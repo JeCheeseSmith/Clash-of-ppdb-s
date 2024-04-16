@@ -1032,9 +1032,9 @@ def preset():
     from preset import presets
     presets()
 
-    connection.commit()
+    # connection.commit()
 
-    return jsonify(data)
+    return jsonify('data')
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
