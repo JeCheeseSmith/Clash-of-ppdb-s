@@ -20,12 +20,13 @@ import {useLocation} from "react-router-dom";
 import RequestMassagePopUp from "../../../globalComponents/popupMessage/popup.jsx";
 import {empty} from "leaflet/src/dom/DomUtil.js";
 import {updateResources} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
+import {updateTimers} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
 
 /**
  * React component for the troop screen button
  */
 
-function SoldierMenuButton({getTimer,setResources}) {
+function SoldierMenuButton({setResources, timers, setTimers}) {
     const [soldierVisible, setsoldierVisible] = useState(false);
     return (
         <>
@@ -34,21 +35,21 @@ function SoldierMenuButton({getTimer,setResources}) {
             }} className={"trainMenu"}>Troop Menu
                 <div className="soldierMenuButton-icon"></div>
             </button>
-            {soldierVisible ? <SoldierMenuBox soldierVisible={soldierVisible} setResources={setResources} getTimer={getTimer} />: null}
+            {soldierVisible ? <SoldierMenuBox soldierVisible={soldierVisible} setResources={setResources} setTimers={setTimers} timers={timers} />: null}
         </>
     );
 }
 export default SoldierMenuButton;
 
-function SoldierMenuBox({soldierVisible, getTimer, setResources}) {
+function SoldierMenuBox({soldierVisible, setTimers, setResources, timers}) {
     return (
         <div className="box-container">
-            <SoldierNavbar soldierVisible={soldierVisible} timer={getTimer} setResources={setResources}/>
+            <SoldierNavbar soldierVisible={soldierVisible} setResources={setResources} setTimers={setTimers} timers={timers}/>
         </div>
     )
 }
 
-function SoldierNavbar({soldierVisible, getTimer, setResources}) {
+function SoldierNavbar({soldierVisible, setTimers, setResources, timers}) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
     const [TroopAmount, setTroopAmount] = useState(1);
 
@@ -78,18 +79,18 @@ function SoldierNavbar({soldierVisible, getTimer, setResources}) {
         )}
         {
             soldierVisible && currentPage &&
-            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} timer={getTimer} setResources={setResources}/>)
+            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} setTimers={setTimers} setResources={setResources} timers={timers}/>)
         }
         <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
         </div>
     )
 }
 
-function SoldierMenuOptions({pageName, TroopAmount, getTimer ,requests, sendData, setResources}){
+function SoldierMenuOptions({pageName, TroopAmount, setTimers ,requests, sendData, setResources, timers}){
     return (
         <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage TroopAmount={TroopAmount} setResources={setResources}/>}
-            {pageName === 'trainTroopOverview' && <TroopTrainPage getTimer={getTimer}/>}
+            {pageName === 'trainTroopOverview' && <TroopTrainPage setTimers={setTimers} timers={timers}/>}
         </div>
     )
 }
@@ -307,10 +308,11 @@ function TroopOverviewPage({TroopAmount, setResources}) {
 }
 
 
-function TroopTrainPage(getTimer) {
+function TroopTrainPage({setTimers, timers}) {
 
     useEffect(() => {
-        const timer = getTimer(0, "soldier")
+        updateTimers()
+        //const timer = setTimers(0, "soldier")
     }, []);
     return (
         <div className="soldier-primair-input">

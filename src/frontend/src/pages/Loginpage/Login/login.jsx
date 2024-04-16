@@ -33,9 +33,6 @@ function LoginPage() {
     // Handles the navigation from login page to mainpage
     const handleLoginClick = async () => {
         const data = await POST({ name: username, password: password }, "/login");
-        // if (username === "admin"){
-        // await POST({name: username, password: password}, "/preset"); // When tyring to login to admin, we will call preset functionality
-        // }
         if (username === "admin" && password === "1234") {
               navigate('/AdminPage');
         }

@@ -91,8 +91,8 @@ function MainPage()
             </div>
             <ResourceBar resources={resources} updateResources={updateResources}/>
             <MapButton/>
-            <SoldierMenu/>
-            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
+            <SoldierMenu setResources={setResources} timers={timers} setTimers={setTimers}/>
+            <LocalTimers setResources={setResources} timers={timers} getTimer={getTimer}/>
         </div>
     );
 }
