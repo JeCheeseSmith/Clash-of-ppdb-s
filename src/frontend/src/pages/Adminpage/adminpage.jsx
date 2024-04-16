@@ -1,6 +1,7 @@
 import React, { useState } from 'react'; // Importing React library
 import './adminpage.css';
 import POST from "../../api/POST.jsx";
+import GET from "../../api/GET.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 
 
@@ -11,6 +12,7 @@ function AdminPage() {
     // States for username, password & error
     const [building, setBuilding] = useState('');
     const [buildingfunction, setBuildingFunction] = useState('');
+    const [functionValue, setFunctionValue] = useState("");
     const [errormessage, setErrorMessage] = useState('');
 
     // Handler for username change
@@ -24,18 +26,19 @@ function AdminPage() {
     }
 
     const handleSubmitClick = async () => {
-        console.log("test");
-        const data = await POST({bname: building, function: [1,2]}, "/setFunction");
-        if (data.success != "success") {
+        let buildingFunctionString = buildingfunction;
+        let buildingFunctionArray = JSON.parse(buildingFunctionString);
+        const data = await POST({bname: building, function: buildingFunctionArray}, "/setFunction");
+        console.log(data)
+        if (!data.success) {
             setErrorMessage("Operation Failed");
-        }
-        else {
-            setErrorMessage("Operation Success");
         }
     }
 
-    function handleRetrieveClick() {
-
+    const handleRetrieveClick = async () => {
+        const data = await GET({bname: building}, "/getFunction");
+        console.log(data);
+        setBuildingFunction(`[${data.join(", ")}]`);
     }
 
     return (
