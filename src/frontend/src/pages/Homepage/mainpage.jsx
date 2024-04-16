@@ -6,19 +6,12 @@ import Grid from "./GridBuilder/GridView/grid3D.jsx";
 import Buildmenu from "./GridBuilder/BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Account from "./Account/account.jsx";
-import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
-import LevelBar from "../Homepage/Level/Level.jsx"
 import * as API from "../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"
-import PlaySound from "../../globalComponents/audioComponent/audio.jsx";
 import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
-import Leaderboard from "./Leaderbord/leaderboard.jsx";
-import WheelOfFortune from "./Wheeloffortune/wheel.jsx";
 
-
-import QuestButton from "./Quest/Quest.jsx";
 /**
  * Functional component representing the main page of the application.
  * Displays a full-bleed background image.
@@ -67,7 +60,7 @@ function MainPage()
         API.getGrid(sid).then(data => setBuildings(data.grid))
     }, []);
 
-    /*useEffect(() =>
+    useEffect(() =>
     {
         //todo: compress size of main page mp3, or download new ones
         const audio = new Audio(backgroundMusic);
@@ -77,11 +70,12 @@ function MainPage()
         {
             audio.pause(); // Pause the audio when component unmounts
         };
-    }, [backgroundMusic]);*/
-
+    }, [backgroundMusic]);
     return (
         <div className="mainpage">
-
+            <Chat/>
+            <SocialBox/>
+            <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
             <div className={"grid"}>
                 <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray} updateTimers={updateTimers} getTimer={getTimer}/>
@@ -89,14 +83,6 @@ function MainPage()
             <ResourceBar resources={resources} updateResources={updateResources}/>
             <MapButton/>
             <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
-            <SoldierMenu setResources={setResources}/>
-            <LevelBar/>
-            <QuestButton/>
-            <Chat/>
-            <SocialBox/>
-            <Leaderboard/>
-            <WheelOfFortune/>
-            <Account/>
         </div>
     );
 }
@@ -111,6 +97,5 @@ function getRandomArray()
     }
     return randomArray
 }
-
 
 export default MainPage; // Exporting the MainPage component

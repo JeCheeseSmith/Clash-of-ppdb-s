@@ -1,6 +1,7 @@
 .informationTab-container {
-    width: 500px;
-    background-color: white;
+    width: 300px;
+    background-color: black;
+    color: #1b05d2;
     border-radius: 10px;
     text-align: center;
     margin-left: 10px;

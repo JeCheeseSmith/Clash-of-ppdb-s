@@ -27,7 +27,7 @@ function BuildMenu({addBuilding, buildings, updateResources})
   return (
     <div>
       {/* Button to toggle the visibility of the build menu */}
-      <button onClick={toggleMenuVisibility} className={`toggle-menu-button ${menuVisible ? 'visible' : 'hidden'}`}>
+      <button onClick={toggleMenuVisibility} className={"toggle-menu-button"}>
         {/* Content of the toggle menu button */}
         <div>
           {/* Text indicating the action */}
