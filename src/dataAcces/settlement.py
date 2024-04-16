@@ -42,14 +42,15 @@ class SettlementDataAcces:
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT level FROM building WHERE sid=%s AND name=%s;', (sid, 'Castle'))
-        level = cursor.fetchone()[0]
+        level = cursor.fetchone()
 
         if level is None:
             cursor.execute('SELECT level FROM building WHERE sid=%s AND name=%s;',
                            (sid, 'SatelliteCastle'))  # An outpost online has a SatelliteCastle
-            level = cursor.fetchone()[0]
-
-        return level
+            level = cursor.fetchone()
+            if level is None:  # If the outpost is not yet created, no castle is present
+                level = (0,)
+        return level[0]
 
     def upgradeCastle(self, sid, outpost=False):
         """
