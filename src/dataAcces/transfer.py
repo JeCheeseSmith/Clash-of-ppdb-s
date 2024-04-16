@@ -224,7 +224,6 @@ class TransferDataAccess:
         # Delete the old transfer and old timer in the database (package is recycled)
         cursor.execute('DELETE FROM transfer WHERE id=%s;', (oldTid,))
         cursor.execute('DELETE FROM timer WHERE id=%s;', (originalTimerID,))
-        print(originalTimerID)
 
         # Commit Data
         self.dbconnect.commit()
