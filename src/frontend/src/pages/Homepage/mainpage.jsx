@@ -15,7 +15,7 @@ import backgroundMusic from "../../globalComponents/audioComponent/assets/Backgr
 import PlaySound from "../../globalComponents/audioComponent/audio.jsx";
 import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
 import Leaderboard from "./Leaderbord/leaderboard.jsx";
-import WheelOfFortune from "./Wheel of fortune /wheel.jsx";
+import WheelOfFortune from "./Wheeloffortune/wheel.jsx";
 
 
 import QuestButton from "./Quest/Quest.jsx";
