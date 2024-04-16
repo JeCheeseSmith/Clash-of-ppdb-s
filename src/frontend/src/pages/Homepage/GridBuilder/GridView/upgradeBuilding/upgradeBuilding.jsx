@@ -8,6 +8,17 @@ import * as API from "../../../../../api/EndPoints/EndPoints.jsx";
 import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
+/**
+ * UpgradeBuilding component for upgrading selected building.
+ *
+ * @param {Object} props - Component props.
+ * @param {Object[]} props.selectedBuilding - Information about the selected building.
+ * @param {Function} props.updateResources - Function to update resources.
+ * @param {Function} props.updateTimers - Function to update timers.
+ * @param {Function} props.getTimer - Function to get timer information.
+ * @param {number} props.oldPosition - Old position of the building.
+ * @returns {JSX.Element} React component.
+ */
 
 function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTimer, oldPosition}) {
 

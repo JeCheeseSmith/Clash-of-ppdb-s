@@ -3,6 +3,11 @@ import error from "./assets/buildingPlacementError.mp3";
 import buttonSocial from "./assets/Menu Selection Sound Effect.mp3";
 import buttonOption from "./assets/socialOptionSound.mp3";
 import upgraded from "./assets/Upgraded.mp3"
+
+/*
+* Audio component for better and global use
+* */
+
 async function PlaySound(typeSound)
 {
     let sound;

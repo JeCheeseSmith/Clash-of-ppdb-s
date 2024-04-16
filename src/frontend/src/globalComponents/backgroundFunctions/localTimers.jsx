@@ -1,7 +1,15 @@
 import {useEffect} from 'react'; // Importing React library
 import {useLocation} from "react-router-dom";
-import PlaySound from "../../globalComponents/audioComponent/audio.jsx";
 import {updateResources, updateTimers} from "./helperFunctions.jsx";
+
+/**
+ * Represents a component for managing local timers.
+ * @param {object} props - The props object.
+ * @param {Function} props.setResources - A function to set the resources.
+ * @param {Array} props.timers - An array containing timer objects.
+ * @param {Function} props.setTimers - A function to set the timers.
+ * @returns {null} Null component.
+ */
 
 function LocalTimers({setResources, timers, setTimers})
 {

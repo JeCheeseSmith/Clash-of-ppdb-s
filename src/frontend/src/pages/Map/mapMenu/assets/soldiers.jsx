@@ -15,6 +15,9 @@ import Guardsman from "../assets/images/guardian.png"
 import Pikeman from "../assets/images/Pikeman.png"
 import Halbardier from "../assets/images/Halbardier.png"
 
+/*
+* Dictionary consisting soldier images with their name
+* */
 
 const Soldiers =
 {

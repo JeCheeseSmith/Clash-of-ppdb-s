@@ -1,4 +1,9 @@
 import * as API from "../../api/EndPoints/EndPoints.jsx";
+
+/*
+* made helper Functions for later use
+* */
+
 export const updateTimers = (username, setTimers) =>
 {
     API.update(username).then(data => {setTimers(data); console.log("Update Timers Called: ", data)});
