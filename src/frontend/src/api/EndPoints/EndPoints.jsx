@@ -67,3 +67,8 @@ export const createOutpost = async (coordTo, sidFrom, outpostName, soldiers, res
 {
     return await POST({coordTo, sidFrom, outpostName, soldiers, resources}, '/createOutpost')
 }
+
+export const getBarrackLevelSum = async(sid) =>
+{
+    return await POST({"id": sid}, "/getBarrackLevelSum")
+}
