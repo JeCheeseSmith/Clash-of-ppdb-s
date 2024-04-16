@@ -9,7 +9,7 @@ const TimerProgressBar = ({timeValue, totalTimeValue, finished}) => {
   useEffect(() => {
 
     if (seconds > 0) {
-      // setSeconds and setPercentage are called every second as long as seconds > 0
+      // seconds and percentage are updated every second as long as seconds > 0
       const intervalId = setInterval(() => {
         setSeconds(prevSeconds => prevSeconds - 1);
         setPercentage((seconds / totalTimeValue) * 100);
@@ -20,16 +20,20 @@ const TimerProgressBar = ({timeValue, totalTimeValue, finished}) => {
   }, [seconds, timeValue]);
 
   const getProgressBarClass = () => {
+
     if (seconds === 0) {
       // Finished variable is set to false and is used in upgradeBuilding
       finished(false);
     }
+    // As long as percentage > 50, the progressbar will be green
     if (percentage > 50) {
       return 'green';
     }
+    // If percentage < 50 and > 25, the progressbar will be orange
     else if (percentage > 25) {
       return 'orange';
     }
+    // If percentage < 25, the progressbar will be red
     else {
       return 'red';
     }
