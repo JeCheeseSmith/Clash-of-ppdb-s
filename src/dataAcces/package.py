@@ -423,10 +423,10 @@ class PackageDataAccess:
         Total_Consumption = int(self.calc_consumption(sid, calculated_time))
 
         # Update the resources in the right way
-        Newp_wood = min(Generated_wood + Pwood, Wood)
-        Newp_stone = min(Generated_stone + Pstone, Stone)
-        Newp_steel = min(Generated_steel + Psteel, Steel)
-        Newp_food = min(Generated_food + Pfood - Total_Consumption, Food)
+        Newp_wood = round(min(Generated_wood + Pwood, Wood))
+        Newp_stone = round(min(Generated_stone + Pstone, Stone))
+        Newp_steel = round(min(Generated_steel + Psteel, Steel))
+        Newp_food = round(min(Generated_food + Pfood - Total_Consumption, Food))
 
         # Check for possible troop starvation
         for soldier in Soldiers:
@@ -445,7 +445,7 @@ class PackageDataAccess:
             if Newp_food >= 0:
                 break
 
-        Newp_food = min(Newp_wood, 0)  # Food can't be negative
+        Newp_food = round(min(Newp_wood, 0))  # Food can't be negative
 
         # Update all resources
         cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
