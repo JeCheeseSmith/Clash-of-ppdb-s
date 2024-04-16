@@ -94,6 +94,7 @@ function SoldierNavbar({soldierVisible, setTimers, setResources, timers, }) {
 function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, timers, }){
     const [consumption, setConsumption] = useState(0);
     const { sid,  } = useLocation().state;
+    const countById2 = {};
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
         heavyInfantry1: 0,
@@ -129,6 +130,10 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
         ambush2: 0,
         ambush3: 0
     });
+    const handleTraineeAmountChange = (change) => {
+        console.log(change[0], "g")
+        setTraineeCount({heavyInfantry1: change[0]})
+    }
     const [soldiersAvailable, setSoldierAvailable] = useState({
         heavyInfantry1: false,
         heavyInfantry2: false,
@@ -201,8 +206,9 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
     return (
         <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage timers={timers} TroopAmount={TroopAmount} setResources={setResources} soldiers={soldiers
-            } setTimers={setTimers} soldiersAvailable={soldiersAvailable} consumption={consumption}/>}
-            {pageName === 'trainTroopOverview' && <TroopTrainPage setTimers={setTimers} timers={timers} soldiersAvailable={soldiersAvailable} />}
+            } setTimers={setTimers} soldiersAvailable={soldiersAvailable} consumption={consumption} trainees={trainees} TraineesUpdate={handleTraineeAmountChange}/>}
+            {pageName === 'trainTroopOverview' && <TroopTrainPage setTimers={setTimers} timers={timers} traineesAvailable={soldiersAvailable} 
+                                                                  traineesAmount={trainees} />}
         </div>
     )
 }
@@ -224,7 +230,7 @@ function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChang
 }
 
 
-function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldiers, consumption, setTimers, timers}) {
+function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldiers, consumption, setTimers, timers, trainees, TraineesUpdate}) {
     const { sid, username  } = useLocation().state;
     const [errorMessage, setErrorMessage] = useState("")
     const [popup, setPopup] = useState(false)
@@ -242,7 +248,7 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
                 updateTimers(username, setTimers)
                 updateResources(sid, setResources)
                 console.log(timers)
-                calcTrainees(timers)
+                calcTrainees(timers, trainees, TraineesUpdate)
                 console.log('updated')
             }else
             {
@@ -338,7 +344,7 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
     )
 }
 
-function calcTrainees(timers){
+function calcTrainees(timers, trainees, handleAmountChange){
 
     console.log('z')
 
@@ -351,118 +357,98 @@ function calcTrainees(timers){
 
     );
     console.log(countById2)
-
-    setTraineeCount(
-            {
-            heavyInfantry1: countById2[],
-            heavyInfantry2: data.Huskarl.amount,
-            heavyInfantry3: data.OrderKnight.amount,
-            spear1: data.Guardsman.amount,
-            spear2: data.Pikeman.amount,
-            spear3: data.Halbardier.amount,
-            horseman1: data.Horseman.amount,
-            horseman2: data.Knight.amount,
-            horseman3: data.WarElephant.amount,
-            bowman1: data.Bowman.amount,
-            bowman2: data.LongbowMan.amount,
-            bowman3: data.CrossbowMan.amount,
-            ambush1: data.Bandit.amount,
-            ambush2: data.Militia.amount,
-            ambush3: data.Skirmisher.amount
-        })
-
-
+    handleAmountChange(countById2)
     console.log('z')
 }
 
-function TroopTrainPage({setTimers, timers, trainees}) {
+function TroopTrainPage({setTimers, timers, traineesAvailable, traineesAmount}) {
     return (
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
             <div className="soldierSection">
-                {trainees.heavyInfantry1 ?
+                {traineesAvailable.heavyInfantry1 ?
                     <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.heavyInfantry2 ?
+                <p className="soldierCount">{traineesAmount.heavyInfantry1}</p>
+                {traineesAvailable.heavyInfantry2 ?
                     <button className="button"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.heavyInfantry3 ?
+                <p className="soldierCount">{traineesAmount.heavyInfantry2}</p>
+                {traineesAvailable.heavyInfantry3 ?
                     <button className="button"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
+                <p className="soldierCount">{traineesAmount.heavyInfantry3}</p>
             </div>
             <div className="soldierSection">
-                {trainees.spear1 ?
+                {traineesAvailable.spear1 ?
                     <button className="button"><img src={spear1} alt="Guardsman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={spear1} alt="Guardsman" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.spear2 ?
+                <p className="soldierCount">{traineesAmount.spear1}</p>
+                {traineesAvailable.spear2 ?
                     <button className="button"><img src={spear2} alt="Pike man" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={spear2} alt="Pike man" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.spear3 ?
+                <p className="soldierCount">{traineesAmount.spear2}</p>
+                {traineesAvailable.spear3 ?
                     <button className="button"><img src={spear3} alt="Halbardier" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={spear3} alt="Halbardier" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
+                <p className="soldierCount">{traineesAmount.spear3}</p>
             </div>
             <div className="soldierSection">
-                {trainees.horseman1 ?
+                {traineesAvailable.horseman1 ?
                     <button className="button"><img src={horseman1} alt="Horseman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={horseman1} alt="Horseman" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.horseman2 ?
+                <p className="soldierCount">{traineesAmount.horseman1}</p>
+                {traineesAvailable.horseman2 ?
                     <button className="button"><img src={horseman2} alt="Knight" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={horseman2} alt="Knight" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.horseman3 ?
+                <p className="soldierCount">{traineesAmount.horseman2}</p>
+                {traineesAvailable.horseman3 ?
                     <button className="button"><img src={horseman3} alt="War elephant" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={horseman3} alt="War elephant" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
+                <p className="soldierCount">{traineesAmount.horseman3}</p>
             </div>
             <div className="soldierSection">
-                {trainees.bowman1 ?
+                {traineesAvailable.bowman1 ?
                     <button className="button"><img src={bowman1} alt="Bowman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={bowman1} alt="Bowman" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.bowman2 ?
+                <p className="soldierCount">{traineesAmount.bowman1}</p>
+                {traineesAvailable.bowman2 ?
                     <button className="button"><img src={bowman2} alt="Longbowman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={bowman2} alt="Longbowman" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.bowman3 ?
+                <p className="soldierCount">{traineesAmount.bowman2}</p>
+                {traineesAvailable.bowman3 ?
                     <button className="button"><img src={bowman3} alt="Crossbowman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={bowman3} alt="Crossbowman" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
+                <p className="soldierCount">{traineesAmount.bowman3}</p>
             </div>
             <div className="soldierSection">
-                {trainees.ambush1 ?
+                {traineesAvailable.ambush1 ?
                     <button className="button"><img src={ambush1} alt="Bandit" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={ambush1} alt="Bandit" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.ambush2 ?
+                <p className="soldierCount">{traineesAmount.ambush1}</p>
+                {traineesAvailable.ambush2 ?
                     <button className="button"><img src={ambush2} alt="Militia" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={ambush2} alt="Militia" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
-                {trainees.ambush3 ?
+                <p className="soldierCount">{traineesAmount.ambush2}</p>
+                {traineesAvailable.ambush3 ?
                     <button className="button"><img src={ambush3} alt="Skirmishers" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={ambush3} alt="Skirmishers" className="soldier-icon"/></div></button>}
-                <p className="soldierCount"></p>
+                <p className="soldierCount">{traineesAmount.ambush3}</p>
             </div>
         </div>
     )
