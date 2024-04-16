@@ -316,7 +316,7 @@ class PackageDataAccess:
         # Calculated difference in timestamp
         calculated_time = abs(start - stop)
         calculated_time = int(calculated_time.total_seconds())
-        calculated_time = calculated_time / 3600
+        calculated_time = calculated_time / 3600 # Calculation in hour
 
         # Generated resources
         Generated_wood = 0

@@ -187,19 +187,19 @@ CREATE TABLE IF NOT EXISTS timer(
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','storage','{0,500,0}','{21600,21600}','{0,4000,0}',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','storage','{0,500,0}','{21600,21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','storage','{1000,0}','{21600,21600}','{0,4000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','storage','{1000,0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','{0}','{86400,0}','{0,32000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','{0}','{21600,0}','{0,4000,0}',12);
 
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodCuttersCamp','production','{200,0}','{600,0}','{400,0}',1);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Quarry','production','{200,0}','{600,0}','{400,0}',2);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','{25,20}','{600,0}','{400,0}',12);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','{300,0}','{600,0}','{400,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SteelMine','production','{150,0}','{600,0}','{400,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Farm','production','{250,0}','{600,0}','{400,0}',12);
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',1);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('StoneStockPile','storage','{0,2000,0}','{600,0}','{0,2000,0}',2);
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Armory','storage','{20000,0}','{600,0}','{0,2000,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('WoodStockPile','storage','{0,1500,0}','{600,0}','{0,2000,0}',1);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('StoneStockPile','storage','{0,1500,0}','{600,0}','{0,2000,0}',2);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Armory','storage','{0,1000,0}','{600,0}','{0,2000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('GrainSilo','storage','{0,2000,0}','{600,0}','{0,2000,0}',12);
 
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Stables','defense','{1.1,0}','{21600,0}','{0,4000,0}',12);
@@ -210,24 +210,24 @@ INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeRe
 
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('empty','decoration','{1.1,0}','{3,0}','{3,0}',12);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,2,1,1,2,10);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Huskarl','HeavyInfantry',25,15,5,3,1,1,4,20);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('OrderKnight','HeavyInfantry',45,25,5,4,1,1,8,40);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,72,1,1,2,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Huskarl','HeavyInfantry',25,15,5,108,1,1,4,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('OrderKnight','HeavyInfantry',45,25,5,144,1,1,8,40);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Guardsman','Spearmen',12,12,8,2,1.3,1,2,10);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Pikeman','Spearmen',20,20,5,8,3.3,1,4,20);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Halbardier','Spearmen',32,32,8,4,1.3,1,8,40);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Guardsman','Spearmen',12,12,8,72,1.3,1,2,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Pikeman','Spearmen',20,20,5,288,3.3,1,4,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Halbardier','Spearmen',32,32,8,144,1.3,1,8,40);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Horseman','Cavalry',20,20,7,6,2,0.3,6,20);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Knight','Cavalry',40,40,5,12,2,0.3,10,40);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('WarElephant','Cavalry',45,45,7,15,2,0.3,18,80);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Horseman','Cavalry',20,20,7,216,2,0.3,6,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Knight','Cavalry',40,40,5,300,2,0.3,10,40);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('WarElephant','Cavalry',45,45,7,350,2,0.3,18,80);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Bowman','Ranged',10,15,10,2,1.4,1,2,10);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('LongbowMan','Ranged',15,25,10,3,1.4,1,4,20);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('CrossbowMan','Ranged',25,45,10,4,1.4,1,8,40);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Bowman','Ranged',10,15,10,72,1.4,1,2,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('LongbowMan','Ranged',15,25,10,108,1.4,1,4,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('CrossbowMan','Ranged',25,45,10,144,1.4,1,8,40);
 
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Bandit','Skirmishers',8,12,20,3,1.2,3,2,10);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Militia','Skirmishers',12,28,20,5,1.2,3,5,20);
-INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Skirmisher','Skirmishers',20,40,20,6,1.2,3,9,40);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Bandit','Skirmishers',8,12,20,108,1.2,3,2,10);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Militia','Skirmishers',12,28,20,180,1.2,3,5,20);
+INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Skirmisher','Skirmishers',20,40,20,216,1.2,3,9,40);
 
 INSERT INTO player(name,password) VALUES('admin','1234');
