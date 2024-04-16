@@ -17,7 +17,7 @@ const GET = async (data, endpoint) =>
 {
     try
     {
-        const url = new URL(local + endpoint);
+        const url = new URL(remote + endpoint);
         if (data)
         {
             Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));
