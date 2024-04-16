@@ -1,6 +1,15 @@
 import React, {useState} from 'react';
 import "./transfers.css"
 import TransferOption from "./transferOptionContents.jsx";
+
+/**
+ * Represents a component for displaying transfer options in a menu.
+ * @param {object} props - The props object.
+ * @param {boolean} props.outpostChosen - A boolean indicating if an outpost is chosen.
+ * @param {object} props.selectedObject - The selected object.
+ * @param {Function} props.setMenuVisible - A function to set the visibility of the menu.
+ * @returns {JSX.Element} TransferMenu component.
+ */
 function TransferMenu({outpostChosen, selectedObject, setMenuVisible})
 {
     return(
@@ -17,6 +26,14 @@ function TransferMenu({outpostChosen, selectedObject, setMenuVisible})
 
 export default TransferMenu;
 
+
+/**
+ * Represents a navigation bar component for the transfer menu.
+ * @param {object} props - The props object.
+ * @param {boolean} props.outpostChosen - A boolean indicating if an outpost is chosen.
+ * @param {object} props.selectedObject - The selected object.
+ * @returns {JSX.Element} Navbar component.
+ */
 function Navbar({outpostChosen, selectedObject})
 {
     const [currentPage, setCurrentPage] = useState('Transfer');

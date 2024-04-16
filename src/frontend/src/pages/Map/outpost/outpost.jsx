@@ -1,6 +1,12 @@
 import React from 'react';
 import './outpost.css'
 
+/**
+ * Represents a component for creating an outpost.
+ * @param {object} props - The props object.
+ * @param {Function} props.onClickFunction - A function to handle the click event.
+ * @returns {JSX.Element} Outpost component.
+ */
 function Outpost({onClickFunction})
 {
     return (

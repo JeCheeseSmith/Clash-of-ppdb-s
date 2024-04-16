@@ -1,15 +1,37 @@
-#UpgradeBuilding
+# UpgradeBuilding Component
 
-The 'UpgradeBuilding' function, defined in 'upgradeBuilding.jsx', is the component responsible for rendering the upgrade button.
+The `UpgradeBuilding` component manages the upgrade process of a building. It displays the name of the selected building and renders an "Upgrade" button if the building is not currently being upgraded. If the building is being upgraded, it shows a progress bar indicating the upgrade progress. The component handles upgrade requests and updates resource and timer information accordingly. It also displays error messages in a popup if an upgrade request fails.
 
-This function has five parameters: 'selectedBuilding', 'updateResources', 'updateTimers', 'getTimer', 'oldPosition'. UpgradeBuilding is called in mainpage.jsx.
+## Functionality
 
-There are five states: 'click', 'errormessage', 'popup', 'currentTimeValue' and 'currentTotalDuration'. The settlement id (sid) and username are also taken from the mainpage.jsx.
+- Displays selected building name.
+- Renders "Upgrade" button if not currently upgrading.
+- Shows progress bar during upgrade.
+- Handles upgrade requests and updates information.
+- Displays error messages in a popup if request fails.
 
-Initially, the value of 'click' is set to false. When you click on the upgrade button, the event handler 'handleUpgradeClick' is called. This handler updates the resources and check if 'click' hasn't been set to true.
-If 'click' is false, (abu vul dit verder aan).
-....
-If 'data' is true (there are enough resources to upgrade the building), (abu vul dit verder aan).... and 'click' will be set to true. If there aren't enough resources, then there will be a popup containing an errormessage.
+## Dependencies
 
-If 'click' is set to true, then the upgrade button will be replaced by the progressbar. 'currentTimeValue', 'currentTotalDuration' and 'setClick' (this changes the value of 'click') will be given to the
-'TimerProgressBar' function as arguments. 
+- React
+- React Router DOM
+- TimerProgressBar Component
+- DisplayAvatarName Component
+- RequestMessagePopUp Component
+- API
+- PlaySound Function
+
+## Props
+
+- selectedBuilding: Array containing info about selected building.
+- updateResources: Function to update available resources.
+- updateTimers: Function to update timer information.
+- getTimer: Function to retrieve timer information.
+- oldPosition: Position of building before upgrade.
+
+## State
+
+- click: Indicates if "Upgrade" button clicked.
+- errormessage: Stores error messages.
+- popup: Controls visibility of error message popup.
+- currentTimeValue: Current time value of upgrade timer.
+- currentTotalDuration: Total duration of upgrade timer.

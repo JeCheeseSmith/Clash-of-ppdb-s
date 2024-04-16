@@ -3,6 +3,11 @@ import POST from "../POST.jsx";
 import {empty} from "leaflet/src/dom/DomUtil.js";
 
 
+/*
+* made async API Functions for better use
+*/
+
+
 export const getGrid = async (sid) =>
 {
     return await GET({"sid":sid}, "/getGrid")
