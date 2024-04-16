@@ -1,44 +1,52 @@
-import React, { useState } from 'react'; // Importing React library
+import React, { useState } from 'react';
 import './adminpage.css';
 import POST from "../../api/POST.jsx";
 import GET from "../../api/GET.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 
 
-
-// Code for login page
+// Code for admin page
 function AdminPage() {
 
-    // States for username, password & error
+    // States for building, buildingfunction & errormessage
     const [building, setBuilding] = useState('');
     const [buildingfunction, setBuildingFunction] = useState('');
-    const [functionValue, setFunctionValue] = useState("");
     const [errormessage, setErrorMessage] = useState('');
 
-    // Handler for username change
+    // Handler for building change
     function handleBuildingChange(event) {
         setBuilding(event.target.value);
     }
 
-    // Handler for password change
+    // Handler for buidlingfunction change
     function handleBuildingFunctionChange(event) {
         setBuildingFunction(event.target.value);
     }
 
+    // Handles click on submit button
     const handleSubmitClick = async () => {
-        let buildingFunctionString = buildingfunction;
-        let buildingFunctionArray = JSON.parse(buildingFunctionString);
-        const data = await POST({bname: building, function: buildingFunctionArray}, "/setFunction");
-        console.log(data)
+        // Convert the string to an array of integers
+        let buildingFunctionArray = JSON.parse(buildingfunction);
+        // Calls the 'setFunction' API and stores the returned value in data
+        const data = await POST({bname: building, function: buildingFunctionArray}, "/setFunction"); // The function of the building will be updated in the database
+
         if (!data.success) {
             setErrorMessage("Operation Failed");
         }
     }
 
+    // Handles click on retrieve button
     const handleRetrieveClick = async () => {
+        // Calls the 'getFunction' API and stores the returned value in data
         const data = await GET({bname: building}, "/getFunction");
-        console.log(data);
-        setBuildingFunction(`[${data.join(", ")}]`);
+        // Add '[' and ']' to string
+        setBuildingFunction(`[${data.join(", ")}]`); // The function that is retrieved from the database will now be shown in the inputbox
+    }
+
+    // Handles click on preset-button
+    const handlePresetClick = async () => {
+        // Calls the 'preset' API
+        await POST({}, "/preset");
     }
 
     return (
@@ -76,6 +84,8 @@ function AdminPage() {
               <button className="submit-button" onClick={handleSubmitClick}>Submit</button>
               {/* retrieve-button */}
               <button className="retrieve-button" onClick={handleRetrieveClick}>Retrieve</button>
+              {/* preset-button */}
+              <button className="preset-button" onClick={handlePresetClick}>Preset</button>
           </div>
       </div>
   );
