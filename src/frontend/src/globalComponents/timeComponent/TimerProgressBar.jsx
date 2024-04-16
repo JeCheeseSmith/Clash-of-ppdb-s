@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './TimerProgressBar.css'; // Vergeet niet je nieuwe CSS-bestand te importeren
+import './TimerProgressBar.css';
 
 const TimerProgressBar = ({timeValue, totalTimeValue, finished}) => {
 
