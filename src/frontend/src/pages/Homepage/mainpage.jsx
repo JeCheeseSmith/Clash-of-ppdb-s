@@ -10,7 +10,6 @@ import * as API from "../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"
-import PlaySound from "../../globalComponents/audioComponent/audio.jsx";
 import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
 
 /**
