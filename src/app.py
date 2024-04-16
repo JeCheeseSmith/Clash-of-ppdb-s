@@ -224,7 +224,7 @@ def get_resources():
     return jsonify(packageDict)
 
 
-@app.route("/update", methods=["POST"])
+@app.route("/update", methods=["GET"])
 def update():
     """
     Tell the server to re-evaluate its timers
@@ -242,15 +242,16 @@ def update():
     Timer objects related to transfer have the following extra info: {"from": <ARRAY INT[2]> , "to": <ARRAY INT[2]>, "discovered": <BOOL> }
     }
     """
-    timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
-                                    soldier_data_acces, timer_data_acces)
+    # TODO uncomment
+    # timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
+    #                                 soldier_data_acces, timer_data_acces)
 
-    data = request.json
+    data = request.args
     pname = data.get('pname')
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
-        print(jsonify(timers))
+        print(timers)
         return jsonify(timers)
     else:
         return jsonify('')
