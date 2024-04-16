@@ -39,19 +39,7 @@ function MainPage()
     }
     const getTimer = (ID, type) =>
     {
-        if (type === "building")
-        {
-            let duration = [false, 0, 0]
-            for (let timer of timers)
-            {
-                if (timer.ID[0] === ID[0] && timer.ID[1] === ID[1])
-                {
-                    return [true, timer.duration, timer.totalDuration]
-                }
-            }
-            return duration
-        }
-        if (type === "soldier")
+        if (type === "building" || type === "soldier")
         {
             let duration = [false, 0, 0]
             for (let timer of timers)
