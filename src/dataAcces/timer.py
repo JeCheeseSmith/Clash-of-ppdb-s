@@ -149,6 +149,8 @@ class TimerDataAccess:
         :param pname: Username
         :return: List of timer object with info
         """
+        self.dbconnect.commit()
+
         cursor = self.dbconnect.get_cursor()
 
         # Get all befriended players incl yourself without 'admin'
@@ -380,7 +382,7 @@ SELECT id FROM transfer WHERE discovered=True
         :return:
         """
         # Instantiate Usable Data Objects
-        success = choice([True, False])  # Choose a random winner
+        success = choice([False])  # Choose a random winner # TODO
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
 
@@ -470,6 +472,15 @@ SELECT id FROM transfer WHERE discovered=True
                 if defendant == 'admin':  # We attack an outpost transfer
                     cursor.execute('DELETE FROM settlement WHERE id=%s AND pname=%s;', (transferDefendant.sid, 'admin'))
         else:  # Defendant won
+            # Get transfers going to the attack that doesn't exist anymore now
+            cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s;',
+                           (transfer.id,))
+            transfers = cursor.fetchall()
+            for tid in transfers:  # Send them back to where they came from
+                transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access,
+                                                 soldier_data_acces, package_data_acces)
+                self.dbconnect.commit()
+
             # Delete attack transfer
             cursor.execute('DELETE FROM transfer WHERE id=%s;', (transfer.id,))
             cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))

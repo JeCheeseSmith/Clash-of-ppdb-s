@@ -244,18 +244,16 @@ def update():
     """
     timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
                                     soldier_data_acces, timer_data_acces)
-
     data = request.args
     pname = data.get('pname')
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
-        print('timers:', timers)
         return jsonify(timers)
-    else:
-        timers = timer_data_acces.retrieveTimers('a', transfer_data_acces)
-        print(timers)
-        return jsonify('')
+
+    # timers = timer_data_acces.retrieveTimers('a', transfer_data_acces) # This is for debug only
+    # print(timers)
+    return jsonify('')
 
 
 @app.route("/getGrid", methods=["GET"])
