@@ -14,13 +14,12 @@ import Landscape from "./modals/Landscape.jsx";
 
 
 const mapSize = 50;
-function Map({setMenuVisible, setSelectedSettlement})
+function Map({setMenuVisible, setSelectedSettlement, outpostChosen, setOutpostChosen})
 {
     const { sid, username} = useLocation().state;
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [settlements, setSettlements] = useState([])
     const [timers, setTimers] = useState([])
-    const [outpostChosen, setOutpostChosen] = useState(false)
     useEffect(() =>
     {
         updateTimers(username, setTimers)
@@ -30,8 +29,15 @@ function Map({setMenuVisible, setSelectedSettlement})
     const handleSettlement = (rowIndex, colIndex) =>
     {
         setMenuVisible(true)
+        setOutpostChosen(false)
         setSelectedSettlement([rowIndex,colIndex])
     }
+    const handleOutpost = (rowIndex, colIndex) =>
+    {
+        setMenuVisible(true)
+        setSelectedSettlement([rowIndex,colIndex])
+    }
+
     const renderSettlement = (rowIndex, colIndex) =>
     {
         let found = false
@@ -51,7 +57,7 @@ function Map({setMenuVisible, setSelectedSettlement})
                 );
             }
         }
-        if (!outpostChosen)
+        if (outpostChosen)
         {
             return (
                 <gridHelper
@@ -59,6 +65,7 @@ function Map({setMenuVisible, setSelectedSettlement})
                     position={[colIndex - mapSize / 2, 5.9, rowIndex - mapSize / 2]}
                     args={[1, 1]}
                     material={new THREE.MeshBasicMaterial({color: 0x0ff000})}
+                    onClick={() => handleOutpost(rowIndex, colIndex)}
                 />
             );
         }

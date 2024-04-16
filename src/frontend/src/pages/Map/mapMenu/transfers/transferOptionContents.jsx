@@ -47,19 +47,19 @@ function TransferPage()
             <hr/>
             <div className={"resourcesTransfer-container"}>
                 <div className={"iconWithAmount"}>
-                    <img src={wood} className={"resource-image"} alt={"Soldier"}/>
+                    <img src={wood} className={"resource-image"} alt={"Resource"}/>
                     <input className={"amount"}/>
                 </div>
                 <div className={"iconWithAmount"}>
-                    <img src={stone} className={"resource-image"} alt={"Soldier"}/>
+                    <img src={stone} className={"resource-image"} alt={"Resource"}/>
                     <input className={"amount"} />
                 </div>
                 <div className={"iconWithAmount"}>
-                    <img src={metal} className={"resource-image"} alt={"Soldier"}/>
+                    <img src={metal} className={"resource-image"} alt={"Resource"}/>
                     <input className={"amount"} />
                 </div>
                 <div className={"iconWithAmount"}>
-                    <img src={food} className={"resource-image"} alt={"Soldier"}/>
+                    <img src={food} className={"resource-image"} alt={"Resource"}/>
                     <input className={"amount"} />
                 </div>
             </div>

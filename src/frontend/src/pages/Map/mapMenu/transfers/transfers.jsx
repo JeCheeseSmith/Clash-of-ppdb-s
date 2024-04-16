@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import "./transfers.css"
 import TransferOption from "./transferOptionContents.jsx";
-function TransferMenu({setMenuVisible})
+function TransferMenu({outpostChosen, selectedSettlement, setMenuVisible})
 {
     return(
         <div>
-            <Navbar/>
+            <Navbar outpostChosen={outpostChosen}/>
             <button className={"close-transfer-menu"} onClick={() => setMenuVisible(false)}>
                 <span className="transition"></span>
                 <span className="gradient"></span>
@@ -17,7 +17,8 @@ function TransferMenu({setMenuVisible})
 
 export default TransferMenu;
 
-function Navbar() {
+function Navbar({outpostChosen})
+{
     const [currentPage, setCurrentPage] = useState('Transfer');
 
     const handleButtonClick = (pageName) =>
@@ -34,13 +35,13 @@ function Navbar() {
                             <button onClick={() => handleButtonClick('Transfer')} className={"transferOption"}>Transfer</button>
                         </li>
                         <li>
-                            <button onClick={() => handleButtonClick('Attack')} className={"transferOption"}>Attack</button>
+                            {!outpostChosen && <button onClick={() => handleButtonClick('Attack')} className={"transferOption"}>Attack</button>}
                         </li>
                         <li>
-                            <button onClick={() => handleButtonClick('Espionage')} className={"transferOption"}>Espionage</button>
+                            {!outpostChosen && <button onClick={() => handleButtonClick('Espionage')} className={"transferOption"}>Espionage</button>}
                         </li>
                         <li>
-                            <button onClick={() => handleButtonClick('Information')} className={"transferOption"}>Information</button>
+                            {!outpostChosen && <button onClick={() => handleButtonClick('Information')} className={"transferOption"}>Information</button>}
                         </li>
                     </ul>
                 </nav>
