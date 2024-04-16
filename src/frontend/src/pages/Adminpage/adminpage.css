@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
 .admin-form {
-  max-width: 350px; /* Form size */
+  max-width: 350px;
   margin: 250px auto;
   margin-top: 40px;
   padding: 40px;
   background-color: #e0d8c3;
-  border-radius: 8px; /* edges */
+  border-radius: 8px;
   font-family: 'MedievalSharp', cursive;
   font-size: 20px;
   font-weight: bold;
@@ -46,8 +46,8 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  font-size: 18px; /* Button size */
-  font-family: 'MedievalSharp', cursive; /* Lettertype */
+  font-size: 18px;
+  font-family: 'MedievalSharp', cursive;
 }
 
 .retrieve-button {
@@ -61,31 +61,47 @@
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  font-size: 18px; /* Button size */
-  font-family: 'MedievalSharp', cursive; /* Lettertype */
+  font-size: 18px;
+  font-family: 'MedievalSharp', cursive;
+}
+
+.preset-button {
+  width: 45%;
+  padding: 12px;
+  margin-top: 10px;
+  margin-right: 100px;
+  margin-left: 100px;
+  background-color: #8a795d;
+  color: #D4AF37;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  font-family: 'MedievalSharp', cursive;
 }
 
 .admin-form button:hover {
-  background-color: #7d6b4d; /* Button-color when you hold the cursor over it */
+  background-color: #7d6b4d;
 }
 
 .gametitle {
-  margin-bottom: 15px; /* Space between title and form */
-  margin-top: 70px; /* Space between title and form */
-  text-align: center; /* Title in centre */
-  font-size: 100px; /* Title size */
-  color: #D4AF37; /* Title color */
-  font-family: 'MedievalSharp', cursive; /* Lettertype */
+  margin-bottom: 15px;
+  margin-top: 70px;
+  text-align: center;
+  font-size: 100px;
+  color: #D4AF37;
+  font-family: 'MedievalSharp', cursive;
 
 }
 
 .subtitle {
-  margin-bottom: 15px; /* Space between title and form */
-  margin-top: 15px; /* Space between title and form */
-  text-align: center; /* Title in centre */
-  font-size: 50px; /* Title size */
-  color: #D4AF37; /* Title color */
-  font-family: 'MedievalSharp', cursive; /* Lettertype */
+  margin-bottom: 15px;
+  margin-top: 15px;
+  text-align: center;
+  font-size: 50px;
+  color: #D4AF37;
+  font-family: 'MedievalSharp', cursive;
 }
 
 .error-message {
