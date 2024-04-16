@@ -10,8 +10,8 @@ def presets():
 
     # Reset database
     cursor = connection.get_cursor()
-    cursor.execute(query)
-    connection.commit()
+    # cursor.execute(query)
+    # connection.commit()
 
     Player_obj = Player(name='a', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
