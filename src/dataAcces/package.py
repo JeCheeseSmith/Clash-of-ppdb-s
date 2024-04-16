@@ -420,20 +420,16 @@ class PackageDataAccess:
         cursor.execute('SELECT * FROM troops WHERE pid=%s;', (pid,))
         Soldiers = cursor.fetchall()
 
-        print(calculated_time)
         Total_Consumption = int(self.calc_consumption(sid, calculated_time))
-        print("consumption: ", Total_Consumption)
 
         # Update the resources in the right way
-        Newp_wood = min(Generated_wood + Pwood, Wood)
-        Newp_stone = min(Generated_stone + Pstone, Stone)
-        Newp_steel = min(Generated_steel + Psteel, Steel)
-        Newp_food = min(Generated_food + Pfood - Total_Consumption, Food)
-        print(Generated_food, Pfood, Total_Consumption, Generated_food + Pfood - Total_Consumption, Food, )
+        Newp_wood = round(min(Generated_wood + Pwood, Wood))
+        Newp_stone = round(min(Generated_stone + Pstone, Stone))
+        Newp_steel = round(min(Generated_steel + Psteel, Steel))
+        Newp_food = round(min(Generated_food + Pfood - Total_Consumption, Food))
 
         # Check for possible troop starvation
         for soldier in Soldiers:
-            print(soldier)
             cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
             Consumption = cursor.fetchone()[0]
             if Newp_food >= 0:
@@ -449,7 +445,7 @@ class PackageDataAccess:
             if Newp_food >= 0:
                 break
 
-        Newp_food = max(Newp_wood, 0)  # Food can't be negative
+        Newp_food = round(min(Newp_wood, 0))  # Food can't be negative
 
         # Update all resources
         cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
