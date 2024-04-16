@@ -51,6 +51,18 @@ function MainPage()
             }
             return duration
         }
+        if (type === "soldier")
+        {
+            let duration = [false, 0, 0]
+            for (let timer of timers)
+            {
+                if (timer.ID[0] === ID[0] && timer.ID[1] === ID[1])
+                {
+                    return [true, timer.duration, timer.totalDuration]
+                }
+            }
+            return duration
+        }
     }
     const updateResources = () =>
     {

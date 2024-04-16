@@ -40,15 +40,15 @@ function SoldierMenuButton({getTimer,setResources}) {
 }
 export default SoldierMenuButton;
 
-function SoldierMenuBox({soldierVisible, timer, setResources}) {
+function SoldierMenuBox({soldierVisible, getTimer, setResources}) {
     return (
         <div className="box-container">
-            <SoldierNavbar soldierVisible={soldierVisible} timer={timer} setResources={setResources}/>
+            <SoldierNavbar soldierVisible={soldierVisible} timer={getTimer} setResources={setResources}/>
         </div>
     )
 }
 
-function SoldierNavbar({soldierVisible, timer, setResources}) {
+function SoldierNavbar({soldierVisible, getTimer, setResources}) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
     const [TroopAmount, setTroopAmount] = useState(1);
 
@@ -78,18 +78,18 @@ function SoldierNavbar({soldierVisible, timer, setResources}) {
         )}
         {
             soldierVisible && currentPage &&
-            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} timer={timer} setResources={setResources}/>)
+            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} timer={getTimer} setResources={setResources}/>)
         }
         <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
         </div>
     )
 }
 
-function SoldierMenuOptions({pageName, TroopAmount, timer ,requests, sendData, setResources}){
+function SoldierMenuOptions({pageName, TroopAmount, getTimer ,requests, sendData, setResources}){
     return (
         <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage TroopAmount={TroopAmount} setResources={setResources}/>}
-            {pageName === 'trainTroopOverview' && <TroopTrainPage getTimer={timer}/>}
+            {pageName === 'trainTroopOverview' && <TroopTrainPage getTimer={getTimer}/>}
         </div>
     )
 }
@@ -310,7 +310,7 @@ function TroopOverviewPage({TroopAmount, setResources}) {
 function TroopTrainPage(getTimer) {
 
     useEffect(() => {
-        //const timer = getTimer(1, "soldier")
+        const timer = getTimer(0, "soldier")
     }, []);
     return (
         <div className="soldier-primair-input">
