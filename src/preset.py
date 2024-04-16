@@ -92,7 +92,7 @@ def presets():
                                        soldier_data_acces)
 
     # d attacks the transfer attack to d from a
-    a,b = transfer_data_acces.createTransfer(4, True, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
+    transfer_data_acces.createTransfer(4, True, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
                                        timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
                                        soldier_data_acces)
 

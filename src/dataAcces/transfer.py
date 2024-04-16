@@ -426,4 +426,11 @@ class TransferDataAccess:
         for troop in troops.keys():  # Reform to frontend format
             if troops[troop]["discovered"] or allied:  # Add the troop info if they are discovered or if allied
                 dct[troop] = troops[troop]["amount"]
-        return dct | package.to_dct()  # Return the merge of the 2 dicts
+
+        dct2 = package.to_dct()
+        for resource in dct2.keys(): # Merge both dicts
+            dct[resource] = dct2[resource]
+
+        print(dct)
+
+        return dct 
