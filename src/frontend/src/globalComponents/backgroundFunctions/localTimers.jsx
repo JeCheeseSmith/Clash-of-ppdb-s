@@ -37,7 +37,8 @@ function LocalTimers({setResources, timers, setTimers})
                     }
                     else
                     {
-                        let promise  = PlaySound("BuildingUpgraded")
+                        // TODO later adjust volume
+                        //let promise  = PlaySound("BuildingUpgraded")
                         updateResources(sid, setResources)
                         console.log("Timer finished: ", timer)
                         console.log("Username on the moment of the finished timer: ", timer)
