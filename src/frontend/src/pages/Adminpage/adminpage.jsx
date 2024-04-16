@@ -8,7 +8,6 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 // Code for admin page
 function AdminPage() {
 
-    // States for building, buildingfunction & errormessage
     const [building, setBuilding] = useState('');
     const [buildingfunction, setBuildingFunction] = useState('');
     const [errormessage, setErrorMessage] = useState('');

@@ -7,7 +7,6 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 // Code for signing up
 function RegistrationPage() {
 
-    // States for username, password & errormessage
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
