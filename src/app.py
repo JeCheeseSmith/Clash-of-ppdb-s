@@ -606,7 +606,6 @@ def transfer():
     "idTo": <INT> | Identifier of the settlement going to ('receiver')
     "toType": <BOOL> | Specifies if we're going to a settlement (False) or another transfer (True)
     "idFrom": <INT> | Identifier of the settlement going from ('sender')
-    "fromType": <BOOL> | Specifies if we're going to a settlement (False) or another transfer (True)
     "soldiers": <LIST> : [ (sname <STRING> , amount <INT>) , ... ] : List of : soldier names and the amount of soldiers for that type and if these soldiers may be transferred or not
     "resources": <LIST>: [ amount <INT> , ... ]: Index 0: 0, Index 1: Stone, 2: Wood, 3: Steel, 4: Food, 5: 0, 6:0
     "tType": <STRING> | 'attack' or 'transfer'; specifies the sort of transfer we're doing
@@ -622,7 +621,7 @@ def transfer():
     """
     data = request.json
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
-                                                        data.get('fromType'), data.get('soldiers'),
+                                                        True, data.get('soldiers'),
                                                         data.get('resources'), data.get('tType'), data.get('pname'),
                                                         timer_data_acces,
                                                         package_data_acces, clan_data_acces,
