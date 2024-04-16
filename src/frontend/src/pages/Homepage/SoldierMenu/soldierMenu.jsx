@@ -311,12 +311,6 @@ function TroopTrainPage({setTimers, timers, soldiersAvailable, APIcalls}) {
     const { sid, username } = useLocation().state;
     useEffect(() => {
         updateTimers()
-        APIcalls(sid);
-        const intervalId = setInterval(() =>
-        {
-            APIcalls(sid)
-        }, 5 * 60 * 1000); // 15 minutes in milliseconds
-        return () => clearInterval(intervalId);
     }, []);
     return (
         <div className="soldier-primair-input">
