@@ -333,7 +333,7 @@ class SettlementDataAcces:
                 raise Exception(total.deficitString())
             package_data_acces.update_resources(total)  # Adjust resource amount
 
-            start, stop, duration = soldier_data_acces.calculateTrainTime(sname)  # Create Timer(s)
+            start, stop, duration = soldier_data_acces.calculateTrainTime(sname, sid)  # Create Timer(s)
             timerList = []
             for i in range(0, amount):
                 timer = Timer(None, soldierId, 'soldier', start, stop, duration, sid)

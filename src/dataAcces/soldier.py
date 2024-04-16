@@ -21,7 +21,7 @@ class SoldierDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def calculateTrainTime(self, sname):
+    def calculateTrainTime(self, sname, sid):
         """
         Helper function to retrieve the start,stop and duration for a timer to train a soldier
         REMEMBER: Troop training may not work in parallel; will retrieve
@@ -30,8 +30,15 @@ class SoldierDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
         cursor.execute('SELECT trainingTime from soldier where name=%s;', (sname,))
-        duration = cursor.fetchone()[0] * 200
-        start = datetime.now()
+        duration = cursor.fetchone()[0]
+
+        cursor.execute("SELECT done FROM timer WHERE sid=%s AND type='soldier' ORDER BY done DESC LIMIT 1;", (sid,))  # Retrieve the last soldier that is being trained
+        latestDone = cursor.fetchone()
+        if latestDone is None:  # Start when the other soldier is finished
+            start = datetime.now()
+        else:
+            start = latestDone[0]
+
         stop = start + timedelta(seconds=duration)
         return start, stop, duration
 
