@@ -1,4 +1,4 @@
-import React, { useState} from 'react'; // Importing React library
+import React, { useState} from 'react';
 import './login_signup.css';
 import { useNavigate } from 'react-router-dom';
 import POST from "../../../api/POST.jsx";
@@ -32,24 +32,34 @@ function LoginPage() {
 
     // Handles the navigation from login page to mainpage
     const handleLoginClick = async () => {
-        console.log(password);
-        const data = await POST({ name: username, password: password }, "/login");
-        if (username === "admin"){
-        await POST({name: username, password: password}, "/preset"); // When tyring to login to admin, we will call preset functionality
-        }
-        if (username === "admin" && password === "1234") {
-              navigate('/AdminPage');
+
+        if (username) {
+            // Calls the 'login' API and stores the returned value in data
+            const data = await POST({ name: username, password: password }, "/login");
+            if (username === "admin") {
+                await POST({name: username, password: password}, "/preset"); // When tyring to login to admin, we will call preset functionality
+            }
+            // When the admin is logging in, navigate to admin-page
+            if (username === "admin" && password === "1234") {
+                navigate('/AdminPage');
+            }
+            else {
+                // If the data is true (account exists), then navigate to main page.
+                if (data.success) {
+                    let sid = data.sid
+                    // sid and username are given to main page
+                    navigate('/MainPage', { state: { sid, username }});
+                }
+                // Display error
+                else {
+                    setErrorMessage('Wrong login credentials');
+                }
+            }
         }
         else {
-           if (data.success) {
-                let sid = data.sid
-                navigate('/MainPage', { state: { sid, username }});
-            }
-            // Display error
-            else {
-            setErrorMessage('Wrong login credentials');
-            }
+            setErrorMessage('Username cannot be empty');
         }
+
     }
 
   return (
@@ -92,4 +102,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage; // Exporting the MainPage component
+export default LoginPage;

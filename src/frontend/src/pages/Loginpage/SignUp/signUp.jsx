@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
-import POST from "../../../api/POST.jsx"; // Importing React library
+import POST from "../../../api/POST.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 
 
 // Code for signing up
 function RegistrationPage() {
 
-    // States for username, password & error
+    // States for username, password & errormessage
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
@@ -25,14 +25,14 @@ function RegistrationPage() {
     let navigate = useNavigate();
 
     const handleSaveClick = async () => {
-        const username2 = username.trim();
 
-        if (username2) {
+        if (username) {
             // Calls the API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/signup");
-            // If the data is true (account already exists), then navigate to main page
+            // If the data is true (account doesn't exist), then navigate to main page
             if (data.success) {
                 let sid = data.sid
+                // sid and username are given to main page
                 navigate('/MainPage', { state: { sid, username }});
             }
             // Display error
@@ -77,11 +77,11 @@ function RegistrationPage() {
                   onChange={handlePasswordChange}
               />
             </div>
-            {/* Save button */}
-            <button className="login-button" onClick={handleSaveClick}>Make Account</button>
+            {/* make account button */}
+            <button className="make-account-button" onClick={handleSaveClick}>Make Account</button>
           </div>
         </div>
     );
 }
 
-export default RegistrationPage; // Exporting the MainPage component
+export default RegistrationPage;
