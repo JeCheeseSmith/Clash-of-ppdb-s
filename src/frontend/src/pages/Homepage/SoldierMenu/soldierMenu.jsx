@@ -25,13 +25,18 @@ import {updateTimers} from "../../../globalComponents/backgroundFunctions/helper
 /**
  * React component for the troop screen button
  */
+let SoldierTimers;
+
 
 function SoldierMenuButton({setResources, timers, setTimers, }) {
     const [soldierVisible, setsoldierVisible] = useState(false);
+
+
     return (
         <>
             <button onClick={() => {
                 setsoldierVisible(!soldierVisible);
+                SoldierTimers = timers
             }} className={"trainMenu"}>Troop Menu
                 <div className="soldierMenuButton-icon"></div>
             </button>
@@ -91,6 +96,23 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
     const { sid,  } = useLocation().state;
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
+        heavyInfantry1: 0,
+        heavyInfantry2: 0,
+        heavyInfantry3: 0,
+        spear1: 0,
+        spear2: 0,
+        spear3: 0,
+        horseman1: 0,
+        horseman2: 0,
+        horseman3: 0,
+        bowman1: 0,
+        bowman2: 0,
+        bowman3: 0,
+        ambush1: 0,
+        ambush2: 0,
+        ambush3: 0
+    });
+        const [trainees, setTraineeCount] = useState({
         heavyInfantry1: 0,
         heavyInfantry2: 0,
         heavyInfantry3: 0,
@@ -211,9 +233,15 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
     const handleTroopTrain = (troop) => {
         API.trainTroop(sid, troop, 1).then(data =>  {
             if (data.success) {
-                console.log(username)
+                //console.log(SoldierTimers)
+                console.log('updated')
+                console.log(SoldierTimers)
+                console.log(timers)
+                console.log('settimers:')
+                console.log(setTimers)
                 updateTimers(username, setTimers)
                 updateResources(sid, setResources)
+                console.log(timers)
                 calcTrainees(timers)
                 console.log('updated')
             }else
@@ -310,112 +338,127 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
     )
 }
 
-function calcTrainees({timers}){
+function calcTrainees(timers){
 
-    console.log(timers)
+    console.log('z')
 
     const countById2 = {};
     timers.forEach(obj => {
-        if (type === "soldier"){
-            countById2[obj.oid] = (countById2[obj.oid] || 0) + 1;
+        if (obj.type === "soldier"){
+            countById2[obj.sname] = (countById2[obj.sname] || 0) + 1;
         }
     }
 
     );
     console.log(countById2)
+
+    setTraineeCount(
+            {
+            heavyInfantry1: countById2[],
+            heavyInfantry2: data.Huskarl.amount,
+            heavyInfantry3: data.OrderKnight.amount,
+            spear1: data.Guardsman.amount,
+            spear2: data.Pikeman.amount,
+            spear3: data.Halbardier.amount,
+            horseman1: data.Horseman.amount,
+            horseman2: data.Knight.amount,
+            horseman3: data.WarElephant.amount,
+            bowman1: data.Bowman.amount,
+            bowman2: data.LongbowMan.amount,
+            bowman3: data.CrossbowMan.amount,
+            ambush1: data.Bandit.amount,
+            ambush2: data.Militia.amount,
+            ambush3: data.Skirmisher.amount
+        })
+
+
+    console.log('z')
 }
 
-function TroopTrainPage({setTimers, timers, soldiersAvailable }) {
-    const { sid, username } = useLocation().state
-
-
-
-    // useEffect(() => {
-    //     //updateTimers(username, setTimers)
-    // }, [timers]);
+function TroopTrainPage({setTimers, timers, trainees}) {
     return (
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
             <div className="soldierSection">
-                {soldiersAvailable.heavyInfantry1 ?
+                {trainees.heavyInfantry1 ?
                     <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.heavyInfantry2 ?
+                {trainees.heavyInfantry2 ?
                     <button className="button"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.heavyInfantry3 ?
+                {trainees.heavyInfantry3 ?
                     <button className="button"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
             </div>
             <div className="soldierSection">
-                {soldiersAvailable.spear1 ?
+                {trainees.spear1 ?
                     <button className="button"><img src={spear1} alt="Guardsman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={spear1} alt="Guardsman" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.spear2 ?
+                {trainees.spear2 ?
                     <button className="button"><img src={spear2} alt="Pike man" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={spear2} alt="Pike man" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.spear3 ?
+                {trainees.spear3 ?
                     <button className="button"><img src={spear3} alt="Halbardier" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={spear3} alt="Halbardier" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
             </div>
             <div className="soldierSection">
-                {soldiersAvailable.horseman1 ?
+                {trainees.horseman1 ?
                     <button className="button"><img src={horseman1} alt="Horseman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={horseman1} alt="Horseman" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.horseman2 ?
+                {trainees.horseman2 ?
                     <button className="button"><img src={horseman2} alt="Knight" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={horseman2} alt="Knight" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.horseman3 ?
+                {trainees.horseman3 ?
                     <button className="button"><img src={horseman3} alt="War elephant" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={horseman3} alt="War elephant" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
             </div>
             <div className="soldierSection">
-                {soldiersAvailable.bowman1 ?
+                {trainees.bowman1 ?
                     <button className="button"><img src={bowman1} alt="Bowman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={bowman1} alt="Bowman" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.bowman2 ?
+                {trainees.bowman2 ?
                     <button className="button"><img src={bowman2} alt="Longbowman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={bowman2} alt="Longbowman" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.bowman3 ?
+                {trainees.bowman3 ?
                     <button className="button"><img src={bowman3} alt="Crossbowman" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={bowman3} alt="Crossbowman" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
             </div>
             <div className="soldierSection">
-                {soldiersAvailable.ambush1 ?
+                {trainees.ambush1 ?
                     <button className="button"><img src={ambush1} alt="Bandit" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={ambush1} alt="Bandit" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.ambush2 ?
+                {trainees.ambush2 ?
                     <button className="button"><img src={ambush2} alt="Militia" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={ambush2} alt="Militia" className="soldier-icon"/></div></button>}
                 <p className="soldierCount"></p>
-                {soldiersAvailable.ambush3 ?
+                {trainees.ambush3 ?
                     <button className="button"><img src={ambush3} alt="Skirmishers" className="soldier-icon"/></button>
                     : <button className="button">
                         <div id="wrapper"><img src={ambush3} alt="Skirmishers" className="soldier-icon"/></div></button>}
