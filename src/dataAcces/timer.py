@@ -82,6 +82,8 @@ class TimerDataAccess:
                            (datetime.now(),))  # Sort by earliest done time
             timerDone = cursor.fetchone()
 
+        self.dbconnect.commit()
+
     def simulateTroopTraining(self, timer: Timer):
         """
         Increase the amount of a soldier by 1.

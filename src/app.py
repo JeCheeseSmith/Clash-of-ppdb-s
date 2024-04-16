@@ -250,7 +250,7 @@ def update():
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
-        print(timers)
+        print('timers:', timers)
         return jsonify(timers)
     else:
         timers = timer_data_acces.retrieveTimers('a', transfer_data_acces)
@@ -535,6 +535,7 @@ def getFunction():
     }
     """
     data = request.args
+    print(data.get('bname'))
     return jsonify(building_data_acces.getFunction(data.get('bname')))
 
 

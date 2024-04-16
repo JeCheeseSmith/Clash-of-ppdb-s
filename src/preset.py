@@ -15,15 +15,19 @@ def presets():
 
     Player_obj = Player(name='a', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    friend_data_access.add_admin('a')
 
     Player_obj = Player(name='b', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    friend_data_access.add_admin('b')
 
     Player_obj = Player(name='c', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    friend_data_access.add_admin('c')
 
     Player_obj = Player(name='d', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    friend_data_access.add_admin('d')
 
     # Make a and b friends
     cursor.execute('INSERT INTO friend(pname1, pname2) VALUES(%s,%s);', ('a', 'b'))
