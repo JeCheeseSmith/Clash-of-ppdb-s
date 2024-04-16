@@ -57,20 +57,16 @@ class TimerDataAccess:
             timer = Timer(timerDone[0], timerDone[1], timerDone[2], timerDone[3], timerDone[4], timerDone[5],
                           timerDone[6])
 
-            if timer.id == 5:
-                print(timer.to_dct())
-
             if timer.type == 'soldier':
                 self.simulateTroopTraining(timer)
             elif timer.type == 'building':
                 self.simulateUpgrade(timer, settlement_data_acces)
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access,
-                                      soldier_data_acces)
+                                     soldier_data_acces)
             elif timer.type == 'espionage':
-                pid = self.simulateEspionage(timer, transfer_data_acces, content_data_access)
+                self.simulateEspionage(timer, transfer_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
-                cursor.execute('DELETE FROM package WHERE id=%s;', (pid,))
             elif timer.type == 'attack':
                 self.simulateAttack(timer, transfer_data_acces, content_data_access, package_data_acces,
                                     soldier_data_acces, timer_data_access)
@@ -338,7 +334,7 @@ SELECT id FROM transfer WHERE discovered=True
         if transfer.toType:  # If you spied on a transfer, verify if it still exists
             cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
             if not cursor.fetchone()[0]:  # Doesn't exist anymore
-                return transfer.pid
+                return
 
         # We need to do this locally otherwise other functionality will break due to circular includes
         from .content import Content
@@ -363,7 +359,7 @@ SELECT id FROM transfer WHERE discovered=True
                                             receiver)  # Notify receiver
         content_data_access.add_message(Content(None, datetime.now(), senderMessage, 'admin'),
                                         transfer.pname)  # Notify sender
-        return transfer.pid
+        return
 
     def simulateAttack(self, timer: Timer, transfer_data_acces, content_data_access, package_data_acces,
                        soldier_data_acces, timer_data_access):
@@ -386,9 +382,6 @@ SELECT id FROM transfer WHERE discovered=True
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
 
-        if transfer.id == 5:
-            print('no')
-
         # We need to do this locally otherwise other functionality will break due to circular includes
         from .content import Content
         from .package import Package
@@ -396,7 +389,6 @@ SELECT id FROM transfer WHERE discovered=True
         if transfer.toType:
             cursor.execute('SELECT EXISTS(SELECT id FROM transfer WHERE id=%s);', (transfer.idTo,))
             status = cursor.fetchone()
-            print(status[0], transfer.id)
             if not status[0]:  # Doesn't exist anymore
                 content_data_access.add_message(Content(None, datetime.now(),
                                                         "Your soldiers could not reach the transfer they we're chasing. Sadly, they got lost in the wilderness..",
@@ -430,7 +422,6 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s EXCEPT SELECT %s;',
                                (transferDefendant.id, transfer.id))
                 transfers = cursor.fetchall()
-                print("transfers which will be send back to base:", transfers)
                 for tid in transfers:  # Send them back to where they came from
                     transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access,
                                                      soldier_data_acces, package_data_acces)
