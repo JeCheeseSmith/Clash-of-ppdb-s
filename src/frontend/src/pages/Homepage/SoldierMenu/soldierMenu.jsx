@@ -131,9 +131,24 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
         ambush3: 0
     });
     const handleTraineeAmountChange = (change) => {
-        console.log(change, "g")
+        console.log(change, "ggggggg")
 
-        setTraineeCount({heavyInfantry1: change[0]})
+        setTraineeCount({
+            heavyInfantry1: change.ArmoredFootman,
+            heavyInfantry2: change.Huskarl,
+            heavyInfantry3: change.OrderKnight,
+            spear1: change.Guardsman,
+            spear2: change.Pikeman,
+            spear3: change.Halbardier,
+            horseman1: change.Horseman,
+            horseman2: change.Knight,
+            horseman3: change.WarElephant,
+            bowman1: change.Bowman,
+            bowman2: change.LongbowMan,
+            bowman3: change.CrossbowMan,
+            ambush1: change.Bandit,
+            ambush2: change.Militia,
+            ambush3: change.Skirmisher})
     }
     const [soldiersAvailable, setSoldierAvailable] = useState({
         heavyInfantry1: false,
