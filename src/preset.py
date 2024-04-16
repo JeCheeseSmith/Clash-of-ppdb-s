@@ -30,7 +30,7 @@ def presets():
     friend_data_access.add_admin('d')
 
     # Make a and b friends
-    cursor.execute('INSERT INTO friend(pname1, pname2) VALUES(%s,%s);', ('a', 'b'))
+    # cursor.execute('INSERT INTO friend(pname1, pname2) VALUES(%s,%s);', ('a', 'b'))
     connection.commit()
 
     # Set a and c in a clan
