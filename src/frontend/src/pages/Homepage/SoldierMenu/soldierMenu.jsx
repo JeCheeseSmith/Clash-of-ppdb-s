@@ -317,7 +317,7 @@ function calcTrainees({timers}){
     const countById2 = {};
     timers.forEach(obj => {
         if (type === "soldier"){
-            countById2[obj.id] = (countById2[obj.id] || 0) + 1;
+            countById2[obj.oid] = (countById2[obj.oid] || 0) + 1;
         }
     }
 

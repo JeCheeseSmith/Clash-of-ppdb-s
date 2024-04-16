@@ -184,7 +184,6 @@ SELECT id FROM transfer WHERE discovered=True
         cursor.execute(query)
         data = cursor.fetchall()
         newData = []
-        print(data)
 
         for info in data:
             timer = Timer(info[0], info[1], info[2], info[3], info[4], info[5],
@@ -210,7 +209,6 @@ SELECT id FROM transfer WHERE discovered=True
                 (timer.done - datetime.now()).total_seconds())  # Give back time format from frontEnd
 
             newData.append(newInfo)
-        print(newData)
         return newData
 
     def addTransferTimerInfo(self, newInfo: dict, timer: Timer, transfer_data_acces):
