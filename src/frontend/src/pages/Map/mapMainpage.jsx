@@ -7,7 +7,7 @@ import Outpost from "./outpost/outpost.jsx";
 function MapMainpage()
 {
     const [menuVisible, setMenuVisible] = useState(false)
-    const [selectedSettlement, setSelectedSettlement] = useState(null)
+    const [selectedObject, setSelectedObject] = useState(null)
     const [outpostChosen, setOutpostChosen] = useState(false)
 
     const handleOutpostButton = () =>
@@ -19,7 +19,7 @@ function MapMainpage()
             {
                 menuVisible &&
                 (<div className={"menu-info-container"}>
-                    <TransferMenu selectedSettlement={selectedSettlement}
+                    <TransferMenu selectedObject={selectedObject}
                                   setMenuVisible={setMenuVisible}
                                   outpostChosen={outpostChosen}
                                   setOutpostChosen={setOutpostChosen}
@@ -28,7 +28,7 @@ function MapMainpage()
             }
             <Outpost onClickFunction={handleOutpostButton}/>
             <Map setMenuVisible={setMenuVisible}
-                 setSelectedSettlement={setSelectedSettlement}
+                 setSelectedObject={setSelectedObject}
                  outpostChosen={outpostChosen}
                  setOutpostChosen={setOutpostChosen}/>
         </div>

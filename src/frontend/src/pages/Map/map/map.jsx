@@ -14,7 +14,7 @@ import Landscape from "./modals/Landscape.jsx";
 
 
 const mapSize = 50;
-function Map({setMenuVisible, setSelectedSettlement, outpostChosen, setOutpostChosen})
+function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen})
 {
     const { sid, username} = useLocation().state;
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
@@ -26,16 +26,16 @@ function Map({setMenuVisible, setSelectedSettlement, outpostChosen, setOutpostCh
         API.getMap().then(data => {setSettlements(data); console.log("Map at mount: ", data)})
     }, []);
 
-    const handleSettlement = (rowIndex, colIndex) =>
+    const handleTransfer = (idTO, toType) =>
     {
         setMenuVisible(true)
         setOutpostChosen(false)
-        setSelectedSettlement([rowIndex,colIndex])
+        setSelectedObject({idTO, toType})
     }
     const handleOutpost = (rowIndex, colIndex) =>
     {
         setMenuVisible(true)
-        setSelectedSettlement([rowIndex,colIndex])
+        setSelectedObject([rowIndex, colIndex])
     }
 
     const renderSettlement = (rowIndex, colIndex) =>
@@ -49,7 +49,7 @@ function Map({setMenuVisible, setSelectedSettlement, outpostChosen, setOutpostCh
                 return (
                     <mesh key={`${rowIndex}-${colIndex}`}
                           position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
-                          onClick={() => handleSettlement(rowIndex, colIndex)}
+                          onClick={() => handleTransfer(settlement.sid, false)}
                           scale={2}
                     >
                         <Settlement1/>
@@ -83,7 +83,7 @@ function Map({setMenuVisible, setSelectedSettlement, outpostChosen, setOutpostCh
                     arrowMeshes.push(
                         <mesh key={`${rowIndex}-${colIndex}-${timer.type}`}
                               position={[colIndex + 0.5 - mapSize / 2, 0, rowIndex + 1 - mapSize / 2]}
-                              onClick={() => handleSettlement(rowIndex, colIndex)}
+                              onClick={() => handleTransfer(timer.oid, true)}
                         >
                             <Arrow intercept={timer.toType} position={[rowIndex, colIndex]} destinationPosition={timer.to}/>
                         </mesh>

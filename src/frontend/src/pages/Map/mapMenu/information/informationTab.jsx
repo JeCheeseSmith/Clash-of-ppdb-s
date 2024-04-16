@@ -1,14 +1,28 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './informationTab.css'
 import Soldiers from "../assets/soldiers.jsx";
 import wood from "../assets/wood.png";
 import stone from "../assets/stone.png";
 import metal from "../assets/metal.png";
 import food from "../assets/food.png";
+import * as API from '../../../../api/EndPoints/EndPoints.jsx'
+import {useLocation} from "react-router-dom";
 
-function InformationTab()
+
+function InformationTab({selectedObject})
 {
-    const dictionary = {ArmoredFootman:1, Huskarl:2, OrderKnight:3, Horseman:10, Knight:5, Militia:18, food:5, wood:25}
+    const [dictionary, setDictionary] = useState({})
+    const {sid, username} = useLocation().state
+
+    useEffect(() =>
+    {
+        console.log(selectedObject)
+        API.getInfo(selectedObject.idTO, username, selectedObject.toType).then(data =>
+        {
+            setDictionary(data)
+        })
+    }, []);
+
     const resources = resourcesFound(dictionary)
     return (
         <div className={"transferMenu-container"}>
@@ -67,7 +81,7 @@ function soldierFound(dictionary, soldierName)
 
 function resourcesFound(dictionary)
 {
-    const resourcesDict = {wood: 0, stone: 0, metal: 0, food: 0};
+    const resourcesDict = {wood: null, stone: null, metal: null, food: null};
     for (let key in dictionary)
     {
         if (resourcesDict.hasOwnProperty(key))

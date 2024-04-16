@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import "./transfers.css"
 import TransferOption from "./transferOptionContents.jsx";
-function TransferMenu({outpostChosen, selectedSettlement, setMenuVisible})
+function TransferMenu({outpostChosen, selectedObject, setMenuVisible})
 {
     return(
         <div>
-            <Navbar outpostChosen={outpostChosen}/>
+            <Navbar outpostChosen={outpostChosen} selectedObject={selectedObject}/>
             <button className={"close-transfer-menu"} onClick={() => setMenuVisible(false)}>
                 <span className="transition"></span>
                 <span className="gradient"></span>
@@ -17,7 +17,7 @@ function TransferMenu({outpostChosen, selectedSettlement, setMenuVisible})
 
 export default TransferMenu;
 
-function Navbar({outpostChosen})
+function Navbar({outpostChosen, selectedObject})
 {
     const [currentPage, setCurrentPage] = useState('Transfer');
 
@@ -47,7 +47,7 @@ function Navbar({outpostChosen})
                 </nav>
             }
             {
-                currentPage && (<TransferOption pageName={currentPage}/>)
+                currentPage && (<TransferOption pageName={currentPage} selectedObject={selectedObject} outpostChosen={outpostChosen}/>)
             }
         </div>
     );

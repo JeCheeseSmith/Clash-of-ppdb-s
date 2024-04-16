@@ -48,31 +48,22 @@ export const getMap = async () =>
     return await GET({}, '/map')
 }
 
-export const getTransfers = async () =>
+export const transfer = async (idTo, toType, idFrom, soldiers, resources, tType, pname) =>
 {
-    return await GET({}, '/getTransfers')
+    return await POST({idTo, toType, idFrom, soldiers, resources, tType, pname}, '/transfer')
 }
 
-export const update_groupchat = async (username, receiver, message, API_Request) =>
+export const espionage = async (idTo, sidFrom, toType) =>
 {
-    if (API_Request === "GET")
-    {
-        return await GET({"pname":username, "cname":receiver}, "/groupchat")
-    }
-    else if (API_Request === "POST")
-    {
-        return await POST({"content": message, "sname": username, "pname":receiver}, "/chat")
-    }
+    return await POST({idTo, sidFrom, toType}, '/espionage')
 }
 
-export const update_chat = async (username, receiver, message, API_Request) =>
+export const getInfo = async (oid, pname, type) =>
 {
-    if (API_Request === "GET")
-    {
-        return await GET({"pname":username, "sname":receiver}, "/chat")
-    }
-    else if (API_Request === "POST")
-    {
-        return await POST({"content": message, "pname": username, "cname":receiver}, "/groupchat")
-    }
+    return await GET({"oid":oid, "pname":pname, "type":type}, '/getInfo')
+}
+
+export const createOutpost = async (coordTo, sidFrom, outpostName, soldiers, resources) =>
+{
+    return await POST({coordTo, sidFrom, outpostName, soldiers, resources}, '/createOutpost')
 }
