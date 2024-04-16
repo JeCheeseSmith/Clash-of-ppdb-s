@@ -251,6 +251,8 @@ def update():
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
         return jsonify(timers)
+    else:
+        return jsonify('')
 
 
 @app.route("/getGrid", methods=["GET"])
