@@ -624,8 +624,9 @@ def transfer():
     }
     """
     data = request.json
+
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
-                                                        True, data.get('soldiers'),
+                                                        False, data.get('soldiers'),
                                                         data.get('resources'), data.get('tType'), data.get('pname'),
                                                         timer_data_acces,
                                                         package_data_acces, clan_data_acces,

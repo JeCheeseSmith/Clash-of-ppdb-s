@@ -10,7 +10,7 @@ def presets():
     # TODO to change for server
     # Reset database
     cursor = connection.get_cursor()
-    # cursor.execute(query)
+    #cursor.execute(query)
     # connection.commit()
 
     Player_obj = Player(name='a', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
