@@ -11,6 +11,10 @@
 - [ ] Documented
 - [ ] Beautiful?
 
+#Documentation
+
+For the workings of the game, refer to. the documentation folder in which every component is explained.we'We reccomend reading from the database, to the backend to the frontend to get a solidgraspa boutthre mechanics. 
+
 ## How to start?
 
 > This guide assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL installed. Optionally, like we did, you can retrieve your free SSL Certificate using Certbot. 
