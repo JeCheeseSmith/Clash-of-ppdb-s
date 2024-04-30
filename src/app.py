@@ -1045,6 +1045,24 @@ def catch_all(path):
     """
     return render_template("index.html")
 
+### Level & XP
+@app.route("/setXPandLevel", methods=["POST"])
+def setXPandLevel():
+
+    data = request.json
+    player_name = data.get("name")
+    xp_count = data.get("xp")
+    player_data_access.updateXPandLevel(xp_count, player_name)
+
+@app.route("/getXPandLevel", methods=["GET"])
+def getXPandLevel():
+
+    data = request.json
+    player_name = data.get("name")
+    level = player_data_access.getXPandLevel(player_name)[0]
+    xp = player_data_access.getXPandLevel(player_name)[1]
+    return jsonify({"level": level, "xp": xp})
+
 
 # RUN DEV SERVER
 if __name__ == "__main__":

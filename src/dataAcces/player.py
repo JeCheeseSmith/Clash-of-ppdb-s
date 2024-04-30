@@ -99,3 +99,27 @@ class PlayerDataAccess:
         cursor = self.dbconnect.get_cursor()
         cursor.execute('UPDATE player SET logout=NOW() WHERE name=%s;', (name,))
         self.dbconnect.commit()
+
+    # Update xp and/or level
+    def updateXPandLevel(self, XP, pname):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT xp FROM player where name=%s;', (pname,))
+        Xp = cursor.fetchone()[0]
+        Xp += XP
+        cursor.execute('SELECT level FROM player where name=%s;', (pname,))
+        Level = cursor.fetchone()[0]
+        if (Xp >= 1000):
+            Level += 1
+            Xp -= 1000
+            cursor.execute('UPDATE player SET level = %s WHERE name=%s;', (Level, pname,))
+        cursor.execute('UPDATE player SET xp = %s WHERE name=%s;', (Xp, pname,))
+        self.dbconnect.commit()
+
+    def getXPandLevel(self, pname):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT xp FROM player where name=%s;', (pname,))
+        Xp = cursor.fetchone()[0]
+        cursor.execute('SELECT level FROM player where name=%s;', (pname,))
+        Level = cursor.fetchone()[0]
+        print(Level, Xp)
+        return Level, Xp
