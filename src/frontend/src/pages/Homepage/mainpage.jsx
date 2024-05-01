@@ -16,6 +16,7 @@ import QuestButton from "./Quest/Quest.jsx";
 import Leaderboard from "./Leaderbord/leaderboard.jsx";
 import WheelOfFortune from "./Wheeloffortune/wheel.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
+import LevelBar from "./Level/Level.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -39,8 +40,9 @@ function MainPage()
         API.getXPLevel(username).then(data => {setXp(data.xp)});
     }
 
-    const changeXP = (xp) => {
-        API.setXPLevel(username, xp).then();
+    const changeXP = (xp_amount) => {
+        API.setXPLevel(username, xp_amount).then();
+        setXp(xp_amount);
     }
 
     const addBuilding = (type, position, size, occupiedCells) =>

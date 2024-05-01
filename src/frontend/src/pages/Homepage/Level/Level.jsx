@@ -8,7 +8,7 @@ function LevelBar({level, updateLevel, xp, updateXP}) {
     useEffect(() => {
     updateLevel();
     updateXP();
-  }, []);
+  }, [xp]);
 
     return (
         <div className="level-xp-container">
