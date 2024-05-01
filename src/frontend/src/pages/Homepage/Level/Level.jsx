@@ -1,15 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './level.css'
 
 // Code for level
-function LevelBar() {
+function LevelBar({level, updateLevel, xp, updateXP}) {
 
-    // This variable represents the amount of xp you have
-    const xpPercentage = 50;
+    const xpPercentage = xp/10
+    useEffect(() => {
+    updateLevel();
+    updateXP();
+  }, []);
 
     return (
         <div className="level-xp-container">
-            <div className="level-container">1</div>
+            <div className="level-container">{level}</div>
             <div className="xp-bar-container">
                 <div className="xp-bar" style={{width: `${xpPercentage}%`}}></div>
             </div>
@@ -18,3 +21,7 @@ function LevelBar() {
 }
 
 export default LevelBar;
+
+
+
+

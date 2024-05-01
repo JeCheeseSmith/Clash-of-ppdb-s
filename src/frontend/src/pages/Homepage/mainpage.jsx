@@ -28,10 +28,26 @@ function MainPage()
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [timers, setTimers] = useState([])
     const randomArray = useMemo(getRandomArray, []); // Memoize the random array
+    const [lvl, setLvl] = useState(null)
+    const [xp, setXp] = useState(null)
+
+    const requestLevel = () => {
+        API.getXPLevel(username).then(data => {setLvl(data.level)});
+    }
+
+    const requestXP = () => {
+        API.getXPLevel(username).then(data => {setXp(data.xp)});
+    }
+
+    const changeXP = (xp) => {
+        API.setXPLevel(username, xp).then();
+    }
 
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
+        changeXP(1200);
+
     }
     const updateTimers = () =>
     {
@@ -78,7 +94,7 @@ function MainPage()
     }, [backgroundMusic]);
     return (
         <div className="mainpage">
-            <Level/>
+            <Level level={lvl} updateLevel={requestLevel} xp={xp} updateXP={requestXP}/>
             <QuestButton/>
             <Leaderboard/>
             <Chat/>

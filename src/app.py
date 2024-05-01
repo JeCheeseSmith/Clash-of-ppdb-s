@@ -56,7 +56,7 @@ def add_player():
     data = request.json
     name = data.get("name")
     password = data.get("password")
-    Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
+    Player_obj = Player(name=name, password=password, avatar=None, gems=50, xp=0, level=1, logout=None, pid=None)
     control = player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     if control[0]:
         friend_data_access.add_admin(name)
@@ -1057,7 +1057,7 @@ def setXPandLevel():
 @app.route("/getXPandLevel", methods=["GET"])
 def getXPandLevel():
 
-    data = request.json
+    data = request.args
     player_name = data.get("name")
     level = player_data_access.getXPandLevel(player_name)[0]
     xp = player_data_access.getXPandLevel(player_name)[1]
