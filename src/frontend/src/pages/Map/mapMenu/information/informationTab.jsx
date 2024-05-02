@@ -6,27 +6,35 @@ import stone from "../assets/stone.png";
 import metal from "../assets/metal.png";
 import food from "../assets/food.png";
 import * as API from '../../../../api/EndPoints/EndPoints.jsx'
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 /**
- * Represents a component for displaying information about a selected object.
+ * Represents a component for displaying information about a selected object and navigating to it (if outpost).
  * @param {object} props - The props object.
  * @param {object} props.selectedObject - The selected object.
  * @returns {JSX.Element} InformationTab component.
  */
 function InformationTab({selectedObject})
 {
+    let {sid, username} = useLocation().state
     const [dictionary, setDictionary] = useState({})
-    const {sid, username} = useLocation().state
-
+    const [outpostSelected, setOutpostSelected] = useState(false)
+    const [sidOutpostSelected, setSidOutpostSelected] = useState(null)
+    let navigate = useNavigate();
     useEffect(() =>
     {
-        console.log(selectedObject)
         API.getInfo(selectedObject.idTO, username, selectedObject.toType).then(data =>
         {
             setDictionary(data)
+            setOutpostSelected(data.me)
+            setSidOutpostSelected(data.id)
         })
     }, []);
+
+    const handleNavigationButton = () =>
+    {
+        navigate('/MainPage', { state: { sid:sidOutpostSelected, username }});
+    }
 
     const resources = resourcesFound(dictionary)
     return (
@@ -36,11 +44,10 @@ function InformationTab({selectedObject})
                     <div key={category}>
                         {Object.entries(images).map((image) => {
                             const found = soldierFound(dictionary, image[0]);
-                            if (found[0])
-                            {
+                            if (found[0]) {
                                 return (
                                     <div key={image[0]} className={"iconWithAmount"}>
-                                        <img src={image[1]} className={"soldier-image"} alt={"Soldier"} />
+                                        <img src={image[1]} className={"soldier-image"} alt={"Soldier"}/>
                                         <div className={"amount"}>{found[1]}</div>
                                     </div>
                                 );
@@ -48,8 +55,8 @@ function InformationTab({selectedObject})
                         })}
                     </div>
                 ))}
-        </div>
-        <hr/>
+            </div>
+            <hr/>
             <div className={"resourcesTransfer-container"}>
                 <div className={"iconWithAmount"}>
                     <img src={wood} className={"resource-image"} alt={"Soldier"}/>
@@ -68,14 +75,13 @@ function InformationTab({selectedObject})
                     <div className={"amount"}>{resources.food}</div>
                 </div>
             </div>
+            {outpostSelected && <button className={"send-transferTYPE"} onClick={handleNavigationButton}> Adventure Awaits at your Outpost! </button>}
         </div>
     );
 }
 
-function soldierFound(dictionary, soldierName)
-{
-    for (let key in dictionary)
-    {
+function soldierFound(dictionary, soldierName) {
+    for (let key in dictionary) {
         if (key === soldierName)
         {
             return [true, dictionary[key]]
