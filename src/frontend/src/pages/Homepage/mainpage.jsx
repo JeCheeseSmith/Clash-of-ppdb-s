@@ -16,6 +16,8 @@ import QuestButton from "./Quest/Quest.jsx";
 import Leaderboard from "./Leaderbord/leaderboard.jsx";
 import WheelOfFortune from "./Wheeloffortune/wheel.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
+import {Loader} from "@react-three/drei";
+import {loaderStyles} from "../../globalComponents/loadingScreen/loadingScreen.jsx";
 
 /**
  * Functional component representing the main page of the application.
@@ -78,6 +80,7 @@ function MainPage()
     }, [backgroundMusic]);
     return (
         <div className="mainpage">
+            <Loader {...loaderStyles} />
             <Level/>
             <QuestButton/>
             <Leaderboard/>
