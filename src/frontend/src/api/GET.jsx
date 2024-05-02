@@ -17,7 +17,7 @@ const GET = async (data, endpoint) =>
 {
     try
     {
-        const url = new URL(remote + endpoint);
+        const url = new URL(local + endpoint);
         if (data)
         {
             Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));
@@ -26,8 +26,7 @@ const GET = async (data, endpoint) =>
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
-        const responseData = await response.json();
-        return responseData;
+        return await response.json();
     }
     catch (error)
     {
