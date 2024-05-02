@@ -99,3 +99,21 @@ class PlayerDataAccess:
         cursor = self.dbconnect.get_cursor()
         cursor.execute('UPDATE player SET logout=NOW() WHERE name=%s;', (name,))
         self.dbconnect.commit()
+
+    def getplayers(self):
+        cursor = self.dbconnect.get_cursor()
+        # Select players in order by there level
+        leaderboard = """
+               SELECT name, level
+               FROM player
+               ORDER BY level DESC, name ASC
+               LIMIT 10;
+           """
+        cursor.execute(leaderboard)
+        leaderboard = cursor.fetchall()
+        leaderboardlist = []
+
+        for player in leaderboard:
+            leaderboardlist.append((player[0], player[1]))
+
+        return leaderboardlist

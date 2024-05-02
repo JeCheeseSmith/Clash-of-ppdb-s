@@ -1037,6 +1037,16 @@ def preset():
 
     return jsonify(data)
 
+
+@app.route("/getleaderboard", methods=["GET"])
+def getLeaderboard():
+   """
+   API Call to retrieve the leaderboard
+   JSON Output Format (GET):
+   List with players returned in json format, ordered by level
+   """
+   return jsonify(player_data_access.getplayers())
+
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def catch_all(path):
