@@ -40,15 +40,19 @@ function MainPage()
         API.getXPLevel(username).then(data => {setXp(data.xp)});
     }
 
-    const changeXP = (xp_amount) => {
-        API.setXPLevel(username, xp_amount).then();
-        setXp(xp_amount);
+    const addXP = (xp_amount) => {
+        API.setXPLevel(username, xp_amount).then(() => {
+            const new_xp = xp + xp_amount
+            setXp(new_xp);
+            }
+        );
+
     }
 
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
-        changeXP(1200);
+        addXP(200);
 
     }
     const updateTimers = () =>
