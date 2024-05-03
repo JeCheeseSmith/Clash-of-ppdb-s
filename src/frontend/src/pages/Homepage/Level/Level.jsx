@@ -1,14 +1,32 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './level.css'
+import * as API from "../../../api/EndPoints/EndPoints.jsx";
 
 // Code for level
-function LevelBar({level, updateLevel, xp, updateXP}) {
+function LevelBar({username1, vlag, changeVlag}) {
+
+    const [level, setLevel] = useState(null);
+    const [xp, setXp] = useState(null)
+
+    useEffect(() => {
+        //if (!vlag) return;
+
+        const fetchData = async () => {
+            try {
+                const level = await requestLevel(username1);
+                const xp = await requestXP(username1);
+                setLevel(level);
+                setXp(xp);
+            } finally {
+                changeVlag(false);
+            }
+        };
+
+        fetchData();
+    }, [vlag]);
+
 
     const xpPercentage = xp/10
-    useEffect(() => {
-    updateLevel();
-    updateXP();
-  }, [xp]);
 
     return (
         <div className="level-xp-container">
@@ -23,5 +41,14 @@ function LevelBar({level, updateLevel, xp, updateXP}) {
 export default LevelBar;
 
 
+export const requestLevel = (username) => {
+    return API.getXPLevel(username).then(data => data.level);
+};
 
+export const requestXP = (username) => {
+    return API.getXPLevel(username).then(data => data.xp);
+};
 
+export const AddXP = (xp_amount, username1) => {
+    API.setXPLevel(username1, xp_amount).then(() => {});
+}

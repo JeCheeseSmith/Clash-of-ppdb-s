@@ -16,7 +16,8 @@ import QuestButton from "./Quest/Quest.jsx";
 import Leaderboard from "./Leaderbord/leaderboard.jsx";
 import WheelOfFortune from "./Wheeloffortune/wheel.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
-import LevelBar from "./Level/Level.jsx";
+import {AddXP} from "./Level/Level.jsx";
+
 
 /**
  * Functional component representing the main page of the application.
@@ -29,30 +30,13 @@ function MainPage()
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [timers, setTimers] = useState([])
     const randomArray = useMemo(getRandomArray, []); // Memoize the random array
-    const [lvl, setLvl] = useState(null)
-    const [xp, setXp] = useState(null)
-
-    const requestLevel = () => {
-        API.getXPLevel(username).then(data => {setLvl(data.level)});
-    }
-
-    const requestXP = () => {
-        API.getXPLevel(username).then(data => {setXp(data.xp)});
-    }
-
-    const addXP = (xp_amount) => {
-        API.setXPLevel(username, xp_amount).then(() => {
-            const new_xp = xp + xp_amount
-            setXp(new_xp);
-            }
-        );
-
-    }
+    const [flag, setFlag] = useState(true);
 
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
-        addXP(200);
+        AddXP(200, username);
+        setFlag(true);
 
     }
     const updateTimers = () =>
@@ -100,7 +84,7 @@ function MainPage()
     }, [backgroundMusic]);
     return (
         <div className="mainpage">
-            <Level level={lvl} updateLevel={requestLevel} xp={xp} updateXP={requestXP}/>
+            <Level username1={username} vlag={flag} changeVlag={setFlag}/>
             <QuestButton/>
             <Leaderboard/>
             <Chat/>
