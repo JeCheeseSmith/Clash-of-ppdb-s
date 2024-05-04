@@ -131,7 +131,7 @@ function TransferPage({selectedObject, outpostChosen})
                 </div>
             </div>
             <button className={"send-transferTYPE"} onClick={handleTransferButton}> Send Soldier and Resources! </button>
-            {outpostChosen && <input placeholder={"Settlement Name..."} onChange={(e) => setOutpostName(e.target.value)}/>}
+            {outpostChosen && <input className={"outpost-Name"} placeholder={"Settlement Name..."} onChange={(e) => setOutpostName(e.target.value)}/>}
             {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     );

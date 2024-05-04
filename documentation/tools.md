@@ -27,7 +27,7 @@
 3. JS
 4. React
 5. REST API in psycopg2
-6. Flask Framework (incl. Nginx & Gunicorn)
+6. Flask Framework (incl. Nginx & Gunicorn) - Python3.8
 7. PostgreSQL Database
 
 ### Naming Conventions

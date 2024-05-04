@@ -3,6 +3,8 @@ import './login_signup.css';
 import { useNavigate } from 'react-router-dom';
 import POST from "../../../api/POST.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import {Loader} from "@react-three/drei";
+import {loaderStyles} from "../../../globalComponents/loadingScreen/loadingScreen.jsx";
 
 
 // Code for login page
@@ -60,6 +62,7 @@ function LoginPage() {
 
   return (
       <div className="login-container">
+          <Loader {...loaderStyles} />
           <h1 className="gametitle">TRAVISIA</h1>
           <h2 className="subtitle">FALLEN EMPIRE</h2>
           <div className="login-form">

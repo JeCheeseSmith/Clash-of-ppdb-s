@@ -144,6 +144,8 @@ class TimerDataAccess:
                            (datetime.now(),))  # Sort by earliest done time
             timerDone = cursor.fetchone()
 
+        self.dbconnect.commit()
+
     def simulateTroopTraining(self, timer: Timer):
         """
         Increase the amount of a soldier by 1.
@@ -209,6 +211,8 @@ class TimerDataAccess:
         :param pname: Username
         :return: List of timer object with info
         """
+        self.dbconnect.commit()
+
         cursor = self.dbconnect.get_cursor()
 
         # Get all befriended players incl yourself without 'admin'
@@ -286,6 +290,9 @@ SELECT id FROM transfer WHERE discovered=True
         transfer = cursor.fetchone()  # tid, discovered, idTo, toType, idFrom, fromType, pid
 
         # Add info to dict
+
+        print(transfer)
+
         newInfo["to"] = transfer_data_acces.translatePosition(transfer[2], transfer[3])
         newInfo["from"] = transfer_data_acces.translatePosition(transfer[4], transfer[5])
         newInfo["discovered"] = transfer[1]
@@ -331,6 +338,7 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
                 cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))
                 cursor.execute('DELETE FROM troops WHERE pid=%s;', (transfer.pid,))
+                self.dbconnect.commit()
                 return
 
         else:  # To a settlement
@@ -354,6 +362,7 @@ SELECT id FROM transfer WHERE discovered=True
         cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
         cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))
         cursor.execute('DELETE FROM troops WHERE pid=%s;', (transfer.pid,))
+        self.dbconnect.commit()
 
     def setTransfersDiscovered(self, pname):
         """
@@ -481,9 +490,11 @@ SELECT id FROM transfer WHERE discovered=True
                 package_data_acces.update_resources(ap)  # Update database
 
                 # Get transfer going to the transfer that doesn't exist anymore now
-                cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s EXCEPT SELECT %s;',
-                               (transferDefendant.id, transfer.id))
+                cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s or idTo=%s EXCEPT SELECT %s;',
+                               (transferDefendant.id, transfer.id, transfer.id))
+
                 transfers = cursor.fetchall()
+                print(transferDefendant.id, transfer.id, 'transfer related to the attack on a transfer', transfers)
                 for tid in transfers:  # Send them back to where they came from
                     transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access,
                                                      soldier_data_acces, package_data_acces)
@@ -530,6 +541,15 @@ SELECT id FROM transfer WHERE discovered=True
                 if defendant == 'admin':  # We attack an outpost transfer
                     cursor.execute('DELETE FROM settlement WHERE id=%s AND pname=%s;', (transferDefendant.sid, 'admin'))
         else:  # Defendant won
+            # Get transfers going to the attack that doesn't exist anymore now
+            cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s;',
+                           (transfer.id,))
+            transfers = cursor.fetchall()
+            for tid in transfers:  # Send them back to where they came from
+                transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access,
+                                                 soldier_data_acces, package_data_acces)
+                self.dbconnect.commit()
+
             # Delete attack transfer
             cursor.execute('DELETE FROM transfer WHERE id=%s;', (transfer.id,))
             cursor.execute('DELETE FROM package WHERE id=%s;', (transfer.pid,))

@@ -7,23 +7,27 @@ This script will delete all current data and load some preset information into t
 """
 
 def presets():
-
+    # TODO to change for server
     # Reset database
     cursor = connection.get_cursor()
-    cursor.execute(query)
-    connection.commit()
+    #cursor.execute(query)
+    # connection.commit()
 
     Player_obj = Player(name='a', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    friend_data_access.add_admin('a')
 
     Player_obj = Player(name='b', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    friend_data_access.add_admin('b')
 
     Player_obj = Player(name='c', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    friend_data_access.add_admin('c')
 
     Player_obj = Player(name='d', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
+    friend_data_access.add_admin('d')
 
     # Make a and b friends
     cursor.execute('INSERT INTO friend(pname1, pname2) VALUES(%s,%s);', ('a', 'b'))
@@ -88,7 +92,7 @@ def presets():
                                        soldier_data_acces)
 
     # d attacks the transfer attack to d from a
-    a,b = transfer_data_acces.createTransfer(4, True, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
+    transfer_data_acces.createTransfer(4, True, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
                                        timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
                                        soldier_data_acces)
 

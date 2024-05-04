@@ -91,7 +91,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                     arrowMeshes.push(
                         <mesh key={`${rowIndex}-${colIndex}-${timer.type}`}
                               position={[colIndex + 0.5 - mapSize / 2, 0, rowIndex + 1 - mapSize / 2]}
-                              onClick={() => handleTransfer(timer.oid, true)}
+                              onClick={() => handleTransfer(timer.tid, true)}
                         >
                             <Arrow intercept={timer.toType} position={[rowIndex, colIndex]} destinationPosition={timer.to}/>
                         </mesh>

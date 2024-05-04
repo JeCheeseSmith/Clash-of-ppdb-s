@@ -3,6 +3,8 @@ import Map from "./map/map.jsx";
 import './mapMainpage.css'
 import TransferMenu from "./mapMenu/transfers/transfers.jsx";
 import Outpost from "./outpost/outpost.jsx";
+import {Loader} from "@react-three/drei";
+import {loaderStyles} from "../../globalComponents/loadingScreen/loadingScreen.jsx";
 
 /**
  * Represents the main page of the map component.
@@ -20,6 +22,7 @@ function MapMainpage()
     }
     return (
         <div className={"map-mainpage"}>
+            <Loader {...loaderStyles} />
             {
                 menuVisible &&
                 (<div className={"menu-info-container"}>

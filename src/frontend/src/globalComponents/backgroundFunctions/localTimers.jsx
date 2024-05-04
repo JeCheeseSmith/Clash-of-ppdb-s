@@ -1,6 +1,7 @@
 import {useEffect} from 'react'; // Importing React library
 import {useLocation} from "react-router-dom";
 import {updateResources, updateTimers} from "./helperFunctions.jsx";
+import PlaySound from "../audioComponent/audio.jsx";
 
 /**
  * Represents a component for managing local timers.
@@ -45,8 +46,7 @@ function LocalTimers({setResources, timers, setTimers})
                     }
                     else
                     {
-                        // TODO later adjust volume
-                        //let promise  = PlaySound("BuildingUpgraded")
+                        let promise  = PlaySound("BuildingUpgraded")
                         updateResources(sid, setResources)
                         console.log("Timer finished: ", timer)
                         console.log("Username on the moment of the finished timer: ", timer)

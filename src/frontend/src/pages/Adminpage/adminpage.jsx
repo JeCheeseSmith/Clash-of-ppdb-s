@@ -45,7 +45,8 @@ function AdminPage() {
     // Handles click on preset-button
     const handlePresetClick = async () => {
         // Calls the 'preset' API
-        await POST({}, "/preset");
+        await POST({"test": 't'}, "/preset");
+        console.log('post')
     }
 
     return (

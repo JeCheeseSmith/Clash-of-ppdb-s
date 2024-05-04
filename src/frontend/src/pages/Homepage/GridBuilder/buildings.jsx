@@ -32,6 +32,10 @@ import WoodStockpile from "./GridView/models/Objects/Buildings/WoodStockpile.jsx
 import Castle from "./GridView/models/Objects/Buildings/Castle.jsx";
 import Chancery from "./GridView/models/Objects/Buildings/Chancery.jsx";
 import Barracks from "./GridView/models/Objects/Buildings/Barracks.jsx";
+import Gazebo from "./GridView/models/Objects/Buildings/Gazebo.jsx";
+import SakuraTree from "./GridView/models/Objects/Buildings/SakuraTree.jsx";
+import SnakeStatue from "./GridView/models/Objects/Buildings/SnakeStatue.jsx";
+import WaterStatue from "./GridView/models/Objects/Buildings/WaterStatue.jsx";
 
 
 /*
@@ -75,6 +79,11 @@ const Buildings =
     Military:
     {
         "Barracks": [BarracksIMAGE, Barracks, [5,6]]
+    },
+
+    Decoration:
+    {
+        "Gazebo": [BarracksIMAGE, Gazebo, [5,6]]
     }
 };
 

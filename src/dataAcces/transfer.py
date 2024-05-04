@@ -77,6 +77,7 @@ class TransferDataAccess:
         if transfer:  # If it's a transfer, we take the middle of the 2 sids
             cursor.execute('SELECT idTo,toType,idFrom, fromtype FROM transfer WHERE id=%s;', (oid,))
             ids = cursor.fetchone()
+            print(ids)
             sidTo = self.translatePosition(ids[0], ids[1])  # This can go recursively for transfers on transfers
             sidFrom = self.translatePosition(ids[2], ids[3])
             midX = int((sidTo[0] + sidFrom[0]) / 2)
@@ -197,29 +198,46 @@ class TransferDataAccess:
         cursor = self.dbconnect.get_cursor()
         oldTid = transfer.id
         cursor.execute("SELECT id FROM timer WHERE oid=%s and type IN('attack','outpost','transfer')", (oldTid,))
-        originalTimerID = cursor.fetchone()[0]  # Already get the original timer ID before we make any changes
+        originalTimerID = cursor.fetchone()  # Already get the original timer ID before we make any changes
+
+        if originalTimerID is None:  # The transfer was an espionage; will be handled seperatly
+            return
+        else:
+            originalTimerID = originalTimerID[0]
+
 
         if transfer.toType:  # If we went to a transfer x, the start location will be the end of x
             cursor.execute('SELECT idTo FROM transfer WHERE id=%s;', (transfer.idTo,))
-            transfer.idTo = cursor.fetchone()[0]
+            idTo = cursor.fetchone()[0]
             # TODO Unsure if this works in frontend, since it goes towards the same settlement now
-        # else:  # We went to a settlement, now leaving from there: transfer data doesn't need to be adjusted
-
+        else:  # We went to a settlement, now leaving from there: transfer data doesn't need to be adjusted
+            idTo = transfer.idTo
         # Make a resource transfer back home
         cursor.execute(
             'INSERT INTO transfer(idto, totype, idfrom, fromtype, discovered, pid, pname) VALUES (%s,%s,%s,%s,%s,%s,%s)',
-            (transfer.idFrom, False, transfer.idTo, False, True, transfer.pid,
+            (transfer.idFrom, False, idTo, False, True, transfer.pid,
              transfer.pname))  # Insert new transfer into the database
         cursor.execute('SELECT max(id) FROM transfer;')  # Retrieve the tid
         transfer.id = cursor.fetchone()[0]
 
         # Add a new timer
+        print('tobase', transfer.to_dct())
         start, stop, duration = self.calculateDuration(soldier_data_acces.getTroops(transfer.pid, 'package'),
                                                        package_data_acces.get_resources(transfer.pid),
                                                        self.translatePosition(transfer.idTo, transfer.toType),
                                                        self.translatePosition(transfer.idFrom, transfer.fromType))
         timer = Timer(None, transfer.id, 'transfer', start, stop, duration, transfer.idTo)
         timer_data_access.insertTimer(timer)
+
+        if transfer.toType:
+            # We need to call this recursively on any transfers linked to this one
+            cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s;',
+                           (transfer.id,))
+            transfers = cursor.fetchall()
+            for tid in transfers:  # Send them back to where they came from
+                self.returnToBase(self.instantiateTransfer(tid[0]), timer_data_access,
+                                  soldier_data_acces, package_data_acces)
+                self.dbconnect.commit()
 
         # Delete the old transfer and old timer in the database (package is recycled)
         cursor.execute('DELETE FROM transfer WHERE id=%s;', (oldTid,))
@@ -408,4 +426,11 @@ class TransferDataAccess:
         for troop in troops.keys():  # Reform to frontend format
             if troops[troop]["discovered"] or allied:  # Add the troop info if they are discovered or if allied
                 dct[troop] = troops[troop]["amount"]
-        return dct | package.to_dct()  # Return the merge of the 2 dicts
+
+        dct2 = package.to_dct()
+        for resource in dct2.keys(): # Merge both dicts
+            dct[resource] = dct2[resource]
+
+        print(dct)
+
+        return dct 

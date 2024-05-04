@@ -243,18 +243,16 @@ def update():
     """
     timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
                                     soldier_data_acces, timer_data_acces)
-
     data = request.args
     pname = data.get('pname')
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
-        print(timers)
         return jsonify(timers)
-    else:
-        timers = timer_data_acces.retrieveTimers('a', transfer_data_acces)
-        print(timers)
-        return jsonify('')
+
+    # timers = timer_data_acces.retrieveTimers('a', transfer_data_acces) # This is for debug only
+    # print(timers)
+    return jsonify('')
 
 
 @app.route("/getGrid", methods=["GET"])
@@ -535,6 +533,7 @@ def getFunction():
     }
     """
     data = request.args
+    print(data.get('bname'))
     return jsonify(building_data_acces.getFunction(data.get('bname')))
 
 
@@ -625,8 +624,9 @@ def transfer():
     }
     """
     data = request.json
+
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
-                                                        True, data.get('soldiers'),
+                                                        False, data.get('soldiers'),
                                                         data.get('resources'), data.get('tType'), data.get('pname'),
                                                         timer_data_acces,
                                                         package_data_acces, clan_data_acces,
@@ -1026,17 +1026,17 @@ def preset():
     This script will delete all current data and load some preset information into the game, providing a very basic example of the workings of the game. We recommend you to actually try it out, not all features are (fully) used.
     """
 
-    # Reset database
-    cursor = connection.get_cursor()
-    cursor.execute(query)
-    connection.commit()
+    # # Reset database
+    # cursor = connection.get_cursor()
+    # cursor.execute(query)
+    # connection.commit()
 
     from preset import presets
     presets()
 
-    connection.commit()
+    # connection.commit()
 
-    return jsonify(data)
+    return jsonify('data')
 
 
 @app.route("/getAchievements", methods=["GET"])

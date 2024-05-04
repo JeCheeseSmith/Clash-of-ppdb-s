@@ -26,8 +26,7 @@ const GET = async (data, endpoint) =>
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
-        const responseData = await response.json();
-        return responseData;
+        return await response.json();
     }
     catch (error)
     {
