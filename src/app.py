@@ -242,7 +242,7 @@ def update():
     }
     """
     timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
-                                    soldier_data_acces, timer_data_acces)
+                                    soldier_data_acces, timer_data_acces, player_data_access)
 
     data = request.args
     pname = data.get('pname')
@@ -1074,7 +1074,6 @@ def catch_all(path):
     """
     return render_template("index.html")
 
-### Level & XP
 @app.route("/setXPandLevel", methods=["POST"])
 def setXPandLevel():
 
@@ -1085,7 +1084,6 @@ def setXPandLevel():
 
 @app.route("/getXPandLevel", methods=["GET"])
 def getXPandLevel():
-
     data = request.args
     player_name = data.get("name")
     level = player_data_access.getXPandLevel(player_name)[0]
