@@ -41,13 +41,27 @@ class TimerDataAccess:
         timer.id = id
         return id
 
-    def evaluateXP(self, timer: Timer):
-        if timer.type == 'soldier':
-            pass
-            # updateXP(pname, 50)
+    def evaluateXP(self, timer: Timer, transfer_data_acces, player_data_acces):
+        cursor = self.dbconnect.get_cursor()
 
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (timer.sid,))
+        pname = cursor.fetchone()
+
+        if timer.type == 'soldier':
+            player_data_acces.updateXPandLevel(50, pname)
         elif timer.type == 'building':
-            pass #updateXP
+            player_data_acces.updateXPandLevel(200, pname)
+        else:  # For transfer timers, the sid of the owner is not strictly timer.sid
+            transfer = transfer_data_acces.instantiateTransfer(timer.oid)
+            pname = transfer.pname  # Correct pname
+            if timer.type == 'transfer':
+                player_data_acces.updateXPandLevel(100, pname)
+            elif timer.type == 'attack':
+                player_data_acces.updateXPandLevel(100, pname)
+            elif timer.type == 'outpost':
+                player_data_acces.updateXPandLevel(100, pname)
+
+        self.dbconnect.commit()  # Commit Achievement Changes
 
     def evaluateQuests(self, timer: Timer, transfer_data_acces):
         """
@@ -100,7 +114,7 @@ class TimerDataAccess:
         self.dbconnect.commit()  # Commit XP Bonuses & achievement updates once again
 
     def evaluateTimers(self, settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
-                       soldier_data_acces, timer_data_access):
+                       soldier_data_acces, timer_data_access, player_data_acces):
         """
         Evaluate all timers passed their done time
         :return:
@@ -116,11 +130,12 @@ class TimerDataAccess:
                           timerDone[6])
 
             self.evaluateQuests(timer, transfer_data_acces)  # Check up if any quest is done and an XP bonus needs to be added
+            self.evaluateXP(timer, transfer_data_acces, player_data_acces)
 
             if timer.type == 'soldier':
                 self.simulateTroopTraining(timer)
             elif timer.type == 'building':
-                self.simulateUpgrade(timer, settlement_data_acces)
+                self.simulateUpgrade(timer, settlement_data_acces, content_data_access)
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access,
                                      soldier_data_acces)
@@ -175,7 +190,7 @@ class TimerDataAccess:
             print('error', e)
             self.dbconnect.rollback()
 
-    def simulateUpgrade(self, timer: Timer, settlement_data_acces):
+    def simulateUpgrade(self, timer: Timer, settlement_data_acces, content_data_access):
         """
         Increment the level of a building with 1. If the Castle is to be upgraded, execute the extra functionality
         :param timer: Complete Timer Object
@@ -197,10 +212,17 @@ class TimerDataAccess:
             elif name == 'Barracks':  # Upgrading a barrack unlocks new troops
                 settlement_data_acces.upgradeBarracks(timer.sid)
 
+            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (timer.sid,))
+            pname = cursor.fetchone()
+            from .content import *
+            content_data_access.add_message(Content(None, datetime.now(), f"""Your building {name} has been upgraded!""", 'admin'), pname)
+
             self.dbconnect.commit()
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
+
+
 
     def retrieveTimers(self, pname: str, transfer_data_acces):
         """

@@ -30,6 +30,7 @@ function MainPage()
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [timers, setTimers] = useState([])
     const randomArray = useMemo(getRandomArray, []); // Memoize the random array
+    const [flag, setFlag] = useState(true);
 
     const addBuilding = (type, position, size, occupiedCells) =>
     {
@@ -38,6 +39,7 @@ function MainPage()
     const updateTimers = () =>
     {
         API.update(username).then(data => {setTimers(data)})
+        setFlag(true);
     }
     const getTimer = (ID, type) =>
     {
@@ -81,7 +83,7 @@ function MainPage()
     return (
         <div className="mainpage">
             <Loader {...loaderStyles} />
-            <Level/>
+            <Level username1={username} vlag={flag} changeVlag={setFlag}/>
             <QuestButton/>
             <Leaderboard/>
             <Chat/>

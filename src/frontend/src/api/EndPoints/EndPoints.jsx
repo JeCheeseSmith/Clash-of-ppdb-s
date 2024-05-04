@@ -1,6 +1,7 @@
 import GET from "../GET.jsx";
 import POST from "../POST.jsx";
 import {empty} from "leaflet/src/dom/DomUtil.js";
+import LevelBar from "../../pages/Homepage/Level/Level.jsx";
 
 
 /*
@@ -81,4 +82,12 @@ export const getBarrackLevelSum = async(sid) =>
 export const getAchieved = async(pname) =>
 {
     return await GET({"pname": pname}, "/getAchievements")
+}
+
+export const setXPLevel = async (username, xp_amount) => {
+    await POST({ name: username, xp: xp_amount }, "/setXPandLevel");
+}
+
+export const getXPLevel = async (username) => {
+    return await GET({ name: username}, "/getXPandLevel");
 }
