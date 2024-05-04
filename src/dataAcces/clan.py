@@ -1,3 +1,6 @@
+from datetime import datetime
+
+
 class Clan:
     def __init__(self, name, pname, description, status):
         self.name = name
@@ -106,8 +109,13 @@ class ClanDataAccess:
                 cursor.execute('INSERT INTO clan(name,pname,description,status) VALUES(%s,%s,%s,%s);',
                                (obj.name, player_name, obj.description, obj.status,))
                 cursor.execute('INSERT INTO member(pname,cname) VALUES(%s,%s);', (obj.pname, obj.name,))
+
+                # Update the clan achievement
+                cursor.execute('UPDATE achieved SET amount = %s WHERE pname = %s and aname=%s', (0, obj.pname, "Travisia's Uniter"))
+
                 # Commit to the database
                 self.dbconnect.commit()
+
                 return True
             except Exception as e:
                 print("Error:", e)

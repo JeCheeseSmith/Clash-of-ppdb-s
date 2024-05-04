@@ -1,6 +1,5 @@
 from dataAcces.player import *
 from dataAcces.content import *
-from dataAcces.achievement import *
 from dataAcces.building import *
 from dataAcces.package import *
 from dataAcces.settlement import *
@@ -1036,6 +1035,36 @@ def preset():
     connection.commit()
 
     return jsonify(data)
+
+@app.route("/getAchievements", methods=["GET"])
+def getAchieved():
+    """
+    GET API Call to get achieved achievements
+
+    JSON Input Format:
+    {
+    "pname": <string> | Player name
+    }
+
+    JSON Output Format:
+    {
+    Dict with items:
+    "aname": Achievement Name
+    "task": Actual action done
+    }
+    """
+    data = request.args
+    pname = data.get("pname")
+    return jsonify(player_data_access.getAchieved(pname))
+
+@app.route("/getleaderboard", methods=["GET"])
+def getLeaderboard():
+   """
+   API Call to retrieve the leaderboard
+   JSON Output Format (GET):
+   List with players returned in json format, ordered by level
+   """
+   return jsonify(player_data_access.getplayers())
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")

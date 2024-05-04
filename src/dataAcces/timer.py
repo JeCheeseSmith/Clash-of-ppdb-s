@@ -41,6 +41,66 @@ class TimerDataAccess:
         timer.id = id
         return id
 
+    def evaluateXP(self, timer: Timer):
+        if timer.type == 'soldier':
+            pass
+            # updateXP(pname, 50)
+
+        elif timer.type == 'building':
+            pass #updateXP
+
+    def evaluateQuests(self, timer: Timer, transfer_data_acces):
+        """
+        Update data for all quests upon timer info. E.g. adjust amount of times and check if a quest is done, if so: add XP.
+        :param timer: Timer object
+        :param transfer_data_acces: Data Acces
+        """
+        cursor = self.dbconnect.get_cursor()
+
+        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (timer.sid,))
+        pname = cursor.fetchone()
+
+        if timer.type == 'soldier':
+            cursor.execute('UPDATE achieved SET amount = amount - 1 WHERE pname = %s and aname=%s', (pname, "Hungry for more"))
+        elif timer.type == 'building':
+            cursor.execute('SELECT count(id) FROM building WHERE sid=%s and name=%s;', (timer.sid, 'WoodCuttersCamp'))
+            count = cursor.fetchone()
+            if count >= 3:  # When 3 buildings is met, achieved!
+                cursor.execute('UPDATE achieved SET amount = %s WHERE pname = %s and aname=%s',
+                               (0, pname, "Hungry for more"))
+        else:  # For transfer timers, the sid of the owner is not strictly timer.sid
+            transfer = transfer_data_acces.instantiateTransfer(timer.oid)
+            pname = transfer.pname  # Correct pname
+
+            if timer.type == 'transfer':
+                cursor.execute('UPDATE achieved SET amount = amount - 1 WHERE pname = %s and aname=%s',
+                               (pname, "Friendly Neighbour"))
+            elif timer.type == 'attack':
+                cursor.execute('UPDATE achieved SET amount = amount - 1 WHERE pname = %s and aname=%s',
+                               (pname, "Fighter"))
+            elif timer.type == 'outpost':
+                cursor.execute('UPDATE achieved SET amount = amount - 1 WHERE pname = %s and aname=%s',
+                                (pname, "Kingdom Rebuilder"))
+
+        self.dbconnect.commit()  # Commit Achievement Changes
+
+        # When an achievement amount hit 0; add XP
+        cursor.execute('SELECT aname FROM achieved WHERE amount=0 and pname=%s;', (pname,))  # If amount < 0: it has already been added
+        achieved = cursor.fetchall()
+        for quest in achieved:
+            print("questname in evalaue:" , quest)
+
+            # Set moment and amount to -1; indicating the achievement is done
+            cursor.execute('UPDATE achieved SET amount = -1 WHERE aname = %s and pname = %s;', (quest, pname))
+
+            # Add XP bonus
+            cursor.execute('SELECT xpBonus FROM achievement WHERE name=%s;', (quest,))
+            xpBonus = cursor.fetchone()
+            print(xpBonus)
+            cursor.execute('UPDATE player SET xp= xp + %s WHERE name=%s;', (xpBonus, pname))
+
+        self.dbconnect.commit()  # Commit XP Bonuses & achievement updates once again
+
     def evaluateTimers(self, settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
                        soldier_data_acces, timer_data_access):
         """
@@ -56,6 +116,8 @@ class TimerDataAccess:
                 timerDone) != 0:  # Since timers might be removed upon attack, we have to refresh the timerDone after each simulation
             timer = Timer(timerDone[0], timerDone[1], timerDone[2], timerDone[3], timerDone[4], timerDone[5],
                           timerDone[6])
+
+            self.evaluateQuests(timer, transfer_data_acces)  # Check up if any quest is done and an XP bonus needs to be added
 
             if timer.type == 'soldier':
                 self.simulateTroopTraining(timer)

@@ -1,15 +1,20 @@
 import React, {useState} from 'react';
 import './leaderboard.css'
+import POST from "../../../api/POST.jsx";
+import GET from "../../../api/GET.jsx";
 
 
 function Leaderboard() {
+     const [leaderboard, setLeaderboard] = useState([]);
 
     // Variable to check if the toggle-leaderboard-button has been clicked, initially set to false
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     // This function handles the toggle-leaderboard-button click
-    const toggleMenu = () => {
+    const toggleMenu = async () => {
         setIsMenuOpen(!isMenuOpen);
+        const data = await GET({}, "/getleaderboard");
+        setLeaderboard(data)
     };
 
     return (
@@ -20,11 +25,10 @@ function Leaderboard() {
                 <div className={`leaderboard-container ${isMenuOpen  ? 'visible' : 'hidden'}`}>
                     <div className="leaderboardmenu">
                         <h1 className="leaderboard-title">Leaderboard</h1>
-                         {/* just hardcoded for the demo but it will be connected with an api */}
                         <ul>
-                            <li>Player 1</li>
-                            <li>player 2</li>
-                            <li>Player 3</li>
+                             {leaderboard.map((player, index) => (
+                                <li key={index}>{player[0]}                              Level {player[1]}</li>
+                            ))}
                         </ul>
                     </div>
                 </div>
