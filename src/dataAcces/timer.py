@@ -278,7 +278,7 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('SELECT gridX,gridY FROM building WHERE id=%s and sid=%s;', (timer.oid, timer.sid))
                 newInfo["ID"] = cursor.fetchone()
             elif timer.type == 'transfer' or timer.type == 'attack' or timer.type == 'outpost':
-                newInfo = self.addTransferTimerInfo(newInfo, timer, transfer_data_acces)
+                newInfo = self.addTransferTimerInfo(newInfo, timer, pname, transfer_data_acces)
                 newInfo["ID"] = timer.oid
             elif timer.type == 'soldier':
                 newInfo["ID"] = timer.oid
@@ -295,12 +295,13 @@ SELECT id FROM transfer WHERE discovered=True
             newData.append(newInfo)
         return newData
 
-    def addTransferTimerInfo(self, newInfo: dict, timer: Timer, transfer_data_acces):
+    def addTransferTimerInfo(self, newInfo: dict, timer: Timer, pname: str, transfer_data_acces):
         """
         Helper function to add needed info for frontend to a transfer timer
         :param newInfo:
         :param timer:
         :param transfer_data_acces:
+        :param pname: Player requesting info
         :return:
         """
         cursor = self.dbconnect.get_cursor()
@@ -308,12 +309,9 @@ SELECT id FROM transfer WHERE discovered=True
         transfer = cursor.fetchone()  # tid, discovered, idTo, toType, idFrom, fromType, pid
 
         # Add info to dict
-
-        print(transfer)
-
         newInfo["to"] = transfer_data_acces.translatePosition(transfer[2], transfer[3])
         newInfo["from"] = transfer_data_acces.translatePosition(transfer[4], transfer[5])
-        newInfo["discovered"] = transfer[1]
+        newInfo["discovered"] = transfer[1] or pname == transfer[7]  # Own transfer should always be visible
         newInfo["tid"] = transfer[0]
         newInfo["toType"] = transfer[3]
 
