@@ -119,6 +119,8 @@ class Package:
             return True
         elif self.wood < 0:
             return True
+        elif self.gems < 0:
+            return True
         else:
             return False
 

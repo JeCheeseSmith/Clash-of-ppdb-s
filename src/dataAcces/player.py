@@ -52,7 +52,7 @@ class PlayerDataAccess:
 
             # Create a package for the settlement
             pid = package_data_acces.add_resources(
-                Package([0, 1000, 1000, 1000, 1000, 0, 0]))  # All resource are initialised at the maximum
+                Package([0, 1000, 1000, 1000, 1000, 50, 0]))  # All resource are initialised at the maximum
 
             # Create a settlement & link the package
             location = settlement_data_acces.getNewCoordinate()

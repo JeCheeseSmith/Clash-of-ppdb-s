@@ -65,3 +65,17 @@ Buildings are split up in category we use them for.
 
 >[Barracks](https://sketchfab.com/3d-models/medieval-house-4ec56df1c24d422ea85d1cfbf21bbe8c#download)
 >>"Medieval house" (https://skfb.ly/6RyOR) by Young_Wizard is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+### Decorations
+
+>[SnakeStatue](https://sketchfab.com/3d-models/snake-statue-794b77a3e4654a669cf259d20dc89ec7)
+>>"Snake Statue" (https://skfb.ly/MnRU) by Ville Seppänen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+>[Fountain](https://sketchfab.com/3d-models/statue-08aa8c9b10fb4ba189a030582b942b13#download)
+>>"Statue" (https://skfb.ly/6XGuo) by Ashkan.Khelghati is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
+
+>[Tree](https://sketchfab.com/3d-models/sakura-tree-c5795e23566a414692042560e98a2306)
+>>"Sakura tree" (https://skfb.ly/6RPDE) by TatianaDevos is licensed under CC Attribution-NonCommercial-NoDerivs (http://creativecommons.org/licenses/by-nc-nd/4.0/).
+
+>[Gazebo](https://sketchfab.com/3d-models/decoration-7a2b0b35fa65403ab61753afbab23d97)
+>>"Decoration" (https://skfb.ly/6Uq6q) by Dannik is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
