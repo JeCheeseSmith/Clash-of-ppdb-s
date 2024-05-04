@@ -16,8 +16,6 @@ import QuestButton from "./Quest/Quest.jsx";
 import Leaderboard from "./Leaderbord/leaderboard.jsx";
 import WheelOfFortune from "./Wheeloffortune/wheel.jsx";
 import SoldierMenu from "./SoldierMenu/soldierMenu.jsx";
-import {AddXP} from "./Level/Level.jsx";
-
 
 /**
  * Functional component representing the main page of the application.
@@ -35,13 +33,11 @@ function MainPage()
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
-        AddXP(200, username);
-        setFlag(true);
-
     }
     const updateTimers = () =>
     {
         API.update(username).then(data => {setTimers(data)})
+        setFlag(true);
     }
     const getTimer = (ID, type) =>
     {

@@ -48,7 +48,3 @@ export const requestLevel = (username) => {
 export const requestXP = (username) => {
     return API.getXPLevel(username).then(data => data.xp);
 };
-
-export const AddXP = (xp_amount, username1) => {
-    API.setXPLevel(username1, xp_amount).then(() => {});
-}
