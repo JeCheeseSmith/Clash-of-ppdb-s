@@ -724,6 +724,8 @@ def getInfo():
     if not typee:  # Settlement
         info["id"] = data.get('oid')  # Set id to sid
         info["outpost"] = settlement_data_acces.isOutPost(data.get('oid'))
+    else:
+        info["outpost"] = False
 
     print(info)
     return jsonify(info)
