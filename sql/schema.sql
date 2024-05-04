@@ -83,12 +83,8 @@ CREATE TABLE IF NOT EXISTS settlement(
 CREATE TABLE IF NOT EXISTS achievement(
     name VARCHAR PRIMARY KEY,
     task TEXT NOT NULL, -- Description of the tasks to do
-    pid INT NOT NULL REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE -- Contains Relation
-);
-
-CREATE TABLE IF NOT EXISTS quest(
-    name VARCHAR PRIMARY KEY REFERENCES achievement(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    deadline TIMESTAMP NOT NULL
+    xpBonus INT NOT NULL,
+    amount INT NOT NULL -- Preset number of times the task needs to be done
 );
 
 CREATE TABLE IF NOT EXISTS transfer(
@@ -171,7 +167,7 @@ CREATE TABLE IF NOT EXISTS wheelofFortune(
 CREATE TABLE IF NOT EXISTS achieved(
     pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
     aname VARCHAR REFERENCES achievement(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    moment TIMESTAMP NOT NULL ,
+    amount INT, --- Keep track how many times this action has been done; initialised on e.g. 5 and decremented until 0
     PRIMARY KEY (pname,aname)
 );
 
@@ -230,7 +226,11 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Militia','Skirmishers',12,28,20,180,1.2,3,5,20);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Skirmisher','Skirmishers',20,40,20,216,1.2,3,9,40);
 
+INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Woodcutter', 'Build 3 Woodcutters in 1 settlement',300,3 );
+INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Fighter', 'Go to war 5 times',500,5 );
+INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Friendly Neighbour', 'Send 7 times resources to an ally',700,7 );
+INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Hungry for more', 'Create an outpost',300,3 );
+INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Kingdom Rebuilder', 'Create an outpost',500,1 );
+INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Travisia''s Uniter', 'Create a clan',500, 1);
 
 INSERT INTO player(name,password) VALUES('admin','1234');
-
-

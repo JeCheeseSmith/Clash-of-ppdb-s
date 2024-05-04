@@ -69,6 +69,14 @@ class PlayerDataAccess:
 
             # Send a message to the user from the system
             content_data_access.add_message(Content(None, None, "Welcome to Travisia!", "admin"), obj.name)
+
+            # Add achievements
+            cursor.execute('SELECT name, amount FROM achievement;')
+            quests = cursor.fetchall()
+            for tup in quests:
+                cursor.execute('INSERT INTO achieved(pname, aname, amount) VALUES(%s,%s,%s);', (obj.name, tup[0], tup[1]))
+            self.dbconnect.commit()
+
             return True, sid
         except Exception as e:
             print("Error:", e)
@@ -117,3 +125,12 @@ class PlayerDataAccess:
             leaderboardlist.append((player[0], player[1]))
 
         return leaderboardlist
+
+    def getAchieved(self, pname):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT aname, task FROM achieved  JOIN achievement ON aname =name WHERE pname=%s and achieved.amount<=-1;', (pname,))
+        achieved = cursor.fetchall()
+        lst = []
+        for quest in achieved:
+            lst.append(dict(aname=quest[0], task=quest[1]))
+        return lst
