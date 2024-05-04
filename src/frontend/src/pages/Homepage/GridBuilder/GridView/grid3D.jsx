@@ -120,6 +120,7 @@ function Grid({buildings, updateResources, randomArray, updateTimers, getTimer})
 
     const BuildingMesh = ({building}) =>
     {
+        if (building.type === "SatelliteCastle") {building.type = "Castle"}
         let Building;
         for (let category in Buildings)
         {

@@ -48,8 +48,6 @@ function LocalTimers({setResources, timers, setTimers})
                     {
                         let promise  = PlaySound("BuildingUpgraded")
                         updateResources(sid, setResources)
-                        console.log("Timer finished: ", timer)
-                        console.log("Username on the moment of the finished timer: ", timer)
                         updateTimers(username, setTimers)
                         break
                     }

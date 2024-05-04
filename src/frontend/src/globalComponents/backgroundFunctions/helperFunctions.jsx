@@ -6,7 +6,7 @@ import * as API from "../../api/EndPoints/EndPoints.jsx";
 
 export const updateTimers = (username, setTimers) =>
 {
-    API.update(username).then(data => {setTimers(data); console.log("Update Timers Called: ", data)});
+    API.update(username).then(data => {setTimers(data)});
 };
 
 export const updateResources = (sid, setResources) =>
