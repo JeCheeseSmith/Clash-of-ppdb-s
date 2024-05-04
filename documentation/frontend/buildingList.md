@@ -61,12 +61,12 @@ Buildings are split up in category we use them for.
 >[Chancery](https://sketchfab.com/3d-models/rauma-town-hall-e2c47838ebde464bbcea521c0ff5ce9e#download)
 >>"Rauma Town Hall" (https://skfb.ly/6twnU) by Karumaki is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
-### Military
+### Military:
 
 >[Barracks](https://sketchfab.com/3d-models/medieval-house-4ec56df1c24d422ea85d1cfbf21bbe8c#download)
 >>"Medieval house" (https://skfb.ly/6RyOR) by Young_Wizard is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
 
-### Decorations
+### Decoration:
 
 >[SnakeStatue](https://sketchfab.com/3d-models/snake-statue-794b77a3e4654a669cf259d20dc89ec7)
 >>"Snake Statue" (https://skfb.ly/MnRU) by Ville Seppänen is licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
