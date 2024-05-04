@@ -10,6 +10,13 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import gazebo from '../../../assets/gazebo.glb'
 
+/**
+ * Represents a Gazebo component.
+ * @component
+ * @param {object} props - Props for the Gazebo component.
+ * @returns {JSX.Element} A Gazebo component.
+ */
+
 export default function Gazebo(props) {
   const { nodes, materials } = useGLTF(gazebo)
   return (

@@ -10,6 +10,13 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import tree from '../../../assets/tree.glb'
 
+/**
+ * Represents a Tree component.
+ * @component
+ * @param {object} props - Props for the Tree component.
+ * @returns {JSX.Element} A Tree component.
+ */
+
 export default function Tree(props) {
   const { nodes, materials } = useGLTF(tree)
   return (

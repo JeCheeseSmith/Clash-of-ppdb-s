@@ -10,6 +10,13 @@ import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import fountain from '../../../assets/fountain.glb'
 
+/**
+ * Represents a Fountain component.
+ * @component
+ * @param {object} props - Props for the Fountain component.
+ * @returns {JSX.Element} A Fountain component.
+ */
+
 export default function Fountain(props) {
   const { nodes, materials } = useGLTF(fountain)
   return (

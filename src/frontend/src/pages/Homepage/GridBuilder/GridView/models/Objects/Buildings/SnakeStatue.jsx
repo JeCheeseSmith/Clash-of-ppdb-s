@@ -9,6 +9,14 @@ Title: Snake Statue
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
 import snakeStatue from '../../../assets/snakeStatue.glb'
+
+/**
+ * Represents a SnakeStatue component.
+ * @component
+ * @param {object} props - Props for the SnakeStatue component.
+ * @returns {JSX.Element} A SnakeStatue component.
+ */
+
 export default function SnakeStatue(props) {
   const { nodes, materials } = useGLTF(snakeStatue)
   return (
