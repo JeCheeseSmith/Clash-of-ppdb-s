@@ -505,9 +505,10 @@ def trainTroop():
     """
     data = request.json
 
-    success, timers = settlement_data_acces.trainTroop(data.get('id'), data.get('sname'), data.get('amount'), soldier_data_acces,
-                                                      package_data_acces,
-                                                      timer_data_acces)  # Execute actual functionality
+    success, timers = settlement_data_acces.trainTroop(data.get('id'), data.get('sname'), data.get('amount'),
+                                                       soldier_data_acces,
+                                                       package_data_acces,
+                                                       timer_data_acces)  # Execute actual functionality
     if success:
         dct = dict(success=success, sname=data.get('sname'))
         for timer in timers:
@@ -666,7 +667,7 @@ def createOutpost():
                                                        data.get('outpostName'), data.get('soldiers'),
                                                        data.get('resources'), timer_data_acces,
                                                        package_data_acces, clan_data_acces,
-                                                       friend_data_access, soldier_data_acces,settlement_data_acces)
+                                                       friend_data_access, soldier_data_acces, settlement_data_acces)
 
     if success:
         dct = timer.to_dct()
@@ -718,7 +719,7 @@ def getInfo():
         customer = info[1]
 
     info = TransferDataAccess.getInfo(pid, data.get('pname'), customer, soldier_data_acces, clan_data_acces,
-                                       friend_data_access, package_data_acces)
+                                      friend_data_access, package_data_acces)
     info["me"] = customer == data.get('pname')
     return jsonify(info)
 
@@ -1015,6 +1016,7 @@ def deleteClan():
     success = clan_data_acces.deleteClan(data.get('cname'), data.get('pname'))  # Execute functionality
     return jsonify({"success": success})
 
+
 @app.route("/preset", methods=["POST"])
 def preset():
     data = request.json
@@ -1035,6 +1037,7 @@ def preset():
     connection.commit()
 
     return jsonify(data)
+
 
 @app.route("/getAchievements", methods=["GET"])
 def getAchieved():
@@ -1057,14 +1060,16 @@ def getAchieved():
     pname = data.get("pname")
     return jsonify(player_data_access.getAchieved(pname))
 
+
 @app.route("/getleaderboard", methods=["GET"])
 def getLeaderboard():
-   """
+    """
    API Call to retrieve the leaderboard
    JSON Output Format (GET):
    List with players returned in json format, ordered by level
    """
-   return jsonify(player_data_access.getplayers())
+    return jsonify(player_data_access.getplayers())
+
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
