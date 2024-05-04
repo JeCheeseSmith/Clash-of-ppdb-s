@@ -242,7 +242,7 @@ def update():
     }
     """
     timer_data_acces.evaluateTimers(settlement_data_acces, transfer_data_acces, package_data_acces, content_data_access,
-                                    soldier_data_acces, timer_data_acces)
+                                    soldier_data_acces, timer_data_acces, player_data_access)
     data = request.args
     pname = data.get('pname')
 
