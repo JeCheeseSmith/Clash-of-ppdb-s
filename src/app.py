@@ -1077,6 +1077,24 @@ def getLeaderboard():
     return jsonify(player_data_access.getplayers())
 
 
+@app.route("/setXPandLevel", methods=["POST"])
+def setXPandLevel():
+
+    data = request.json
+    player_name = data.get("name")
+    xp_count = data.get("xp")
+    player_data_access.updateXPandLevel(xp_count, player_name)
+
+
+@app.route("/getXPandLevel", methods=["GET"])
+def getXPandLevel():
+    data = request.args
+    player_name = data.get("name")
+    level = player_data_access.getXPandLevel(player_name)[0]
+    xp = player_data_access.getXPandLevel(player_name)[1]
+    return jsonify({"level": level, "xp": xp})
+
+
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")
 def catch_all(path):

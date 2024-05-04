@@ -214,15 +214,13 @@ class TimerDataAccess:
 
             cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (timer.sid,))
             pname = cursor.fetchone()
-            from .content import *
+            from content import Content
             content_data_access.add_message(Content(None, datetime.now(), f"""Your building {name} has been upgraded!""", 'admin'), pname)
 
             self.dbconnect.commit()
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
-
-
 
     def retrieveTimers(self, pname: str, transfer_data_acces):
         """
