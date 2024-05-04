@@ -19,21 +19,27 @@ function InformationTab({selectedObject})
     let {sid, username} = useLocation().state
     const [dictionary, setDictionary] = useState({})
     const [outpostSelected, setOutpostSelected] = useState(false)
-    const [sidOutpostSelected, setSidOutpostSelected] = useState(null)
+    const [mainSettlementSelected, setMainSettlementSelected] = useState(false)
+    const [sidSettlementSelected, setSidSettlementSelected] = useState(null)
     let navigate = useNavigate();
     useEffect(() =>
     {
         API.getInfo(selectedObject.idTO, username, selectedObject.toType).then(data =>
         {
+            console.log(data)
             setDictionary(data)
-            setOutpostSelected(data.me)
-            setSidOutpostSelected(data.id)
+            setOutpostSelected(data.outpost)
+            if (data.me && !data.outpost) // main settlement
+            {
+                setMainSettlementSelected(true)
+            }
+            setSidSettlementSelected(data.id)
         })
     }, []);
 
     const handleNavigationButton = () =>
     {
-        navigate('/MainPage', { state: { sid:sidOutpostSelected, username }});
+        navigate('/MainPage', { state: { sid:sidSettlementSelected, username }});
     }
 
     const resources = resourcesFound(dictionary)
@@ -76,6 +82,7 @@ function InformationTab({selectedObject})
                 </div>
             </div>
             {outpostSelected && <button className={"send-transferTYPE"} onClick={handleNavigationButton}> Adventure Awaits at your Outpost! </button>}
+            {mainSettlementSelected && <button className={"send-transferTYPE"} onClick={handleNavigationButton}> Go Back to Main Settlement! </button>}
         </div>
     );
 }

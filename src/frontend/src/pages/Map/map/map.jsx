@@ -48,12 +48,10 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
 
     const renderSettlement = (rowIndex, colIndex) =>
     {
-        let found = false
         for (let settlement of settlements)
         {
             if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
             {
-                found = true
                 return (
                     <mesh key={`${rowIndex}-${colIndex}-settlement`}
                           position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
