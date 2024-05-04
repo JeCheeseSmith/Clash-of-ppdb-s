@@ -714,10 +714,16 @@ def getInfo():
         info = cursor.fetchone()
         pid = info[0]
         customer = info[1]
+        print(info)
 
     info = TransferDataAccess.getInfo(pid, data.get('pname'), customer, soldier_data_acces, clan_data_acces,
                                       friend_data_access, package_data_acces)
     info["me"] = customer == data.get('pname')
+
+    if not typee: # Settlement
+        info["id"] = data.get('oid')  # Set id to sid
+
+    print(info)
     return jsonify(info)
 
 

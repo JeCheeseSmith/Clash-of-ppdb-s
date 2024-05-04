@@ -13,7 +13,7 @@
 
 #Documentation
 
-For the workings of the game, refer to. the documentation folder in which every component is explained.we'We reccomend reading from the database, to the backend to the frontend to get a solidgraspa boutthre mechanics. 
+For the workings of the game, refer to. the documentation folder in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
 
 ## How to start?
 
