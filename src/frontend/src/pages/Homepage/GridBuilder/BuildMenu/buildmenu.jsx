@@ -109,11 +109,17 @@ function BuildOptions({ menuVisible, setMenuVisible, addBuildable, buildings}) {
                 Military
               </button>
             </li>
+            <li>
+              <button onClick={() => handleButtonClick('Decoration')} className={"type-button"}>
+                Decoration
+              </button>
+            </li>
           </ul>
         </nav>
       )}
       {/* Rendering content based on the current page */}
-      {menuVisible && (<BuildmenuOptionsContents currentPage={currentPage} addBuildable={addBuildable} buildings={buildings}/>)}
+      {menuVisible && (
+          <BuildmenuOptionsContents currentPage={currentPage} addBuildable={addBuildable} buildings={buildings}/>)}
     </div>
   );
 }
