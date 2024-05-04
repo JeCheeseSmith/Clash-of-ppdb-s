@@ -77,3 +77,8 @@ export const getBarrackLevelSum = async(sid) =>
 {
     return await POST({"id": sid}, "/getBarrackLevelSum")
 }
+
+export const getAchieved = async(pname) =>
+{
+    return await GET({"pname": pname}, "/getAchievements")
+}

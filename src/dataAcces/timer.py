@@ -88,8 +88,6 @@ class TimerDataAccess:
         cursor.execute('SELECT aname FROM achieved WHERE amount=0 and pname=%s;', (pname,))  # If amount < 0: it has already been added
         achieved = cursor.fetchall()
         for quest in achieved:
-            print("questname in evalaue:" , quest)
-
             # Set moment and amount to -1; indicating the achievement is done
             cursor.execute('UPDATE achieved SET amount = -1 WHERE aname = %s and pname = %s;', (quest, pname))
 

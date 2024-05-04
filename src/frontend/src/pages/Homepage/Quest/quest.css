@@ -49,3 +49,14 @@
     font-size: 1.5em;
     font-family: 'MedievalSharp', sans-serif;
 }
+
+.questpage-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    color: white;
+    border-radius: 10px;
+    font-size: 1.5em;
+    font-family: 'MedievalSharp', sans-serif;
+}

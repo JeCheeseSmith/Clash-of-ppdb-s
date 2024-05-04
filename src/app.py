@@ -354,7 +354,7 @@ def placeBuilding():
     }
     """
     data = request.json
-
+    print(data.get('name'))
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
     success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
@@ -477,8 +477,6 @@ def getBarrackLevelSum():
     """
     data = request.json
     amount = soldier_data_acces.getBarrackLevelSum(data.get('id'))
-    print({"amount": amount})
-    print(data.get('id'))
     return jsonify({"amount": amount})
 
 
@@ -533,7 +531,6 @@ def getFunction():
     }
     """
     data = request.args
-    print(data.get('bname'))
     return jsonify(building_data_acces.getFunction(data.get('bname')))
 
 
@@ -1027,14 +1024,14 @@ def preset():
     """
 
     # # Reset database
-    # cursor = connection.get_cursor()
-    # cursor.execute(query)
-    # connection.commit()
+    cursor = connection.get_cursor()
+    cursor.execute(query)
+    connection.commit()
 
     from preset import presets
     presets()
 
-    # connection.commit()
+    connection.commit()
 
     return jsonify('data')
 
@@ -1058,7 +1055,8 @@ def getAchieved():
     """
     data = request.args
     pname = data.get("pname")
-    return jsonify(player_data_access.getAchieved(pname))
+    data = player_data_access.getAchieved(pname)
+    return jsonify(data)
 
 
 @app.route("/getleaderboard", methods=["GET"])
