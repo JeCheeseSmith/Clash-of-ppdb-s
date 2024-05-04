@@ -48,18 +48,18 @@ class TimerDataAccess:
         pname = cursor.fetchone()
 
         if timer.type == 'soldier':
-            player_data_acces.updateXPandLevel()
+            player_data_acces.updateXPandLevel(50, pname)
         elif timer.type == 'building':
-            player_data_acces.updateXPandLevel()
+            player_data_acces.updateXPandLevel(200, pname)
         else:  # For transfer timers, the sid of the owner is not strictly timer.sid
             transfer = transfer_data_acces.instantiateTransfer(timer.oid)
             pname = transfer.pname  # Correct pname
             if timer.type == 'transfer':
-                player_data_acces.updateXPandLevel()
+                player_data_acces.updateXPandLevel(100, pname)
             elif timer.type == 'attack':
-                player_data_acces.updateXPandLevel()
+                player_data_acces.updateXPandLevel(100, pname)
             elif timer.type == 'outpost':
-                player_data_acces.updateXPandLevel()
+                player_data_acces.updateXPandLevel(100, pname)
 
         self.dbconnect.commit()  # Commit Achievement Changes
 
