@@ -12,7 +12,7 @@ import snakeStatue from '../../../assets/snakeStatue.glb'
 export default function SnakeStatue(props) {
   const { nodes, materials } = useGLTF(snakeStatue)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} scale={0.5} position={[1.5,0,1.35]}>
       <group rotation={[-Math.PI / 2, 0, 0]}>
         <mesh
           castShadow

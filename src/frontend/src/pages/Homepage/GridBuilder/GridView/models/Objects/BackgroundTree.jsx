@@ -8,10 +8,10 @@ Title: Gorilla Tag Pine Tree Assets
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import tree from '../../assets/tree.glb'
+import backgroundTree from '../../assets/backgroundTree.glb'
 
-export default function Tree({position}) {
-  const { nodes, materials } = useGLTF(tree)
+export default function BackgroundTree({position}) {
+  const { nodes, materials } = useGLTF(backgroundTree)
   return (
     <group dispose={null} position={position}>
       <group scale={0.05}>
@@ -43,4 +43,4 @@ export default function Tree({position}) {
   )
 }
 
-useGLTF.preload(tree)
+useGLTF.preload(backgroundTree)

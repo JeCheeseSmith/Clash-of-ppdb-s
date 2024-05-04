@@ -33,9 +33,9 @@ import Castle from "./GridView/models/Objects/Buildings/Castle.jsx";
 import Chancery from "./GridView/models/Objects/Buildings/Chancery.jsx";
 import Barracks from "./GridView/models/Objects/Buildings/Barracks.jsx";
 import Gazebo from "./GridView/models/Objects/Buildings/Gazebo.jsx";
-import SakuraTree from "./GridView/models/Objects/Buildings/SakuraTree.jsx";
+import Tree from "./GridView/models/Objects/Buildings/Tree.jsx";
 import SnakeStatue from "./GridView/models/Objects/Buildings/SnakeStatue.jsx";
-import WaterStatue from "./GridView/models/Objects/Buildings/WaterStatue.jsx";
+import Fountain from "./GridView/models/Objects/Buildings/Fountain.jsx";
 
 
 /*
@@ -83,7 +83,10 @@ const Buildings =
 
     Decoration:
     {
-        "Gazebo": [BarracksIMAGE, Gazebo, [5,6]]
+        "SnakeStatue": [BarracksIMAGE, SnakeStatue, [5,6]],
+        "Fountain": [BarracksIMAGE, Fountain, [5,6]],
+        "Tree": [BarracksIMAGE, Tree, [9,4]],
+        "Gazebo": [BarracksIMAGE, Gazebo, [4,4]]
     }
 };
 

@@ -8,12 +8,12 @@ Title: Statue
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import waterStatue from '../../../assets/waterStatue.glb'
+import fountain from '../../../assets/fountain.glb'
 
-export default function WaterStatue(props) {
-  const { nodes, materials } = useGLTF(waterStatue)
+export default function Fountain(props) {
+  const { nodes, materials } = useGLTF(fountain)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} position={[-4.2,0.2,3]}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={1.556}>
         <mesh
           castShadow
@@ -62,4 +62,4 @@ export default function WaterStatue(props) {
   )
 }
 
-useGLTF.preload(waterStatue)
+useGLTF.preload(fountain)
