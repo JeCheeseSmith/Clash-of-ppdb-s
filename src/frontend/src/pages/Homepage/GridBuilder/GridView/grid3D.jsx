@@ -11,7 +11,7 @@ import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
 import * as API from "../../../../api/EndPoints/EndPoints.jsx"
 import Ground from "./models/Objects/Ground.jsx";
 import Bush from "./models/Objects/Bush.jsx";
-import Tree from "./models/Objects/Tree.jsx";
+import BackgroundTree from "./models/Objects/BackgroundTree.jsx";
 import Mountain from "./models/Objects/Mountain.jsx";
 import Cobblestones from "./models/Objects/Cobblestones.jsx";
 /**
@@ -321,7 +321,7 @@ function createTree()
     const treeComponents = [];
     for (let i = 0; i < trees.length; i++)
     {
-        treeComponents.push(<Tree key={i} position={trees[i]} />);
+        treeComponents.push(<BackgroundTree key={i} position={trees[i]} />);
     }
     return treeComponents
 }

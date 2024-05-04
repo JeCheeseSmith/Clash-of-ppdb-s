@@ -13,16 +13,7 @@ import gazebo from '../../../assets/gazebo.glb'
 export default function Gazebo(props) {
   const { nodes, materials } = useGLTF(gazebo)
   return (
-    <group {...props} dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.bench_low_Bench_M_0.geometry}
-        material={materials.Bench_M}
-        position={[-1079.35, 155.056, 893.322]}
-        rotation={[-Math.PI / 2, 0, 0.378]}
-        scale={108.912}
-      />
+    <group {...props} dispose={null} scale={0.002} position={[1,0.2,0.5]}>
       <mesh
         castShadow
         receiveShadow

@@ -8,12 +8,12 @@ Title: Sakura tree
 
 import React, { useRef } from 'react'
 import { useGLTF } from '@react-three/drei'
-import sakuraTree from '../../../assets/sakuraTree.glb'
+import tree from '../../../assets/tree.glb'
 
-export default function SakuraTree(props) {
-  const { nodes, materials } = useGLTF(sakuraTree)
+export default function Tree(props) {
+  const { nodes, materials } = useGLTF(tree)
   return (
-    <group {...props} dispose={null}>
+    <group {...props} dispose={null} scale={0.02} position={[2.3,0.25,0.5]}>
       <mesh
         castShadow
         receiveShadow
@@ -3892,89 +3892,9 @@ export default function SakuraTree(props) {
         rotation={[-2.813, -0.601, 2.706]}
         scale={0.066}
       />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Plane536_Leaves_and_Branches_0.geometry}
-        material={materials.Leaves_and_Branches}
-        position={[96.784, 367.845, 5.998]}
-        rotation={[0.504, 0.036, -2.898]}
-        scale={0.085}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Plane537_Leaves_and_Branches_0.geometry}
-        material={materials.Leaves_and_Branches}
-        position={[15.343, 403.609, -20.677]}
-        rotation={[1.935, 1.301, 2.442]}
-        scale={0.068}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Plane538_Leaves_and_Branches_0.geometry}
-        material={materials.Leaves_and_Branches}
-        position={[30.389, 386.08, -44.728]}
-        rotation={[0.496, 1.195, -2.814]}
-        scale={0.061}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Plane539_Leaves_and_Branches_0.geometry}
-        material={materials.Leaves_and_Branches}
-        position={[-1.166, 398.969, -69.67]}
-        rotation={[-0.68, 0.662, -1.719]}
-        scale={0.077}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Plane540_Leaves_and_Branches_0.geometry}
-        material={materials.Leaves_and_Branches}
-        position={[64.626, 346.988, -86.282]}
-        rotation={[-0.853, 0.501, -2.492]}
-        scale={0.077}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Plane541_Leaves_and_Branches_0.geometry}
-        material={materials.Leaves_and_Branches}
-        position={[79.748, 401.176, -59.488]}
-        rotation={[-0.445, 0.227, -2.323]}
-        scale={0.077}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Plane542_Leaves_and_Branches_0.geometry}
-        material={materials.Leaves_and_Branches}
-        position={[97.492, 329.014, 9.449]}
-        rotation={[0.13, -0.129, 3.08]}
-        scale={0.077}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes['Box002_Material_#46_0'].geometry}
-        material={materials.Material_46}
-        position={[-4.086, -0.016, -45.5]}
-        rotation={[-Math.PI / 2, 0, -Math.PI / 2]}
-        scale={1.644}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes['SM_Sandals_Material_#0001_0'].geometry}
-        material={materials['Material_0.001']}
-        position={[63.517, 3.958, -65.927]}
-        rotation={[Math.PI / 2, 0, -2.998]}
-        scale={1.15}
-      />
+
     </group>
   )
 }
 
-useGLTF.preload(sakuraTree)
+useGLTF.preload(tree)
