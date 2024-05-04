@@ -40,7 +40,7 @@ import Fountain from "./GridView/models/Objects/Buildings/Fountain.jsx";
 
 /*
 * Building Name: String
-* Building Size: [columns, rows]
+* Building Resolution: [columns, rows]
 * */
 
 const Buildings =
