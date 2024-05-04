@@ -14,7 +14,7 @@ Multiple enhancements are added to improve the user experience; social menu's, q
 Players are uniquely identified by their username. The login is only password protected and optionally the (relative) path of an avatar can be set to display a users profile.
 Each player has an amount of gems, a level and associated XP. The last logout timestamp is kept to recalculate the resources for a user on login. 
 
-It is possible to achieve Achievements which are uniquely identified by a name. A task is given. Each Quest is also an Achievement, since it's the same data that needs to be stored. However, they have a deadline (Timestamp) specified to be completed before.
+It is possible to achieve Achievements which are uniquely identified by a name. A task is given.
 
 Each Achievement contains a Package, which is the reward for fulfilling a noble task. (See Package)
 

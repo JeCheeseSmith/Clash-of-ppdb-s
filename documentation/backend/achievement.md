@@ -1,18 +1,18 @@
 # Achievements
-> TODO
+> Achievements or quests contain actions that needs to be done. When achieved, an xp bonus is set. XP can also be achieved by playing the game upon different actions.
 
-Woodcutter: Build 3 Woodcutters
-Fighter: Defeat 5 Enemies
-Friendly Neighbour: Send 7 times resources to an ally
-Hungry for more: Train 500 Troops
-Kingdom Rebuilder: Create an outpost
-Travisia's Uniter: Create a clan" 
+Upon a timer's ending (actions that are made), the quests status is verified and the xp amount is incremented.
 
+### evaluateQuests()
 
+This function is given a timer and verifies the quest actions. E.g. if the task is to build 3 Woodcutters, it is checked if the timer type is a building.
+Then we check if a woodcutter was build. If so, the task amount in the database will be decremented, telling us less actions need to be done.
 
-XP: 1 level = 1000 XP
+If the amount is negative, a predefined xpBonus will be added to the player' level. 
 
-Soldier Trainee: +1
-Transfer: + 50
-Building: +100
-Completing 1 Quest: + 500 XP
+Code exists for each achievement. 
+
+### evualateXP()
+
+TODO Raadin  write XP backend
+

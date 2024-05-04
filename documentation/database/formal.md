@@ -34,7 +34,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | [admin](#admin)                     | Contains the users who are also admins                                         |
 | [clan](#clan)                       | Contains all current clans and their info                                      |
 | [achievement](#achievement)         | Stores the different achievements                                              |
-| [quest](#quest)                     | Specialization upon achievements favoring a deadline                           |                         |
 | [transfer](#transfer)               | Keeps all the active transfers between settlements                             |
 | [buildable](#buildable)             | All possible buildings to build                                                |
 | [building](#building)               | Actual buildable placed into a settlement                                      |
@@ -162,13 +161,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | task | TEXT    | Description of the tasks to do     |
 | pid  | INT     | Contains Relation (See ER-Diagram) |
 
-### quest
-
-| Name     | Type      | Explanation                                 |
-|----------|-----------|---------------------------------------------|
-| name     | VARCHAR   | PRIMARY KEY; Specialisation of Achievement  |
-| deadline | TIMESTAMP | Latest time the quest needs to be fulfilled |
-
 ### transfer
 
 | Name       | Type    | Explanation                                                                  |
@@ -270,8 +262,8 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### achieved
 
-| Name   | Type      | Explanation                               |
-|--------|-----------|-------------------------------------------|
-| pname  | VARCHAR   | Player who achieved the achievement       |
-| aname  | VARCHAR   | Name of the achievement which is achieved |
-| moment | TIMESTAMP | Moment of achieving the achievement       |
+| Name   | Type    | Explanation                                                                                                                 |
+|--------|---------|-----------------------------------------------------------------------------------------------------------------------------|
+| pname  | VARCHAR | Player who achieved the achievement                                                                                         |
+| aname  | VARCHAR | Name of the achievement which is achieved                                                                                   |
+| amount | INT     | Number of times the action need to be done. Decremented upon doing 1 action. A negative amount means the task is completed. |
