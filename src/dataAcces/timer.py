@@ -137,7 +137,7 @@ class TimerDataAccess:
             if timer.type == 'soldier':
                 self.simulateTroopTraining(timer)
             elif timer.type == 'building':
-                self.simulateUpgrade(timer, settlement_data_acces)
+                self.simulateUpgrade(timer, settlement_data_acces, content_data_access)
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access,
                                      soldier_data_acces)
@@ -190,7 +190,7 @@ class TimerDataAccess:
             print('error', e)
             self.dbconnect.rollback()
 
-    def simulateUpgrade(self, timer: Timer, settlement_data_acces):
+    def simulateUpgrade(self, timer: Timer, settlement_data_acces, content_data_access):
         """
         Increment the level of a building with 1. If the Castle is to be upgraded, execute the extra functionality
         :param timer: Complete Timer Object
@@ -212,10 +212,17 @@ class TimerDataAccess:
             elif name == 'Barracks':  # Upgrading a barrack unlocks new troops
                 settlement_data_acces.upgradeBarracks(timer.sid)
 
+            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (timer.sid,))
+            pname = cursor.fetchone()
+            from .content import *
+            content_data_access.add_message(Content(None, datetime.now(), f"""Your building {name} has been upgraded!""", 'admin'), pname)
+
             self.dbconnect.commit()
         except Exception as e:
             print('error', e)
             self.dbconnect.rollback()
+
+
 
     def retrieveTimers(self, pname: str, transfer_data_acces):
         """
