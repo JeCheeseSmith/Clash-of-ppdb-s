@@ -15,6 +15,10 @@ import WoodStockpileIMAGE from "./BuildMenu/assets/ObjectsImages/woodstockpile.p
 import CastleIMAGE from "./BuildMenu/assets/ObjectsImages/castle.png";
 import ChanceryIMAGE from "./BuildMenu/assets/ObjectsImages/chancery.png";
 import BarracksIMAGE from "./BuildMenu/assets/ObjectsImages/barracks.png";
+import SnakeStatueIMAGE from "./BuildMenu/assets/ObjectsImages/snakestatue.png";
+import FountainIMAGE from "./BuildMenu/assets/ObjectsImages/fountain.png";
+import TreeIMAGE from "./BuildMenu/assets/ObjectsImages/tree.png";
+import GazeboIMAGE from "./BuildMenu/assets/ObjectsImages/gazebo.png";
 ////////////////////////////////////////// BUILDING 3D OBJECTS //////////////////////////////////////////
 import WoodCuttersCamp from "./GridView/models/Objects/Buildings/WoodCuttersCamp.jsx";
 import Quarry from "./GridView/models/Objects/Buildings/Quarry.jsx";
@@ -32,10 +36,11 @@ import WoodStockpile from "./GridView/models/Objects/Buildings/WoodStockpile.jsx
 import Castle from "./GridView/models/Objects/Buildings/Castle.jsx";
 import Chancery from "./GridView/models/Objects/Buildings/Chancery.jsx";
 import Barracks from "./GridView/models/Objects/Buildings/Barracks.jsx";
-import Gazebo from "./GridView/models/Objects/Buildings/Gazebo.jsx";
-import Tree from "./GridView/models/Objects/Buildings/Tree.jsx";
 import SnakeStatue from "./GridView/models/Objects/Buildings/SnakeStatue.jsx";
 import Fountain from "./GridView/models/Objects/Buildings/Fountain.jsx";
+import Tree from "./GridView/models/Objects/Buildings/Tree.jsx";
+import Gazebo from "./GridView/models/Objects/Buildings/Gazebo.jsx";
+
 
 
 /*
@@ -83,10 +88,10 @@ const Buildings =
 
     Decoration:
     {
-        "SnakeStatue": [BarracksIMAGE, SnakeStatue, [5,6]],
-        "Fountain": [BarracksIMAGE, Fountain, [5,6]],
-        "Tree": [BarracksIMAGE, Tree, [9,4]],
-        "Gazebo": [BarracksIMAGE, Gazebo, [4,4]]
+        "SnakeStatue": [SnakeStatueIMAGE, SnakeStatue, [5,6]],
+        "Fountain": [FountainIMAGE, Fountain, [5,6]],
+        "Tree": [TreeIMAGE, Tree, [9,4]],
+        "Gazebo": [GazeboIMAGE, Gazebo, [4,4]]
     }
 };
 

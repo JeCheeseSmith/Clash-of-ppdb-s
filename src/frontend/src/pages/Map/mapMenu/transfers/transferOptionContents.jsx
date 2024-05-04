@@ -96,10 +96,10 @@ function TransferPage({selectedObject, outpostChosen})
     }
 
     return (
-        <div className={"transferMenu-container"}>
-            <div className={"soldierTransfer-container"}>
+        <div className={"transferMenu-container"} key={"TransferPage"}>
+            <div className={"soldierTransfer-container"} key={"TransferPage"}>
                 {Object.entries(Soldiers).map(([category, images]) => (
-                    <div>
+                    <div key={category}>
                         {Object.entries(images).map((image) => (
                             <div key={image[0]} className={"iconWithAmount"}>
                                 <img src={image[1]} className={"soldier-image"} alt={"Soldier"}/>
@@ -181,10 +181,10 @@ function AttackPage({selectedObject})
         })
     }
     return (
-        <div className={"transferMenu-container"}>
-            <div className={"soldierTransfer-container"}>
+        <div className={"transferMenu-container"} key={"AttackPage"}>
+            <div className={"soldierTransfer-container"} key={"AttackPage"}>
                 {Object.entries(Soldiers).map(([category, images]) => (
-                    <div>
+                    <div key={category}>
                         {Object.entries(images).map((image) => (
                             <div key={image[0]} className={"iconWithAmount"}>
                                 <img src={image[1]} className={"soldier-image"} alt={"Soldier"}/>

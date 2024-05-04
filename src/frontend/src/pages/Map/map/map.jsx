@@ -55,7 +55,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
             {
                 found = true
                 return (
-                    <mesh key={`${rowIndex}-${colIndex}`}
+                    <mesh key={`${rowIndex}-${colIndex}-settlement`}
                           position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
                           onClick={() => handleTransfer(settlement.sid, false)}
                           scale={2}
@@ -69,7 +69,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
         {
             return (
                 <gridHelper
-                    key={`${rowIndex}-${colIndex}`}
+                    key={`${rowIndex}-${colIndex}-grid`}
                     position={[colIndex - mapSize / 2, 5.9, rowIndex - mapSize / 2]}
                     args={[1, 1]}
                     material={new THREE.MeshBasicMaterial({color: 0x0ff000})}
@@ -89,7 +89,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                 if (timer.from[0] === rowIndex && timer.from[1] === colIndex && timer.discovered && timer.to)
                 {
                     arrowMeshes.push(
-                        <mesh key={`${rowIndex}-${colIndex}-${timer.type}`}
+                        <mesh key={`${rowIndex}-${colIndex}-${timer.to}`}
                               position={[colIndex + 0.5 - mapSize / 2, 0, rowIndex + 1 - mapSize / 2]}
                               onClick={() => handleTransfer(timer.tid, true)}
                         >
