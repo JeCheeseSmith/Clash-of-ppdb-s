@@ -354,7 +354,7 @@ def placeBuilding():
     }
     """
     data = request.json
-
+    print(data.get('name'))
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
     success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality

@@ -102,6 +102,8 @@ class Package:
             return Package([0, 0, 0, 0, amount, 0, 0])
         elif upgradeResource == 12:  # E.g. Stone AND Wood
             return Package([0, amount, amount, 0, 0, 0, 0])
+        elif upgradeResource == 5:  # Gems
+            return Package([0, 0, 0, 0, 0, amount, 0])
 
     @abstractmethod
     def hasNegativeBalance(self):

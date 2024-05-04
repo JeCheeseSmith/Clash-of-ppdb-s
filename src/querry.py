@@ -183,7 +183,8 @@ CREATE TABLE IF NOT EXISTS timer(
 
 -- Insert standard buildings
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','storage','{1000,0}','{21600,21600}','{0,4000,0}',12);
+-- TODO change castle value back
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','storage','{12000,0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','storage','{1000,0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Chancery','government','{0}','{86400,0}','{0,32000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Barracks','government','{0}','{21600,0}','{0,4000,0}',12);
@@ -204,7 +205,10 @@ INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeRe
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('BlackSmith','defense','{1.1,0}','{21600,0}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Tavern','defense','{1.1,0}','{21600,0}','{0,4000,0}',12);
 
-INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('empty','decoration','{1.1,0}','{3,0}','{3,0}',12);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SnakeStatue','decoration','{1.1,0}','{10,0}','{1,0}',5);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Fountain','decoration','{1.1,0}','{10,0}','{1,0}',5);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Tree','decoration','{1.1,0}','{10,0}','{1,0}',5);
+INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Gazebo','decoration','{1.1,0}','{10,0}','{1,0}',5);
 
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('ArmoredFootman','HeavyInfantry',15,10,5,72,1,1,2,10);
 INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,stealth, cost, trainingtime) VALUES('Huskarl','HeavyInfantry',25,15,5,108,1,1,4,20);
