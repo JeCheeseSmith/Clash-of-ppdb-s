@@ -95,3 +95,8 @@ export const getXPLevel = async (username) => {
 export const Wheelcheck= async (username)=>{
     return await GET({name: username},"/controlespin")
 }
+
+export const Wheelprize = async (sid,username,prize) =>
+{
+    return await POST({sid, username, prize}, '/wheelOFfortune')
+}

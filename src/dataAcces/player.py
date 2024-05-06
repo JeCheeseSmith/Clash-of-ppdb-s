@@ -72,12 +72,12 @@ class PlayerDataAccess:
             # Send a message to the user from the system
             content_data_access.add_message(Content(None, None, "Welcome to Travisia!", "admin"), obj.name)
 
-            # # Add achievements
-            # cursor.execute('SELECT name, amount FROM achievement;')
-            # quests = cursor.fetchall()
-            # for tup in quests:
-            #     cursor.execute('INSERT INTO achieved(pname, aname, amount) VALUES(%s,%s,%s);', (obj.name, tup[0], tup[1]))
-            # self.dbconnect.commit()
+            # Add achievements
+            cursor.execute('SELECT name, amount FROM achievement;')
+            quests = cursor.fetchall()
+            for tup in quests:
+                cursor.execute('INSERT INTO achieved(pname, aname, amount) VALUES(%s,%s,%s);', (obj.name, tup[0], tup[1]))
+            self.dbconnect.commit()
 
             cursor.execute('INSERT INTO wheeloffortune(pname,sid) VALUES(%s,%s);', (obj.name,sid))
             self.dbconnect.commit()
@@ -170,20 +170,25 @@ class PlayerDataAccess:
 
         current_time = datetime.now()
 
-        print(name)
-        print(time)
-
         if time==None:
-            print("tsts")
             cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
             self.dbconnect.commit()
             return True
         else:
             if current_time-time >= timedelta(days=1):
-                print("jaa")
                 cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
                 self.dbconnect.commit()
                 return True
             else:
-                print("nrrr")
                 return False
+
+    def updategems(self,pname,aantal):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT gems from player where name=%s;',(pname,))
+        pgems=cursor.fetchone()[0]
+
+        pgems+=aantal
+        cursor.execute('UPDATE player SET gems = %s WHERE name=%s;', (pgems, pname,))
+        self.dbconnect.commit()
+
+

@@ -2,9 +2,11 @@ import React, {useEffect, useState} from 'react';
 import './wheel.css'
 import GET from "../../../api/GET.jsx";
 import * as API from "../../../api/EndPoints/EndPoints.jsx";
+import POST from "../../../api/POST.jsx";
 
 
-function WheelOfFortune ({username1}) {
+
+function WheelOfFortune ({username1,sid1}) {
 
   // Variable to check if the toggle-leaderboard-button has been clicked, initially set to false
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,7 +28,7 @@ function WheelOfFortune ({username1}) {
 
     }else{
       setIsMenuOpen(false);
-      alert("dombo.");
+      alert("You can only spin the wheel once a day.");
     }
 
   };
@@ -43,17 +45,19 @@ function WheelOfFortune ({username1}) {
       setTimeout(() => {
         setIsMenuOpen(false);
         setShowPrize(true);
-      }, 6000);
+      }, 7000);
 
       setTimeout(() => {
         setShowPrize(false);
-      }, 10000);
+      }, 8000);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         const arrowAngle = (390 - (newRotation % 360)) % 360;
         const newPrize = getPrize(arrowAngle);
         setPrize(newPrize);
+        await POST({sid1, username1,newPrize}, '/wheelOFfortune')
       }, 5000);
+
       setCanSpin(false);
     } else {
       alert("You can only spin the wheel once a day.");
@@ -104,8 +108,8 @@ function WheelOfFortune ({username1}) {
                 <div className={"segments-wheel"} style={{ "--i": 2, "--clr": "#ffff00" }}><span>1000 stone</span></div>
                 <div className={"segments-wheel"} style={{ "--i": 3, "--clr": "#0000FF" }}><span>1000 food</span></div>
                 <div className={"segments-wheel"} style={{ "--i": 4, "--clr": "#008000" }}><span>1000 metal</span></div>
-                <div className={"segments-wheel"} style={{ "--i": 5, "--clr": "#800080" }}><span>100 gems</span></div>
-                <div className={"segments-wheel"} style={{ "--i": 6, "--clr": "#dc143c" }}><span>200 xp</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 5, "--clr": "#800080" }}><span>200 gems</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 6, "--clr": "#dc143c" }}><span>150 xp</span></div>
                 <div className={"segments-wheel"} style={{ "--i": 7, "--clr": "#008b8b" }}><span>1000 gems</span></div>
                 <div className={"segments-wheel"} style={{ "--i": 8, "--clr": "#ff8c00" }}><span>Level up</span></div>
                 <div className={"segments-wheel"} style={{ "--i": 9, "--clr": "#ff1493" }}><span>bad luck</span></div>
@@ -130,5 +134,6 @@ export default WheelOfFortune;
 export const Wheelinfo = (username) => {
     return API.Wheelcheck(username).then(data => data.bool);
 };
+
 
 

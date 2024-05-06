@@ -1100,8 +1100,10 @@ def getXPandLevel():
 @app.route("/wheelOFfortune", methods=["POST"])
 def getprize():
     data = request.json
-    sid=data.get("sid")
-    prize = data.get("prize")
+    pname = data.get("username1")
+    sid=data.get("sid1")
+    prize = data.get("newPrize")
+    print(prize)
     if prize=='You won 1000 wood!':
         package_data_acces.Resource_managment(sid,1000,"wood")
     if prize == 'You won 1000 stone!':
@@ -1110,23 +1112,31 @@ def getprize():
         package_data_acces.Resource_managment(sid, 1000, "food")
     if prize == 'You won 1000 metal!':
         package_data_acces.Resource_managment(sid, 1000, "steel")
-    # if prize == 'You won 200 gems!':
-    # if prize == 'You won 150 xp!':
-    # if prize == 'You won 1000 gems!':
-    # if prize == 'Level up':
+    if prize == 'You won 200 gems!':
+        player_data_access.updategems(pname,200)
+    if prize == 'You won 150 xp!':
+        player_data_access.updateXPandLevel(150, pname)
+
+    if prize == 'You won 1000 gems!':
+        player_data_access.updategems(pname, 1000)
+    if prize == 'Level up':
+        player_data_access.updateXPandLevel(1000, pname)
 
     if prize == 'Jackpot':
         package_data_acces.Resource_managment(sid, 1000, "wood")
         package_data_acces.Resource_managment(sid, 1000, "stone")
         package_data_acces.Resource_managment(sid, 1000, "food")
         package_data_acces.Resource_managment(sid, 1000, "steel")
+        player_data_access.updateXPandLevel(1500, pname)
+        player_data_access.updategems(pname, 1500)
+
+    return jsonify({"success": True, "message": "Prize is updated "})
 
 @app.route("/controlespin", methods=["GET"])
 def get_controlespin():
     data = request.args
     player_name = data.get("name")
     info=player_data_access.checkwheel(player_name)
-    print(info)
     return jsonify({"bool": info})
 
 
