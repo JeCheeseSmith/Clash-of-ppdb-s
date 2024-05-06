@@ -14,5 +14,5 @@ Code exists for each achievement.
 
 ### evualateXP()
 
-TODO Raadin  write XP backend
-
+This function takes in parameters such as a timer, 'transfer_data_access', and 'player_data_access'. It checks if the timer is for a soldier, a building,
+a transfer, an attack or an outpost. Depending on the timer type, the function then calls 'updateXPandlevel' (defined in player.py) and provides it with the player's name and a certain amount of XP. 
