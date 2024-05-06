@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './wheel.css'
+import GET from "../../../api/GET.jsx";
+import * as API from "../../../api/EndPoints/EndPoints.jsx";
 
-const WheelOfFortune = () => {
+
+function WheelOfFortune ({username1}) {
 
   // Variable to check if the toggle-leaderboard-button has been clicked, initially set to false
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,38 +14,51 @@ const WheelOfFortune = () => {
   const [showPrize, setShowPrize] = useState(false);
   // Variable to set the prize itself, initially an empty string
   const [prize, setPrize] = useState('');
+  const [canSpin, setCanSpin] = useState();
+
 
   // This function handles the toggle-wheel-button click
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+  const toggleMenu = async () => {
+    const info = await Wheelinfo(username1);
+    setCanSpin(info);
+    if (info){
+      setIsMenuOpen(true);
+
+    }else{
+      setIsMenuOpen(false);
+      alert("dombo.");
+    }
+
   };
 
+
   // This is made for the spin of the wheel
-  const spinWheel = () => {
-    // First part is to calculate the rotation of the wheel
-    const newValue = Math.ceil(Math.random() * 3600);
-    const newRotation = rotation + newValue;
-    setRotation(newRotation);
-    setShowPrize(false);
+   const spinWheel = () => {
+    if (canSpin) {
+      const newValue = Math.ceil(Math.random() * 3600);
+      const newRotation = rotation + newValue;
+      setRotation(newRotation);
+      setShowPrize(false);
 
-    // Set a timer when to show the popup
-    setTimeout(() => {
-    setIsMenuOpen(false);
-    setShowPrize(true);
-    }, 6000);
+      setTimeout(() => {
+        setIsMenuOpen(false);
+        setShowPrize(true);
+      }, 6000);
 
-    // Set a timer when to close the popup
-    setTimeout(() => {
-     setShowPrize(false);
-    }, 7000);
+      setTimeout(() => {
+        setShowPrize(false);
+      }, 10000);
 
-    // Set a timer of the wheel itself after it gets the price
-    setTimeout(() => {
-      const arrowAngle = (390 - (newRotation % 360)) % 360;
-      const newPrize = getPrize(arrowAngle);
-      setPrize(newPrize);
-    },5000);
-};
+      setTimeout(() => {
+        const arrowAngle = (390 - (newRotation % 360)) % 360;
+        const newPrize = getPrize(arrowAngle);
+        setPrize(newPrize);
+      }, 5000);
+      setCanSpin(false);
+    } else {
+      alert("You can only spin the wheel once a day.");
+    }
+  };
 
   // Function to calculate the prize with an angle and with the given segments we used in the wheel
   const getPrize = (angle) => {
@@ -59,17 +75,17 @@ const WheelOfFortune = () => {
     } else if (angle >= 3 * segmentAngle && angle < 4 * segmentAngle) {
       prize = 'You won 1000 metal!';
     } else if (angle >= 4 * segmentAngle && angle < 5 * segmentAngle) {
-      prize = 'You won 1000 gems!';
+      prize = 'You won 200 gems!';
     } else if (angle >= 5 * segmentAngle && angle < 6 * segmentAngle) {
-      prize = 'You won Xp boost!';
+      prize = 'You won 150 xp!';
     } else if (angle >= 6 * segmentAngle && angle < 7 * segmentAngle) {
-      prize = 'You won Upgrade boost!';
+      prize = 'You won 1000 gems';
     } else if (angle >= 7 * segmentAngle && angle < 8 * segmentAngle) {
-      prize = 'You won Free soldier!';
+      prize = 'Level up';
     } else if (angle >= 8 * segmentAngle && angle < 9 * segmentAngle) {
-      prize='You won Level up!';
+      prize='bad luck!';
     }else {
-      prize = 'You won 2000 gems!';
+      prize = 'Jackpot';
     }
     return prize;
   };
@@ -88,12 +104,12 @@ const WheelOfFortune = () => {
                 <div className={"segments-wheel"} style={{ "--i": 2, "--clr": "#ffff00" }}><span>1000 stone</span></div>
                 <div className={"segments-wheel"} style={{ "--i": 3, "--clr": "#0000FF" }}><span>1000 food</span></div>
                 <div className={"segments-wheel"} style={{ "--i": 4, "--clr": "#008000" }}><span>1000 metal</span></div>
-                <div className={"segments-wheel"} style={{ "--i": 5, "--clr": "#800080" }}><span>1000 gems</span></div>
-                <div className={"segments-wheel"} style={{ "--i": 6, "--clr": "#dc143c" }}><span>Xp boost</span></div>
-                <div className={"segments-wheel"} style={{ "--i": 7, "--clr": "#008b8b" }}><span>Upgrade boost</span></div>
-                <div className={"segments-wheel"} style={{ "--i": 8, "--clr": "#ff8c00" }}><span>Free soldier</span></div>
-                <div className={"segments-wheel"} style={{ "--i": 9, "--clr": "#ff1493" }}><span>Level up</span></div>
-                <div className={"segments-wheel"} style={{ "--i": 10, "--clr": "#00bfff" }}><span>2000 gems</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 5, "--clr": "#800080" }}><span>100 gems</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 6, "--clr": "#dc143c" }}><span>200 xp</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 7, "--clr": "#008b8b" }}><span>1000 gems</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 8, "--clr": "#ff8c00" }}><span>Level up</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 9, "--clr": "#ff1493" }}><span>bad luck</span></div>
+                <div className={"segments-wheel"} style={{ "--i": 10, "--clr": "#00bfff" }}><span>Jackpot</span></div>
               </div>
             </div>
         )}
@@ -107,8 +123,12 @@ const WheelOfFortune = () => {
       )}
       </div>
   );
-};
+}
 
 export default WheelOfFortune;
+
+export const Wheelinfo = (username) => {
+    return API.Wheelcheck(username).then(data => data.bool);
+};
 
 

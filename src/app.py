@@ -1097,6 +1097,46 @@ def getXPandLevel():
     xp = player_data_access.getXPandLevel(player_name)[1]
     return jsonify({"level": level, "xp": xp})
 
+@app.route("/wheelOFfortune", methods=["POST"])
+def getprize():
+    data = request.json
+    sid=data.get("sid")
+    prize = data.get("prize")
+    if prize=='You won 1000 wood!':
+        package_data_acces.Resource_managment(sid,1000,"wood")
+    if prize == 'You won 1000 stone!':
+        package_data_acces.Resource_managment(sid, 1000, "stone")
+    if prize == 'You won 1000 food!':
+        package_data_acces.Resource_managment(sid, 1000, "food")
+    if prize == 'You won 1000 metal!':
+        package_data_acces.Resource_managment(sid, 1000, "steel")
+    # if prize == 'You won 200 gems!':
+    # if prize == 'You won 150 xp!':
+    # if prize == 'You won 1000 gems!':
+    # if prize == 'Level up':
+
+    if prize == 'Jackpot':
+        package_data_acces.Resource_managment(sid, 1000, "wood")
+        package_data_acces.Resource_managment(sid, 1000, "stone")
+        package_data_acces.Resource_managment(sid, 1000, "food")
+        package_data_acces.Resource_managment(sid, 1000, "steel")
+
+@app.route("/controlespin", methods=["GET"])
+def get_controlespin():
+    data = request.args
+    player_name = data.get("name")
+    info=player_data_access.checkwheel(player_name)
+    print(info)
+    return jsonify({"bool": info})
+
+
+
+
+
+
+
+
+
 
 @app.route("/", defaults={"path": ""})
 @app.route("/<path:path>")

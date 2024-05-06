@@ -88,7 +88,7 @@ function MainPage()
             <Leaderboard/>
             <Chat/>
             <SocialBox/>
-            <WheelOfFortune/>
+            <WheelOfFortune username1={username}/>
             <Account/>
             <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
             <div className={"grid"}>

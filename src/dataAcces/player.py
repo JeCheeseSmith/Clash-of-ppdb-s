@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from .content import *
 from .package import *
 
@@ -70,11 +72,14 @@ class PlayerDataAccess:
             # Send a message to the user from the system
             content_data_access.add_message(Content(None, None, "Welcome to Travisia!", "admin"), obj.name)
 
-            # Add achievements
-            cursor.execute('SELECT name, amount FROM achievement;')
-            quests = cursor.fetchall()
-            for tup in quests:
-                cursor.execute('INSERT INTO achieved(pname, aname, amount) VALUES(%s,%s,%s);', (obj.name, tup[0], tup[1]))
+            # # Add achievements
+            # cursor.execute('SELECT name, amount FROM achievement;')
+            # quests = cursor.fetchall()
+            # for tup in quests:
+            #     cursor.execute('INSERT INTO achieved(pname, aname, amount) VALUES(%s,%s,%s);', (obj.name, tup[0], tup[1]))
+            # self.dbconnect.commit()
+
+            cursor.execute('INSERT INTO wheeloffortune(pname,sid) VALUES(%s,%s);', (obj.name,sid))
             self.dbconnect.commit()
 
             return True, sid
@@ -157,3 +162,28 @@ class PlayerDataAccess:
         for quest in achieved:
             lst.append(dict(aname=quest[0], task=quest[1]))
         return lst
+
+    def checkwheel(self,name):
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT last_timespin FROM wheeloffortune where pname=%s;',(name,))
+        time=cursor.fetchone()[0]
+
+        current_time = datetime.now()
+
+        print(name)
+        print(time)
+
+        if time==None:
+            print("tsts")
+            cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
+            self.dbconnect.commit()
+            return True
+        else:
+            if current_time-time >= timedelta(days=1):
+                print("jaa")
+                cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
+                self.dbconnect.commit()
+                return True
+            else:
+                print("nrrr")
+                return False

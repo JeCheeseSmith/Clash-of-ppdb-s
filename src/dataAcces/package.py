@@ -457,6 +457,117 @@ class PackageDataAccess:
                        (Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))
         self.dbconnect.commit()
 
+    def Resource_managment(self,sid,aantal,resource):
+        """
+        Function to re-evaluate resources number with
+        start: Start Time of the interval to calculate resource from
+        stop: end time towards resources need to be calculated
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+
+
+        # Player resources
+        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))
+        pid = cursor.fetchone()[0]
+        cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid,))
+        Pwood = cursor.fetchone()[0]
+        cursor.execute('SELECT stone FROM package WHERE id=%s;', (pid,))
+        Pstone = cursor.fetchone()[0]
+        cursor.execute('SELECT steel FROM package WHERE id=%s;', (pid,))
+        Psteel = cursor.fetchone()[0]
+        cursor.execute('SELECT food FROM package WHERE id=%s;', (pid,))
+        Pfood = cursor.fetchone()[0]
+
+        # Maximum storage
+        Wood = 0
+        Stone = 0
+        Steel = 0
+        Food = 0
+
+        # Search the person his buildings on the settlement
+        cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
+        buildings = cursor.fetchall()
+
+
+        # Find the right storage functions
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodStockPile",))
+        Wood_Storage_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("StoneStockPile",))
+        Stone_Storage_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Armory",))
+        Steel_Storage_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("GrainSilo",))
+        Food_Storage_function = cursor.fetchone()[0]
+
+        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Castle",))
+        Castle_Storage_function = cursor.fetchone()[0]
+
+        if resource=="wood":
+            for building in buildings:
+                if building[1] == "WoodStockPile":
+                    Level = building[2]
+                    Wood += PackageDataAccess.evaluate(Wood_Storage_function, Level)
+
+                if building[1] == "Castle":
+                    Level = building[2]
+                    MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
+                    Wood += MainStorage
+
+            Newp_wood = round(min(aantal + Pwood, Wood))
+            cursor.execute('UPDATE package SET wood = %s WHERE id=%s;',(Newp_wood, pid))
+
+
+
+        if resource == "stone":
+            for building in buildings:
+                if building[1] == "StoneStockPile":
+                    Level = building[2]
+                    Stone += PackageDataAccess.evaluate(Stone_Storage_function, Level)
+
+                if building[1] == "Castle":
+                    Level = building[2]
+                    MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
+                    Stone += MainStorage
+
+            Newp_stone = round(min(aantal + Pstone, Stone))
+            cursor.execute('UPDATE package SET stone = %s WHERE id=%s;', (Newp_stone, pid))
+
+        if resource == "steel":
+            for building in buildings:
+                if building[1] == "Armory":
+                    Level = building[2]
+                    Steel += PackageDataAccess.evaluate(Steel_Storage_function, Level)
+
+                if building[1] == "Castle":
+                    Level = building[2]
+                    MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
+                    Steel += MainStorage
+
+            Newp_steel = round(min(aantal + Psteel, Steel))
+            cursor.execute('UPDATE package SET steel = %s WHERE id=%s;', (Newp_steel, pid))
+
+
+        if resource=="food":
+            for building in buildings:
+                if building[1] == "GrainSilo":
+                    Level = building[2]
+                    Food += PackageDataAccess.evaluate(Food_Storage_function, Level)
+
+                if building[1] == "Castle":
+                    Level = building[2]
+                    MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
+                    Food += MainStorage
+
+            Newp_food = round(min(aantal + Pfood, Food))
+            cursor.execute('UPDATE package SET food = %s WHERE id=%s;', (Newp_food, pid))
+
+
+        self.dbconnect.commit()
+
     @staticmethod
     def evaluate(function: list, x: int):
         """

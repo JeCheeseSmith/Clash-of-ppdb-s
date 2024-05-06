@@ -91,3 +91,7 @@ export const setXPLevel = async (username, xp_amount) => {
 export const getXPLevel = async (username) => {
     return await GET({ name: username}, "/getXPandLevel");
 }
+
+export const Wheelcheck= async (username)=>{
+    return await GET({name: username},"/controlespin")
+}
