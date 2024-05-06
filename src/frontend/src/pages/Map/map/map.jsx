@@ -11,6 +11,7 @@ import LocalTimers from "../../../globalComponents/backgroundFunctions/localTime
 import ResourceBar from "../../Homepage/RecourceBar/resourcebar.jsx";
 import Environment from "./modals/Environment.jsx";
 import Landscape from "./modals/Landscape.jsx";
+import Settlement2 from "./modals/Settlement2.jsx";
 
 /**
  * Represents a component for displaying and interacting with a map.
@@ -24,14 +25,14 @@ import Landscape from "./modals/Landscape.jsx";
 const mapSize = 50;
 function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen})
 {
-    const { sid, username} = useLocation().state;
+    const {sid, username} = useLocation().state;
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [settlements, setSettlements] = useState([])
     const [timers, setTimers] = useState([])
     useEffect(() =>
     {
         updateTimers(username, setTimers)
-        API.getMap().then(data => {setSettlements(data); console.log("Map at mount: ", data)})
+        API.getMap().then(data => {setSettlements(data)})
     }, []);
 
     const handleTransfer = (idTO, toType) =>
@@ -52,15 +53,30 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
         {
             if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
             {
-                return (
-                    <mesh key={`${rowIndex}-${colIndex}-settlement`}
-                          position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
-                          onClick={() => handleTransfer(settlement.sid, false)}
-                          scale={2}
-                    >
-                        <Settlement1/>
-                    </mesh>
-                );
+                if (settlement.sid === sid)
+                {
+                    return (
+                        <mesh key={`${rowIndex}-${colIndex}-settlement`}
+                              position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
+                              onClick={() => handleTransfer(settlement.sid, false)}
+                              scale={2}
+                        >
+                            <Settlement2/>
+                        </mesh>
+                    );
+                }
+                else
+                {
+                    return (
+                        <mesh key={`${rowIndex}-${colIndex}-settlement`}
+                              position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
+                              onClick={() => handleTransfer(settlement.sid, false)}
+                              scale={2}
+                        >
+                            <Settlement1/>
+                        </mesh>
+                    );
+                }
             }
         }
         if (outpostChosen)

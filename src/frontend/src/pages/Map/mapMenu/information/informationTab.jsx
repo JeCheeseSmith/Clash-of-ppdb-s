@@ -39,7 +39,7 @@ function InformationTab({selectedObject})
 
     const handleNavigationButton = () =>
     {
-        navigate('/MainPage', { state: { sid:sidSettlementSelected, username }});
+        navigate('/MainPage', { state: { sid:parseInt(sidSettlementSelected), username }});
     }
 
     const resources = resourcesFound(dictionary)
