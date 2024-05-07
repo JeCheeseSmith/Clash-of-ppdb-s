@@ -78,7 +78,7 @@ class TimerDataAccess:
             cursor.execute('UPDATE achieved SET amount = amount - 1 WHERE pname = %s and aname=%s', (pname, "Hungry for more"))
         elif timer.type == 'building':
             cursor.execute('SELECT count(id) FROM building WHERE sid=%s and name=%s;', (timer.sid, 'WoodCuttersCamp'))
-            count = cursor.fetchone()
+            count = cursor.fetchone()[0]
             if count >= 3:  # When 3 buildings is met, achieved!
                 cursor.execute('UPDATE achieved SET amount = %s WHERE pname = %s and aname=%s',
                                (0, pname, "Woodcutter"))

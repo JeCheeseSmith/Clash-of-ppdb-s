@@ -1,19 +1,20 @@
 from app import *
 from querry import query
-import subprocess
+
 
 """
 WARNING: DATA WILL BE LOST
 This script will delete all current data and load some preset information into the game, providing a very basic example of the workings of the game. We recommend you to actually try it out, not all features are (fully) used.
 """
 
+
 def presets():
-    #subprocess.run("sudo systemctl stop webapp && sudo systemctl stop nginx", )
     # TODO to change for server
     # Reset database
-    cursor = connection.get_cursor()
+    temp_connection = DBConnection()
+    cursor = temp_connection.get_cursor()
     cursor.execute(query)
-    connection.commit()
+    temp_connection.commit()
 
     Player_obj = Player(name='a', password='', avatar=None, gems=50, xp=0, level=1, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
@@ -33,7 +34,7 @@ def presets():
 
     # Make a and b friends
     cursor.execute('INSERT INTO friend(pname1, pname2) VALUES(%s,%s);', ('a', 'b'))
-    connection.commit()
+    temp_connection.commit()
 
     # Set a and c in a clan
     clan_data_acces.add_clan(Clan('a Clan', 'a', 'Clan of a', 'We are cool'))
@@ -71,7 +72,7 @@ def presets():
                    (4, 'Halbardier', 500, False))
     cursor.execute('INSERT INTO troops(pid, sname, amount, discovered) VALUES (%s,%s,%s,%s);', (4, 'Bandit', 500, False))
 
-    connection.commit()
+    temp_connection.commit()
 
     resources = [0, 5000, 5000, 5000, 5000, 0, 0, 0]
     soldiers = [["Halbardier", 15, "True"], ["Bandit", 5, "False"]]
@@ -107,8 +108,8 @@ def presets():
 
     cursor.execute('UPDATE transfer SET discovered=True;')
 
-    connection.commit()
+    temp_connection.commit()
+    temp_connection.close()
 
-    #subprocess.run("sudo systemctl start webapp && sudo systemctl start nginx", )
 
 presets()
