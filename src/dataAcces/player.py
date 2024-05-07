@@ -142,6 +142,7 @@ class PlayerDataAccess:
         leaderboard = """
                SELECT name, level
                FROM player
+               WHERE name != 'admin'
                ORDER BY level DESC, name ASC
                LIMIT 10;
            """

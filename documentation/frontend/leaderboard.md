@@ -7,4 +7,6 @@ When you click on the leaderboard-button, the event handler "toggleMenu" is call
 When "click" becomes true, the leaderboard-menu opens.
 
 
-The styles of both the leaderboard-button and the leaderboard-menu are present in the leaderboard.css file.
+The styles of both the leaderboard-button and the leaderboard-menu are present in the leaderboard.css file. 
+
+Now the backend is connected to the frontend. So there is one main call that is used to get a list of all players based on level with a max of ten. 

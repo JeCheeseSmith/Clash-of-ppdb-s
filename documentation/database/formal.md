@@ -255,10 +255,12 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### wheelofFortune
 
-| Name  | Type    | Explanation                           |
-|-------|---------|---------------------------------------|
-| pname | VARCHAR | Name of the player spinning the wheel |
-| pid   | INT     | Packages/Rewards associated           |
+| Name  | Type      | Explanation                           |
+|-------|-----------|---------------------------------------|
+| pname | VARCHAR   | Name of the player spinning the wheel |
+| sid   | INT       | Sid of the player main settlement     |
+| last_timespin | TIMESTAMP | Stored time of the last spin          |
+
 
 ### achieved
 

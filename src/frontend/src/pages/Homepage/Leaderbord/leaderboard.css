@@ -67,6 +67,7 @@
     justify-content: space-between;
     align-items: center;
     font-family: MedievalSharp, cursive;
+    font-size: 25px;
 }
 
 .leaderboard-menu li:hover {

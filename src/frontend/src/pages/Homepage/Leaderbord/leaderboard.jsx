@@ -27,7 +27,7 @@ function Leaderboard() {
                         <h1 className="leaderboard-title">Leaderboard</h1>
                         <ul>
                              {leaderboard.map((player, index) => (
-                                <li key={index}>{player[0]}                              Level {player[1]}</li>
+                                <li key={index}> {`Player: ${player[0]}  Level: ${player[1]}`}</li>
                             ))}
                         </ul>
                     </div>

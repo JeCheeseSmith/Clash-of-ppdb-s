@@ -1113,12 +1113,25 @@ def getXPandLevel():
 
 @app.route("/wheelOFfortune", methods=["POST"])
 def getprize():
+    """
+        POST API Call to post up a bool to check if you already spin today
+
+        JSON Input Format:
+        {
+        "username1": <string> | Player name
+        "sid1":<int>| Sid of player
+        "newPrize":<string>| prize in a string
+        }
+
+        JSON Output Format:
+        {
+        }
+    """
     data = request.json
     pname = data.get("username1")
     sid=data.get("sid1")
     prize = data.get("newPrize")
-    print(prize)
-    if prize == 'You won 1000 wood!':
+    if prize=='You won 1000 wood!':
         package_data_acces.Resource_managment(sid,1000,"wood")
     if prize == 'You won 1000 stone!':
         package_data_acces.Resource_managment(sid, 1000, "stone")
@@ -1148,6 +1161,19 @@ def getprize():
 
 @app.route("/controlespin", methods=["GET"])
 def get_controlespin():
+    """
+        GET API Call to get a bool to check if you already spin today
+
+        JSON Input Format:
+        {
+        "name": <string> | Player name
+        }
+
+        JSON Output Format:
+        {
+        "bool":<boolean>| spin status
+        }
+        """
     data = request.args
     player_name = data.get("name")
     info=player_data_access.checkwheel(player_name)

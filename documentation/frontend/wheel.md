@@ -4,3 +4,5 @@ WheelOfFortune is a component that uses state variables to control the visibilit
 
 
 The styles of both the wheel-button, spin-button, segments of the wheel and the popup-prize are present in the wheel.css file.
+
+Now the backend is connected to the frontend. There are two api calls one to get a boolean if it is possible to spin the wheel. The other api call is a post to the backend to store the prize in the backend and update the prize for every player.
