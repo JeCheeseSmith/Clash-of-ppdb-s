@@ -117,7 +117,7 @@ def presets(connection):
     transfer_data_acces.createOutpost(1, settlement_data_acces.getNewCoordinate(0, 0), 'Outpost of a', soldiers, resources, timer_data_acces, package_data_acces,
                                       clan_data_acces, friend_data_access, soldier_data_acces, settlement_data_acces)
 
-    cursor.execute("UPDATE timer SET done = done + interval '8 minutes' WHERE type=%s;", ('outpost', ))
+    cursor.execute("UPDATE timer SET done = done + interval '8 minutes' WHERE type!=%s;", ('outpost', ))
 
     cursor.execute('UPDATE transfer SET discovered=True;')
 
