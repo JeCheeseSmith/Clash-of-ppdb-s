@@ -160,8 +160,9 @@ CREATE TABLE IF NOT EXISTS unlocked(
 
 CREATE TABLE IF NOT EXISTS wheelofFortune(
     pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    pid INT REFERENCES package(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    PRIMARY KEY (pid,pname)
+    sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    last_timespin TIMESTAMP,
+    PRIMARY KEY (sid,pname)
 );
 
 CREATE TABLE IF NOT EXISTS achieved(
@@ -238,5 +239,4 @@ INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Kingdom Rebuilder',
 INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Travisia''s Uniter', 'Create a clan',500, 1);
 
 INSERT INTO player(name,password) VALUES('admin','1234');
-
 """

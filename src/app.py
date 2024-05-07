@@ -1095,6 +1095,7 @@ def getXPandLevel():
     xp = player_data_access.getXPandLevel(player_name)[1]
     return jsonify({"level": level, "xp": xp})
 
+
 @app.route("/wheelOFfortune", methods=["POST"])
 def getprize():
     data = request.json
@@ -1102,7 +1103,7 @@ def getprize():
     sid=data.get("sid1")
     prize = data.get("newPrize")
     print(prize)
-    if prize=='You won 1000 wood!':
+    if prize == 'You won 1000 wood!':
         package_data_acces.Resource_managment(sid,1000,"wood")
     if prize == 'You won 1000 stone!':
         package_data_acces.Resource_managment(sid, 1000, "stone")
