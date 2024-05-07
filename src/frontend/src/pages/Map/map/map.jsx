@@ -12,7 +12,7 @@ import ResourceBar from "../../Homepage/RecourceBar/resourcebar.jsx";
 import Environment from "./modals/Environment.jsx";
 import Landscape from "./modals/Landscape.jsx";
 import Settlement2 from "./modals/Settlement2.jsx";
-import Bush from "../../Homepage/GridBuilder/GridView/models/Objects/Bush.jsx";
+import Settlement3 from "./modals/Settlement3.jsx";
 
 /**
  * Represents a component for displaying and interacting with a map.
@@ -57,7 +57,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                               onClick={() => handleTransfer(settlement.sid, false)}
                               scale={2}
                         >
-                            <Settlement2/>
+                            <Settlement3/>
                         </mesh>
                     );
                 }
@@ -69,7 +69,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                               onClick={() => handleTransfer(settlement.sid, false)}
                               scale={2}
                         >
-                            <Bush/>
+                            <Settlement2/>
                         </mesh>
                     );
                 }
@@ -147,7 +147,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                     zoomSpeed={0.7}
                     rotateSpeed={0.1}
                     maxDistance={50}
-                    minDistance={30}
+                    minDistance={20}
                     maxPolarAngle={Math.PI / 2.5}
                     minPolarAngle={Math.PI / 5}
                     maxAzimuthAngle={Math.PI / 2}

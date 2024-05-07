@@ -83,7 +83,6 @@ function TransferPage({selectedObject, outpostChosen})
         }
         else
         {
-            console.log(outpostName)
             API.createOutpost(selectedObject, sid, outpostName, soldiers, resources).then(data =>
             {
                 if (!data.success)
@@ -170,7 +169,6 @@ function AttackPage({selectedObject})
     };
     const handleAttack = () =>
     {
-        console.log(soldiers)
         API.transfer(selectedObject.idTO, selectedObject.toType, sid, soldiers, resources, 'attack', username).then(data =>
         {
             if (!data.success)
