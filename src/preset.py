@@ -8,13 +8,26 @@ This script will delete all current data and load some preset information into t
 """
 
 
-def presets():
-    # TODO to change for server
+def presets(connection):
+    connection.close()
+
     # Reset database
     temp_connection = DBConnection()
     cursor = temp_connection.get_cursor()
     cursor.execute(query)
     temp_connection.commit()
+
+    player_data_access.dbconnect = temp_connection
+    player_data_access.dbconnect = temp_connection
+    content_data_access.dbconnect = temp_connection
+    clan_data_acces.dbconnect = temp_connection
+    friend_data_access.dbconnect = temp_connection
+    settlement_data_acces.dbconnect = temp_connection
+    package_data_acces.dbconnect = temp_connection
+    building_data_acces.dbconnect = temp_connection
+    timer_data_acces.dbconnect = temp_connection
+    soldier_data_acces.dbconnect = temp_connection
+    transfer_data_acces.dbconnect = temp_connection
 
     Player_obj = Player(name='a', password='', avatar=None, gems=50, xp=0, level=1, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
@@ -111,5 +124,19 @@ def presets():
     temp_connection.commit()
     temp_connection.close()
 
+    connection = DBConnection()
 
-presets()
+    player_data_access.dbconnect = connection
+    player_data_access.dbconnect = connection
+    content_data_access.dbconnect = connection
+    clan_data_acces.dbconnect = connection
+    friend_data_access.dbconnect = connection
+    settlement_data_acces.dbconnect = connection
+    package_data_acces.dbconnect = connection
+    building_data_acces.dbconnect = connection
+    timer_data_acces.dbconnect = connection
+    soldier_data_acces.dbconnect = connection
+    transfer_data_acces.dbconnect = connection
+
+
+presets(connection)

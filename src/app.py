@@ -1029,15 +1029,8 @@ def preset():
     This script will delete all current data and load some preset information into the game, providing a very basic example of the workings of the game. We recommend you to actually try it out, not all features are (fully) used.
     """
 
-    # # Reset database
-    cursor = connection.get_cursor()
-    cursor.execute(query)
-    connection.commit()
-
     from preset import presets
-    presets()
-
-    connection.commit()
+    presets(connection)
 
     return jsonify('data')
 
