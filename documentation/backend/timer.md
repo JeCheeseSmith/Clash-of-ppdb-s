@@ -44,6 +44,8 @@ The first step in executing this functionality always is recomposing the data fr
 
 The level of the building is incremented. If the castle or barracks are upgraded, extra functionality is called to set new unlocked soldiers or newly unlocked buildings.
 
+The player is notified when their building is upgraded.
+
 #### simulateTroopTraining()
 
 The trained troop is added to the troops of the settlement.
