@@ -26,7 +26,6 @@ function InformationTab({selectedObject})
     {
         API.getInfo(selectedObject.idTO, username, selectedObject.toType).then(data =>
         {
-            console.log(data)
             setDictionary(data)
             setOutpostSelected(data.outpost)
             if (data.me && !data.outpost) // main settlement
@@ -74,7 +73,7 @@ function InformationTab({selectedObject})
                 </div>
                 <div className={"iconWithAmount"}>
                     <img src={metal} className={"resource-image"} alt={"Soldier"}/>
-                    <div className={"amount"}>{resources.metal}</div>
+                    <div className={"amount"}>{resources.steel}</div>
                 </div>
                 <div className={"iconWithAmount"}>
                     <img src={food} className={"resource-image"} alt={"Soldier"}/>
@@ -99,7 +98,7 @@ function soldierFound(dictionary, soldierName) {
 
 function resourcesFound(dictionary)
 {
-    const resourcesDict = {wood: null, stone: null, metal: null, food: null};
+    const resourcesDict = {wood: null, stone: null, steel: null, food: null};
     for (let key in dictionary)
     {
         if (resourcesDict.hasOwnProperty(key))

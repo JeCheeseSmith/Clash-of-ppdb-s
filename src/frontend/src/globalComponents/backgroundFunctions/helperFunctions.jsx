@@ -20,5 +20,5 @@ export const updateResources = (sid, setResources) =>
 
 export const updateMap = (username, setSettlements) =>
 {
-    API.getMap(username).then(data => {setSettlements(data); console.log("----------------MAP updated----------------: ",data)})
+    API.getMap(username).then(data => {setSettlements(data)})
 }
