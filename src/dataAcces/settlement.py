@@ -402,19 +402,20 @@ class SettlementDataAcces:
                 return self.getNewCoordinate()
         return [x, y]
 
-    def getMap(self):
+    def getMap(self, pname: str):
         """
         Retrieve the info about the map; aka settlement coordinates
+        :param pname: Name of the player
         :return:
         """
         # sid, gridX,gridY, level, isOutpost
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT id,mapX,mapY FROM settlement;')  # Outposts to be created are owned by admin
+        cursor.execute('SELECT id,mapX,mapY,pname FROM settlement;')  # Outposts to be created are owned by admin
         data = cursor.fetchall()
         sList = []
 
         for settlement in data:
             sList.append(dict(sid=settlement[0], position=[settlement[1], settlement[2]],
-                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0])))
+                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0]), me= (pname == settlement[3])))
         print(sList)
         return sList
