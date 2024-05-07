@@ -134,8 +134,8 @@ class PlayerDataAccess:
         Xp = cursor.fetchone()[0]
         cursor.execute('SELECT level FROM player where name=%s;', (pname,))
         Level = cursor.fetchone()[0]
-        print(Level, Xp)
         return Level, Xp
+
     def getplayers(self):
         cursor = self.dbconnect.get_cursor()
         # Select players in order by there level

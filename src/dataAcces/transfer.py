@@ -77,7 +77,6 @@ class TransferDataAccess:
         if transfer:  # If it's a transfer, we take the middle of the 2 sids
             cursor.execute('SELECT idTo,toType,idFrom, fromtype FROM transfer WHERE id=%s;', (oid,))
             ids = cursor.fetchone()
-            print(ids)
             sidTo = self.translatePosition(ids[0], ids[1])  # This can go recursively for transfers on transfers
             sidFrom = self.translatePosition(ids[2], ids[3])
             midX = int((sidTo[0] + sidFrom[0]) / 2)
@@ -221,7 +220,6 @@ class TransferDataAccess:
         transfer.id = cursor.fetchone()[0]
 
         # Add a new timer
-        print('tobase', transfer.to_dct())
         start, stop, duration = self.calculateDuration(soldier_data_acces.getTroops(transfer.pid, 'package'),
                                                        package_data_acces.get_resources(transfer.pid),
                                                        self.translatePosition(transfer.idTo, transfer.toType),
@@ -428,9 +426,7 @@ class TransferDataAccess:
                 dct[troop] = troops[troop]["amount"]
 
         dct2 = package.to_dct()
-        for resource in dct2.keys(): # Merge both dicts
+        for resource in dct2.keys():  # Merge both dicts
             dct[resource] = dct2[resource]
-
-        print(dct)
 
         return dct 

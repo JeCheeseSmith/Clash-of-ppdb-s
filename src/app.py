@@ -248,11 +248,9 @@ def update():
 
     if pname is not None:
         timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
-        print(timers)
         return jsonify(timers)
 
     # timers = timer_data_acces.retrieveTimers('a', transfer_data_acces) # This is for debug only
-    # print(timers)
     return jsonify('')
 
 
@@ -355,7 +353,6 @@ def placeBuilding():
     }
     """
     data = request.json
-    print(data.get('name'))
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
     success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
@@ -726,7 +723,6 @@ def getInfo():
     else:
         info["outpost"] = False
 
-    print(info)
     return jsonify(info)
 
 

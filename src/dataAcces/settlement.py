@@ -417,5 +417,4 @@ class SettlementDataAcces:
         for settlement in data:
             sList.append(dict(sid=settlement[0], position=[settlement[1], settlement[2]],
                               isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0]), me= (pname == settlement[3])))
-        print(sList)
         return sList

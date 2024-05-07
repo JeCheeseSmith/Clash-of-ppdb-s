@@ -313,7 +313,6 @@ class PackageDataAccess:
         if start is None:  # Logout time from player needs to be used & updated
             cursor.execute('SELECT logout FROM player WHERE name IN (SELECT pname FROM settlement WHERE id=%s);',
                            (sid,))
-            print(sid)
             start = cursor.fetchone()[0]
         cursor.execute('UPDATE player SET logout = %s WHERE name IN (SELECT pname FROM settlement WHERE id=%s);',
                        (stop, sid))
