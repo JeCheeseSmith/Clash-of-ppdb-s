@@ -17,3 +17,8 @@ export const updateResources = (sid, setResources) =>
         console.log("Resource Updated: ", data, " at ",`${new Date().getHours()}h${new Date().getMinutes()}`);
     });
 };
+
+export const updateMap = (username, setSettlements) =>
+{
+    API.getMap(username).then(data => {setSettlements(data); console.log("----------------MAP updated----------------: ",data)})
+}

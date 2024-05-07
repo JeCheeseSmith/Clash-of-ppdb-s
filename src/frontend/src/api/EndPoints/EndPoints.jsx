@@ -49,9 +49,9 @@ export const update = async (username) =>
     return await GET({"pname":username}, '/update')
 }
 
-export const getMap = async () =>
+export const getMap = async (username) =>
 {
-    return await GET({}, '/map')
+    return await GET({'pname':username}, '/map')
 }
 
 export const transfer = async (idTo, toType, idFrom, soldiers, resources, tType, pname) =>
