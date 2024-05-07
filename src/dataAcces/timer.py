@@ -108,7 +108,6 @@ class TimerDataAccess:
             # Add XP bonus
             cursor.execute('SELECT xpBonus FROM achievement WHERE name=%s;', (quest,))
             xpBonus = cursor.fetchone()
-            print(xpBonus)
             cursor.execute('UPDATE player SET xp= xp + %s WHERE name=%s;', (xpBonus, pname))
 
         self.dbconnect.commit()  # Commit XP Bonuses & achievement updates once again
@@ -510,7 +509,6 @@ SELECT id FROM transfer WHERE discovered=True
                                (transferDefendant.id, transfer.id, transfer.id))
 
                 transfers = cursor.fetchall()
-                print(transferDefendant.id, transfer.id, 'transfer related to the attack on a transfer', transfers)
                 for tid in transfers:  # Send them back to where they came from
                     transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access,
                                                      soldier_data_acces, package_data_acces)

@@ -149,7 +149,6 @@ class ContentDataAccess:
         messages = cursor.fetchall()
 
         for message in messages:
-            print(message)
             c = Content(message[0], str(message[2]), message[3], message[4])
             chatbox.append(c.to_dct())
 
