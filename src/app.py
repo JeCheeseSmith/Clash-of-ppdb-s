@@ -1081,6 +1081,9 @@ def getLeaderboard():
 @app.route("/setXPandLevel", methods=["POST"])
 def setXPandLevel():
 
+    """
+    POST: modify the xp and level in the database
+    """
     data = request.json
     player_name = data.get("name")
     xp_count = data.get("xp")
@@ -1089,6 +1092,18 @@ def setXPandLevel():
 
 @app.route("/getXPandLevel", methods=["GET"])
 def getXPandLevel():
+    """
+    GET: API call to get the xp and level
+    JSON Input Format:
+    {
+    "level": <INT> | player's level
+    }
+
+    JSON Output Format:
+    {
+    "xp": <INT> | player's xp
+    }
+    """
     data = request.args
     player_name = data.get("name")
     level = player_data_access.getXPandLevel(player_name)[0]
