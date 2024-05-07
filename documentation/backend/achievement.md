@@ -16,3 +16,4 @@ Code exists for each achievement.
 
 This function takes in parameters such as a timer, 'transfer_data_access', and 'player_data_access'. It checks if the timer is for a soldier, a building,
 a transfer, an attack or an outpost. Depending on the timer type, the function then calls 'updateXPandlevel' (defined in player.py) and provides it with the player's name and a certain amount of XP. 
+The 'updateXPandlevel' function increases your current XP by the given amount. If the XP reaches or surpasses 1000, your level is incremented by one, and the XP is reduced by 1000.
