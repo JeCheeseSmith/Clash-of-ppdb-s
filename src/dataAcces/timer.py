@@ -81,7 +81,7 @@ class TimerDataAccess:
             count = cursor.fetchone()
             if count >= 3:  # When 3 buildings is met, achieved!
                 cursor.execute('UPDATE achieved SET amount = %s WHERE pname = %s and aname=%s',
-                               (0, pname, "Hungry for more"))
+                               (0, pname, "Woodcutter"))
         else:  # For transfer timers, the sid of the owner is not strictly timer.sid
             transfer = transfer_data_acces.instantiateTransfer(timer.oid)
             pname = transfer.pname  # Correct pname
@@ -631,6 +631,14 @@ SELECT id FROM transfer WHERE discovered=True
               [19, 18], [19, 19], [19, 20], [20, 6], [20, 7], [20, 8], [20, 9], [20, 10],
               [20, 11], [20, 12], [20, 13], [20, 14], [20, 15], [20, 16], [20, 17], [20, 18],
               [20, 19], [20, 20]]))
+
+        # Preset Unlocked Status for each building (All are unlocked at start)
+        cursor.execute('SELECT name FROM buildable;')
+        buildings = cursor.fetchall()
+        for buildable in buildings:
+            cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);',
+                           (buildable, timer.sid, 1))
+
         settlement_data_acces.upgradeCastle(timer.sid, True)  # Upgrade the Satellite Castle to level 1
 
         # We need to do this locally otherwise other functionality will break due to circular includes

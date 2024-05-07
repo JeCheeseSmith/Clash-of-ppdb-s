@@ -355,7 +355,9 @@ def placeBuilding():
     data = request.json
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
+    print(building.to_dct())
     success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
+    print(success, error)
     dct = dict(success=success)
     if not success:
         dct["error"] = str(error)
