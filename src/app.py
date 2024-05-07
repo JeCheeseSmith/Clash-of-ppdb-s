@@ -722,7 +722,6 @@ def getInfo():
         info["outpost"] = settlement_data_acces.isOutPost(data.get('oid'))
     else:
         info["outpost"] = False
-
     return jsonify(info)
 
 
