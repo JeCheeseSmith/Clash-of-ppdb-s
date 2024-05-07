@@ -1,5 +1,6 @@
 from app import *
 from querry import query
+import subprocess
 
 """
 WARNING: DATA WILL BE LOST
@@ -7,11 +8,12 @@ This script will delete all current data and load some preset information into t
 """
 
 def presets():
+    #subprocess.run("sudo systemctl stop webapp && sudo systemctl stop nginx", )
     # TODO to change for server
     # Reset database
     cursor = connection.get_cursor()
-    cursor.execute(query)
-    connection.commit()
+    # cursor.execute(query)
+    # connection.commit()
 
     Player_obj = Player(name='a', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
@@ -106,5 +108,7 @@ def presets():
     cursor.execute('UPDATE transfer SET discovered=True;')
 
     connection.commit()
+
+    #subprocess.run("sudo systemctl start webapp && sudo systemctl start nginx", )
 
 presets()
