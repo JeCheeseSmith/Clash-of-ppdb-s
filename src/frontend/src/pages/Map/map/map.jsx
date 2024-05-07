@@ -12,6 +12,7 @@ import ResourceBar from "../../Homepage/RecourceBar/resourcebar.jsx";
 import Environment from "./modals/Environment.jsx";
 import Landscape from "./modals/Landscape.jsx";
 import Settlement2 from "./modals/Settlement2.jsx";
+import Bush from "../../Homepage/GridBuilder/GridView/models/Objects/Bush.jsx";
 
 /**
  * Represents a component for displaying and interacting with a map.
@@ -29,11 +30,6 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [settlements, setSettlements] = useState([])
     const [timers, setTimers] = useState([])
-    useEffect(() =>
-    {
-        updateTimers(username, setTimers)
-        API.getMap().then(data => {setSettlements(data)})
-    }, []);
 
     const handleTransfer = (idTO, toType) =>
     {
@@ -53,7 +49,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
         {
             if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
             {
-                if (settlement.sid === sid)
+                if (settlement.me && !settlement.isOutpost)
                 {
                     return (
                         <mesh key={`${rowIndex}-${colIndex}-settlement`}
@@ -62,6 +58,18 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                               scale={2}
                         >
                             <Settlement2/>
+                        </mesh>
+                    );
+                }
+                else if (settlement.me && settlement.isOutpost)
+                {
+                    return (
+                        <mesh key={`${rowIndex}-${colIndex}-settlement`}
+                              position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
+                              onClick={() => handleTransfer(settlement.sid, false)}
+                              scale={2}
+                        >
+                            <Bush/>
                         </mesh>
                     );
                 }
@@ -118,6 +126,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
 
     return (
         <Suspense fallback={null}>
+            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers} setSettlements={setSettlements}/>
             <Canvas camera={{position: [0, 10, 30]}}>
                 {/*<color attach="background" args={['lightblue']}/>*/}
                 <directionalLight
@@ -151,7 +160,6 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                 <Environment/>
             </Canvas>
             <ResourceBar resources={resources} updateResources={() => updateResources(sid, setResources)}/>
-            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
         </Suspense>
     );
 }

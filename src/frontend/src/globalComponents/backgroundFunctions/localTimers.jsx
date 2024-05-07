@@ -1,6 +1,6 @@
 import {useEffect} from 'react'; // Importing React library
 import {useLocation} from "react-router-dom";
-import {updateResources, updateTimers} from "./helperFunctions.jsx";
+import {updateResources, updateTimers, updateMap} from "./helperFunctions.jsx";
 import PlaySound from "../audioComponent/audio.jsx";
 
 /**
@@ -12,17 +12,25 @@ import PlaySound from "../audioComponent/audio.jsx";
  * @returns {null} Null component.
  */
 
-function LocalTimers({setResources, timers, setTimers})
+function LocalTimers({setResources, timers, setTimers, setSettlements})
 {
     const { sid, username } = useLocation().state
-    useEffect(() =>
+    const location = useLocation();
+    const update = () =>
     {
         updateResources(sid, setResources) // do this twice, because without the first time, resources are going to be 0
         updateTimers(username, setTimers)
+        if (location.pathname === "/Map")
+        {
+            updateMap(username, setSettlements)
+        }
+    }
+    useEffect(() =>
+    {
+        update()
         const intervalId = setInterval(() =>
         {
-            updateResources(sid, setResources)
-            updateTimers(username, setTimers)
+            update()
         }, 15 * 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);
@@ -47,8 +55,7 @@ function LocalTimers({setResources, timers, setTimers})
                     else
                     {
                         let promise  = PlaySound("BuildingUpgraded")
-                        updateResources(sid, setResources)
-                        updateTimers(username, setTimers)
+                        update()
                         break
                     }
                 }
