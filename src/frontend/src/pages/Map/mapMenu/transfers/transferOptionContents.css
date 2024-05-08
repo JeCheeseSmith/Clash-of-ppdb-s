@@ -1,0 +1,228 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+
+.option-content
+{
+    background-color: #1f1a18;
+    border: 2px solid #ffd700;
+    height: 600px;
+    width: 1150px;
+    border-radius: 10px;
+    margin-top: 2px;
+}
+
+hr {
+    margin-top: 50px;
+    width: 900px;
+}
+
+.transferMenu-container {
+    margin: 10px 10px 10px;
+}
+
+.soldierTransfer-container {
+    display: flex;
+    flex-direction: row;
+    overflow-y: auto;
+}
+
+.iconWithAmount {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.soldier-image {
+    width: 80px;
+    height: 80px;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+.amount{
+    width: 30px;
+    height: 20px;
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #1a1a1a;
+    border: none;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    outline: none;
+    color: white;
+    animation: rotateShadow 2s infinite linear;
+}
+
+.amount:focus {
+  animation: rotateShadowActive 2s infinite linear;
+}
+
+@keyframes rotateShadow {
+  0% {
+    box-shadow: -2px -2px 8px 1px #652c00, 2px 2px 8px 1px #ff6a00;
+  }
+  25% {
+    box-shadow: -2px 2px 8px 1px #652c00, 2px -2px 8px 1px #ff6a00;
+  }
+  50% {
+    box-shadow: 2px 2px 8px 1px #652c00, -2px -2px 8px 1px #ff6a00;
+  }
+  75% {
+    box-shadow: 2px -2px 8px 1px #652c00, -2px 2px 8px 1px #ff6a00;
+  }
+  100% {
+    box-shadow: -2px -2px 8px 1px #652c00, 2px 2px 8px 1px #ff6a00;
+  }
+}
+
+@keyframes rotateShadowActive {
+  0% {
+    box-shadow: -2px -2px 8px 1px #4b1a05, 2px 2px 8px 1px #1b05d2;
+  }
+  25% {
+    box-shadow: -2px 2px 8px 1px #4b1a05, 2px -2px 8px 1px #1b05d2;
+  }
+  50% {
+    box-shadow: 2px 2px 8px 1px #4b1a05, -2px -2px 8px 1px #1b05d2;
+  }
+  75% {
+    box-shadow: 2px -2px 8px 1px #4b1a05, -2px 2px 8px 1px #1b05d2;
+  }
+  100% {
+    box-shadow: -2px -2px 8px 1px #4b1a05, 2px 2px 8px 1px #1b05d2;
+  }
+}
+
+
+.horizontal-line {
+    border-top: 1px solid #000; /* Change the color and thickness as needed */
+    margin-top: 10px; /* Adjust the margin to create space above the line */
+}
+
+.resourcesTransfer-container {
+    display: flex;
+    flex-direction: row;
+    overflow-y: auto;
+    margin: 30px 10px 10px;
+    justify-items: center;
+}
+
+.resource-image {
+    width: 80px;
+    height: 80px;
+    margin-top: 10px;
+    margin-left: 55px;
+}
+
+.espionage-button {
+    margin-left: 350px;
+    margin-top: 200px;
+    width: 500px;
+    height: 200px;
+    border-radius: 30px;
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #000;
+    padding: 0 20px;
+    font-size: 60px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: 'Anton', sans-serif;
+    cursor: pointer;
+    transition: 2s;
+}
+
+.espionage-button:hover {
+    width: 500px;
+    height: 100px;
+    background-color: #fff;
+    color: #000;
+}
+
+.send-transferTYPE{
+  --bezier: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --edge-light: hsla(0, 0%, 50%, 0.8);
+  --text-light: rgba(255, 255, 255, 0.4);
+  --back-color: 240, 40%;
+
+    margin-left: 450px;
+    margin-top: 50px;
+    cursor: pointer;
+    padding: 0.7em 1em;
+    border-radius: 0.5em;
+    min-height: 2.4em;
+    min-width: 3em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    font-weight: bold;
+
+    background: linear-gradient(
+    140deg,
+    hsla(var(--back-color), 50%, 1) min(2em, 20%),
+    hsla(var(--back-color), 50%, 0.6) min(8em, 100%)
+    );
+    color: hsla(0, 0%, 90%);
+    border: 0;
+    box-shadow: inset 0.4px 1px 4px var(--edge-light);
+
+    transition: all 0.1s var(--bezier);
+}
+
+.send-transferTYPE:hover {
+  --edge-light: hsla(0, 0%, 50%, 1);
+  text-shadow: 0px 0px 10px var(--text-light);
+  box-shadow: inset 0.4px 1px 4px var(--edge-light),
+    2px 4px 8px hsla(0, 0%, 0%, 0.295);
+  transform: scale(1.1);
+}
+
+.send-transferTYPE:active {
+  --text-light: rgba(255, 255, 255, 1);
+
+  background: linear-gradient(
+    140deg,
+    hsla(var(--back-color), 50%, 1) min(2em, 20%),
+    hsla(var(--back-color), 50%, 0.6) min(8em, 100%)
+  );
+  box-shadow: inset 0.4px 1px 8px var(--edge-light),
+    0px 0px 8px hsla(var(--back-color), 50%, 0.6);
+  text-shadow: 0px 0px 20px var(--text-light);
+  color: hsla(0, 0%, 100%, 1);
+  letter-spacing: 0.1em;
+  transform: scale(1);
+}
+
+.outpost-Name{
+    position: relative;
+    margin-left: 35px;
+    bottom: 60px;
+    height: 50px;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+    font-weight: 500;
+    font-size: .8vw;
+    color: #fff;
+    background-color: rgb(2, 2, 75);
+    box-shadow: 0 0 .4vw rgba(0,0,0,0.5), 0 0 0 .15vw transparent;
+    border-radius: 0.4vw;
+    border: none;
+    outline: none;
+    padding: 0.4vw;
+    max-width: 190px;
+    transition: .4s;
+}
+
+.outpost-Name:hover {
+  box-shadow: 0 0 0 .15vw rgba(135, 207, 235, 0.186);
+}
+
+.outpost-Name:focus {
+  box-shadow: 0 0 0 .15vw skyblue;
+}

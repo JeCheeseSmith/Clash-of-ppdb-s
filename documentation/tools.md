@@ -14,20 +14,20 @@
 
 **src/frontend** All files from the React.js Frontend
 
-**src/backend** All files from the Flask Backend
+**src/ and src/dataAcces** Files from the Flask Backend
 
 ### Use of Technology
 
 > From frontend to backend
 > 
-<img src="include/tools.png" alt="drawing" width="200"/>
+<img src="#include/tools.png" alt="drawing" width="300"/>
 
 1. HTML
 2. CSS (Boostrap)
 3. JS
 4. React
 5. REST API in psycopg2
-6. Flask Framework (incl. Nginx & Gunicorn)
+6. Flask Framework (incl. Nginx & Gunicorn) - Python3.8
 7. PostgreSQL Database
 
 ### Naming Conventions
@@ -36,4 +36,4 @@
 1. Database tables are lowercase (single) words
 2. Database table entities are lowercase (single) words
 3. If Database table expresses a relation, referencing towards another table, the first letter from the referred table is added to the word. e.g. id becomes sid if it refers to a settlement id.
-4. In the backend & APIs, the same name & identifiers are (mostly) used to ease references. 
+4. In the backend & APIs, the same name & identifiers are (mostly) used to ease references. Names of functions logically already try to explain their working.

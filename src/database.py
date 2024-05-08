@@ -2,6 +2,10 @@ import psycopg2
 
 
 class DBConnection:
+    """
+    Class to initialise & abstract the database connection
+    """
+
     def __init__(self):
         try:
             self.conn = psycopg2.connect(user="postgres", password="password", host="127.0.0.1", port="5432",

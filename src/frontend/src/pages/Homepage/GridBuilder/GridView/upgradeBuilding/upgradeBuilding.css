@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.button-container {
+  position: absolute;
+  right: 250px;
+  top: 100px; /* You can adjust this value */
+  padding: 10px;
+  z-index: 1;
+  background-color: #261717;
+  border: #0e0049 solid 5px;
+  border-radius: 10px;
+}
+
+.upgrade-button {
+  background-color: rgb(213, 66, 19);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 25px; /* Button size */
+  font-family: 'Anton', cursive; /* Lettertype */
+  color: #090046;
+  height: 50px;
+  width: 200px;
+  margin-top: 35px;
+  transition: transform 0.2s ease-in-out; /* Smooth hover effect */
+}
+
+.upgrade-button:hover {
+  transform: scale(1.05); /* Slightly enlarges on hover */
+}
+
+.error-message {
+  color: #D8000C;
+  background-color: #FFD2D2;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}

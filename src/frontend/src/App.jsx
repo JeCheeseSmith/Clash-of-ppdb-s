@@ -4,8 +4,9 @@ import LoginPage from "./pages/Loginpage/Login/login.jsx";
 import SignUp from "./pages/Loginpage/SignUp/signUp.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React from "react";
-import './App.css'; // Importing CSS file for styling
-
+import './App.css';
+import MapMainpage from "./pages/Map/mapMainpage.jsx";
+import AdminPage from "./pages/Adminpage/adminpage.jsx";
 /**
  * Main application component responsible for routing and rendering different pages.
  * @component
@@ -13,25 +14,24 @@ import './App.css'; // Importing CSS file for styling
  * // Usage:
  * <App />
  */
-function App() {
-    /**
-     * Render method for the App component.
-     * @returns {JSX.Element} - The JSX element representing the entire application.
-     */
-  return (
-    // Wrapping the entire application with a div having a specific CSS class
-    <div className="background-login">
-      {/* BrowserRouter component to enable routing */}
-      <Router>
-        {/* Routes component to define different routes */}
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/MainPage" element={<MainPage />} />
-        </Routes>
-      </Router>
-    </div>
-  );
+function App()
+{
+    return (
+        // Wrapping the entire application with a div having a specific CSS class
+        <div className="background">
+            {/* BrowserRouter component to enable routing */}
+            <Router>
+                {/* Routes component to define different routes */}
+                <Routes>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="/SignUp" element={<SignUp />} />
+                    <Route path="/AdminPage" element={<AdminPage />} />
+                    <Route path="/MainPage" element={<MainPage />} />
+                    <Route path="/Map" element={<MapMainpage />} />
+                </Routes>
+            </Router>
+        </div>
+    );
 }
 
 // Exporting the App component as default

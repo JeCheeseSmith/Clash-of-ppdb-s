@@ -3,11 +3,13 @@ import './login_signup.css';
 import { useNavigate } from 'react-router-dom';
 import POST from "../../../api/POST.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import {Loader} from "@react-three/drei";
+import {loaderStyles} from "../../../globalComponents/loadingScreen/loadingScreen.jsx";
+
 
 // Code for login page
 function LoginPage() {
 
-    // State for username & password
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
@@ -23,33 +25,52 @@ function LoginPage() {
     }
 
     let navigate = useNavigate();
+
     // Handles the navigation from login page to sign-up page
     function handleSignUpClick() {
-        navigate('/signup');
+        navigate('/Signup');
     }
 
     // Handles the navigation from login page to mainpage
     const handleLoginClick = async () => {
-      const data = await POST({ name: username, password: password }, "/login");
-      if (data.success) {
-        navigate('/MainPage', { state: { username } });
-      }
-      else {
-        setErrorMessage('Verkeerde login details');
-      }
+
+        if (username) {
+            // Calls the 'login' API and stores the returned value in data
+            const data = await POST({ name: username, password: password }, "/login");
+            // When the admin is logging in, navigate to admin-page
+            if (username === "admin" && password === "1234") {
+                navigate('/AdminPage');
+            }
+            else {
+                // If the data is true (account exists), then navigate to main page.
+                if (data.success) {
+                    let sid = data.sid
+                    // sid and username are given to main page
+                    navigate('/MainPage', { state: { sid, username }});
+                }
+                // Display error
+                else {
+                    setErrorMessage('Wrong login credentials');
+                }
+            }
+        }
+        else {
+            setErrorMessage('Username cannot be empty');
+        }
+
     }
 
   return (
-      // Makes a form
       <div className="login-container">
+          <Loader {...loaderStyles} />
           <h1 className="gametitle">TRAVISIA</h1>
           <h2 className="subtitle">FALLEN EMPIRE</h2>
           <div className="login-form">
               {errormessage && (
-          <div className="error-message">
-            <AiOutlineExclamationCircle /> {errormessage}
-          </div>
-        )}
+                <div className="error-message">
+                <AiOutlineExclamationCircle /> {errormessage}
+                </div>
+              )}
               <div>
                   {/* <div> groupes the label and input together on one line */}
                   <label htmlFor="username">Username:</label>

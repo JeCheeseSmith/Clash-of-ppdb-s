@@ -1,0 +1,40 @@
+.popup-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.89);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    z-index: 9999;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.message-string {
+    font-size: 20px;
+    font-family: 'MedievalSharp', cursive;
+    padding: 20px;
+    border-radius: 20px;
+    color: rgb(0, 0, 0);
+    background-image: linear-gradient(to right, rgb(255, 117, 0), rgb(255, 183, 0));
+}
+
+.close-button {
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+    transition: 0.2s;
+    margin-bottom: 40px;
+    margin-left: 10px;
+}
+
+.close-button:hover {
+    transform: scale(1.1);
+}

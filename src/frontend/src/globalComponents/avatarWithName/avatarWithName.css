@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+.player-REQUEST {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+}
+
+.player-REQUEST-avatar {
+    height: 60px;
+    width: 50px;
+    border-radius: 10px;
+}
+
+.player-REQUEST-name {
+    margin-top: 5px;
+    color: #101b4d;
+    font-family: 'Anton', cursive;
+}
+
+.player-SEARCH{
+    display: flex;
+    align-items: center;
+}
+
+.player-SEARCH-avatar{
+    height: 60px;
+    width: 50px;
+    border-radius: 10px;
+}
+
+.player-SEARCH-name{
+    font-family: 'Anton', sans-serif;
+    margin-left: 20px;
+    color: #ffffff;
+}
+
+.clan-SEARCH{
+    display: flex;
+    flex-direction: row;
+}
+
+.clan-SEARCH-avatar {
+    width: 120px;
+    height: 150px;
+    border-radius: 20px;
+}
+
+.clan-SEARCH-NamePname{
+    flex-direction: column;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+.clan-SEARCH-name {
+    font-size: 28px;
+    font-family: 'Anton', sans-serif;
+    color: #ffc845;
+    margin-bottom: 10px;
+}
+
+.clan-SEARCH-pname {
+    font-size: 18px;
+    font-family: 'Anton', sans-serif;
+    color: #83771c;
+    margin-bottom: 30px;
+}
+
+.chat-ICON-avatar{
+    height: 50px;
+    width: 50px;
+    border-radius: 10px;
+}
+
+.building-SELECTED{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.building-SELECTED-avatar {
+    height: 150px;
+    width: 150px;
+    border-radius: 10px;
+}
+
+
+.building-SELECTED-name{
+    font-family: Anton, cursive;
+    font-size: 24px;
+    color: #ee8505;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}

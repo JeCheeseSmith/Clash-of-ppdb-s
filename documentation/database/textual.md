@@ -14,7 +14,7 @@ Multiple enhancements are added to improve the user experience; social menu's, q
 Players are uniquely identified by their username. The login is only password protected and optionally the (relative) path of an avatar can be set to display a users profile.
 Each player has an amount of gems, a level and associated XP. The last logout timestamp is kept to recalculate the resources for a user on login. 
 
-It is possible to achieve Achievements which are uniquely identified by a name. A task is given. Each Quest is also an Achievement, since it's the same data that needs to be stored. However, they have a deadline (Timestamp) specified to be completed before.
+It is possible to achieve Achievements which are uniquely identified by a name. A task is given.
 
 Each Achievement contains a Package, which is the reward for fulfilling a noble task. (See Package)
 
@@ -43,20 +43,22 @@ Soldiers have an amount of health and damage they do. Also, they consume food at
 
 Some soldiers might move faster than others. Plan your transfer strategically!
 
+A soldier has a cost & time to train, which is specified per type. 
+
 ### Building
 
 You can place multiple buildings of the same type. The types are referred to as "Buildables" and have a unique name. They perform an action specified in a category (type). Farmers may produce food, woodcutters produce wood for upgrading buildings. Some buildings store amounts of resource and others allow for bonus effects such as increasing the health of a soldier type.
 Refer to the other documentation for specific amounts & functions. 
 
-A building costs resources to build. When destroyed, a part of the costs is won back. All resources are defined in a particular package.
+A building costs resources to build, which are specified in the upgradeFunction. The time needed to build the building is specified in a timeFunction. We use a more technical representation of these functions to evaluate them with ease.
 
 ### Package
 
 A package is an entity to store resources. It is purely for technical convenience and hasn't anything to do for the user.
 Uniquely identified with an id. All other parts are optional and are amounts. e.g. Stone is the amount of stone in the package.
 
-Soldiers are linked to the package via the Troops relation in the database. An amount is specified, as well as a boolean: Discovered & Transferable.
-Users can specify if they want to transfer the troops attached to a package or transfer or let them return home. The discovered boolean is used to determine if the soldier is spotted/spied on by a rivaling player.
+Soldiers are linked to the package via the Troops relation in the database. An amount is specified, as well as a boolean: Discovered.
+The discovered boolean is used to determine if the soldier is spotted/spied on by a rivaling player.
 
 ### Transfer
 
@@ -64,14 +66,14 @@ Transfer, uniquely identified by their ID (Serial) have a base speed. In the bac
 
 The discovered bool is used for the same purpose.
 
-Transfer move from a settlement towards another settlement. Transfers can be captured/intercepted by other transfers. 
+Transfer move from a settlement/transfer towards another settlement/transfer. Transfers can be captured/intercepted by other transfers. 
 
-As should be clear, a transfer also contains a package.
+As should be clear, a transfer also contains a package. A transfer is owned by a player.
 
 ### Clan
 
 A clan is uniquely identified by their name. They have a status, like an oneliner/headline and a more formal description, specified by the clan Leader: a player.
-Players can optionally join a guild. 
+Players can optionally join a clan. 
 
 Allied players can transfer goods to support each other and bring peace to their alliance: they can't attack each-other.
 
@@ -81,4 +83,8 @@ A content can be a message or a request. The send time & content (actual message
 
 Contents/Messages are send from one player to another, to perform direct messaging. The shared relation is used to make a group chat for a clan. 
 
-A request is a specialization of content and has a status; True = Accepted, False = Rejected. It is used to store Clan Invitations, Friend Request & Transfer Requests (Inherited specializations).
+A request is a specialization of content and has a status; True = Accepted, False = Rejected. It is used to store Clan Invitations, Friend Request (Inherited specializations).
+
+### Timer
+
+A building, soldier or transfer might take time until it arrives. In the database we keep track of the current actions that are running. Upon user interaction, the server  checks if there are timers that need to be resolved.

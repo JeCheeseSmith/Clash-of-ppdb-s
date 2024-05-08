@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import POST from "../../../../../api/POST.jsx";
 import "./personInfo.css"
-import DisplayAvatarName from "../../../../../avatarWithName/avatarWithName.jsx";
+import DisplayAvatarName from "../../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
+import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
 
 /**
  * Represents a component for displaying information about a clan.
@@ -17,45 +18,25 @@ import {useLocation} from "react-router-dom";
 
 function PersonInformation({name, succesPersonSearch})
 {
-    const [massage, setMassage] = useState("")
-    const [succesRequest, setSuccesRequest] = useState(false)
+    const [message, setMessage] = useState("")
+    const [popUp, setPopUp] = useState(false)
     const location = useLocation();
     const sender = location.state.username || {};
     const handleRequestbutton = async () =>
     {
         const requestMassage = await POST({'pname': name, 'sname': sender, 'content': "Care to be allies, noble adventurer?"}, "/sendfriendrequest")
-        setMassage(requestMassage.message)
-        setSuccesRequest(requestMassage.success)
-        console.log(massage)
-        console.log(succesRequest)
-        console.log(sender)
+        setPopUp(true)
+        setMessage(requestMassage.message)
     }
-
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            setSuccesRequest(false);
-        }, 4000);
-
-        // Clear the timeout when the component unmounts or when succesRequest changes
-        return () => clearTimeout(timeout);
-    }, [succesRequest]);
 
     return(
         <div className={"player-info-request"}>
             <DisplayAvatarName type={"player-search"} name={name}/>
             <button className={"friend-request-button"} onClick={handleRequestbutton}>Send Friend Request</button>
-            {succesRequest && <RequestMassagePopUp massage={massage}/>}
-            {!succesRequest && <RequestMassagePopUp massage={massage}/>}
+            {popUp && <RequestMassagePopUp message={message} setPopup={setPopUp}/>}
         </div>
     )
 }
 
-function RequestMassagePopUp({massage}) {
-    return (
-        <div className="popup-message">
-            {massage}
-        </div>
-    );
-}
 
 export default PersonInformation;

@@ -3,16 +3,25 @@ import "./socialOptionContents.css"
 import POST from "../../../../api/POST.jsx";
 import ClanInformation from "./retrievedData/clanInfo.jsx";
 import PersonInformation from "./retrievedData/personInfo.jsx";
-import DisplayAvatarName from "../../../../avatarWithName/avatarWithName.jsx";
+import DisplayAvatarName from "../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
+import RequestMassagePopUp from "../../../../globalComponents/popupMessage/popup.jsx";
 
-function SocialOption({pageName, requests})
+/**
+ * Component for social options.
+ * @param {Object} props - The props object.
+ * @param {string} props.pageName - The name of the page ('createClan', 'joinClan', 'requests', 'searchPerson').
+ * @param {Array} props.requests - Array of requests data (only required for 'requests' page).
+ * @param {Function} props.sendData - Function to send data (only required for 'requests' page).
+ * @returns {JSX.Element} - The JSX for social options.
+ */
+function SocialOption({pageName, requests, sendData})
 {
     return(
         <div className="page-content">
             {pageName === 'createClan' && <CreateClanPage/>}
             {pageName === 'joinClan' && <JoinClanPage/>}
-            {pageName === 'requests' && <RequestsPage requests={requests}/>}
+            {pageName === 'requests' && <RequestsPage requests={requests} sendDate={sendData}/>}
             {pageName === 'searchPerson' && <SearchPersonPage/>}
         </div>
     )
@@ -27,6 +36,8 @@ function CreateClanPage()
     const [clanName, setClanName] = useState("");
     const [clanDescription, setClanDescription] = useState("");
     const [clanStatus,setClanStatus] = useState("")
+    const [popUp, setPopUp] = useState(false)
+    const [popUpMessage, setPopUpMessage] = useState("")
     const handleclanName = (e) =>
     {
         setClanName(e.target.value);
@@ -47,6 +58,15 @@ function CreateClanPage()
             status: clanStatus,
             pname: clanLeader
         }, "/createClan");
+        setPopUp(true)
+        if (data.success)
+        {
+            setPopUpMessage("Clan Created!")
+        }
+        else
+        {
+            setPopUpMessage("Clan Could Not Be Created!")
+        }
     };
 
     return (
@@ -54,7 +74,8 @@ function CreateClanPage()
             <input value={clanName} onChange={handleclanName} className={"search-name"} placeholder={"Name"} />
             <input value={clanStatus} onChange={handleClanStatus} className={"clanStatus"} placeholder={"clan chant"}/>
             <textarea value={clanDescription} onChange={handleclanDescription} className={"descriptionClan"} placeholder={"Description"}/>
-            <button className={"create-clan-button"} onClick={handleButtonClick} >Create Clan</button>
+            <button className={"create-clan-button"} onClick={handleButtonClick}>Create Clan</button>
+            {popUp && <RequestMassagePopUp message={popUpMessage} setPopup={setPopUp}/>}
         </div>
     );
 }
@@ -92,8 +113,21 @@ function JoinClanPage()
 }
 
 
-function RequestsPage({ requests })
+function RequestsPage({requests, sendDate})
 {
+    const location = useLocation();
+    const username = location.state.username || {};
+    const acceptationButton = async (request, state) =>
+    {
+        const accept = await POST({
+            'id': request.id,
+            "state": state,
+            "pname": username,
+            "sname": request.pname
+        }, "/acceptgeneralrequests")
+        sendDate();
+    }
+
     return (
         <div className="requests-container">
             {
@@ -101,8 +135,8 @@ function RequestsPage({ requests })
                     <div className={"request"}>
                         <DisplayAvatarName type={"player-request"} name={request.pname}/>
                         <div className={"content"}>{request.content}</div>
-                        <button className={"request-accept"}>Accept</button>
-                        <button className={"request-decline"}>Decline</button>
+                        <button className={"request-accept"} onClick={() => acceptationButton(request, true)}>Accept</button>
+                        <button className={"request-decline"} onClick={() => acceptationButton(request, false)}>Decline</button>
                     </div>
                 ))
             }

@@ -1,0 +1,8 @@
+.informationTab-container {
+    width: 300px;
+    background-color: black;
+    color: #1b05d2;
+    border-radius: 10px;
+    text-align: center;
+    margin-left: 10px;
+}

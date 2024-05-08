@@ -11,6 +11,10 @@
 - [ ] Documented
 - [ ] Beautiful?
 
+#Documentation
+
+For the workings of the game, refer to. the documentation folder in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
+
 ## How to start?
 
 > This guide assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL installed. Optionally, like we did, you can retrieve your free SSL Certificate using Certbot. 
@@ -77,8 +81,8 @@ sudo npm run build
 
 #### B. Install packages & Build the files using vite
 ```bash
-sudo npm install
-sudo npm run build
+npm install
+npm run build
 ```
 
 #### 5. Create user to run application
