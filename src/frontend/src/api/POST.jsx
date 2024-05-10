@@ -1,3 +1,5 @@
+import apiURL from "./URL.jsx";
+
 /**
  * Sends data to a specified endpoint using a POST request and Receiving back data.
  *
@@ -6,16 +8,10 @@
  * @returns {Promise<void>} - A Promise that resolves when the data is sent.
  */
 
-/**
- * Predefine urls for easy switch
- * @type {string}
- */
-const local = "http://127.0.0.1:5000"
-const remote = "https://team8.ua-ppdb.me/"
 const POST = async (data, endpoint) =>
 {
     let returnData;
-    await fetch(remote + endpoint, {
+    await fetch(apiURL + endpoint, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(data)
