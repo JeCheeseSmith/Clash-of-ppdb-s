@@ -100,7 +100,7 @@ function JoinClanPage()
         setDescription(data.description)
         setStatus(data.status)
         setPname(data.pname)
-        setSucces(data.succes)
+        setSucces(data.success)
         setClicked(true)
     };
     return (

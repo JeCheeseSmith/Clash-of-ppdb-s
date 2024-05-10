@@ -1,9 +1,9 @@
 .toggle-chat-button {
     position: absolute;
-    bottom: 50%;
+    bottom: 45%;
     transform: translateY(-50%);
-    height: 70px;
-    width: 50px;
+    height: 100px;
+    width: 100px;
     z-index: 10000;
     padding: 2px;
     background-color: #262826;
@@ -38,8 +38,8 @@
     position: fixed;
     bottom: 30%;
     transform: translateY(-50%);
-    height: 70px;
-    width: 55px;
+    height: 100px;
+    width: 100px;
     z-index: 3; /* Decreased z-index to bring it down in the background */
     padding: 0px;
     background-color: #262826;

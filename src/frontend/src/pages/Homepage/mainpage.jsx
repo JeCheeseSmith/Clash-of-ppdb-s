@@ -61,7 +61,6 @@ function MainPage()
         API.get_resources(sid).then(data =>
         {
             setResources(data);
-            console.log("Resource Updated: ", data, " at ",`${new Date().getHours()}h${new Date().getMinutes()}`)
         })
     }
     useEffect(() =>
@@ -71,7 +70,6 @@ function MainPage()
 
     useEffect(() =>
     {
-        //todo: compress size of main page mp3, or download new ones
         const audio = new Audio(backgroundMusic);
         audio.loop = true; // Loop the audio
         audio.play();

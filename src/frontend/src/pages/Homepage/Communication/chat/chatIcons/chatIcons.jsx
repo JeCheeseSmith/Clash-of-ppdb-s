@@ -3,40 +3,79 @@ import './chatIcons.css'
 import AvatarWithName from "../../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import GET from "../../../../../api/GET.jsx";
 import {useLocation} from "react-router-dom";
+import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
-function ChatIcons({contactList, updateMessages, updateReceiver, updateTypeReceiver, chatVisible})
+function ChatIcons({contactList, messages, updateMessages, receiver, updateReceiver, updateTypeReceiver, chatVisible, setNewReport})
 {
     const location = useLocation();
     const username = location.state.username || {};
-    const [selectedContact, setSelectedContact] = useState({type:"admin", name:"admin"})
+    const [adminMessages, setAdminMessages] = useState(null);
+    const [selectedContact, setSelectedContact] = useState(null);
+    const messagesAreEqual = (oldMessages, newMessages) =>
+    {
+        return JSON.stringify(oldMessages) === JSON.stringify(newMessages);
+    }
     const update = (data, name, type) =>
     {
-        updateMessages(data)
-        updateReceiver(name)
-        updateTypeReceiver(type)
+        if (name === receiver && !messagesAreEqual(messages, data)) // new incoming messages on the current chat
+        {
+            updateMessages(data)
+            updateReceiver(name)
+            updateTypeReceiver(type)
+            setSelectedContact({ name, type });
+
+            const lastMessage = data[data.length - 1]
+            if (lastMessage.sender !== username)
+            {
+                let promise  = PlaySound("NewMessage")
+            }
+        }
+        else if (name !== receiver)
+        {
+            updateMessages(data)
+            updateReceiver(name)
+            updateTypeReceiver(type)
+            setSelectedContact({ name, type });
+        }
     }
+
     const retrieveMessages = async (name, type) =>
     {
+        let data
         if (type === "clan")
         {
-            const data = await GET({"pname":username, "cname":name}, "/groupchat")
+            data = await GET({"pname":username, "cname":name}, "/groupchat")
             update(data,name,type)
         }
         else if (type === "person")
         {
-            const data = await GET({"pname":username, "sname":name}, "/chat")
+            data = await GET({"pname":username, "sname":name}, "/chat")
             update(data,name,type)
         }
         if (name === "admin")
         {
-            updateReceiver("")
+            setAdminMessages(data)
+            updateReceiver("admin")
+        }
+    }
+
+    const updateAdminMessages = async () =>
+    {
+        const data = await GET({"pname": username, "sname": "admin"}, "/chat")
+        if (!messagesAreEqual(adminMessages, data) && !chatVisible)
+        {
+            if (adminMessages !== null)
+            {
+                let promise  = PlaySound("Report")
+                setNewReport(true)
+            }
+            setAdminMessages(data)
         }
     }
 
     useEffect(() =>
     {
         let intervalId;
-
         if (selectedContact && chatVisible)
         {
             intervalId = setInterval(() =>
@@ -44,9 +83,19 @@ function ChatIcons({contactList, updateMessages, updateReceiver, updateTypeRecei
                 retrieveMessages(selectedContact.name, selectedContact.type);
             }, 1000);
         }
-
         return () => clearInterval(intervalId);
     }, [selectedContact, chatVisible]);
+
+    useEffect(() => // admin messages
+    {
+        let intervalId;
+        updateAdminMessages()
+        intervalId = setInterval(() =>
+        {
+            updateAdminMessages()
+        }, 10*60*5000);
+        return () => clearInterval(intervalId);
+    }, [adminMessages, chatVisible]);
 
     return (
         <div className={"contact-list"}>

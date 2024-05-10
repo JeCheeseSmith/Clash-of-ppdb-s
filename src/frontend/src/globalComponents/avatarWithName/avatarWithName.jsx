@@ -93,10 +93,12 @@ function ClanSearch({name, pname, succes}) {
  */
 function ChatPerson({name})
 {
+    let finalName = name
+    if (name === "admin") {finalName = "Imperial Messenger"}
     return (
         <div>
             <img src={person} className={"chat-ICON-avatar"}/>
-            <h3>{name}</h3>
+            <h3>{finalName}</h3>
         </div>
     );
 }

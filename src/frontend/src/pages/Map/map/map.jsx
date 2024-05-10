@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import * as API from "../../../api/EndPoints/EndPoints.jsx"
 import Arrow from "./modals/Arrow.jsx";
 import Settlement1 from "./modals/Settlement1.jsx";
-import {updateResources, updateTimers} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
+import {updateResources, updateTimers} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
 import LocalTimers from "../../../globalComponents/backgroundFunctions/localTimers.jsx";
 import ResourceBar from "../../Homepage/RecourceBar/resourcebar.jsx";
 import Environment from "./modals/Environment.jsx";

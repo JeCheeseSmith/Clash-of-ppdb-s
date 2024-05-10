@@ -1,4 +1,5 @@
-query = """--- Standard Development Schema to load into your (empty) database
+query = """
+--- Standard Development Schema to load into your (empty) database
 --- This deletes your WHOLE CURRENT DATABASE
 --- USE WITH CAUTION
 
@@ -239,4 +240,5 @@ INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Kingdom Rebuilder',
 INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Travisia''s Uniter', 'Create a clan',500, 1);
 
 INSERT INTO player(name,password) VALUES('admin','1234');
+
 """

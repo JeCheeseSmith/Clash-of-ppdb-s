@@ -36,7 +36,7 @@ export default TransferMenu;
  */
 function Navbar({outpostChosen, selectedObject})
 {
-    const [currentPage, setCurrentPage] = useState('Transfer');
+    const [currentPage, setCurrentPage] = useState('Information');
 
     const handleButtonClick = (pageName) =>
     {
@@ -49,22 +49,28 @@ function Navbar({outpostChosen, selectedObject})
                 <nav className="menu-navbar">
                     <ul className="menu-navbar-links">
                         <li>
-                            <button onClick={() => handleButtonClick('Transfer')} className={"transferOption"}>Transfer</button>
+                            {!outpostChosen && <button onClick={() => handleButtonClick('Information')}
+                                                       className={"transferOption"}>Information</button>}
                         </li>
                         <li>
-                            {!outpostChosen && <button onClick={() => handleButtonClick('Attack')} className={"transferOption"}>Attack</button>}
+                            <button onClick={() => handleButtonClick('Transfer')}
+                                    className={"transferOption"}>Transfer
+                            </button>
                         </li>
                         <li>
-                            {!outpostChosen && <button onClick={() => handleButtonClick('Espionage')} className={"transferOption"}>Espionage</button>}
+                            {!outpostChosen && <button onClick={() => handleButtonClick('Attack')}
+                                                       className={"transferOption"}>Attack</button>}
                         </li>
                         <li>
-                            {!outpostChosen && <button onClick={() => handleButtonClick('Information')} className={"transferOption"}>Information</button>}
+                            {!outpostChosen && <button onClick={() => handleButtonClick('Espionage')}
+                                                       className={"transferOption"}>Espionage</button>}
                         </li>
                     </ul>
                 </nav>
             }
             {
-                currentPage && (<TransferOption pageName={currentPage} selectedObject={selectedObject} outpostChosen={outpostChosen}/>)
+                currentPage && (
+                    <TransferOption pageName={currentPage} selectedObject={selectedObject} outpostChosen={outpostChosen}/>)
             }
         </div>
     );

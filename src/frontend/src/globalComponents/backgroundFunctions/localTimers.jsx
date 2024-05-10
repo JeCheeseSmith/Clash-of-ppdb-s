@@ -1,6 +1,6 @@
 import {useEffect} from 'react'; // Importing React library
 import {useLocation} from "react-router-dom";
-import {updateResources, updateTimers, updateMap} from "./helperFunctions.jsx";
+import {updateResources, updateTimers, updateMap} from "./updateFunctions.jsx";
 import PlaySound from "../audioComponent/audio.jsx";
 
 /**
@@ -54,7 +54,10 @@ function LocalTimers({setResources, timers, setTimers, setSettlements})
                     }
                     else
                     {
-                        let promise  = PlaySound("BuildingUpgraded")
+                        if (timer.type === "building")
+                        {
+                            let promise  = PlaySound("BuildingUpgraded")
+                        }
                         update()
                         break
                     }

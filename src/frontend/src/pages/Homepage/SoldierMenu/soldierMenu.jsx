@@ -19,8 +19,8 @@ import * as API from "../../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import RequestMassagePopUp from "../../../globalComponents/popupMessage/popup.jsx";
 import {empty} from "leaflet/src/dom/DomUtil.js";
-import {updateResources} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
-import {updateTimers} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
+import {updateResources} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
+import {updateTimers} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
 
 /**
  * React component for the troop screen button
