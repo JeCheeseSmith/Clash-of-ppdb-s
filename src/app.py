@@ -355,7 +355,9 @@ def placeBuilding():
     data = request.json
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
+    print(building.to_dct())
     success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
+    print(success, error)
     dct = dict(success=success)
     if not success:
         dct["error"] = str(error)
@@ -1027,15 +1029,8 @@ def preset():
     This script will delete all current data and load some preset information into the game, providing a very basic example of the workings of the game. We recommend you to actually try it out, not all features are (fully) used.
     """
 
-    # # Reset database
-    cursor = connection.get_cursor()
-    cursor.execute(query)
-    connection.commit()
-
     from preset import presets
-    presets()
-
-    connection.commit()
+    presets(connection)
 
     return jsonify('data')
 

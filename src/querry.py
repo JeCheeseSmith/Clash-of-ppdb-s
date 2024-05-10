@@ -235,7 +235,7 @@ INSERT INTO soldier(name, type, health, damage, capacity, consumption, speed,ste
 INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Woodcutter', 'Upgrade & Build 3 Woodcutters in 1 settlement',300,3 );
 INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Fighter', 'Go to war 5 times',500,5 );
 INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Friendly Neighbour', 'Send 7 times resources to an ally',700,7 );
-INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Hungry for more', 'Create an outpost',300,3 );
+INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Hungry for more', 'Train 500 troops',300,500 );
 INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Kingdom Rebuilder', 'Create an outpost',500,1 );
 INSERT INTO achievement(name, task, xpBonus, amount) VALUES('Travisia''s Uniter', 'Create a clan',500, 1);
 
