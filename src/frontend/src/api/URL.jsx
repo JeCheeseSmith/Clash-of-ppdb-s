@@ -16,6 +16,6 @@ const local = "http://127.0.0.1:5000";
  */
 const remote = "https://team8.ua-ppdb.me/";
 
-// Set the initial value of apiURL to the local URL
+// Set the initial value of apiURL to the wanted URL
 apiURL = local;
 export default apiURL;
