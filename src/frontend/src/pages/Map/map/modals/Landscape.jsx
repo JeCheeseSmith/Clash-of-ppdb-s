@@ -157,51 +157,6 @@ export default function Landscape(props) {
       <mesh
         castShadow
         receiveShadow
-        geometry={nodes.grass_06_lambert18_0.geometry}
-        material={materials.lambert18}
-        position={[-120.488, 15.967, 444.357]}
-        rotation={[-Math.PI, -1.415, -Math.PI]}
-        scale={14.727}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.grass_015_lambert18_0.geometry}
-        material={materials.lambert18}
-        position={[46.718, 15.967, 583.695]}
-        rotation={[0, 1.008, 0]}
-        scale={14.727}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.grass_016_lambert18_0.geometry}
-        material={materials.lambert18}
-        position={[34.431, 19.042, 576.056]}
-        rotation={[0, 0.399, 0]}
-        scale={8.86}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.grass_017_lambert18_0.geometry}
-        material={materials.lambert18}
-        position={[-25.458, 22.871, 474.776]}
-        rotation={[0, -0.097, 0]}
-        scale={7.633}
-      />
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.grass_018_lambert18_0.geometry}
-        material={materials.lambert18}
-        position={[57.086, 22.871, 561.44]}
-        rotation={[0, 1.217, 0]}
-        scale={7.633}
-      />
-      <mesh
-        castShadow
-        receiveShadow
         geometry={nodes.rock_083_lambert19_0.geometry}
         material={materials.lambert19}
         position={[1035.808, 5.312, 1268.326]}

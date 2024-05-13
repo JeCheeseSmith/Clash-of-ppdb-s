@@ -4,7 +4,8 @@ import Buildings from "../buildings.jsx";
 import GridCalculation from "../gridCalculation.jsx";
 import POST from "../../../../api/POST.jsx";
 import {useLocation} from "react-router-dom";
-import RequestMassagePopUp from "../../../../globalComponents/popupMessage/popup.jsx";
+import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
+import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
 
 function BuildmenuOptionsContents({ currentPage, addBuildable, buildings})
 {
@@ -77,10 +78,12 @@ function Building({addBuildable, name, image, size, buildings})
         if (data.success)
         {
             addBuildable(name, randomPosition, size, newCells[1])
+            const promise = PlaySound("BuildingUpgraded")
         }
         else
         {
             setErrorMessage(data.error);
+            const promise = PlaySound("ResourcesError")
             setPopup(true)
         }
     }
@@ -95,7 +98,7 @@ function Building({addBuildable, name, image, size, buildings})
                 onMouseLeave={handleMouseLeave}
             />
             {showTooltip && <div className="tooltip">{name}</div>}
-            {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
+            {popup && <PopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     );
 }

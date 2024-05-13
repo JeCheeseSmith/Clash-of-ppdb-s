@@ -13,7 +13,7 @@ import settlementType2 from '../assets/settlementType2.glb'
 export default function Settlement2(props) {
   const { nodes, materials } = useGLTF(settlementType2)
   return (
-    <group {...props} dispose={null} scale={1.1} position={[-0.5,0.1,-1.15]}>
+    <group {...props} dispose={null} scale={1.1} position={[-0.5,0.1,-0.7]}>
       <group rotation={[-Math.PI / 2, 0, 0]} scale={0.005}>
         <group rotation={[Math.PI / 2, 0, 0]}>
           <group scale={0.01}>

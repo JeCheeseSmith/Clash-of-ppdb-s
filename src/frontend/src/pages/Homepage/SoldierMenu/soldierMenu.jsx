@@ -17,7 +17,7 @@ import spear2 from "./assets/Pikeman.png"
 import spear3 from "./assets/Halbardier.png"
 import * as API from "../../../api/EndPoints/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
-import RequestMassagePopUp from "../../../globalComponents/popupMessage/popup.jsx";
+import PopUp from "../../../globalComponents/popupMessage/popup.jsx";
 import {empty} from "leaflet/src/dom/DomUtil.js";
 import {updateResources} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
 import {updateTimers} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
@@ -368,7 +368,7 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
                         <p className="soldierCount">{soldiers.ambush3}</p>
                 </div>
             </div>
-            {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
+            {popup && <PopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     )
 }

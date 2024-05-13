@@ -3,7 +3,7 @@ import POST from "../../../../../api/POST.jsx";
 import "./clanInfo.css"
 import DisplayAvatarName from "../../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
-import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
+import PopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
 
 /**
  * Represents a component for displaying information about a clan.
@@ -39,7 +39,7 @@ function ClanInformation({name, description, status, pname, succesClanSearch})
                 </div>
             </div>
             {succesClanSearch && <button className={"clan-request-button"} onClick={handleRequestbutton}>Send Request</button>}
-            {popUp && <RequestMassagePopUp message={message} setPopup={setPopUp}/>}
+            {popUp && <PopUp message={message} setPopup={setPopUp}/>}
         </div>
     )
 }

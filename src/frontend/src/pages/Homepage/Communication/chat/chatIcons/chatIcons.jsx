@@ -86,14 +86,14 @@ function ChatIcons({contactList, messages, updateMessages, receiver, updateRecei
         return () => clearInterval(intervalId);
     }, [selectedContact, chatVisible]);
 
-    useEffect(() => // admin messages retrieved after each 10 minutes
+    useEffect(() => // admin messages retrieved after each 5 minutes
     {
         let intervalId;
         updateAdminMessages()
         intervalId = setInterval(() =>
         {
             updateAdminMessages()
-        }, 10*60*5000);
+        }, 5*60*1000);
         return () => clearInterval(intervalId);
     }, [adminMessages, chatVisible]);
 

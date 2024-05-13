@@ -27,7 +27,10 @@ function InformationTab({selectedObject})
         API.getInfo(selectedObject.idTO, username, selectedObject.toType).then(data =>
         {
             setDictionary(data)
-            setOutpostSelected(data.outpost)
+            if (data.me && data.outpost) // outpost settlement
+            {
+                setOutpostSelected(true)
+            }
             if (data.me && !data.outpost) // main settlement
             {
                 setMainSettlementSelected(true)
@@ -40,7 +43,6 @@ function InformationTab({selectedObject})
     {
         navigate('/MainPage', { state: { sid:parseInt(sidSettlementSelected), username }});
     }
-
     const resources = resourcesFound(dictionary)
     return (
         <div className={"transferMenu-container"}>
@@ -88,21 +90,17 @@ function InformationTab({selectedObject})
 
 function soldierFound(dictionary, soldierName) {
     for (let key in dictionary) {
-        if (key === soldierName)
-        {
+        if (key === soldierName) {
             return [true, dictionary[key]]
         }
     }
     return [true, null]
 }
 
-function resourcesFound(dictionary)
-{
+function resourcesFound(dictionary) {
     const resourcesDict = {wood: null, stone: null, steel: null, food: null};
-    for (let key in dictionary)
-    {
-        if (resourcesDict.hasOwnProperty(key))
-        {
+    for (let key in dictionary) {
+        if (resourcesDict.hasOwnProperty(key)) {
             resourcesDict[key] = dictionary[key];
         }
     }

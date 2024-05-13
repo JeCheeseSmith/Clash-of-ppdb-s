@@ -19,6 +19,7 @@ function MapMainpage()
     const handleOutpostButton = () =>
     {
         setOutpostChosen(!outpostChosen)
+        setMenuVisible(false)
     }
     return (
         <div className={"map-mainpage"}>
@@ -29,7 +30,6 @@ function MapMainpage()
                     <TransferMenu selectedObject={selectedObject}
                                   setMenuVisible={setMenuVisible}
                                   outpostChosen={outpostChosen}
-                                  setOutpostChosen={setOutpostChosen}
                     />
                 </div>)
             }
