@@ -14,13 +14,15 @@ import PlaySound from "../../../globalComponents/audioComponent/audio.jsx";
  * @param {Function} props.setVariable - Function to set a variable (only required for chat buttons).
  * @returns {JSX.Element} - The JSX for communication buttons.
  */
-function CommunicationButton({type, buttonFunction, visible, setVariable})
+function CommunicationButton({type, buttonFunction, visible, setVariable, newReport, setNewReport})
 {
     return (
         <div className={"buttons"}>
             {type === 'chat' && <ChatButton toggleChatVisibility={buttonFunction}
                                             chatVisible={visible}
                                             setContactList={setVariable}
+                                            newReport={newReport}
+                                            setNewReport={setNewReport}
 
             />}
             {type === 'social' && <SocialButton toggleSocialVisibility={buttonFunction}/>}
@@ -36,7 +38,7 @@ function CommunicationButton({type, buttonFunction, visible, setVariable})
  * @param {Function} props.setContactList - Function to set the contact list.
  * @returns {JSX.Element} - The JSX for chat button.
  */
-function ChatButton({toggleChatVisibility, chatVisible, setContactList})
+function ChatButton({toggleChatVisibility, chatVisible, setContactList, newReport, setNewReport})
 {
     const username = useLocation().state.username || {};
     const updateContactList = async () =>
@@ -46,8 +48,8 @@ function ChatButton({toggleChatVisibility, chatVisible, setContactList})
     }
 
     return(
-        <button onClick={() => {toggleChatVisibility(); updateContactList()}} className={`toggle-chat-button ${chatVisible ? 'visible' : 'hidden'}`}>
-            {chatVisible ? 'chat' : 'chat'}
+        <button onClick={() => {toggleChatVisibility(); updateContactList(); setNewReport(false)}} className={`toggle-chat-button ${chatVisible ? 'visible' : 'hidden'}`}>
+            {!chatVisible && newReport ? 'Reports!' : 'Chat'}
         </button>
     )
 }
@@ -63,7 +65,7 @@ function SocialButton({toggleSocialVisibility}) {
     let promise;
     return (
         <button onClick={() => {toggleSocialVisibility(); promise = PlaySound("SocialButton")}} className={"toggle-social-button"}>
-            social
+            Social
         </button>
     )
 }

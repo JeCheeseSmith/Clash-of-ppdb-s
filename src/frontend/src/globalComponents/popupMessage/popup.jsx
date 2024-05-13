@@ -9,7 +9,7 @@ import close from '../../assets/closePopUp.png'
  * @param {function} props.setPopup - Function to set the popup state.
  * @returns {JSX.Element} - The JSX for displaying the popup message.
  */
-function RequestMassagePopUp({ message, setPopup })
+function PopUp({ message, setPopup })
 {
     const closeButton = () =>
     {
@@ -23,4 +23,4 @@ function RequestMassagePopUp({ message, setPopup })
     );
 }
 
-export default RequestMassagePopUp;
+export default PopUp;

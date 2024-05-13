@@ -5,7 +5,7 @@ import TimerProgressBar from "../../../../../globalComponents/timeComponent/Time
 import DisplayAvatarName from "../../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
 import * as API from "../../../../../api/EndPoints/EndPoints.jsx";
-import RequestMassagePopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
+import PopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
 /**
@@ -69,7 +69,7 @@ function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTi
                 {!click && <button className="upgrade-button" onClick={HandleUpgradeClick}> Upgrade</button>}
                 {click && <TimerProgressBar timeValue={currentTimeValue}  totalTimeValue={currentTotalDuration} finished={setClick}/>}
             </div>
-            {popup && <RequestMassagePopUp message={errormessage} setPopup={setPopup}/>}
+            {popup && <PopUp message={errormessage} setPopup={setPopup}/>}
         </div>
     );
 }

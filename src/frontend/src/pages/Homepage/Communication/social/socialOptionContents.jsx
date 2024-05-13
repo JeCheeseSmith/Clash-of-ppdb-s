@@ -5,7 +5,7 @@ import ClanInformation from "./retrievedData/clanInfo.jsx";
 import PersonInformation from "./retrievedData/personInfo.jsx";
 import DisplayAvatarName from "../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
-import RequestMassagePopUp from "../../../../globalComponents/popupMessage/popup.jsx";
+import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
 
 /**
  * Component for social options.
@@ -75,7 +75,7 @@ function CreateClanPage()
             <input value={clanStatus} onChange={handleClanStatus} className={"clanStatus"} placeholder={"clan chant"}/>
             <textarea value={clanDescription} onChange={handleclanDescription} className={"descriptionClan"} placeholder={"Description"}/>
             <button className={"create-clan-button"} onClick={handleButtonClick}>Create Clan</button>
-            {popUp && <RequestMassagePopUp message={popUpMessage} setPopup={setPopUp}/>}
+            {popUp && <PopUp message={popUpMessage} setPopup={setPopUp}/>}
         </div>
     );
 }
@@ -100,7 +100,7 @@ function JoinClanPage()
         setDescription(data.description)
         setStatus(data.status)
         setPname(data.pname)
-        setSucces(data.succes)
+        setSucces(data.success)
         setClicked(true)
     };
     return (

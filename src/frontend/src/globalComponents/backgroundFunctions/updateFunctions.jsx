@@ -11,11 +11,7 @@ export const updateTimers = (username, setTimers) =>
 
 export const updateResources = (sid, setResources) =>
 {
-    API.get_resources(sid).then(data =>
-    {
-        setResources(data);
-        console.log("Resource Updated: ", data, " at ",`${new Date().getHours()}h${new Date().getMinutes()}`);
-    });
+    API.get_resources(sid).then(data => {setResources(data);});
 };
 
 export const updateMap = (username, setSettlements) =>

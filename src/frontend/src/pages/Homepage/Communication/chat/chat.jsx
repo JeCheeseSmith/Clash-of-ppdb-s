@@ -14,11 +14,12 @@ import {useLocation} from "react-router-dom"; // CSS file for styling
  */
 function ChatBox()
 {
-    const [messages, setMessages] = useState([{content:"Welcome to Chat!"}]); // Initialize messages
+    const [messages, setMessages] = useState([{content:"Welcome to Chat!", sender:"Travisia"}]); // Initialize messages
     const [chatVisible, setChatVisible] = useState(false); // State variable to track chat visibility
     const [contactList, setContactList] = useState([])
     const [receiver, setReceiver] = useState("")
     const [typeReceiver, setTypeReceiver] = useState("")
+    const [newReport, setNewReport] = useState(false);
 
     const handleMessageSubmit = (content, sender) =>
     {
@@ -36,16 +37,21 @@ function ChatBox()
                                  buttonFunction={toggleChatVisibility}
                                  visible={chatVisible}
                                  setVariable={setContactList}
+                                 newReport={newReport}
+                                 setNewReport={setNewReport}
             />
             <div className={`chat-container ${chatVisible ? 'visible' : 'hidden'}`}>
                 <h1 className="chat-title">CHAT</h1>
                 <MessageDisplay messages={messages} />
-                {receiver && <MessageInput onSubmit={handleMessageSubmit} receiver={receiver} typeReceiver={typeReceiver}/>}
+                {receiver !== "admin" && <MessageInput onSubmit={handleMessageSubmit} receiver={receiver} typeReceiver={typeReceiver}/>}
                 <ChatIcons updateMessages={setMessages}
                            contactList={contactList}
                            updateReceiver={setReceiver}
                            updateTypeReceiver={setTypeReceiver}
                            chatVisible={chatVisible}
+                           messages={messages}
+                           receiver={receiver}
+                           setNewReport={setNewReport}
                 />
             </div>
         </div>
@@ -65,8 +71,8 @@ function ChatBox()
 
 function MessageDisplay({ messages })
 {
+    const {username} = useLocation().state;
     const messageDisplayRef = useRef(null);
-    // Scroll to the bottom of the message display on component update
     useEffect(() =>
     {
         if (messageDisplayRef.current)
@@ -76,14 +82,17 @@ function MessageDisplay({ messages })
     }, [messages]);
 
     return (
-      <div ref={messageDisplayRef} className="message-display">
-        {messages.map((message, index) => (
-          <div key={index} className="message">
-            <div>{message.content}</div>
-            <span className="sender-name">{message.sender}</span>
-          </div>
-        ))}
-      </div>
+        <div ref={messageDisplayRef} className="message-display">
+            {messages.map((message, index) => {
+                const senderName = message.sender === "admin" ? "Imperial Messenger" : message.sender;
+                return (<div key={index} className={`message ${message.sender === username ? 'sent' : 'received'}`}>
+                    {message.sender === username && <div>{message.content}</div>}
+                    {message.sender === username && <div className="you-name">you</div>}
+                    {message.sender !== username && <div className="sender-name">{senderName}</div>}
+                    {message.sender !== username && <div>{message.content}</div>}
+                </div>)
+            })}
+        </div>
     );
 }
 

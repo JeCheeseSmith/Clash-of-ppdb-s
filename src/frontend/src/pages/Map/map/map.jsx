@@ -1,18 +1,18 @@
-import React, {Suspense, useEffect, useState} from 'react';
+import React, {Suspense, useState} from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import {OrbitControls, Text} from '@react-three/drei';
 import * as THREE from 'three';
 import { useLocation } from 'react-router-dom';
-import * as API from "../../../api/EndPoints/EndPoints.jsx"
 import Arrow from "./modals/Arrow.jsx";
 import Settlement1 from "./modals/Settlement1.jsx";
-import {updateResources, updateTimers} from "../../../globalComponents/backgroundFunctions/helperFunctions.jsx";
+import {updateResources} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
 import LocalTimers from "../../../globalComponents/backgroundFunctions/localTimers.jsx";
 import ResourceBar from "../../Homepage/RecourceBar/resourcebar.jsx";
 import Environment from "./modals/Environment.jsx";
 import Landscape from "./modals/Landscape.jsx";
 import Settlement2 from "./modals/Settlement2.jsx";
 import Settlement3 from "./modals/Settlement3.jsx";
+import textFont from './assets/MagelyfreeRegular-DOeXW.otf'
 
 /**
  * Represents a component for displaying and interacting with a map.
@@ -40,50 +40,66 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
     const handleOutpost = (rowIndex, colIndex) =>
     {
         setMenuVisible(true)
-        setSelectedObject([rowIndex, colIndex])
+        setSelectedObject([rowIndex, colIndex, true])
     }
 
-    const renderSettlement = (rowIndex, colIndex) =>
+    const SettlementMesh = ({Type, settlement, rowIndex, colIndex, text, color, scale}) =>
     {
+        return (
+            <>
+                <mesh key={`${rowIndex}-${colIndex}-settlement`}
+                      position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
+                      onClick={() => handleTransfer(settlement.sid, false)}
+                      scale={2}
+                >
+                    <Type/>
+                </mesh>
+                <Text position={[colIndex + 0.5 - mapSize / 2, 10, rowIndex + 1 - mapSize / 2]}
+                      scale={scale}
+                      font={textFont}
+                >
+                    {text}
+                    <meshBasicMaterial color={color}/>
+                </Text>
+            </>
+        );
+    }
+
+    const renderSettlement = (rowIndex, colIndex) => {
         for (let settlement of settlements)
         {
             if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
             {
                 if (settlement.me && !settlement.isOutpost)
                 {
-                    return (
-                        <mesh key={`${rowIndex}-${colIndex}-settlement`}
-                              position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
-                              onClick={() => handleTransfer(settlement.sid, false)}
-                              scale={2}
-                        >
-                            <Settlement3/>
-                        </mesh>
-                    );
+                    return (<SettlementMesh Type={Settlement3}
+                                            settlement={settlement}
+                                            rowIndex={rowIndex}
+                                            colIndex={colIndex}
+                                            text={"Capital City \n"}
+                                            color={"red"}
+                                            scale={2.5}
+                    />)
                 }
                 else if (settlement.me && settlement.isOutpost)
                 {
-                    return (
-                        <mesh key={`${rowIndex}-${colIndex}-settlement`}
-                              position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
-                              onClick={() => handleTransfer(settlement.sid, false)}
-                              scale={2}
-                        >
-                            <Settlement2/>
-                        </mesh>
-                    );
+                    return (<SettlementMesh Type={Settlement2}
+                                            settlement={settlement}
+                                            rowIndex={rowIndex}
+                                            colIndex={colIndex}
+                                            text={"Outpost \n"}
+                                            color={"blue"}
+                                            scale={2.0}
+                    />)
                 }
                 else
                 {
-                    return (
-                        <mesh key={`${rowIndex}-${colIndex}-settlement`}
-                              position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
-                              onClick={() => handleTransfer(settlement.sid, false)}
-                              scale={2}
-                        >
-                            <Settlement1/>
-                        </mesh>
-                    );
+                    return (<SettlementMesh Type={Settlement1}
+                                            settlement={settlement}
+                                            rowIndex={rowIndex}
+                                            colIndex={colIndex}
+                                            scale={0.7}
+                    />)
                 }
             }
         }
@@ -127,7 +143,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
     return (
         <Suspense fallback={null}>
             <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers} setSettlements={setSettlements}/>
-            <Canvas camera={{position: [0, 10, 30]}}>
+            <Canvas camera={{position: [0, 50, 65]}}>
                 {/*<color attach="background" args={['lightblue']}/>*/}
                 <directionalLight
                     position={[50, 50, 50]} // Position of the light source
@@ -150,8 +166,6 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                     minDistance={20}
                     maxPolarAngle={Math.PI / 2.5}
                     minPolarAngle={Math.PI / 5}
-                    maxAzimuthAngle={Math.PI / 2}
-                    minAzimuthAngle={Math.PI / 5}
                     enablePan={false}
                 />
                 {createSettlements(renderSettlement)}

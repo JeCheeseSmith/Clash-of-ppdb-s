@@ -1,3 +1,5 @@
+import apiURL from './URL.jsx'
+
 /**
  * Sends data to a specified endpoint using a GET request and Receiving back data.
  *
@@ -6,18 +8,11 @@
  * @returns {Promise<void>} - A Promise that resolves when the data is sent.
  */
 
-/**
- * Predefine urls
- * @type {string}
- */
-const local = "http://127.0.0.1:5000"
-const remote = "https://team8.ua-ppdb.me/"
-
 const GET = async (data, endpoint) =>
 {
     try
     {
-        const url = new URL(local + endpoint);
+        const url = new URL(apiURL + endpoint);
         if (data)
         {
             Object.keys(data).forEach(key => url.searchParams.append(key, data[key]));

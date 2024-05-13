@@ -8,7 +8,7 @@ import Soldiers from "../assets/soldiers.jsx";
 import InformationTab from "../information/informationTab.jsx";
 import * as API from '../../../../api/EndPoints/EndPoints.jsx'
 import {useLocation} from "react-router-dom";
-import RequestMassagePopUp from "../../../../globalComponents/popupMessage/popup.jsx";
+import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
 
 
 /**
@@ -131,7 +131,7 @@ function TransferPage({selectedObject, outpostChosen})
             </div>
             <button className={"send-transferTYPE"} onClick={handleTransferButton}> Send Soldier and Resources! </button>
             {outpostChosen && <input className={"outpost-Name"} placeholder={"Settlement Name..."} onChange={(e) => setOutpostName(e.target.value)}/>}
-            {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
+            {popup && <PopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     );
 }
@@ -193,7 +193,7 @@ function AttackPage({selectedObject})
                 ))}
             </div>
             <button className={"send-transferTYPE"} onClick={handleAttack}> Send Troops and Attack!</button>
-            {popup && <RequestMassagePopUp message={errorMessage} setPopup={setPopup}/>}
+            {popup && <PopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     )
 }

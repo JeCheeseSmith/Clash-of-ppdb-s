@@ -93,7 +93,7 @@ The `LocalTimers` component manages local timers for resource updates and other 
 
 - `useEffect` from React library: Used to perform side effects in function components.
 - `useLocation` from "react-router-dom": Used to access location information.
-- `updateResources` and `updateTimers` from "./helperFunctions.jsx": Functions to update resources and timers.
+- `updateResources` and `updateTimers` from "./updateFunctions.jsx": Functions to update resources and timers.
 
 ## Usage
 
