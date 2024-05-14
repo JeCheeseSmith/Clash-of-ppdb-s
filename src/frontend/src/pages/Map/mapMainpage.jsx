@@ -5,6 +5,10 @@ import TransferMenu from "./mapMenu/transfers/transfers.jsx";
 import Outpost from "./outpost/outpost.jsx";
 import {Loader} from "@react-three/drei";
 import {loaderStyles} from "../../globalComponents/loadingScreen/loadingScreen.jsx";
+import compass from './map/assets/image-removebg-preview.png'
+import Chat from "../Homepage/Communication/chat/chat.jsx";
+import SocialBox from "../Homepage/Communication/social/social.jsx";
+import Account from "../Homepage/Account/account.jsx";
 
 /**
  * Represents the main page of the map component.
@@ -34,6 +38,10 @@ function MapMainpage()
                 </div>)
             }
             <Outpost onClickFunction={handleOutpostButton}/>
+            <Chat/>
+            <SocialBox/>
+            <Account/>
+            <img src={compass} alt={"compass"} className={"compass"}/>
             <Map setMenuVisible={setMenuVisible}
                  setSelectedObject={setSelectedObject}
                  outpostChosen={outpostChosen}

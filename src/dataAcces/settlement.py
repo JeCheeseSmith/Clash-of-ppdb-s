@@ -1,6 +1,7 @@
 from random import randrange
 from math import sqrt
 from .building import *
+from .friend import *
 from .timer import *
 
 
@@ -402,7 +403,7 @@ class SettlementDataAcces:
                 return self.getNewCoordinate()
         return [x, y]
 
-    def getMap(self, pname: str):
+    def getMap(self, pname: str, friend_data_acces: FriendDataAccess):
         """
         Retrieve the info about the map; aka settlement coordinates
         :param pname: Name of the player
@@ -415,6 +416,7 @@ class SettlementDataAcces:
         sList = []
 
         for settlement in data:
+            isFriend = friend_data_acces.areFriends(pname, settlement[3])
             sList.append(dict(sid=settlement[0], position=[settlement[1], settlement[2]],
-                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0]), me= (pname == settlement[3])))
+                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0]), me= (pname == settlement[3]), pname=settlement[3], isFriend=isFriend))
         return sList

@@ -12,5 +12,10 @@
     display: flex;
     flex-direction: row;
     left: 400px; /* Adjust this value as needed */
-    top: 115px; /* Adjust this value as needed */
+    top: 50px; /* Adjust this value as needed */
+}
+
+.compass {
+    position: absolute;
+    z-index: 1;
 }

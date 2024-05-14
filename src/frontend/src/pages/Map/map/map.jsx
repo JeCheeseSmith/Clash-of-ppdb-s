@@ -1,4 +1,4 @@
-import React, {Suspense, useState} from 'react';
+import React, {Suspense, useRef, useState} from 'react';
 import { Canvas } from '@react-three/fiber';
 import {OrbitControls, Text} from '@react-three/drei';
 import * as THREE from 'three';
@@ -13,6 +13,7 @@ import Landscape from "./modals/Landscape.jsx";
 import Settlement2 from "./modals/Settlement2.jsx";
 import Settlement3 from "./modals/Settlement3.jsx";
 import textFont from './assets/MagelyfreeRegular-DOeXW.otf'
+import Capital from "./modals/Capital.jsx";
 
 /**
  * Represents a component for displaying and interacting with a map.
@@ -30,6 +31,8 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [settlements, setSettlements] = useState([])
     const [timers, setTimers] = useState([])
+    const markerRef = useRef()
+    let characteristics
 
     const handleTransfer = (idTO, toType) =>
     {
@@ -43,64 +46,70 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
         setSelectedObject([rowIndex, colIndex, true])
     }
 
-    const SettlementMesh = ({Type, settlement, rowIndex, colIndex, text, color, scale}) =>
+    const SettlementMesh = ({settlement, rowIndex, colIndex, characteristics}) =>
     {
+        let positionX = colIndex + 0.5 - mapSize / 2
+        let positionY = rowIndex + 1 - mapSize / 2
         return (
             <>
                 <mesh key={`${rowIndex}-${colIndex}-settlement`}
-                      position={[colIndex + 0.5 - mapSize / 2, 6, rowIndex + 1 - mapSize / 2]}
+                      position={[positionX, 6, positionY]}
                       onClick={() => handleTransfer(settlement.sid, false)}
                       scale={2}
                 >
-                    <Type/>
+                    <characteristics.Type/>
                 </mesh>
-                <Text position={[colIndex + 0.5 - mapSize / 2, 10, rowIndex + 1 - mapSize / 2]}
-                      scale={scale}
-                      font={textFont}
-                >
-                    {text}
-                    <meshBasicMaterial color={color}/>
-                </Text>
+                {!outpostChosen &&
+                    <>
+                       <Text position={[positionX, 10, positionY]}
+                               rotation={[-0.5, 0, 0]}
+                               scale={characteristics.scale}
+                               font={textFont}
+                               onClick={() => handleTransfer(settlement.sid, false)}
+                       >
+                           {characteristics.text}
+                           <meshBasicMaterial color={characteristics.color}/>
+                       </Text>
+                        {characteristics.text === "Capital City" &&
+                            <mesh position={[positionX, 10, positionY]}
+                                  onClick={() => handleTransfer(settlement.sid, false)}
+                            >
+                                <Capital/>
+                            </mesh>
+                        }
+                    </>
+                }
             </>
         );
     }
 
     const renderSettlement = (rowIndex, colIndex) => {
-        for (let settlement of settlements)
-        {
+        for (let settlement of settlements) {
             if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
             {
                 if (settlement.me && !settlement.isOutpost)
                 {
-                    return (<SettlementMesh Type={Settlement3}
-                                            settlement={settlement}
-                                            rowIndex={rowIndex}
-                                            colIndex={colIndex}
-                                            text={"Capital City \n"}
-                                            color={"red"}
-                                            scale={2.5}
-                    />)
+                    characteristics = {Type: Settlement3, text: "Capital City", color: "red", scale: 2.5}
                 }
-                else if (settlement.me && settlement.isOutpost)
+                else if ((settlement.me && settlement.isOutpost) || settlement.pname === "admin")
                 {
-                    return (<SettlementMesh Type={Settlement2}
-                                            settlement={settlement}
-                                            rowIndex={rowIndex}
-                                            colIndex={colIndex}
-                                            text={"Outpost \n"}
-                                            color={"blue"}
-                                            scale={2.0}
-                    />)
+                    characteristics = {Type: Settlement2, text: "Outpost", color: "blue", scale: 2}
+                }
+                else if (settlement.isOutpost || settlement.pname === "admin")
+                {
+                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s Outpost`, color: "yellow", scale: 1}
+                }
+                else if (settlement.isFriend)
+                {
+                    characteristics = {Type: Settlement1, text: `${settlement.pname} (Ally)`, color: "purple", scale: 1}
                 }
                 else
                 {
-                    return (<SettlementMesh Type={Settlement1}
-                                            settlement={settlement}
-                                            rowIndex={rowIndex}
-                                            colIndex={colIndex}
-                                            scale={0.7}
-                    />)
+                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City`, color: "white", scale: 0.8}
                 }
+                return (
+                    <SettlementMesh settlement={settlement} rowIndex={rowIndex} colIndex={colIndex} characteristics={characteristics}/>
+                )
             }
         }
         if (outpostChosen)

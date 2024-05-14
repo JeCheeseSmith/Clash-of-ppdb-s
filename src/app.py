@@ -571,7 +571,7 @@ def getMap():
     }
     """
     data = request.args
-    return jsonify(settlement_data_acces.getMap(data.get('pname')))
+    return jsonify(settlement_data_acces.getMap(data.get('pname'), friend_data_access))
 
 
 @app.route("/espionage", methods=["POST"])
