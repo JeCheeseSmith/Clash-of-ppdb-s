@@ -5,6 +5,7 @@ import buttonOption from "./assets/socialOptionSound.mp3";
 import upgraded from "./assets/Upgraded.mp3"
 import newMessage from "./assets/NewMessage.mp3"
 import report from "./assets/Report.mp3"
+import click from "./assets/Click.mp3"
 
 /*
 * Audio component for better and global use
@@ -13,14 +14,18 @@ import report from "./assets/Report.mp3"
 async function PlaySound(typeSound)
 {
     let sound;
-    if (typeSound === "ResourcesError")
+    if (typeSound === "Click")
+    {
+        sound = new Audio(click)
+        sound.currentTime = 0.46;
+    }
+    else if (typeSound === "ResourcesError")
     {
         sound = new Audio(notEnough);
     }
     else if (typeSound === "ObjectPlacementError")
     {
         sound = new Audio(error);
-        sound.currentTime = 0.0;
     }
     else if (typeSound === "SocialButton")
     {

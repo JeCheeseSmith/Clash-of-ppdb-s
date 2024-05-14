@@ -59,6 +59,7 @@ function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTi
                     const promise = PlaySound("ResourcesError")
                 }
             })
+            let promise  = PlaySound("Click")
         }
     }
 

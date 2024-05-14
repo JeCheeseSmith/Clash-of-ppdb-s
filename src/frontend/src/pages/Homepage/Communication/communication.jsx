@@ -45,6 +45,7 @@ function ChatButton({toggleChatVisibility, chatVisible, setContactList, newRepor
     {
         const data = await GET({"pname":username},"/getChats")
         setContactList(data)
+        let promise  = PlaySound("Click")
     }
 
     return(

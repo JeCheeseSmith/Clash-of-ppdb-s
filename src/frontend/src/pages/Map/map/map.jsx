@@ -14,6 +14,7 @@ import Settlement2 from "./modals/Settlement2.jsx";
 import Settlement3 from "./modals/Settlement3.jsx";
 import textFont from './assets/MagelyfreeRegular-DOeXW.otf'
 import Capital from "./modals/Capital.jsx";
+import PlaySound from "../../../globalComponents/audioComponent/audio.jsx";
 
 /**
  * Represents a component for displaying and interacting with a map.
@@ -39,11 +40,13 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
         setMenuVisible(true)
         setOutpostChosen(false)
         setSelectedObject({idTO, toType})
+        let promise  = PlaySound("Click")
     }
     const handleOutpost = (rowIndex, colIndex) =>
     {
         setMenuVisible(true)
         setSelectedObject([rowIndex, colIndex, true])
+        let promise  = PlaySound("Click")
     }
 
     const SettlementMesh = ({settlement, rowIndex, colIndex, characteristics}) =>
@@ -61,7 +64,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                 </mesh>
                 {!outpostChosen &&
                     <>
-                       <Text position={[positionX, 10, positionY]}
+                       <Text position={[positionX, characteristics.height, positionY]}
                                rotation={[-0.5, 0, 0]}
                                scale={characteristics.scale}
                                font={textFont}
@@ -89,23 +92,23 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
             {
                 if (settlement.me && !settlement.isOutpost)
                 {
-                    characteristics = {Type: Settlement3, text: "Capital City", color: "red", scale: 2.5}
+                    characteristics = {Type: Settlement3, text: "Capital City", color: "red", scale: 2.5, height: 12}
                 }
                 else if ((settlement.me && settlement.isOutpost) || settlement.pname === "admin")
                 {
-                    characteristics = {Type: Settlement2, text: "Outpost", color: "blue", scale: 2}
+                    characteristics = {Type: Settlement2, text: "Outpost", color: "blue", scale: 2, height: 12}
                 }
                 else if (settlement.isOutpost || settlement.pname === "admin")
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s Outpost`, color: "yellow", scale: 1}
+                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s Outpost`, color: "yellow", scale: 1, height: 12}
                 }
                 else if (settlement.isFriend)
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname} (Ally)`, color: "purple", scale: 1}
+                    characteristics = {Type: Settlement1, text: `${settlement.pname} (Ally)`, color: "purple", scale: 1, height: 9}
                 }
                 else
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City`, color: "white", scale: 0.8}
+                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City`, color: "white", scale: 0.8, height: 9}
                 }
                 return (
                     <SettlementMesh settlement={settlement} rowIndex={rowIndex} colIndex={colIndex} characteristics={characteristics}/>

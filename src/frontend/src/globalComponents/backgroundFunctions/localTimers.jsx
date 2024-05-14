@@ -12,7 +12,7 @@ import PlaySound from "../audioComponent/audio.jsx";
  * @returns {null} Null component.
  */
 
-function LocalTimers({setResources, timers, setTimers, setSettlements})
+function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag})
 {
     const { sid, username } = useLocation().state
     const location = useLocation();
@@ -56,6 +56,7 @@ function LocalTimers({setResources, timers, setTimers, setSettlements})
                     {
                         if (timer.type === "building")
                         {
+                            setFlag(true)
                             let promise  = PlaySound("BuildingUpgraded")
                         }
                         update()

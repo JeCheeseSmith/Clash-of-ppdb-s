@@ -57,6 +57,7 @@ function ChatIcons({contactList, messages, updateMessages, receiver, updateRecei
             setAdminMessages(data)
             updateReceiver("admin")
         }
+        let promise  = PlaySound("Click")
     }
 
     const updateAdminMessages = async () =>

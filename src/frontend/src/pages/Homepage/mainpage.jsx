@@ -39,7 +39,6 @@ function MainPage()
     const updateTimers = () =>
     {
         API.update(username).then(data => {setTimers(data)})
-        setFlag(true);
     }
     const getTimer = (ID, type) =>
     {
@@ -95,7 +94,7 @@ function MainPage()
             <ResourceBar resources={resources} updateResources={updateResources}/>
             <MapButton/>
             <SoldierMenu setResources={setResources} timers={timers} setTimers={setTimers}/>
-            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers}/>
+            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers} setFlag={setFlag}/>
         </div>
     );
 }
