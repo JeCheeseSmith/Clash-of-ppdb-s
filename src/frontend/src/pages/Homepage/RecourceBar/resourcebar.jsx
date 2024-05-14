@@ -4,6 +4,7 @@ import woodLog from '../../../assets/wood.png';
 import stone from '../../../assets/stone.png';
 import metal from '../../../assets/metal.png';
 import food from '../../../assets/food.png';
+import gem from '../../../assets/gem.png';
 import refresh from '../../../assets/refresh.png'
 
 
@@ -14,6 +15,10 @@ function ResourceBar({resources, updateResources}) {
             {/*Resource-bar section*/}
             <div className="resourceBar">
                 {/* Each resource has a symbol and a count */}
+                <div className="resourceSection">
+                    <img src={gem} alt="Gem" className="resourceIcon" onClick={updateResources}/>
+                    <span className="resourceCount">{resources.gems}</span>
+                </div>
                 <div className="resourceSection">
                     <img src={woodLog} alt="Wood" className="resourceIcon" onClick={updateResources}/>
                     <span className="resourceCount">{resources.wood}</span>
