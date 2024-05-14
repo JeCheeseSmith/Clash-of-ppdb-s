@@ -17,7 +17,7 @@ export default function Capital(props) {
 
   useEffect(() =>
   {
-    actions[names[0]].reset().fadeIn(10).play()
+    actions[names[0]].play()
   }, [])
   return (
     <group ref={group} {...props} dispose={null} scale={[17,20,17]} position={[0,-2.2,0]}>

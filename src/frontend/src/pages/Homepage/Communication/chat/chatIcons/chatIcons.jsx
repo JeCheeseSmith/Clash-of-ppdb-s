@@ -57,7 +57,6 @@ function ChatIcons({contactList, messages, updateMessages, receiver, updateRecei
             setAdminMessages(data)
             updateReceiver("admin")
         }
-        let promise  = PlaySound("Click")
     }
 
     const updateAdminMessages = async () =>
@@ -102,7 +101,12 @@ function ChatIcons({contactList, messages, updateMessages, receiver, updateRecei
         <div className={"contact-list"}>
             {
                 Object.entries(contactList).map(([name, type]) => (
-                    <button className={"icons"} key={name} onClick={() => {setSelectedContact({ name, type }); retrieveMessages(name, type)}}>
+                    <button className={"icons"} key={name} onClick={() =>
+                    {
+                        setSelectedContact({ name, type });
+                        retrieveMessages(name, type);
+                        let promise  = PlaySound("Click")
+                    }}>
                         {type === "person" && <AvatarWithName type={"chat-person"} name={name}/>}
                         {type === "clan" && <AvatarWithName type={"chat-group"} name={name}/>}
                     </button>

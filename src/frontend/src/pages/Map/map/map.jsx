@@ -32,7 +32,6 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
     const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
     const [settlements, setSettlements] = useState([])
     const [timers, setTimers] = useState([])
-    const markerRef = useRef()
     let characteristics
 
     const handleTransfer = (idTO, toType) =>
@@ -46,7 +45,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
     {
         setMenuVisible(true)
         setSelectedObject([rowIndex, colIndex, true])
-        let promise  = PlaySound("Click")
+        let promise  = PlaySound("Click", 0.1)
     }
 
     const SettlementMesh = ({settlement, rowIndex, colIndex, characteristics}) =>

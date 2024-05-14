@@ -11,13 +11,14 @@ import click from "./assets/Click.mp3"
 * Audio component for better and global use
 * */
 
-async function PlaySound(typeSound)
+async function PlaySound(typeSound, volume=null)
 {
     let sound;
     if (typeSound === "Click")
     {
         sound = new Audio(click)
         sound.currentTime = 0.46;
+        if (volume) {sound.volume = volume}
     }
     else if (typeSound === "ResourcesError")
     {

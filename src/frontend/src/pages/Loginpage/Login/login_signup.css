@@ -106,3 +106,36 @@
 .error-message > svg {
   margin-right: 10px;
 }
+
+.wrong-device {
+  padding: 10px;
+  text-align: center;
+  font-size: 20px;
+  background-color: black;
+  color: rgb(255, 255, 255);
+  font-family: 'MedievalSharp', cursive;
+  width: 80%; /* Set a fixed width */
+  margin: 0 auto; /* Center horizontally */
+  border-radius: 10px;
+  margin-top: 100px;
+}
+
+.gametitle-wrong-device {
+  margin-bottom: 15px;
+  margin-top: 70px;
+  text-align: center;
+  font-size: 68px;
+  color: #D4AF37;
+  font-family: 'MedievalSharp', cursive;
+
+}
+
+.subtitle-wrong-device {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  text-align: center;
+  font-size: 30px;
+  color: #D4AF37;
+  font-family: 'MedievalSharp', cursive;
+}
+

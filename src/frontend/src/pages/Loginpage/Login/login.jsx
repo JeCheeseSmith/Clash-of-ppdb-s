@@ -3,6 +3,7 @@ import './login_signup.css';
 import { useNavigate } from 'react-router-dom';
 import POST from "../../../api/POST.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import {isMobile, isTablet, isDesktop} from 'react-device-detect';
 import {Loader} from "@react-three/drei";
 import {loaderStyles} from "../../../globalComponents/loadingScreen/loadingScreen.jsx";
 
@@ -61,43 +62,58 @@ function LoginPage() {
     }
 
   return (
-      <div className="login-container">
-          <Loader {...loaderStyles} />
-          <h1 className="gametitle">TRAVISIA</h1>
-          <h2 className="subtitle">FALLEN EMPIRE</h2>
-          <div className="login-form">
-              {errormessage && (
-                <div className="error-message">
-                <AiOutlineExclamationCircle /> {errormessage}
-                </div>
-              )}
-              <div>
-                  {/* <div> groupes the label and input together on one line */}
-                  <label htmlFor="username">Username:</label>
-                  {/* When you click on the Label "Username", the input box is selected */}
-                  <input
-                      id="username"
-                      type="text"
-                      value={username}
-                      onChange={handleUsernameChange}
-                  />
+      <>
+          {!isMobile && !isTablet && isDesktop ?
+              <div className="login-container">
+                  {/* no mobile and tablet, isDesktop = {windows, ubuntu, mac, ...} */}
+                  <Loader {...loaderStyles} />
+                  <h1 className="gametitle">TRAVISIA</h1>
+                  <h2 className="subtitle">FALLEN EMPIRE</h2>
+                  <div className="login-form">
+                      {errormessage && (
+                          <div className="error-message">
+                              <AiOutlineExclamationCircle/> {errormessage}
+                          </div>
+                      )}
+                      <div>
+                          {/* <div> groupes the label and input together on one line */}
+                          <label htmlFor="username">Username:</label>
+                          {/* When you click on the Label "Username", the input box is selected */}
+                          <input
+                              id="username"
+                              type="text"
+                              value={username}
+                              onChange={handleUsernameChange}
+                          />
+                      </div>
+                      <div>
+                          <label htmlFor="password">Password:</label>
+                          {/* When you click on the Label "Password", the input box is selected */}
+                          <input
+                              id="password"
+                              type="password"
+                              value={password}
+                              onChange={handlePasswordChange}
+                          />
+                      </div>
+                      {/* Login button */}
+                      <button className="login-button" onClick={handleLoginClick}>Login</button>
+                      {/* Sign-up button */}
+                      <button className="signup-button" onClick={handleSignUpClick}>Sign Up</button>
+                  </div>
               </div>
+              : // wrong device?
               <div>
-                  <label htmlFor="password">Password:</label>
-                  {/* When you click on the Label "Password", the input box is selected */}
-                  <input
-                      id="password"
-                      type="password"
-                      value={password}
-                      onChange={handlePasswordChange}
-                  />
+                  {/* smaller text for smaller device resolution */}
+                  <h1 className="gametitle-wrong-device">TRAVISIA</h1>
+                  <h2 className="subtitle-wrong-device">FALLEN EMPIRE</h2>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <h3 className="wrong-device">Your Device Is Not Compatible For This Game!</h3>
               </div>
-              {/* Login button */}
-              <button className="login-button" onClick={handleLoginClick}>Login</button>
-              {/* Sign-up button */}
-              <button className="signup-button" onClick={handleSignUpClick}>Sign Up</button>
-          </div>
-      </div>
+          }
+      </>
   );
 }
 
