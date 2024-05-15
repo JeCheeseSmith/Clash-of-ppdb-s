@@ -374,6 +374,7 @@ class TransferDataAccess:
             if self.getMaxNumberOfSettlements(sid) < self.getNumberOfSettlements(sid) + 1:
                 raise Exception(
                     'You reached the maximal number of outposts for your kingdom! Consider upgrading the chancery.')
+            print(coordTo)
             if settlement_data_acces.getNewCoordinate(coordTo[0], coordTo[1]) != coordTo:  # Coordinate is not excepted
                 raise Exception('Your outpost is too close to others, make sure to remain at a safe distance!')
 

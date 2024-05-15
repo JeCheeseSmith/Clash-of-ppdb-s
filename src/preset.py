@@ -1,5 +1,5 @@
 from app import *
-from querry import query
+
 
 
 """
@@ -14,6 +14,12 @@ def presets(connection):
     # Reset database
     temp_connection = DBConnection()
     cursor = temp_connection.get_cursor()
+    query = """"""
+    sql = open("../sql/schema.sql", "r")
+    for line in sql.readlines():
+        query+=line
+    sql.close()
+
     cursor.execute(query)
     temp_connection.commit()
 

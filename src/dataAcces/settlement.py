@@ -399,7 +399,7 @@ class SettlementDataAcces:
         coordinates = cursor.fetchall()
 
         for coord in coordinates:
-            if SettlementDataAcces.calculateDistance(coord, [x, y]) < 2:
+            if SettlementDataAcces.calculateDistance(coord, [x, y]) < 5:
                 return self.getNewCoordinate()
         return [x, y]
 

@@ -322,11 +322,17 @@ class PackageDataAccess:
         calculated_time = int(calculated_time.total_seconds())
         calculated_time = calculated_time / 3600  # Calculation in hour
 
+        #if calculated_time < 1:  # No resources will be calc'
+        #    return
+        #else:
+        #    cursor.execute('UPDATE player SET logout = %s WHERE name IN (SELECT pname FROM settlement WHERE id=%s);',
+        #                   (stop, sid))  # Set new logout time
+
         # Generated resources
-        Generated_wood = 0
-        Generated_stone = 0
-        Generated_steel = 0
-        Generated_food = 0
+        Generated_wood = 1
+        Generated_stone = 1
+        Generated_steel = 1
+        Generated_food = 1
 
         # Player resources
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))

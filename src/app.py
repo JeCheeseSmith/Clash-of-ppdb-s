@@ -660,7 +660,8 @@ def createOutpost():
     }
     """
     data = request.json
-    success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo'),
+    print(data.get('coordTo')[0:2])
+    success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo')[0:2],
                                                        data.get('outpostName'), data.get('soldiers'),
                                                        data.get('resources'), timer_data_acces,
                                                        package_data_acces, clan_data_acces,
