@@ -21,48 +21,42 @@ function WheelOfFortune ({username1,sid1}) {
 
   // This function handles the toggle-wheel-button click
   const toggleMenu = async () => {
-    const info = await Wheelinfo(username1);
-    setCanSpin(info);
-    if (info){
-      setIsMenuOpen(true);
-
-    }else{
-      setIsMenuOpen(false);
-      alert("You can only spin the wheel once a day.");
-    }
+    setIsMenuOpen(true)
 
   };
 
 
   // This is made for the spin of the wheel
-   const spinWheel = () => {
-    if (canSpin) {
-      const newValue = Math.ceil(Math.random() * 3600);
-      const newRotation = rotation + newValue;
-      setRotation(newRotation);
-      setShowPrize(false);
+   const spinWheel = async () => {
+     const info = await Wheelinfo(username1);
+     if (info) {
+       const newValue = Math.ceil(Math.random() * 3600);
+       const newRotation = rotation + newValue;
+       setRotation(newRotation);
+       setShowPrize(false);
 
-      setTimeout(() => {
-        setIsMenuOpen(false);
-        setShowPrize(true);
-      }, 7000);
+       setTimeout(() => {
+         setIsMenuOpen(false);
+         setShowPrize(true);
+       }, 7000);
 
-      setTimeout(() => {
-        setShowPrize(false);
-      }, 8000);
+       setTimeout(() => {
+         setShowPrize(false);
+       }, 8000);
 
-      setTimeout(async () => {
-        const arrowAngle = (390 - (newRotation % 360)) % 360;
-        const newPrize = getPrize(arrowAngle);
-        setPrize(newPrize);
-        await POST({sid1, username1,newPrize}, '/wheelOFfortune')
-      }, 5000);
+       setTimeout(async () => {
+         const arrowAngle = (390 - (newRotation % 360)) % 360;
+         const newPrize = getPrize(arrowAngle);
+         setPrize(newPrize);
+         await POST({sid1, username1, newPrize}, '/wheelOFfortune')
+       }, 5000);
 
-      setCanSpin(false);
-    } else {
-      alert("You can only spin the wheel once a day.");
-    }
-  };
+       setCanSpin(false);
+     } else {
+       setIsMenuOpen(false)
+       alert("You can only spin the wheel once a day.");
+     }
+   };
 
   // Function to calculate the prize with an angle and with the given segments we used in the wheel
   const getPrize = (angle) => {
