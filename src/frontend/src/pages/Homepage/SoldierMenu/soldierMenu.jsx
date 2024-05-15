@@ -57,6 +57,8 @@ function SoldierMenuBox({soldierVisible, setTimers, setResources, timers, }) {
 function SoldierNavbar({soldierVisible, setTimers, setResources, timers, }) {
     const [currentPage, setCurrentPage] = useState('troopOverview');
     const [TroopAmount, setTroopAmount] = useState(1);
+    const [consumption, setConsumption] = useState(0);
+    const { sid,  } = useLocation().state;
 
     const handleButtonClick = (pageName) => {
       setCurrentPage(pageName);
@@ -66,35 +68,6 @@ function SoldierNavbar({soldierVisible, setTimers, setResources, timers, }) {
         setTroopAmount(amount);
     }
 
-    return (
-        <div className="navbar-container">
-            {soldierVisible && (
-            <nav className="navbar visible">
-                <ul className="navbar-links">
-                    <li>
-                        <button onClick={() => handleButtonClick('troopOverview')} className={"soldierMenuOption"}>Troop Overview
-                        </button>
-                    </li>
-                    <li>
-                        <button onClick={() => handleButtonClick('trainTroopOverview')} className={"soldierMenuOption"}>Troop Training
-                        </button>
-                    </li>
-                </ul>
-            </nav>
-        )}
-        {
-            soldierVisible && currentPage &&
-            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} setTimers={setTimers} setResources={setResources} timers={timers} />)
-        }
-        <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
-        </div>
-    )
-}
-
-function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, timers, }){
-    const [consumption, setConsumption] = useState(0);
-    const { sid,  } = useLocation().state;
-    const countById2 = {};
     // default value for soldier counts
     const [soldiers, setSoldierCount] = useState({
         heavyInfantry1: 0,
@@ -219,12 +192,42 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
         }, 5 * 60 * 1000); // 15 minutes in milliseconds
         return () => clearInterval(intervalId);
     }, []);
+
+    return (
+        <div className="navbar-container">
+            {soldierVisible && (
+            <nav className="navbar visible">
+                <ul className="navbar-links">
+                    <li>
+                        <button onClick={() => handleButtonClick('troopOverview')} className={"soldierMenuOption"}>Troop Overview
+                        </button>
+                    </li>
+                    <li>
+                        <button onClick={() => handleButtonClick('trainTroopOverview')} className={"soldierMenuOption"}>Troop Training
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        )}
+        {
+            soldierVisible && currentPage &&
+            (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} setTimers={setTimers} setResources={setResources} timers={timers} soldiers={soldiers}
+            consumption={consumption} trainees={trainees} soldiersAvailable={soldiersAvailable} TraineesUpdate={handleTraineeAmountChange} update={APIcalls} />)
+        }
+        <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
+        </div>
+    )
+}
+
+function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, timers, soldiers, consumption, trainees, soldiersAvailable, TraineesUpdate, update}){
+    const countById2 = {};
+    const { sid,  } = useLocation().state;
     return (
         <div className="soldier-page-content">
             {pageName === 'troopOverview' && <TroopOverviewPage timers={timers} TroopAmount={TroopAmount} setResources={setResources} soldiers={soldiers
-            } setTimers={setTimers} soldiersAvailable={soldiersAvailable} consumption={consumption} trainees={trainees} TraineesUpdate={handleTraineeAmountChange}/>}
+            } setTimers={setTimers} soldiersAvailable={soldiersAvailable} consumption={consumption} trainees={trainees} TraineesUpdate={TraineesUpdate} update={update} countById2={countById2}/>}
             {pageName === 'trainTroopOverview' && <TroopTrainPage setTimers={setTimers} timers={timers} traineesAvailable={soldiersAvailable}
-                                                                  traineesAmount={trainees} />}
+                                                                  traineesAmount={trainees} update={update} TraineesUpdate={TraineesUpdate} countById2={countById2} />}
         </div>
     )
 }
@@ -256,29 +259,23 @@ function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChang
 }
 
 
-function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldiers, consumption, setTimers, timers, trainees, TraineesUpdate}) {
+function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldiers, consumption, setTimers, timers, trainees, TraineesUpdate, update, countById2}) {
     const { sid, username  } = useLocation().state;
     const [errorMessage, setErrorMessage] = useState("")
     const [popup, setPopup] = useState(false)
 
+    useEffect(() =>
+    {
+        update(sid);
+    }, []);
     // Function that sends a request for a soldier to be trained
     const handleTroopTrain = (troop) => {
         API.trainTroop(sid, troop, 1).then(data =>  {
             if (data.success) {
-                //console.log(SoldierTimers)
-                console.log('updated')
-                console.log(SoldierTimers)
-                console.log(timers)
-                console.log('settimers:')
-
-                console.log(setTimers)
-                console.log('traineeeupdate:')
-                console.log(TraineesUpdate)
                 updateTimers(username, setTimers)
                 updateResources(sid, setResources)
                 console.log(timers)
-                calcTrainees(timers={timers}, trainees={trainees}, TraineesUpdate={TraineesUpdate})
-                console.log('updated')
+                calcTrainees(timers={timers}, trainees={trainees}, TraineesUpdate={TraineesUpdate}, countById2)
             }else
             {
                 setErrorMessage(data.error);
@@ -373,11 +370,10 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
     )
 }
 
-function calcTrainees(timers, trainees, TraineesUpdate){
+function calcTrainees(timers, trainees, TraineesUpdate, countById2){
     console.log('zA1')
     console.log(TraineesUpdate)
     console.log(timers)
-    const countById2 = {};
 
     for (let timer of timers.timers)
     {
@@ -392,7 +388,13 @@ function calcTrainees(timers, trainees, TraineesUpdate){
     console.log('zB2')
 }
 
-function TroopTrainPage({setTimers, timers, traineesAvailable, traineesAmount}) {
+function TroopTrainPage({setTimers, timers, traineesAvailable, traineesAmount, update, TraineesUpdate, countById2}) {
+    const { sid  } = useLocation().state;
+    useEffect(() =>
+    {
+        update(sid);
+        TraineesUpdate()
+    }, []);
     return (
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
