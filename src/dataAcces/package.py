@@ -299,7 +299,7 @@ class PackageDataAccess:
 
     def calc_resources(self, sid, start, stop):
         """
-        Function to re-evaluate resources number with
+        Function to re-evaluate resources number with for all settlements of a user
         start: Start Time of the interval to calculate resource from
         stop: end time towards resources need to be calculated
         :return:
@@ -313,146 +313,160 @@ class PackageDataAccess:
         cursor.execute('UPDATE player SET logout = %s WHERE name IN (SELECT pname FROM settlement WHERE id=%s);',
                        (stop, sid))
 
+        # Get all settlements from the user
+        cursor.execute('SELECT id FROM settlement WHERE pname IN (SELECT pname FROM settlement WHERE id=%s);', (sid,))
+        settlements = cursor.fetchall()
+
         # Calculated difference in timestamp
         calculated_time = abs(start - stop)
         calculated_time = int(calculated_time.total_seconds())
         calculated_time = calculated_time / 3600  # Calculation in hour
 
-        # Generated resources
-        Generated_wood = 1
-        Generated_stone = 1
-        Generated_steel = 1
-        Generated_food = 1
+        print("time diff", calculated_time, "settelles", settlements)
 
-        # Player resources
-        cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))
-        pid = cursor.fetchone()[0]
-        cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid,))
-        Pwood = cursor.fetchone()[0]
-        cursor.execute('SELECT stone FROM package WHERE id=%s;', (pid,))
-        Pstone = cursor.fetchone()[0]
-        cursor.execute('SELECT steel FROM package WHERE id=%s;', (pid,))
-        Psteel = cursor.fetchone()[0]
-        cursor.execute('SELECT food FROM package WHERE id=%s;', (pid,))
-        Pfood = cursor.fetchone()[0]
+        for sid_tup in settlements:
+            if isinstance(sid_tup, tuple):
+                sid = sid_tup[0]
+            else:
+                sid = sid_tup
 
-        # Maximum storage
-        Wood = 0
-        Stone = 0
-        Steel = 0
-        Food = 0
+            # Generated resources
+            Generated_wood = 1
+            Generated_stone = 1
+            Generated_steel = 1
+            Generated_food = 1
 
-        # Search the person his buildings on the settlement
-        cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
-        buildings = cursor.fetchall()
+            # Player resources
+            cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))
+            pid = cursor.fetchone()[0]
+            cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid,))
+            Pwood = cursor.fetchone()[0]
+            cursor.execute('SELECT stone FROM package WHERE id=%s;', (pid,))
+            Pstone = cursor.fetchone()[0]
+            cursor.execute('SELECT steel FROM package WHERE id=%s;', (pid,))
+            Psteel = cursor.fetchone()[0]
+            cursor.execute('SELECT food FROM package WHERE id=%s;', (pid,))
+            Pfood = cursor.fetchone()[0]
 
-        # Find the right functions to calculate the resources
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodCuttersCamp",))
-        Wood_function = cursor.fetchone()[0]
+            # Maximum storage
+            Wood = 0
+            Stone = 0
+            Steel = 0
+            Food = 0
 
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Quarry",))
-        Stone_function = cursor.fetchone()[0]
+            # Search the person his buildings on the settlement
+            cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
+            buildings = cursor.fetchall()
 
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("SteelMine",))
-        Steel_function = cursor.fetchone()[0]
+            # Find the right functions to calculate the resources
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodCuttersCamp",))
+            Wood_function = cursor.fetchone()[0]
 
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Farm",))
-        Food_function = cursor.fetchone()[0]
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Quarry",))
+            Stone_function = cursor.fetchone()[0]
 
-        # Find the right storage functions
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodStockPile",))
-        Wood_Storage_function = cursor.fetchone()[0]
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("SteelMine",))
+            Steel_function = cursor.fetchone()[0]
 
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("StoneStockPile",))
-        Stone_Storage_function = cursor.fetchone()[0]
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Farm",))
+            Food_function = cursor.fetchone()[0]
 
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Armory",))
-        Steel_Storage_function = cursor.fetchone()[0]
+            # Find the right storage functions
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodStockPile",))
+            Wood_Storage_function = cursor.fetchone()[0]
 
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("GrainSilo",))
-        Food_Storage_function = cursor.fetchone()[0]
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("StoneStockPile",))
+            Stone_Storage_function = cursor.fetchone()[0]
 
-        cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Castle",))
-        Castle_Storage_function = cursor.fetchone()[0]
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Armory",))
+            Steel_Storage_function = cursor.fetchone()[0]
 
-        # Check if there is a building to generate resources OR to store resources
-        for building in buildings:
-            if building[1] == "WoodCuttersCamp":
-                Level = building[2]
-                Generated_wood += PackageDataAccess.evaluate(Wood_function, calculated_time) * Level
-            if building[1] == "Quarry":
-                Level = building[2]
-                Generated_stone += PackageDataAccess.evaluate(Stone_function, calculated_time) * Level
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("GrainSilo",))
+            Food_Storage_function = cursor.fetchone()[0]
 
-            if building[1] == "SteelMine":
-                Level = building[2]
-                Generated_steel += PackageDataAccess.evaluate(Steel_function, calculated_time) * Level
+            cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Castle",))
+            Castle_Storage_function = cursor.fetchone()[0]
 
-            if building[1] == "Farm":
-                Level = building[2]
-                Generated_food += PackageDataAccess.evaluate(Food_function, calculated_time) * Level
+            # Check if there is a building to generate resources OR to store resources
+            for building in buildings:
+                if building[1] == "WoodCuttersCamp":
+                    Level = building[2]
+                    Generated_wood += PackageDataAccess.evaluate(Wood_function, calculated_time) * Level
+                if building[1] == "Quarry":
+                    Level = building[2]
+                    Generated_stone += PackageDataAccess.evaluate(Stone_function, calculated_time) * Level
 
-            if building[1] == "WoodStockPile":
-                Level = building[2]
-                Wood += PackageDataAccess.evaluate(Wood_Storage_function, Level)
+                if building[1] == "SteelMine":
+                    Level = building[2]
+                    Generated_steel += PackageDataAccess.evaluate(Steel_function, calculated_time) * Level
 
-            if building[1] == "StoneStockPile":
-                Level = building[2]
-                Stone += PackageDataAccess.evaluate(Stone_Storage_function, Level)
+                if building[1] == "Farm":
+                    Level = building[2]
+                    Generated_food += PackageDataAccess.evaluate(Food_function, calculated_time) * Level
 
-            if building[1] == "Armory":
-                Level = building[2]
-                Steel += PackageDataAccess.evaluate(Steel_Storage_function, Level)
+                if building[1] == "WoodStockPile":
+                    Level = building[2]
+                    Wood += PackageDataAccess.evaluate(Wood_Storage_function, Level)
 
-            if building[1] == "GrainSilo":
-                Level = building[2]
-                Food += PackageDataAccess.evaluate(Food_Storage_function, Level)
+                if building[1] == "StoneStockPile":
+                    Level = building[2]
+                    Stone += PackageDataAccess.evaluate(Stone_Storage_function, Level)
 
-            if building[1] == "Castle":
-                Level = building[2]
-                MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
-                Wood += MainStorage
-                Stone += MainStorage
-                Steel += MainStorage
-                Food += MainStorage
+                if building[1] == "Armory":
+                    Level = building[2]
+                    Steel += PackageDataAccess.evaluate(Steel_Storage_function, Level)
 
-        # Check how many soldiers there are and calculate there consumption
-        cursor.execute('SELECT * FROM troops WHERE pid=%s;', (pid,))
-        Soldiers = cursor.fetchall()
+                if building[1] == "GrainSilo":
+                    Level = building[2]
+                    Food += PackageDataAccess.evaluate(Food_Storage_function, Level)
 
-        Total_Consumption = int(self.calc_consumption(sid, calculated_time))
+                if building[1] == "Castle":
+                    Level = building[2]
+                    MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
+                    Wood += MainStorage
+                    Stone += MainStorage
+                    Steel += MainStorage
+                    Food += MainStorage
 
-        # Update the resources in the right way
-        Newp_wood = round(min(Generated_wood + Pwood, Wood))
-        Newp_stone = round(min(Generated_stone + Pstone, Stone))
-        Newp_steel = round(min(Generated_steel + Psteel, Steel))
-        Newp_food = round(min(Generated_food + Pfood - Total_Consumption, Food))
+            # Check how many soldiers there are and calculate there consumption
+            cursor.execute('SELECT * FROM troops WHERE pid=%s;', (pid,))
+            Soldiers = cursor.fetchall()
 
-        # Check for possible troop starvation
-        for soldier in Soldiers:
-            cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
-            Consumption = cursor.fetchone()[0]
-            if Newp_food >= 0:
-                break
-            for i in range(1, soldier[2] + 1):
-                Newp_food += Consumption
-                if i == soldier[2]:
-                    cursor.execute('DELETE FROM troops WHERE pid=%s and sname=%s;', (pid, soldier[1],))
-                else:
-                    cursor.execute('UPDATE troops SET amount = %s WHERE pid=%s;', (soldier[2] - i, pid,))
+            Total_Consumption = int(self.calc_consumption(sid, calculated_time))
+
+            if Generated_food >=1 and Total_Consumption == 0 and len(Soldiers) > 0:  # If there is no consumption due to the short interval; Food should decr
+                Total_Consumption = 2
+
+            # Update the resources in the right way
+            Newp_wood = round(min(Generated_wood + Pwood, Wood))
+            Newp_stone = round(min(Generated_stone + Pstone, Stone))
+            Newp_steel = round(min(Generated_steel + Psteel, Steel))
+            Newp_food = round(min(Generated_food + Pfood - Total_Consumption, Food))
+
+            # Check for possible troop starvation
+            for soldier in Soldiers:
+                cursor.execute('SELECT consumption FROM soldier WHERE name=%s;', (soldier[1],))
+                Consumption = cursor.fetchone()[0]
                 if Newp_food >= 0:
                     break
-            if Newp_food >= 0:
-                break
+                for i in range(1, soldier[2] + 1):
+                    Newp_food += Consumption
+                    if i == soldier[2]:
+                        cursor.execute('DELETE FROM troops WHERE pid=%s and sname=%s;', (pid, soldier[1],))
+                    else:
+                        cursor.execute('UPDATE troops SET amount = %s WHERE pid=%s;', (soldier[2] - i, pid,))
+                    if Newp_food >= 0:
+                        break
+                if Newp_food >= 0:
+                    break
 
-        Newp_food = round(max(Newp_food, 0))  # Food can't be negative
+            Newp_food = round(max(Newp_food, 0))  # Food can't be negative
+            print("newfood", Newp_food)
 
-        print("stone" , Newp_stone, "wood", Newp_wood, "steel",  Newp_steel, "food",  Newp_food, "pid", pid)
-
-        # Update all resources
-        cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
-                       (Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))
-        self.dbconnect.commit()
+            # Update all resources
+            cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
+                           (Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))
+            self.dbconnect.commit()
 
     def resource_management(self, sid, quantity, resource):
         """
