@@ -291,6 +291,9 @@ class TransferDataAccess:
                     raise Exception("You can't attack your allies!")
                 if len(soldiers) == 0:
                     raise Exception("You need to choose troops to start an attack!")
+            else:
+                if self.areEnemies(idFrom, fromType, idTo, toType, friend_data_acces, clan_data_acces):
+                    raise Exception("You can only trade with allied players")
 
             # Restructure to a backend format
             soldiers = self.__restructure(soldiers, False)

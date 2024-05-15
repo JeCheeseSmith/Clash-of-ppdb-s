@@ -47,7 +47,7 @@ def presets(connection):
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     friend_data_access.add_admin('c')
 
-    Player_obj = Player(name='d', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
+    Player_obj = Player(name='d', password='', avatar=None, gems=50, xp=0, level=1, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     friend_data_access.add_admin('d')
 
