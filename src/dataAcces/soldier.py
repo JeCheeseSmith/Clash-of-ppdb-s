@@ -25,6 +25,7 @@ class SoldierDataAccess:
         """
         Helper function to retrieve the start,stop and duration for a timer to train a soldier
         REMEMBER: Troop training may not work in parallel; will retrieve
+        :param sid:
         :param sname: Name of the soldier
         :return: start: now() , stop: datetime, duration: int
         """

@@ -5,18 +5,17 @@ from .package import *
 
 
 class Player:
-    def __init__(self, name, password, avatar, gems, xp, level, logout, pid):
+    def __init__(self, name, password, avatar, xp, level, logout, pid):
         self.name = name
         self.password = password
         self.avatar = avatar
-        self.gems = gems
         self.xp = xp
         self.level = level
         self.logout = logout
         self.pid = pid
 
     def to_dct(self):
-        return {'name': self.name, 'password': self.password, 'avatar': self.avatar, 'gems': self.gems, 'xp': self.xp,
+        return {'name': self.name, 'password': self.password, 'avatar': self.avatar, 'xp': self.xp,
                 'level': self.level, 'logout': self.logout, 'pid': self.pid}
 
 
@@ -49,8 +48,8 @@ class PlayerDataAccess:
 
             # Create the player
             cursor.execute(
-                'INSERT INTO player(name,password,xp,gems,level,avatar,logout) VALUES(%s,%s,%s,%s,%s,%s,now());',
-                (obj.name, obj.password, obj.xp, obj.gems, obj.level, obj.avatar))
+                'INSERT INTO player(name,password,xp,level,avatar,logout) VALUES(%s,%s,%s,%s,%s,now());',
+                (obj.name, obj.password, obj.xp, obj.level, obj.avatar))
 
             # Create a package for the settlement
             pid = package_data_acces.add_resources(
@@ -79,7 +78,7 @@ class PlayerDataAccess:
                 cursor.execute('INSERT INTO achieved(pname, aname, amount) VALUES(%s,%s,%s);', (obj.name, tup[0], tup[1]))
             self.dbconnect.commit()
 
-            cursor.execute('INSERT INTO wheeloffortune(pname,sid) VALUES(%s,%s);', (obj.name,sid))
+            cursor.execute('INSERT INTO wheeloffortune(pname,sid) VALUES(%s,%s);', (obj.name, sid))
             self.dbconnect.commit()
 
             return True, sid
@@ -121,7 +120,7 @@ class PlayerDataAccess:
         Xp += XP
         cursor.execute('SELECT level FROM player where name=%s;', (pname,))
         Level = cursor.fetchone()[0]
-        if (Xp >= 1000):
+        while Xp / 1000 >= 1:
             Level += 1
             Xp -= 1000
             cursor.execute('UPDATE player SET level = %s WHERE name=%s;', (Level, pname,))
@@ -136,24 +135,24 @@ class PlayerDataAccess:
         Level = cursor.fetchone()[0]
         return Level, Xp
 
-    def getplayers(self):
+    def getPlayers(self):
         cursor = self.dbconnect.get_cursor()
         # Select players in order by there level
         leaderboard = """
                SELECT name, level
                FROM player
                WHERE name != 'admin'
-               ORDER BY level DESC, name ASC
+               ORDER BY level DESC
                LIMIT 10;
            """
         cursor.execute(leaderboard)
         leaderboard = cursor.fetchall()
-        leaderboardlist = []
+        leaderboardList = []
 
         for player in leaderboard:
-            leaderboardlist.append((player[0], player[1]))
+            leaderboardList.append((player[0], player[1]))
 
-        return leaderboardlist
+        return leaderboardList
 
     def getAchieved(self, pname):
         cursor = self.dbconnect.get_cursor()
@@ -164,14 +163,14 @@ class PlayerDataAccess:
             lst.append(dict(aname=quest[0], task=quest[1]))
         return lst
 
-    def checkwheel(self,name):
+    def checkWheel(self, name):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT last_timespin FROM wheeloffortune where pname=%s;',(name,))
-        time=cursor.fetchone()[0]
+        cursor.execute('SELECT last_timespin FROM wheeloffortune where pname=%s;', (name,))
+        time = cursor.fetchone()[0]
 
         current_time = datetime.now()
 
-        if time==None:
+        if time is None:
             cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
             self.dbconnect.commit()
             return True
@@ -183,13 +182,10 @@ class PlayerDataAccess:
             else:
                 return False
 
-    def updategems(self,pname,aantal):
+    def updateGems(self, sid, quantity):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT gems from player where name=%s;',(pname,))
-        pgems=cursor.fetchone()[0]
+        cursor.execute('SELECT pid from settlement where id=%s;', (sid,))
+        pid = cursor.fetchone()[0]
 
-        pgems+=aantal
-        cursor.execute('UPDATE player SET gems = %s WHERE name=%s;', (pgems, pname,))
+        cursor.execute('UPDATE package SET gems = gems + %s WHERE id=%s;', (quantity, pid,))
         self.dbconnect.commit()
-
-

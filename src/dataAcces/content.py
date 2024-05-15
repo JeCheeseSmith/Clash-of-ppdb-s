@@ -1,6 +1,6 @@
 class Content:
-    def __init__(self, id, moment, content, sender):
-        self.id = id
+    def __init__(self, cid, moment, content, sender):
+        self.id = cid
         self.moment = moment
         self.content = content
         self.sender = sender
@@ -10,8 +10,8 @@ class Content:
 
 
 class Request(Content):
-    def __init__(self, id, moment, content, sender, accept):
-        super().__init__(id, moment, content, sender)
+    def __init__(self, cid, moment, content, sender, accept):
+        super().__init__(cid, moment, content, sender)
         self.accept = accept
 
     def to_dct(self):
@@ -23,15 +23,15 @@ class ContentDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def isFriendRequest(self, id):
+    def isFriendRequest(self, rid):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT EXISTS( SELECT * FROM friendrequest WHERE id =%s);', (id,))
+        cursor.execute('SELECT EXISTS( SELECT * FROM friendrequest WHERE id =%s);', (rid,))
         result = cursor.fetchone()[0]
         return result
 
-    def isClanRequest(self, id):
+    def isClanRequest(self, rid):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT EXISTS( SELECT * FROM clanrequest WHERE id =%s);', (id,))
+        cursor.execute('SELECT EXISTS( SELECT * FROM clanrequest WHERE id =%s);', (rid,))
         result = cursor.fetchone()[0]
         return result
 
@@ -81,25 +81,10 @@ class ContentDataAccess:
         cursor.execute(message1, (sname, pname,))
         messages = cursor.fetchall()
 
-        for message in messages:
-            c = Content(message[0], str(message[2]), message[3], message[4])
-            chatbox.append(c.to_dct())
-
         # Select messages from pname to sname
-        message2 = """
-                                        SELECT *
-                                        FROM message
-                                        INNER JOIN content ON message.id = content.id and content.pname=%s 
-                                        WHERE message.id IN (     
-                                                SELECT mid
-                                                FROM retrieved
-                                                WHERE pname = %s   
-                                            )
-                                        LIMIT 10;
-                                    """
-        cursor.execute(message2, (pname, sname,))
+        cursor.execute(message1, (pname, sname,))
+        messages += cursor.fetchall()  # Append
 
-        messages = cursor.fetchall()
         for message in messages:
             c = Content(message[0], str(message[2]), message[3], message[4])
             chatbox.append(c.to_dct())

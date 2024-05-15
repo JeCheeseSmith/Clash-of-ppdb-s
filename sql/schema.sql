@@ -25,15 +25,13 @@ CREATE TABLE IF NOT EXISTS package(
     wood BIGINT,
     steel BIGINT,
     food BIGINT,
-    gems BIGINT,
-    xp BIGINT
+    gems BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS player(
     name VARCHAR PRIMARY KEY,
     password VARCHAR NOT NULL,
     avatar VARCHAR,
-    gems BIGINT,
     xp BIGINT,
     level INT,
     logout TIMESTAMP -- Last time a player logged out at this time

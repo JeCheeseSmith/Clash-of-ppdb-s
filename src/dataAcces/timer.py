@@ -37,9 +37,9 @@ class TimerDataAccess:
 
         # Update the id
         cursor.execute('SELECT max(id) FROM timer;')
-        id = cursor.fetchone()[0]
-        timer.id = id
-        return id
+        tid = cursor.fetchone()[0]
+        timer.id = tid
+        return tid
 
     def evaluateXP(self, timer: Timer, transfer_data_acces, player_data_acces):
         cursor = self.dbconnect.get_cursor()
@@ -585,6 +585,7 @@ SELECT id FROM transfer WHERE discovered=True
     def simulateOutpost(self, timer: Timer, transfer_data_acces, settlement_data_acces, content_data_access):
         """
         Transfer the created Outpost from the admin account to the new player
+        :param content_data_access:
         :param settlement_data_acces:
         :param transfer_data_acces:
         :param timer: Timer Object
@@ -647,6 +648,6 @@ SELECT id FROM transfer WHERE discovered=True
         from .content import Content
 
         content_data_access.add_message(Content(None, datetime.now(),
-                                                "You succesfully established an outpost! Come take a look :)",
+                                                "You successfully established an outpost! Come take a look :)",
                                                 'admin'),
                                         transfer.pname)  # Notify user

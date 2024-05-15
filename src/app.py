@@ -50,7 +50,7 @@ def add_player():
     data = request.json
     name = data.get("name")
     password = data.get("password")
-    Player_obj = Player(name=name, password=password, avatar=None, gems=0, xp=0, level=1, logout=None, pid=None)
+    Player_obj = Player(name=name, password=password, avatar=None, xp=0, level=1, logout=None, pid=None)
     control = player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     if control[0]:
         friend_data_access.add_admin(name)
@@ -80,7 +80,7 @@ def get_login():
     data = request.json
     player_name = data.get("name")
     player_password = data.get("password")
-    Player_obj = Player(name=player_name, password=player_password, avatar=None, gems=None, xp=None, level=None,
+    Player_obj = Player(name=player_name, password=player_password, avatar=None, xp=None, level=None,
                         logout=None, pid=None)
     control = player_data_access.get_login(Player_obj)
     if control:
@@ -350,9 +350,7 @@ def placeBuilding():
     data = request.json
     building = building_data_acces.instantiate(data.get('name'), data.get('sid'), data.get('position')[0],
                                                data.get('position')[1], data.get('occupiedCells'))  # Reform data
-    print(building.to_dct())
     success, error = settlement_data_acces.placeBuilding(building, package_data_acces)  # Execute functionality
-    print(success, error)
     dct = dict(success=success)
     if not success:
         dct["error"] = str(error)
@@ -655,7 +653,6 @@ def createOutpost():
     }
     """
     data = request.json
-    print(data.get('coordTo')[0:2])
     success, timer = transfer_data_acces.createOutpost(data.get('sidFrom'), data.get('coordTo')[0:2],
                                                        data.get('outpostName'), data.get('soldiers'),
                                                        data.get('resources'), timer_data_acces,
@@ -1059,7 +1056,7 @@ def getLeaderboard():
    JSON Output Format (GET):
    List with players returned in json format, ordered by level
    """
-    return jsonify(player_data_access.getplayers())
+    return jsonify(player_data_access.getPlayers())
 
 
 @app.route("/setXPandLevel", methods=["POST"])
@@ -1115,31 +1112,32 @@ def getPrize():
     pname = data.get("username1")
     sid = data.get("sid1")
     prize = data.get("newPrize")
+
     if prize == 'You won 1000 wood!':
-        package_data_acces.Resource_managment(sid, 1000, "wood")
+        package_data_acces.resource_management(sid, 1000, "wood")
     if prize == 'You won 1000 stone!':
-        package_data_acces.Resource_managment(sid, 1000, "stone")
+        package_data_acces.resource_management(sid, 1000, "stone")
     if prize == 'You won 1000 food!':
-        package_data_acces.Resource_managment(sid, 1000, "food")
+        package_data_acces.resource_management(sid, 1000, "food")
     if prize == 'You won 1000 metal!':
-        package_data_acces.Resource_managment(sid, 1000, "steel")
+        package_data_acces.resource_management(sid, 1000, "steel")
     if prize == 'You won 200 gems!':
-        player_data_access.updategems(pname, 200)
+        player_data_access.updateGems(sid, 200)
     if prize == 'You won 150 xp!':
         player_data_access.updateXPandLevel(150, pname)
 
     if prize == 'You won 1000 gems!':
-        player_data_access.updategems(pname, 1000)
+        player_data_access.updateGems(sid, 1000)
     if prize == 'Level up':
         player_data_access.updateXPandLevel(1000, pname)
 
     if prize == 'Jackpot':
-        package_data_acces.Resource_managment(sid, 1000, "wood")
-        package_data_acces.Resource_managment(sid, 1000, "stone")
-        package_data_acces.Resource_managment(sid, 1000, "food")
-        package_data_acces.Resource_managment(sid, 1000, "steel")
+        package_data_acces.resource_management(sid, 1000, "wood")
+        package_data_acces.resource_management(sid, 1000, "stone")
+        package_data_acces.resource_management(sid, 1000, "food")
+        package_data_acces.resource_management(sid, 1000, "steel")
         player_data_access.updateXPandLevel(1500, pname)
-        player_data_access.updategems(pname, 1500)
+        player_data_access.updateGems(sid, 1500)
 
     return jsonify({"success": True, "message": "Prize is updated "})
 
@@ -1161,7 +1159,7 @@ def get_controlespin():
         """
     data = request.args
     player_name = data.get("name")
-    info = player_data_access.checkwheel(player_name)
+    info = player_data_access.checkWheel(player_name)
     return jsonify({"bool": info})
 
 

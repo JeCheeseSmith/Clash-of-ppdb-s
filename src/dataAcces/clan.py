@@ -1,6 +1,3 @@
-from datetime import datetime
-
-
 class Clan:
     def __init__(self, name, pname, description, status):
         self.name = name
