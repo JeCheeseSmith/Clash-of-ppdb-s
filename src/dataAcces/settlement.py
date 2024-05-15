@@ -33,6 +33,7 @@ class SettlementDataAcces:
         pid = cursor.fetchone()
         cursor.execute('SELECT * FROM package WHERE package.id=%s;', (pid,))
         packageData = cursor.fetchone()
+
         return Package(packageData).to_dct()
 
     def getLevel(self, sid):
@@ -372,6 +373,7 @@ class SettlementDataAcces:
         cursor.execute('SELECT EXISTS(SELECT name FROM building WHERE sid=%s AND name=%s);', (sid, 'SatelliteCastle'))
         return cursor.fetchone()[0]
 
+    @staticmethod
     def calculateDistance(to: list, start: list):
         """
         Calc grid distance between 2 grid Coordinates (Euclidean distance)
@@ -406,6 +408,7 @@ class SettlementDataAcces:
     def getMap(self, pname: str, friend_data_acces: FriendDataAccess):
         """
         Retrieve the info about the map; aka settlement coordinates
+        :param friend_data_acces:
         :param pname: Name of the player
         :return:
         """
@@ -418,5 +421,5 @@ class SettlementDataAcces:
         for settlement in data:
             isFriend = friend_data_acces.areFriends(pname, settlement[3])
             sList.append(dict(sid=settlement[0], position=[settlement[1], settlement[2]],
-                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0]), me= (pname == settlement[3]), pname=settlement[3], isFriend=isFriend))
+                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0]), me=pname == settlement[3], pname=settlement[3], isFriend=isFriend))
         return sList

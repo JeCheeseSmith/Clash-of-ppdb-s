@@ -43,6 +43,7 @@ class TransferDataAccess:
     def extent(self, soldierDict, discovered):
         """
         Helper function to add soldiers with amount 0 to the dictionary
+        :param discovered:
         :param soldierDict:
         :return:
         """
@@ -199,11 +200,10 @@ class TransferDataAccess:
         cursor.execute("SELECT id FROM timer WHERE oid=%s and type IN('attack','outpost','transfer')", (oldTid,))
         originalTimerID = cursor.fetchone()  # Already get the original timer ID before we make any changes
 
-        if originalTimerID is None:  # The transfer was an espionage; will be handled seperatly
+        if originalTimerID is None:  # The transfer was an espionage; will be handled separately
             return
         else:
             originalTimerID = originalTimerID[0]
-
 
         if transfer.toType:  # If we went to a transfer x, the start location will be the end of x
             cursor.execute('SELECT idTo FROM transfer WHERE id=%s;', (transfer.idTo,))
@@ -358,6 +358,7 @@ class TransferDataAccess:
 
         Starts a timer to create an outpost, makes an outpost transfer and presets the outpost settlement data
 
+        :param settlement_data_acces:
         :param sid: Identifier of the main settlement
         :param coordTo: Coordinate the outpost needs to be created
         :param resources: Resources to give with
@@ -377,7 +378,6 @@ class TransferDataAccess:
             if self.getMaxNumberOfSettlements(sid) < self.getNumberOfSettlements(sid) + 1:
                 raise Exception(
                     'You reached the maximal number of outposts for your kingdom! Consider upgrading the chancery.')
-            print(coordTo)
             if settlement_data_acces.getNewCoordinate(coordTo[0], coordTo[1]) != coordTo:  # Coordinate is not excepted
                 raise Exception('Your outpost is too close to others, make sure to remain at a safe distance!')
 
@@ -423,7 +423,7 @@ class TransferDataAccess:
         dct = dict()
         package = package_data_acces.get_resources(pid)
         troops = soldier_data_acces.getTroops(pid, 'package')
-        allied = (friend_data_acces.areFriends(pname, customer) or clan_data_acces.areAllies(pname, customer) or pname == customer )
+        allied = (friend_data_acces.areFriends(pname, customer) or clan_data_acces.areAllies(pname, customer) or pname == customer)
 
         for troop in troops.keys():  # Reform to frontend format
             if troops[troop]["discovered"] or allied:  # Add the troop info if they are discovered or if allied

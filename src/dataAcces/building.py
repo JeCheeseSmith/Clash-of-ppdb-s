@@ -17,11 +17,11 @@ class Buildable:
 
 
 class Building(Buildable):
-    def __init__(self, name, btype, function, upgradeFunction: list, upgradeResource, timeFunction, id, level, gridX,
+    def __init__(self, name, btype, function, upgradeFunction: list, upgradeResource, timeFunction, bid, level, gridX,
                  gridY,
                  sid, occupiedCells: list):
         Buildable.__init__(self, name, btype, function, upgradeFunction, upgradeResource, timeFunction)
-        self.id = id
+        self.id = bid
         self.level = level
         self.gridX = gridX
         self.gridY = gridY
@@ -134,6 +134,3 @@ class BuildingDataAccess:
         except Exception as e:
             print(e)
             return False
-
-
-

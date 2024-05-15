@@ -5,7 +5,7 @@ class FriendDataAccess:
     def __init__(self, dbconnect):
         self.dbconnect = dbconnect
 
-    def accept_Friendrequest(self, state, id, pname, sname):
+    def accept_Friendrequest(self, state, rid, pname, sname):
         try:
             cursor = self.dbconnect.get_cursor()
             # If State is True accept
@@ -13,10 +13,10 @@ class FriendDataAccess:
                 cursor.execute('INSERT INTO friend(pname1,pname2) VALUES (%s,%s);',
                                (pname, sname,))  # Insert the pname and sname as friends in the database table friend
             # Delete the request that was sent after it is accepted or declined
-            cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (id,))
-            cursor.execute('DELETE FROM request WHERE id=%s;', (id,))
-            cursor.execute('DELETE FROM content WHERE id=%s;', (id,))
-            cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (id,))
+            cursor.execute('DELETE FROM friendrequest WHERE id=%s;', (rid,))
+            cursor.execute('DELETE FROM request WHERE id=%s;', (rid,))
+            cursor.execute('DELETE FROM content WHERE id=%s;', (rid,))
+            cursor.execute('DELETE FROM retrieved WHERE mid=%s;', (rid,))
             # Commit to database
             self.dbconnect.commit()
             return True

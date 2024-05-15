@@ -7,7 +7,7 @@ class Package:
     def __init__(self, args):
         """
         Standard constructor
-        :param args: 0: id, 1: stone, 2: wood, 3: steel, 4: food, 5: gems, 6: xp
+        :param args: 0: id, 1: stone, 2: wood, 3: steel, 4: food, 5: gems
         """
         self.id = args[0]
         self.stone = args[1]
@@ -15,11 +15,9 @@ class Package:
         self.steel = args[3]
         self.food = args[4]
         self.gems = args[5]
-        self.xp = args[6]
 
     def to_dct(self):
-        return dict(id=self.id, stone=self.stone, wood=self.wood, steel=self.steel, food=self.food, gems=self.gems,
-                    xp=self.xp)
+        return dict(id=self.id, stone=self.stone, wood=self.wood, steel=self.steel, food=self.food, gems=self.gems)
 
     @abstractmethod
     def deficitString(self):
@@ -38,6 +36,8 @@ class Package:
             error += " Food: " + str(self.food)
         if self.steel < 0:
             error += " Steel: " + str(self.steel)
+        if self.gems < 0:
+            error += " Gems: " + str(self.steel)
         return error
 
     @abstractmethod
@@ -52,7 +52,6 @@ class Package:
         self.steel += other.steel
         self.food += other.steel
         self.gems += other.gems
-        self.xp += other.xp
         return self
 
     @abstractmethod
@@ -66,7 +65,6 @@ class Package:
         self.steel *= -1
         self.food *= -1
         self.gems *= -1
-        self.xp *= -1
         return self
 
     @abstractmethod
@@ -81,7 +79,6 @@ class Package:
         self.steel -= other.steel
         self.food -= other.steel
         self.gems -= other.gems
-        self.xp -= other.xp
         return self
 
     @staticmethod
@@ -209,12 +206,12 @@ class PackageDataAccess:
 
         # Insert resources into the database
         if isinstance(package, PackageWithSoldier):
-            cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,%s,%s);',
+            cursor.execute('INSERT INTO package(stone,wood,steel,food,gems) VALUES(%s,%s,%s,%s,%s);',
                            (package.package.stone, package.package.wood, package.package.steel, package.package.food,
-                            package.package.xp, package.package.gems))
+                            package.package.gems))
         elif isinstance(package, Package):
-            cursor.execute('INSERT INTO package(stone,wood,steel,food,xp,gems) VALUES(%s,%s,%s,%s,%s,%s);',
-                           (package.stone, package.wood, package.steel, package.food, package.xp, package.gems))
+            cursor.execute('INSERT INTO package(stone,wood,steel,food,gems) VALUES(%s,%s,%s,%s,%s);',
+                           (package.stone, package.wood, package.steel, package.food, package.gems))
 
         # Retrieved pid
         cursor.execute('SELECT max(id) FROM package;')
@@ -248,9 +245,8 @@ class PackageDataAccess:
         cursor = self.dbconnect.get_cursor()
 
         if isinstance(package, Package):
-            cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s , gems = %s , '
-                           'xp = %s WHERE id=%s;',
-                           (package.stone, package.wood, package.steel, package.food, package.gems, package.xp,
+            cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s , gems = %s WHERE id=%s;',
+                           (package.stone, package.wood, package.steel, package.food, package.gems,
                             package.id))
         elif isinstance(package, PackageWithSoldier):
             self.update_resources(package.package)
@@ -321,12 +317,6 @@ class PackageDataAccess:
         calculated_time = abs(start - stop)
         calculated_time = int(calculated_time.total_seconds())
         calculated_time = calculated_time / 3600  # Calculation in hour
-
-        #if calculated_time < 1:  # No resources will be calc'
-        #    return
-        #else:
-        #    cursor.execute('UPDATE player SET logout = %s WHERE name IN (SELECT pname FROM settlement WHERE id=%s);',
-        #                   (stop, sid))  # Set new logout time
 
         # Generated resources
         Generated_wood = 1
@@ -462,7 +452,7 @@ class PackageDataAccess:
                        (Newp_stone, Newp_wood, Newp_steel, Newp_food, pid))
         self.dbconnect.commit()
 
-    def Resource_managment(self,sid,aantal,resource):
+    def resource_management(self, sid, quantity, resource):
         """
         Function to re-evaluate resources number with
         start: Start Time of the interval to calculate resource from
@@ -470,7 +460,6 @@ class PackageDataAccess:
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-
 
         # Player resources
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))
@@ -494,7 +483,6 @@ class PackageDataAccess:
         cursor.execute('SELECT * FROM building WHERE sid=%s;', (sid,))
         buildings = cursor.fetchall()
 
-
         # Find the right storage functions
         cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("WoodStockPile",))
         Wood_Storage_function = cursor.fetchone()[0]
@@ -511,7 +499,7 @@ class PackageDataAccess:
         cursor.execute('SELECT function FROM buildable WHERE name=%s;', ("Castle",))
         Castle_Storage_function = cursor.fetchone()[0]
 
-        if resource=="wood":
+        if resource == "wood":
             for building in buildings:
                 if building[1] == "WoodStockPile":
                     Level = building[2]
@@ -522,10 +510,8 @@ class PackageDataAccess:
                     MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
                     Wood += MainStorage
 
-            Newp_wood = round(min(aantal + Pwood, Wood))
-            cursor.execute('UPDATE package SET wood = %s WHERE id=%s;',(Newp_wood, pid))
-
-
+            Newp_wood = round(min(quantity + Pwood, Wood))
+            cursor.execute('UPDATE package SET wood = %s WHERE id=%s;', (Newp_wood, pid))
 
         if resource == "stone":
             for building in buildings:
@@ -538,7 +524,7 @@ class PackageDataAccess:
                     MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
                     Stone += MainStorage
 
-            Newp_stone = round(min(aantal + Pstone, Stone))
+            Newp_stone = round(min(quantity + Pstone, Stone))
             cursor.execute('UPDATE package SET stone = %s WHERE id=%s;', (Newp_stone, pid))
 
         if resource == "steel":
@@ -552,11 +538,10 @@ class PackageDataAccess:
                     MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
                     Steel += MainStorage
 
-            Newp_steel = round(min(aantal + Psteel, Steel))
+            Newp_steel = round(min(quantity + Psteel, Steel))
             cursor.execute('UPDATE package SET steel = %s WHERE id=%s;', (Newp_steel, pid))
 
-
-        if resource=="food":
+        if resource == "food":
             for building in buildings:
                 if building[1] == "GrainSilo":
                     Level = building[2]
@@ -567,9 +552,8 @@ class PackageDataAccess:
                     MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
                     Food += MainStorage
 
-            Newp_food = round(min(aantal + Pfood, Food))
+            Newp_food = round(min(quantity + Pfood, Food))
             cursor.execute('UPDATE package SET food = %s WHERE id=%s;', (Newp_food, pid))
-
 
         self.dbconnect.commit()
 
