@@ -5,14 +5,19 @@
 ## Play the game [here!](https://team8.ua-ppdb.me/)
 
 ### Functionalities: 
+- [X] Scope & Game Description
 - [X] Simple Auto-Build to server (Follow ([autoBuild](documentation/autoBuild.md) after the initial setup)
 - [X] Idle Game
 - [X] Multiplayer Mechanics
 - [X] Documentation
+- [x] See [ultra-high-level](documentation/ultra-high-level.md) for an incomplete but short overview
+- [x] Design Choices focused on a low server load
+- [x] Focus on database expandability
+- [x] Game is "user-interactive" in the sense that code only gets executed upon a user input
 
 ## Documentation
 
-For the workings of the game, refer to. the [documentation](documentation) in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
+For the workings of the game, refer to the [documentation](documentation) in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
 
 ## How to start?
 

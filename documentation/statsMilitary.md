@@ -8,7 +8,7 @@ Soldiers in each category are divided in 3 categories Tier 1 (T1), Tier 2 (T2), 
 Tier 1 units are weaker than their T3 counterparts but are cheaper and quicker to train. 
 T2 & T3 units are also unlocked by reaching a certain level.
 
-![](#include/soldierAdvantages.png)
+![Soldier Advantages Diagram](1include/soldierAdvantages.png)
 
 | Icon | Meaning                      |
 |------|------------------------------|

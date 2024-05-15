@@ -20,7 +20,7 @@
 
 > From frontend to backend
 > 
-<img src="#include/tools.png" alt="drawing" width="300"/>
+![Tools Diagram](1include/tools.png)
 
 1. HTML
 2. CSS (Boostrap)
