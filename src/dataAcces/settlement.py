@@ -252,6 +252,8 @@ class SettlementDataAcces:
                        (building.sid,))  # Get the current amount of resources
         total = cursor.fetchone()
         total = Package(total)  # Convert to Package Object
+
+        print(total.to_dct(), deficit.to_dct())
         total -= deficit  # Do arithmetic
 
         if total.hasNegativeBalance():  # Not enough resources :(
