@@ -5,12 +5,10 @@
 ## Play the game [here!](https://team8.ua-ppdb.me/)
 
 ### Functionalities: 
-- [X] Auto-Build to server (Follow Setup Guide)
+- [X] Simple Auto-Build to server (Follow ([autoBuild](documentation/autoBuild.md) after the initial setup)
 - [X] Idle Game
 - [X] Multiplayer Mechanics
 - [X] Documentation
-
-### TODO aanvullen met specs van assignment
 
 ## Documentation
 
