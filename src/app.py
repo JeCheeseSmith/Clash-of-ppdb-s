@@ -289,8 +289,9 @@ def getBuildingInfo():
     }
     """
     try:
-        data = request.json
-        building = building_data_acces.retrieve(data.get('position')[0], data.get('position')[1],
+        data = request.args
+        position = data.get('position').split(',')
+        building = building_data_acces.retrieve(position[0], position[1],
                                                 data.get('sid'))  # Reform data
         dct = building.to_dct()
         dct['success'] = True

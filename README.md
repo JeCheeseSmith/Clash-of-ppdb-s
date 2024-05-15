@@ -10,8 +10,9 @@
 ### Code:
 - [ ] Documented
 - [ ] Beautiful?
+- [ ] ### TODO aanvullen met specs van assignment
 
-#Documentation
+# Documentation
 
 For the workings of the game, refer to. the documentation folder in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
 
