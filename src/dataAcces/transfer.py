@@ -291,6 +291,9 @@ class TransferDataAccess:
                     raise Exception("You can't attack your allies!")
                 if len(soldiers) == 0:
                     raise Exception("You need to choose troops to start an attack!")
+            else:
+                if self.areEnemies(idFrom, fromType, idTo, toType, friend_data_acces, clan_data_acces):
+                    raise Exception("You can only trade with allied players")
 
             # Restructure to a backend format
             soldiers = self.__restructure(soldiers, False)
@@ -374,6 +377,7 @@ class TransferDataAccess:
             if self.getMaxNumberOfSettlements(sid) < self.getNumberOfSettlements(sid) + 1:
                 raise Exception(
                     'You reached the maximal number of outposts for your kingdom! Consider upgrading the chancery.')
+            print(coordTo)
             if settlement_data_acces.getNewCoordinate(coordTo[0], coordTo[1]) != coordTo:  # Coordinate is not excepted
                 raise Exception('Your outpost is too close to others, make sure to remain at a safe distance!')
 

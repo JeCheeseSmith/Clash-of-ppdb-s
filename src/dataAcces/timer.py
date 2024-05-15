@@ -203,7 +203,7 @@ class TimerDataAccess:
 
             cursor.execute('SELECT name FROM building WHERE id=%s',
                            (timer.oid,))  # Verify if we're upgrading the Castle
-            name = cursor.fetchone()
+            name = cursor.fetchone()[0]
             if name == 'Castle':  # For castle upgrades, special functionality needs to be executed
                 settlement_data_acces.upgradeCastle(timer.sid)
             elif name == 'SatelliteCastle':
@@ -213,7 +213,9 @@ class TimerDataAccess:
 
             cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (timer.sid,))
             pname = cursor.fetchone()
-            from content import Content
+
+            # We need to do this locally otherwise other functionality will break due to circular includes
+            from .content import Content
             content_data_access.add_message(Content(None, datetime.now(), f"""Your building {name} has been upgraded!""", 'admin'), pname)
 
             self.dbconnect.commit()

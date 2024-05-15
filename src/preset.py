@@ -1,5 +1,5 @@
 from app import *
-from querry import query
+
 
 
 """
@@ -14,6 +14,12 @@ def presets(connection):
     # Reset database
     temp_connection = DBConnection()
     cursor = temp_connection.get_cursor()
+    query = """"""
+    sql = open("../sql/schema.sql", "r")
+    for line in sql.readlines():
+        query+=line
+    sql.close()
+
     cursor.execute(query)
     temp_connection.commit()
 
@@ -41,7 +47,7 @@ def presets(connection):
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     friend_data_access.add_admin('c')
 
-    Player_obj = Player(name='d', password='', avatar=None, gems=50, xp=0, level=0, logout=None, pid=None)
+    Player_obj = Player(name='d', password='', avatar=None, gems=50, xp=0, level=1, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     friend_data_access.add_admin('d')
 
