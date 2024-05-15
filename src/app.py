@@ -215,7 +215,6 @@ def get_resources():
     id = data.get("id")
     package_data_acces.calc_resources(id, None, datetime.now())
     packageDict = settlement_data_acces.getResources(Settlement(id))
-    print("new resources", packageDict)
     return jsonify(packageDict)
 
 

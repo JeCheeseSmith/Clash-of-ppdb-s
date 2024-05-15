@@ -322,8 +322,6 @@ class PackageDataAccess:
         calculated_time = int(calculated_time.total_seconds())
         calculated_time = calculated_time / 3600  # Calculation in hour
 
-        print("time diff", calculated_time, "settelles", settlements)
-
         for sid_tup in settlements:
             if isinstance(sid_tup, tuple):
                 sid = sid_tup[0]
@@ -461,7 +459,6 @@ class PackageDataAccess:
                     break
 
             Newp_food = round(max(Newp_food, 0))  # Food can't be negative
-            print("newfood", Newp_food)
 
             # Update all resources
             cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
