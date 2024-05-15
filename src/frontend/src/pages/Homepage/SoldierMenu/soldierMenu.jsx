@@ -393,7 +393,7 @@ function TroopTrainPage({setTimers, timers, traineesAvailable, traineesAmount, u
     useEffect(() =>
     {
         update(sid);
-        TraineesUpdate()
+        TraineesUpdate(countById2)
     }, []);
     return (
         <div className="soldier-primair-input">
@@ -486,4 +486,3 @@ function TroopTrainPage({setTimers, timers, traineesAvailable, traineesAmount, u
         </div>
     )
 }
-
