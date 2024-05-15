@@ -102,7 +102,7 @@ function LoginPage() {
                       <button className="signup-button" onClick={handleSignUpClick}>Sign Up</button>
                   </div>
               </div>
-              : // wrong device?
+              : // else
               <div>
                   {/* smaller text for smaller device resolution */}
                   <h1 className="gametitle-wrong-device">TRAVISIA</h1>

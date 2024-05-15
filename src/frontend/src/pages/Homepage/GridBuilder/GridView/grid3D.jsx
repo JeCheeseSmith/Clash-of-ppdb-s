@@ -8,12 +8,12 @@ import POST from "../../../../api/POST.jsx";
 import {useLocation} from "react-router-dom";
 import UpgradeBuilding from "./upgradeBuilding/upgradeBuilding.jsx";
 import PlaySound from "../../../../globalComponents/audioComponent/audio.jsx";
-import * as API from "../../../../api/EndPoints/EndPoints.jsx"
 import Ground from "./models/Objects/Ground.jsx";
 import Bush from "./models/Objects/Bush.jsx";
 import BackgroundTree from "./models/Objects/BackgroundTree.jsx";
 import Mountain from "./models/Objects/Mountain.jsx";
 import Cobblestones from "./models/Objects/Cobblestones.jsx";
+import Knight from "./models/Objects/NPC's/Knight.jsx";
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
@@ -151,6 +151,9 @@ function Grid({buildings, updateResources, randomArray, updateTimers, getTimer})
                 </mesh>
                 <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
                     {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building, selectedBuilding[2])}/>}
+                </mesh>
+                <mesh position={[centerX - gridSize / 2 - 5, -0.1, centerY - gridSize / 2 + 0.5]}>
+                    <Knight/>
                 </mesh>
             </>
         );
