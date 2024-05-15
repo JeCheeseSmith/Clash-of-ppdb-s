@@ -7,6 +7,7 @@ import {useLocation} from "react-router-dom";
 import * as API from "../../../../../api/EndPoints/EndPoints.jsx";
 import PopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
+import GET from "../../../../../api/GET.jsx";
 
 /**
  * UpgradeBuilding component for upgrading selected building.
@@ -28,6 +29,12 @@ function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTi
     const [popup, setPopup] = useState(false);
     const [currentTimeValue, setCurrentTimeValue] = useState(null)
     const [currentTotalDuration, setCurrentTotalDuration] = useState(null)
+    const [level,setLevel]=useState(null)
+
+    useEffect( () => {
+        API.getBuildingInfo(selectedBuilding[0].position,sid).then(data => console.log(data));
+        //setLevel(levelinfo(selectedBuilding[0].position,sid))
+    }, []);
 
     useEffect(() => {
         const timer = getTimer(selectedBuilding[0].position, "building")
@@ -67,6 +74,7 @@ function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTi
         <div>
             <div className="button-container">
                 <DisplayAvatarName type={"building-selected"} name={selectedBuilding[0].type}/>
+                <div>Level: {level}</div>
                 {!click && <button className="upgrade-button" onClick={HandleUpgradeClick}> Upgrade</button>}
                 {click && <TimerProgressBar timeValue={currentTimeValue}  totalTimeValue={currentTotalDuration} finished={setClick}/>}
             </div>
@@ -76,3 +84,4 @@ function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTi
 }
 
 export default UpgradeBuilding;
+

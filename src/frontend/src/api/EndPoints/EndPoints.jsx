@@ -100,3 +100,8 @@ export const Wheelprize = async (sid,username,prize) =>
 {
     return await POST({sid, username, prize}, '/wheelOFfortune')
 }
+
+
+export const getBuildingInfo= async (Pos,Sid)=>{
+    return await GET({position:Pos,sid:Sid},"/getBuildingInfo")
+}
