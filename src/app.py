@@ -565,7 +565,7 @@ def getMap():
     }
     """
     data = request.args
-    return jsonify(settlement_data_acces.getMap(data.get('pname'), friend_data_access))
+    return jsonify(settlement_data_acces.getMap(data.get('pname'), friend_data_access, clan_data_acces))
 
 
 @app.route("/espionage", methods=["POST"])
@@ -1096,18 +1096,18 @@ def getXPandLevel():
 @app.route("/wheelOFfortune", methods=["POST"])
 def getPrize():
     """
-        POST API Call to post up a bool to check if you already spin today
+    POST API Call to post up a bool to check if you already spin today
 
-        JSON Input Format:
-        {
-        "username1": <string> | Player name
-        "sid1":<int>| Sid of player
-        "newPrize":<string>| prize in a string
-        }
+    JSON Input Format:
+    {
+    "username1": <string> | Player name
+    "sid1":<int>| Sid of player
+    "newPrize":<string>| prize in a string
+    }
 
-        JSON Output Format:
-        {
-        }
+    JSON Output Format:
+    {
+    }
     """
     data = request.json
     pname = data.get("username1")

@@ -66,3 +66,7 @@ The dataAcces component itself uses these python objects to execute their respec
  | soldier.py     | [soldier](soldier.md)        | soldier                    | 
 | timer.py       | [timer](timer.md)            | timer                      |
 | transfer.py    | [transfer](transfer.md)      | transfer                   |
+
+## Nginx server file
+
+You can find a basic server block we used for Nginx [here](../../nginx/webapp). It publishes our website on port :443. (https)

@@ -405,7 +405,7 @@ class SettlementDataAcces:
                 return self.getNewCoordinate()
         return [x, y]
 
-    def getMap(self, pname: str, friend_data_acces: FriendDataAccess):
+    def getMap(self, pname: str, friend_data_acces: FriendDataAccess, clan_data_acces):
         """
         Retrieve the info about the map; aka settlement coordinates
         :param friend_data_acces:
@@ -419,7 +419,8 @@ class SettlementDataAcces:
         sList = []
 
         for settlement in data:
+            isAllied = clan_data_acces.areAllies(pname, settlement[3])
             isFriend = friend_data_acces.areFriends(pname, settlement[3])
             sList.append(dict(sid=settlement[0], position=[settlement[1], settlement[2]],
-                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0]), me=pname == settlement[3], pname=settlement[3], isFriend=isFriend))
+                              isOutpost=self.isOutPost(settlement[0]), level=self.getLevel(settlement[0]), me=pname == settlement[3], pname=settlement[3], isFriend=isFriend, isAllied=isAllied))
         return sList
