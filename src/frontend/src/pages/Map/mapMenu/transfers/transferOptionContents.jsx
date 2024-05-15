@@ -114,11 +114,11 @@ function TransferPage({selectedObject, outpostChosen})
             <div className={"resourcesTransfer-container"}>
                 <div className={"iconWithAmount"}>
                     <img src={wood} className={"resource-image"} alt={"Resource"}/>
-                    <input className={"amount"} onChange={(e) => handleResourceChange(1, parseInt(e.target.value))}/>
+                    <input className={"amount"} onChange={(e) => handleResourceChange(2, parseInt(e.target.value))}/>
                 </div>
                 <div className={"iconWithAmount"}>
                     <img src={stone} className={"resource-image"} alt={"Resource"}/>
-                    <input className={"amount"} onChange={(e) => handleResourceChange(2, parseInt(e.target.value))}/>
+                    <input className={"amount"} onChange={(e) => handleResourceChange(1, parseInt(e.target.value))}/>
                 </div>
                 <div className={"iconWithAmount"}>
                     <img src={metal} className={"resource-image"} alt={"Resource"}/>
