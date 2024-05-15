@@ -31,7 +31,6 @@ let SoldierTimers;
 function SoldierMenuButton({setResources, timers, setTimers, }) {
     const [soldierVisible, setsoldierVisible] = useState(false);
 
-
     return (
         <>
             <button onClick={() => {
@@ -214,7 +213,7 @@ function SoldierNavbar({soldierVisible, setTimers, setResources, timers, }) {
             (<SoldierMenuOptions pageName={currentPage} TroopAmount={TroopAmount} setTimers={setTimers} setResources={setResources} timers={timers} soldiers={soldiers}
             consumption={consumption} trainees={trainees} soldiersAvailable={soldiersAvailable} TraineesUpdate={handleTraineeAmountChange} update={APIcalls} />)
         }
-        <SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>
+        {/*<SoldierAmountSelectBar soldierVisible={soldierVisible} TroopAmount={TroopAmount} onTroopAmountChange={handleTroopAmountChange}/>*/}
         </div>
     )
 }
@@ -232,31 +231,31 @@ function SoldierMenuOptions({pageName, TroopAmount, setTimers, setResources, tim
     )
 }
 
-function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChange}) {
-    const { sid,  } = useLocation().state;
-    const [amount, setAmount] = useState(1)
-
-     const handleButtonClick = () => {
-      onTroopAmountChange(amount);
-      //getBarrackSum()
-    };
-
-     // const getBarrackSum = () => {
-     //    API.getBarrackLevelSum(sid).then(data => setAmount(
-     //    {
-     //        amount: data.amount
-     //    })
-     //    )
-     // }
-     //
-     // console.log(amount)
-
-    return (
-        <div className="TroopAmountbar">
-            <button onClick={() => handleButtonClick()} className={"AmountMenuOption"}>{amount} x</button>
-        </div>
-    )
-}
+// function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChange}) {
+//     const { sid,  } = useLocation().state;
+//     const [amount, setAmount] = useState(1)
+//
+//      const handleButtonClick = () => {
+//       onTroopAmountChange(amount);
+//       getBarrackSum()
+//     };
+//
+//      const getBarrackSum = () => {
+//         API.getBarrackLevelSum(sid).then(data => setAmount(
+//         {
+//             amount: data.amount
+//         })
+//         )
+//      }
+//
+//      console.log(amount)
+//
+//     return (
+//         <div className="TroopAmountbar">
+//             <button onClick={() => handleButtonClick()} className={"AmountMenuOption"}>{amount} x</button>
+//         </div>
+//     )
+// }
 
 
 function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldiers, consumption, setTimers, timers, trainees, TraineesUpdate, update, countById2}) {
@@ -275,7 +274,6 @@ function TroopOverviewPage({TroopAmount, setResources, soldiersAvailable, soldie
                 updateTimers(username, setTimers)
                 updateResources(sid, setResources)
                 console.log(timers)
-                calcTrainees(timers={timers}, trainees={trainees}, TraineesUpdate={TraineesUpdate}, countById2)
             }else
             {
                 setErrorMessage(data.error);
@@ -390,8 +388,10 @@ function calcTrainees(timers, trainees, TraineesUpdate, countById2){
 
 function TroopTrainPage({setTimers, timers, traineesAvailable, traineesAmount, update, TraineesUpdate, countById2}) {
     const { sid  } = useLocation().state;
+    console.log("troop trainee")
     useEffect(() =>
     {
+        console.log("troop trainee")
         update(sid);
         TraineesUpdate(countById2)
     }, []);
