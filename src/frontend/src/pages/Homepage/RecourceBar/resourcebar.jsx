@@ -9,34 +9,34 @@ import refresh from '../../../assets/refresh.png'
 
 
 // Code for resource bar
-function ResourceBar({resources, updateResources}) {
+function ResourceBar({resources, setCallForUpdate}) {
     return (
         <div className={"resourceSection-Container"}>
             {/*Resource-bar section*/}
             <div className="resourceBar">
                 {/* Each resource has a symbol and a count */}
                 <div className="resourceSection">
-                    <img src={gem} alt="Gem" className="resourceIcon" onClick={updateResources}/>
+                    <img src={gem} alt="Gem" className="resourceIcon" onClick={() => setCallForUpdate(true)}/>
                     <span className="resourceCount">{resources.gems}</span>
                 </div>
                 <div className="resourceSection">
-                    <img src={woodLog} alt="Wood" className="resourceIcon" onClick={updateResources}/>
+                    <img src={woodLog} alt="Wood" className="resourceIcon" onClick={() => setCallForUpdate(true)}/>
                     <span className="resourceCount">{resources.wood}</span>
                 </div>
                 <div className="resourceSection">
-                    <img src={stone} alt="Stone" className="resourceIcon" onClick={updateResources}/>
+                    <img src={stone} alt="Stone" className="resourceIcon" onClick={() => setCallForUpdate(true)}/>
                     <span className="resourceCount">{resources.stone}</span>
                 </div>
                 <div className="resourceSection">
-                    <img src={metal} alt="Metal" className="resourceIcon" onClick={updateResources}/>
+                    <img src={metal} alt="Metal" className="resourceIcon" onClick={() => setCallForUpdate(true)}/>
                     <span className="resourceCount">{resources.steel}</span>
                 </div>
                 <div className="resourceSection">
-                    <img src={food} alt="Food" className="resourceIcon" onClick={updateResources}/>
+                    <img src={food} alt="Food" className="resourceIcon" onClick={() => setCallForUpdate(true)}/>
                     <span className="resourceCount">{resources.food}</span>
                 </div>
             </div>
-            <img src={refresh} alt={"refresh-icon"} className={"updateResources-button"} onClick={updateResources}/>
+            <img src={refresh} alt={"refresh-icon"} className={"updateResources-button"} onClick={() => setCallForUpdate(true)}/>
         </div>
     );
 }

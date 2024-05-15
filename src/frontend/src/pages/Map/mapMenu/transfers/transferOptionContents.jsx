@@ -17,12 +17,12 @@ import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
  * @param {string} props.pageName - The name of the page ('createClan', 'joinClan', 'requests', 'searchPerson').
  * @returns {JSX.Element} - The JSX for social options.
  */
-function TransferOption({pageName, selectedObject, outpostChosen})
+function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpdate})
 {
     return(
         <div className={"option-content"}>
-            {pageName === 'Transfer' && <TransferPage selectedObject={selectedObject} outpostChosen={outpostChosen}/>}
-            {pageName === 'Attack' && <AttackPage selectedObject={selectedObject}/>}
+            {pageName === 'Transfer' && <TransferPage selectedObject={selectedObject} outpostChosen={outpostChosen} setCallForUpdate={setCallForUpdate}/>}
+            {pageName === 'Attack' && <AttackPage selectedObject={selectedObject} setCallForUpdate={setCallForUpdate}/>}
             {pageName === 'Espionage' && <EspionagePage selectedObject={selectedObject}/>}
             {pageName === 'Information' && <InformationTab selectedObject={selectedObject}/>}
         </div>
@@ -31,7 +31,7 @@ function TransferOption({pageName, selectedObject, outpostChosen})
 
 export default TransferOption;
 
-function TransferPage({selectedObject, outpostChosen})
+function TransferPage({selectedObject, outpostChosen, setCallForUpdate})
 {
     const {username, sid} = useLocation().state
     const [popup, setPopup] = useState(false)
@@ -76,9 +76,14 @@ function TransferPage({selectedObject, outpostChosen})
             {
                 if (!data.success)
                 {
-                    setPopup(true)
                     setErrorMessage(data.error)
                 }
+                else
+                {
+                    setErrorMessage("We're dispatching our forces and provisions to aid our ally's stronghold.")
+                    setCallForUpdate(true)
+                }
+                setPopup(true)
             })
         }
         else
@@ -87,9 +92,14 @@ function TransferPage({selectedObject, outpostChosen})
             {
                 if (!data.success)
                 {
-                    setPopup(true)
                     setErrorMessage(data.error)
                 }
+                else
+                {
+                    setErrorMessage("We're sending troops and supplies to bolster our outpost!")
+                    setCallForUpdate(true)
+                }
+                setPopup(true)
             })
         }
     }
@@ -136,7 +146,7 @@ function TransferPage({selectedObject, outpostChosen})
     );
 }
 
-function AttackPage({selectedObject})
+function AttackPage({selectedObject, setCallForUpdate})
 {
     const {username, sid} = useLocation().state
     const [popup, setPopup] = useState(false)
@@ -173,9 +183,14 @@ function AttackPage({selectedObject})
         {
             if (!data.success)
             {
-                setPopup(true)
                 setErrorMessage(data.error)
             }
+            else
+            {
+                setErrorMessage("We're laying siege to the enemy stronghold.")
+                setCallForUpdate(true)
+            }
+            setPopup(true)
         })
     }
     return (

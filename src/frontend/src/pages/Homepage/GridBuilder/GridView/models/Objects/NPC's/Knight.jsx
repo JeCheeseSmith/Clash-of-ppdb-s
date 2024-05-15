@@ -13,11 +13,11 @@ import knight from '../../../assets/knight.glb'
 export default function Knight(props) {
   const group = useRef()
   const { nodes, materials, animations } = useGLTF(knight)
-  const { actions , names} = useAnimations(animations, group)
-  useEffect(() =>
+  const { actions } = useAnimations(animations, group)
+  /*useEffect(() =>
   {
     actions[names[0]].play()
-  }, [])
+  }, [])*/
   return (
     <group ref={group} {...props} dispose={null} position={[0,6,0]}>
       <group name="Sketchfab_Scene">

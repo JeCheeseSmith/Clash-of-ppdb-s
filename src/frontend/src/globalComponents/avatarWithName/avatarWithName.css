@@ -87,8 +87,16 @@
 
 .building-SELECTED-name{
     font-family: Anton, cursive;
-    font-size: 24px;
+    font-size: 30px;
     color: #ee8505;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
+
+.building-SELECTED-level{
+    font-family: Anton, bold, serif;
+    font-size: 15px;
+    color: #ff3e00;
     letter-spacing: 1px;
     margin-bottom: 25px;
 }

@@ -21,7 +21,7 @@ import GET from "../../../../../api/GET.jsx";
  * @returns {JSX.Element} React component.
  */
 
-function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTimer, oldPosition}) {
+function UpgradeBuilding({selectedBuilding, getTimer, oldPosition, setCallForUpdate}) {
 
     const { sid, username } = useLocation().state;
     const [click, setClick] = useState(false);
@@ -31,12 +31,8 @@ function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTi
     const [currentTotalDuration, setCurrentTotalDuration] = useState(null)
     const [level,setLevel]=useState(null)
 
-    useEffect( () => {
-        API.getBuildingInfo(selectedBuilding[0].position,sid).then(data => console.log(data));
-        //setLevel(levelinfo(selectedBuilding[0].position,sid))
-    }, []);
-
     useEffect(() => {
+        API.getBuildingInfo(selectedBuilding[0].position,sid).then(data => setLevel(data.level));
         const timer = getTimer(selectedBuilding[0].position, "building")
         if (timer[0])
         {
@@ -47,14 +43,14 @@ function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTi
     }, []);
 
     function HandleUpgradeClick() {
-        updateResources()
+        setCallForUpdate(true)
         if (!click)
         {
             API.upgradeBuilding(oldPosition, sid).then(data =>
             {
                 if (data.success)
                 {
-                    updateTimers()
+                    setCallForUpdate(true)
                     setCurrentTimeValue(data.duration)
                     setCurrentTotalDuration(data.duration)
                     setClick(true)
@@ -73,10 +69,10 @@ function UpgradeBuilding({selectedBuilding, updateResources, updateTimers, getTi
     return (
         <div>
             <div className="button-container">
-                <DisplayAvatarName type={"building-selected"} name={selectedBuilding[0].type}/>
-                <div>Level: {level}</div>
+                <DisplayAvatarName type={"building-selected"} name={selectedBuilding[0].type} level={level}/>
                 {!click && <button className="upgrade-button" onClick={HandleUpgradeClick}> Upgrade</button>}
-                {click && <TimerProgressBar timeValue={currentTimeValue}  totalTimeValue={currentTotalDuration} finished={setClick}/>}
+                {click && <TimerProgressBar timeValue={currentTimeValue} totalTimeValue={currentTotalDuration}
+                                            finished={setClick}/>}
             </div>
             {popup && <PopUp message={errormessage} setPopup={setPopup}/>}
         </div>

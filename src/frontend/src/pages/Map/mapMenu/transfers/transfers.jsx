@@ -11,7 +11,7 @@ import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
  * @param {Function} props.setMenuVisible - A function to set the visibility of the menu.
  * @returns {JSX.Element} TransferMenu component.
  */
-function TransferMenu({outpostChosen, selectedObject, setMenuVisible})
+function TransferMenu({outpostChosen, selectedObject, setMenuVisible, setCallForUpdate})
 {
     const renderedOutpostChosen = !!(!outpostChosen && selectedObject[2])
     const [popUp, setPopup] = useState(!!(!outpostChosen && selectedObject[2]));
@@ -19,7 +19,7 @@ function TransferMenu({outpostChosen, selectedObject, setMenuVisible})
         <>
             {!renderedOutpostChosen &&
                 <div>
-                    <Navbar outpostChosen={outpostChosen} selectedObject={selectedObject}/>
+                    <Navbar outpostChosen={outpostChosen} selectedObject={selectedObject} setCallForUpdate={setCallForUpdate}/>
                     <button className={"close-transfer-menu"} onClick={() => setMenuVisible(false)}>
                         <span className="transition"></span>
                         <span className="gradient"></span>
@@ -41,7 +41,7 @@ export default TransferMenu;
  * @param {object} props.selectedObject - The selected object.
  * @returns {JSX.Element} Navbar component.
  */
-function Navbar({outpostChosen, selectedObject})
+function Navbar({outpostChosen, selectedObject, setCallForUpdate})
 {
     const [currentPage, setCurrentPage] = useState(outpostChosen ? 'Transfer' : 'Information');
 
@@ -95,7 +95,11 @@ function Navbar({outpostChosen, selectedObject})
                 </nav>
             }
             {
-                currentPage && (<TransferOption pageName={currentPage} selectedObject={selectedObject} outpostChosen={outpostChosen}/>)
+                currentPage && (<TransferOption pageName={currentPage}
+                                                selectedObject={selectedObject}
+                                                outpostChosen={outpostChosen}
+                                                setCallForUpdate={setCallForUpdate}
+                />)
             }
         </div>
     );

@@ -22,7 +22,7 @@ import Knight from "./models/Objects/NPC's/Knight.jsx";
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
 
-function Grid({buildings, updateResources, randomArray, updateTimers, getTimer})
+function Grid({buildings, randomArray, getTimer, setCallForUpdate})
 {
     const { sid, username } = useLocation().state;
     const [selectedBuilding, setSelectedBuilding] =
@@ -75,8 +75,8 @@ function Grid({buildings, updateResources, randomArray, updateTimers, getTimer})
                 setSelectedBuilding([selectedBuilding[0],false, selectedBuilding[2]]); //alleen floating boolean veranderen
                 if (moved[0] !== moved[1])
                 {
-                    const data = await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
-                    updateTimers()
+                    await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
+                    setCallForUpdate(true)
                 }
             }
         }
@@ -151,9 +151,6 @@ function Grid({buildings, updateResources, randomArray, updateTimers, getTimer})
                 </mesh>
                 <mesh position={[centerX - gridSize / 2, 6, centerY - gridSize / 2 + 0.5]}>
                     {selectedBuilding[0] === building && selectedBuilding[1] && <primitive object={createShadow(building, selectedBuilding[2])}/>}
-                </mesh>
-                <mesh position={[centerX - gridSize / 2 - 5, -0.1, centerY - gridSize / 2 + 0.5]}>
-                    <Knight/>
                 </mesh>
             </>
         );
@@ -238,10 +235,9 @@ function Grid({buildings, updateResources, randomArray, updateTimers, getTimer})
             </Canvas>
             {selectedBuilding[1] &&
                 <UpgradeBuilding selectedBuilding={selectedBuilding}
-                                 updateResources={updateResources}
-                                 updateTimers={updateTimers}
                                  oldPosition={oldPosition}
                                  getTimer={getTimer}
+                                 setCallForUpdate={setCallForUpdate}
                 />}
         </Suspense>
     );

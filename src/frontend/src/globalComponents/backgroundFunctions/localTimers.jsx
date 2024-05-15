@@ -12,13 +12,13 @@ import PlaySound from "../audioComponent/audio.jsx";
  * @returns {null} Null component.
  */
 
-function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag})
+function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, callForUpdate, setCallForUpdate})
 {
     const { sid, username } = useLocation().state
     const location = useLocation();
     const update = () =>
     {
-        updateResources(sid, setResources) // do this twice, because without the first time, resources are going to be 0
+        updateResources(sid, setResources)
         updateTimers(username, setTimers)
         if (location.pathname === "/Map")
         {
@@ -28,13 +28,18 @@ function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag})
     useEffect(() =>
     {
         update()
+        setCallForUpdate(false)
+    }, [callForUpdate]);
+    useEffect(() => // Updating Game Essentials After Each 15 Minutes
+    {
+        update() // do this twice, because without the first time, resources are going to be 0
         const intervalId = setInterval(() =>
         {
             update()
         }, 15 * 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);
-    useEffect(() =>
+    useEffect(() => // Live Updating All Timers Locally
     {
         if (timers.length > 0)
         {
@@ -56,8 +61,11 @@ function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag})
                     {
                         if (timer.type === "building")
                         {
-                            setFlag(true)
                             let promise  = PlaySound("BuildingUpgraded")
+                            if (location.pathname === "/MainPage")
+                            {
+                                setFlag(true)
+                            }
                         }
                         update()
                         break

@@ -31,14 +31,11 @@ function MainPage()
     const [timers, setTimers] = useState([])
     const randomArray = useMemo(getRandomArray, []); // Memoize the random array
     const [flag, setFlag] = useState(true);
+    const [callForUpdate, setCallForUpdate] = useState(false)
 
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
-    }
-    const updateTimers = () =>
-    {
-        API.update(username).then(data => {setTimers(data)})
     }
     const getTimer = (ID, type) =>
     {
@@ -55,18 +52,10 @@ function MainPage()
             return duration
         }
     }
-    const updateResources = () =>
-    {
-        API.get_resources(sid).then(data =>
-        {
-            setResources(data);
-        })
-    }
     useEffect(() =>
     {
         API.getGrid(sid).then(data => setBuildings(data.grid))
     }, []);
-
     useEffect(() =>
     {
         const audio = new Audio(backgroundMusic);
@@ -80,21 +69,30 @@ function MainPage()
     return (
         <div className="mainpage">
             <Loader {...loaderStyles} />
-            <Level username1={username} vlag={flag} changeVlag={setFlag}/>
+            <Level vlag={flag} changeVlag={setFlag}/>
             <QuestButton/>
             <Leaderboard/>
             <Chat/>
             <SocialBox/>
-            <WheelOfFortune username1={username} sid1={sid} setFlag={setFlag}/>
+            <WheelOfFortune username1={username} sid1={sid} setFlag={setFlag} setCallForUpdate={setCallForUpdate}/>
             <Account/>
-            <Buildmenu buildings={buildings} addBuilding={addBuilding} updateResources={updateResources}/>
+            <Buildmenu buildings={buildings} addBuilding={addBuilding} setCallForUpdate={setCallForUpdate}/>
             <div className={"grid"}>
-                <Grid buildings={buildings} updateResources={updateResources} randomArray={randomArray} updateTimers={updateTimers} getTimer={getTimer}/>
+                <Grid buildings={buildings}
+                      randomArray={randomArray}
+                      getTimer={getTimer}
+                      setCallForUpdate={setCallForUpdate}/>
             </div>
-            <ResourceBar resources={resources} updateResources={updateResources}/>
+            <ResourceBar resources={resources} setCallForUpdate={setCallForUpdate}/>
             <MapButton/>
             <SoldierMenu setResources={setResources} timers={timers} setTimers={setTimers}/>
-            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers} setFlag={setFlag}/>
+            <LocalTimers setResources={setResources}
+                         timers={timers}
+                         setTimers={setTimers}
+                         setFlag={setFlag}
+                         callForUpdate={callForUpdate}
+                         setCallForUpdate={setCallForUpdate}
+            />
         </div>
     );
 }

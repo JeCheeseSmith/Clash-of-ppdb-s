@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import './level.css'
 import * as API from "../../../api/EndPoints/EndPoints.jsx";
+import {useLocation} from "react-router-dom";
 
 // Code for level
-function LevelBar({username1, vlag, changeVlag}) {
+function LevelBar({vlag, changeVlag}) {
 
     const [level, setLevel] = useState(null);
     const [xp, setXp] = useState(null)
+    const { username } = useLocation().state;
 
     useEffect(() => {
         //if (!vlag) return;
 
         const fetchData = async () => {
             try {
-                const level = await requestLevel(username1);
-                const xp = await requestXP(username1);
+                const level = await requestLevel(username);
+                const xp = await requestXP(username);
                 setLevel(level);
                 setXp(xp);
             } finally {

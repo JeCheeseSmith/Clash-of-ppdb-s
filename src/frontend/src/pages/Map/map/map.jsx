@@ -1,13 +1,9 @@
-import React, {Suspense, useRef, useState} from 'react';
+import React, {Suspense} from 'react';
 import { Canvas } from '@react-three/fiber';
 import {OrbitControls, Text} from '@react-three/drei';
 import * as THREE from 'three';
-import { useLocation } from 'react-router-dom';
 import Arrow from "./modals/Arrow.jsx";
 import Settlement1 from "./modals/Settlement1.jsx";
-import {updateResources} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
-import LocalTimers from "../../../globalComponents/backgroundFunctions/localTimers.jsx";
-import ResourceBar from "../../Homepage/RecourceBar/resourcebar.jsx";
 import Environment from "./modals/Environment.jsx";
 import Landscape from "./modals/Landscape.jsx";
 import Settlement2 from "./modals/Settlement2.jsx";
@@ -26,14 +22,9 @@ import PlaySound from "../../../globalComponents/audioComponent/audio.jsx";
  * @returns {JSX.Element} Map component.
  */
 const mapSize = 50;
-function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen})
+function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen, settlements, timers})
 {
-    const {sid, username} = useLocation().state;
-    const [resources, setResources] = useState({wood: 0,stone: 0,steel: 0,food: 0});
-    const [settlements, setSettlements] = useState([])
-    const [timers, setTimers] = useState([])
     let characteristics
-
     const handleTransfer = (idTO, toType) =>
     {
         setMenuVisible(true)
@@ -103,7 +94,11 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                 }
                 else if (settlement.isFriend)
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname} (Ally)`, color: "purple", scale: 1, height: 9}
+                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City (Companion)`, color: "purple", scale: 1, height: 9}
+                }
+                else if (settlement.isAllied)
+                {
+                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City (Ally)`, color: "Maroon", scale: 1, height: 9}
                 }
                 else
                 {
@@ -153,7 +148,6 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
 
     return (
         <Suspense fallback={null}>
-            <LocalTimers setResources={setResources} timers={timers} setTimers={setTimers} setSettlements={setSettlements}/>
             <Canvas camera={{position: [0, 50, 65]}}>
                 {/*<color attach="background" args={['lightblue']}/>*/}
                 <directionalLight
@@ -184,7 +178,6 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                 <Landscape/>
                 <Environment/>
             </Canvas>
-            <ResourceBar resources={resources} updateResources={() => updateResources(sid, setResources)}/>
         </Suspense>
     );
 }

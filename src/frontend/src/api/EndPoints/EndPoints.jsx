@@ -74,18 +74,9 @@ export const createOutpost = async (coordTo, sidFrom, outpostName, soldiers, res
     return await POST({coordTo, sidFrom, outpostName, soldiers, resources}, '/createOutpost')
 }
 
-export const getBarrackLevelSum = async(sid) =>
-{
-    return await POST({"id": sid}, "/getBarrackLevelSum")
-}
-
 export const getAchieved = async(pname) =>
 {
     return await GET({"pname": pname}, "/getAchievements")
-}
-
-export const setXPLevel = async (username, xp_amount) => {
-    await POST({ name: username, xp: xp_amount }, "/setXPandLevel");
 }
 
 export const getXPLevel = async (username) => {
@@ -95,12 +86,6 @@ export const getXPLevel = async (username) => {
 export const Wheelcheck= async (username)=>{
     return await GET({name: username},"/controlespin")
 }
-
-export const Wheelprize = async (sid,username,prize) =>
-{
-    return await POST({sid, username, prize}, '/wheelOFfortune')
-}
-
 
 export const getBuildingInfo= async (Pos,Sid)=>{
     return await GET({position:Pos,sid:Sid},"/getBuildingInfo")

@@ -15,7 +15,7 @@ import Buildings from "../../pages/Homepage/GridBuilder/buildings.jsx";
  * @param {boolean} [props.succesClanSearch] - Flag indicating success of clan search (only required when type is 'clan-search').
  * @returns {JSX.Element} - The JSX for displaying avatar and name.
  */
-function DisplayAvatarName({type, name, pname, succesClanSearch})
+function DisplayAvatarName({type, name, pname, succesClanSearch, level})
 {
     return (
         <div>
@@ -24,7 +24,7 @@ function DisplayAvatarName({type, name, pname, succesClanSearch})
             {type === 'clan-search' && <ClanSearch name={name} pname={pname} succes={succesClanSearch}/>}
             {type === 'chat-person' && <ChatPerson name={name}/>}
             {type === 'chat-group' && <ChatGroup name={name}/>}
-            {type === 'building-selected' && <SelectedBuilding name={name}/>}
+            {type === 'building-selected' && <SelectedBuilding name={name} level={level}/>}
         </div>
     )
 }
@@ -119,7 +119,7 @@ function ChatGroup({name})
     );
 }
 
-function SelectedBuilding({name})
+function SelectedBuilding({name, level})
 {
     let image;
     for (let category in Buildings)
@@ -135,7 +135,8 @@ function SelectedBuilding({name})
     return (
         <div className={"building-SELECTED"}>
             <h3 className={"building-SELECTED-name"}>{name}</h3>
-            <img src={image} className={"building-SELECTED-avatar"}/>
+            <div className={"building-SELECTED-level"}>Level: {level}</div>
+            <img src={image} className={"building-SELECTED-avatar"} alt={"building-SELECTED-avatar"}/>
         </div>
     );
 }
