@@ -1,0 +1,3 @@
+- Intro Video to explain the game
+- Building names and or info explanation
+- Explanation or inituition behind attack/transfer menu needs to improve
