@@ -1,14 +1,9 @@
 from dataAcces.player import *
 from dataAcces.content import *
-from dataAcces.building import *
-from dataAcces.package import *
-from dataAcces.settlement import *
-from dataAcces.soldier import *
 from dataAcces.transfer import *
 from dataAcces.timer import *
 from dataAcces.friend import *
 from dataAcces.clan import *
-from querry import query
 from database import *
 from datetime import datetime
 from flask import Flask, jsonify, request
@@ -693,7 +688,7 @@ def getInfo():
     {
     dict containing soldiers and their amount + resources, e.g.:
     dictionary = {ArmoredFootman: 1, Huskarl: 2, OrderKnight: 3, Horseman: 10, Knight: 5, Militia: 18, food: 5, wood: 25, me: False}
-    "me" specifies if the settlement or transfer is owned by myself.
+    "me" specifies if the settlement or transfer is owned by myself
     }
     """
     data = request.args
@@ -1023,8 +1018,6 @@ def deleteClan():
 
 @app.route("/preset", methods=["POST"])
 def preset():
-    data = request.json
-
     """
     WARNING: DATA WILL BE LOST
     This script will delete all current data and load some preset information into the game, providing a very basic example of the workings of the game. We recommend you to actually try it out, not all features are (fully) used.
@@ -1103,7 +1096,7 @@ def getXPandLevel():
 
 
 @app.route("/wheelOFfortune", methods=["POST"])
-def getprize():
+def getPrize():
     """
         POST API Call to post up a bool to check if you already spin today
 
@@ -1120,10 +1113,10 @@ def getprize():
     """
     data = request.json
     pname = data.get("username1")
-    sid=data.get("sid1")
+    sid = data.get("sid1")
     prize = data.get("newPrize")
-    if prize=='You won 1000 wood!':
-        package_data_acces.Resource_managment(sid,1000,"wood")
+    if prize == 'You won 1000 wood!':
+        package_data_acces.Resource_managment(sid, 1000, "wood")
     if prize == 'You won 1000 stone!':
         package_data_acces.Resource_managment(sid, 1000, "stone")
     if prize == 'You won 1000 food!':
@@ -1131,7 +1124,7 @@ def getprize():
     if prize == 'You won 1000 metal!':
         package_data_acces.Resource_managment(sid, 1000, "steel")
     if prize == 'You won 200 gems!':
-        player_data_access.updategems(pname,200)
+        player_data_access.updategems(pname, 200)
     if prize == 'You won 150 xp!':
         player_data_access.updateXPandLevel(150, pname)
 
@@ -1168,16 +1161,8 @@ def get_controlespin():
         """
     data = request.args
     player_name = data.get("name")
-    info=player_data_access.checkwheel(player_name)
+    info = player_data_access.checkwheel(player_name)
     return jsonify({"bool": info})
-
-
-
-
-
-
-
-
 
 
 @app.route("/", defaults={"path": ""})

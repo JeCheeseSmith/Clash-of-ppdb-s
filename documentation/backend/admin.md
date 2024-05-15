@@ -19,7 +19,7 @@ Make sure to comply with the format of each function, they need to be polynmials
 
 #### preset():
 
-This function executes the [preset.py](../../src/preset.py) script upon called. It includes the query from [schema.sql](../../sql/schema.sql) as string, specified in [querry.py](../../src/querry.py)
+This function executes the [preset.py](../../src/preset.py) script upon called. It includes the query from [schema.sql](../../sql/schema.sql) as string.
 For debug purposes, it will return any data send so you can verify it executed correctly.
 
 Since it may be used for debug purposes only, a 'raw' connection is used instead of a dataAcces Component.
