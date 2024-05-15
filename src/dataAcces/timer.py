@@ -602,6 +602,13 @@ SELECT id FROM transfer WHERE discovered=True
                        (transfer.pname, transfer.pid, timer.sid,))
         cursor.execute('DELETE FROM package WHERE id=%s;', (oldPid,))  # Delete the old package
 
+        # Preset Unlocked Status for each building (All are unlocked at start)
+        cursor.execute('SELECT name FROM buildable;')
+        buildings = cursor.fetchall()
+        for buildable in buildings:
+            cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);',
+                           (buildable, timer.sid, 1))
+
         # Initialise Satellite Castle and preset unlocked Status
         cursor.execute(
             'INSERT INTO building(name, level, gridx, gridy, sid, occuppiedcells) VALUES(%s,%s,%s,%s,%s,%s);',
@@ -634,13 +641,6 @@ SELECT id FROM transfer WHERE discovered=True
               [19, 18], [19, 19], [19, 20], [20, 6], [20, 7], [20, 8], [20, 9], [20, 10],
               [20, 11], [20, 12], [20, 13], [20, 14], [20, 15], [20, 16], [20, 17], [20, 18],
               [20, 19], [20, 20]]))
-
-        # Preset Unlocked Status for each building (All are unlocked at start)
-        cursor.execute('SELECT name FROM buildable;')
-        buildings = cursor.fetchall()
-        for buildable in buildings:
-            cursor.execute('INSERT INTO unlocked(name, sid, maxnumber) VALUES(%s,%s,%s);',
-                           (buildable, timer.sid, 1))
 
         settlement_data_acces.upgradeCastle(timer.sid, True)  # Upgrade the Satellite Castle to level 1
 

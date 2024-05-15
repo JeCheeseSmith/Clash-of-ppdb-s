@@ -143,7 +143,7 @@ class PlayerDataAccess:
                FROM player
                WHERE name != 'admin'
                ORDER BY level DESC
-               LIMIT 10;
+               LIMIT 5;
            """
         cursor.execute(leaderboard)
         leaderboard = cursor.fetchall()
