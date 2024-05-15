@@ -6,7 +6,7 @@ import POST from "../../../api/POST.jsx";
 
 
 
-function WheelOfFortune ({username1,sid1}) {
+function WheelOfFortune ({username1,sid1,setFlag}) {
 
   // Variable to check if the toggle-leaderboard-button has been clicked, initially set to false
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,9 +40,10 @@ function WheelOfFortune ({username1,sid1}) {
          setShowPrize(true);
        }, 7000);
 
-       setTimeout(() => {
-         setShowPrize(false);
-       }, 8000);
+      setTimeout(() => {
+        setShowPrize(false);
+        setFlag(true)
+      }, 8000);
 
        setTimeout(async () => {
          const arrowAngle = (390 - (newRotation % 360)) % 360;

@@ -50,7 +50,7 @@ class Package:
         self.stone += other.stone
         self.wood += other.wood
         self.steel += other.steel
-        self.food += other.steel
+        self.food += other.food
         self.gems += other.gems
         return self
 
@@ -77,7 +77,7 @@ class Package:
         self.stone -= other.stone
         self.wood -= other.wood
         self.steel -= other.steel
-        self.food -= other.steel
+        self.food -= other.food
         self.gems -= other.gems
         return self
 
@@ -93,9 +93,9 @@ class Package:
             return Package([0, amount, 0, 0, 0, 0, 0])
         elif upgradeResource == 2:  # Wood
             return Package([0, 0, amount, 0, 0, 0, 0])
-        elif upgradeResource == 3:
+        elif upgradeResource == 3:  # Steel
             return Package([0, 0, 0, amount, 0, 0, 0])
-        elif upgradeResource == 4:
+        elif upgradeResource == 4:  # Food
             return Package([0, 0, 0, 0, amount, 0, 0])
         elif upgradeResource == 12:  # E.g. Stone AND Wood
             return Package([0, amount, amount, 0, 0, 0, 0])
@@ -445,7 +445,9 @@ class PackageDataAccess:
             if Newp_food >= 0:
                 break
 
-        Newp_food = round(max(Newp_wood, 0))  # Food can't be negative
+        Newp_food = round(max(Newp_food, 0))  # Food can't be negative
+
+        print("stone" , Newp_stone, "wood", Newp_wood, "steel",  Newp_steel, "food",  Newp_food, "pid", pid)
 
         # Update all resources
         cursor.execute('UPDATE package SET stone = %s , wood = %s , steel = %s , food = %s  WHERE id=%s;',
