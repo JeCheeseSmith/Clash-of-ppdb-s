@@ -20,7 +20,7 @@ On the map you can:
 
 Chat:
 - Talk with friends
-- Get updates from the admin/system about the game
+- Get reports from the admin/system about the game
 
 Social:
 - Join clans (allied)

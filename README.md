@@ -6,54 +6,49 @@
 
 ### Functionalities: 
 - [X] Auto-Build to server (Follow Setup Guide)
+- [X] Idle Game
+- [X] Multiplayer Mechanics
+- [X] Documentation
 
-### Code:
-- [ ] Documented
-- [ ] Beautiful?
-- [ ] ### TODO aanvullen met specs van assignment
+### TODO aanvullen met specs van assignment
 
-# Documentation
+## Documentation
 
-For the workings of the game, refer to. the documentation folder in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
+For the workings of the game, refer to. the [documentation](documentation) in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
 
 ## How to start?
 
-> This guide assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL installed. Optionally, like we did, you can retrieve your free SSL Certificate using Certbot. 
+> This guide assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL configured with a valid SSL Certificate. Optionally, like we did, you can retrieve your free SSL Certificate using [Certbot](https://certbot.eff.org/). 
 > > Don't forget to clone this repository!
 
-#### 1. Install necessary dependencies
-```bash
-sudo apt install python3-psycopg2
-```
+#### 0. Install Dependencies
+- python3 ```sudo apt install nodejs ```
+- psycopg2 ```sudo apt install python3-psycopg2```
+- nodejs ```sudo apt install nodejs```
+- npm ```sudo apt install npm```
+- nginx ```sudo apt install nginx```
+- postgresql ```sudo apt install postgresql```
 
-#### 2. Create the database
+#### 1. Create the database
 First configure the database with `postgres` user:
 ```bash
 sudo su postgres
 psql
 ```
-Then create a role 'app' that will create the database and be used by the application:
+Create the database and adjust the password as written in [database.py](src/database.py)
 ```sql
-CREATE ROLE app WITH LOGIN 'password' CREATEDB;
 CREATE DATABASE ppdb OWNER postgres;
 ALTER USER postgres WITH PASSWORD 'password';
 ```
 
-You need to 'trust' the role to be able to log in. Add the following line to `/etc/postgresql/9.6/main/pg_hba.conf` (you need root access, version may vary). __It needs to be the first rule (above local all all peer)__.
-```
-# TYPE  DATABASE        USER            ADDRESS                 METHOD
-
-# app
-local   dbtutor         app                                     trust
-```
-and restart the service. Then initialize the database:
+Then install the database and restarts postgresql
 ```bash
-sudo systemctl restart postgresql
-
 psql ppdb -f sql/schema.sql
+
+sudo systemctl restart postgresql
 ```
 
-#### 3. Download Python Dependencies
+#### 2. Install Python Dependencies
 
 ```bash
 virtualenv -p python3 env
@@ -61,45 +56,27 @@ source env/bin/activate
 pip3 install -r requirements.txt
 ```
 
-#### 4. Run development server
-```bash
-cd src/
-python3 app.py
-```
-
-### Set up the React.js frontend
-
-#### A. Install Node.js & npm
+#### 3. Install npm packages & build the frontend files
 ```bash
 cd src/frontend/
-sudo apt install nodejs
-sudo apt install npm
-sudo npm install -g n
-sudo n lts
 sudo npm install
 sudo npm run build
 ```
 
-#### B. Install packages & Build the files using vite
-```bash
-npm install
-npm run build
-```
-
-#### 5. Create user to run application
+#### 4. Create a user to run application
 ```bash
 sudo adduser --disabled-login app
 sudo su - app
 ```
 
-#### 6. Test if wsgi entrypoint works
+#### 5. Test if wsgi entrypoint works
 Instead of using the Flask debug server, we use gunicorn to serve the application.
 ```bash
 cd src/
 gunicorn --bind 0.0.0.0:5000 wsgi:app
 ```
 
-#### 7. Enable the webservice
+#### 6. Enable the webservice
 As an account with sudo access (not app), copy the file `service/webapp.service` to `/etc/systemd/system/` and enable the service:
 
 ```bash
@@ -110,7 +87,7 @@ sudo systemctl start webapp
 ```
 A file `src/webapp.sock` should be created.
 
-#### 8. Setup nginx
+#### 7. Setup nginx
 Link or copy the nginx server block configuration file to the right nginx folders:
 ```bash
 sudo ln -s /home/app/Clash-of-ppdb-s/nginx/webapp /etc/nginx/sites-available/
@@ -119,6 +96,6 @@ sudo ln -s /home/app/Clash-of-ppdb-s/nginx/webapp /etc/nginx/sites-enabled/
 
 Test the configuration with `sudo nginx -t`.
 
-#### 9. Restart the server
+#### 8. Restart the server
 
-Restart the server with `sudo systemctl restart nginx`. Your application should be available on port 80.
+Restart the server with `sudo systemctl restart nginx`. Your application should be available on port 443.
