@@ -35,7 +35,7 @@ function LoginPage() {
     // Handles the navigation from login page to mainpage
     const handleLoginClick = async () => {
 
-        if (username) {
+        if (username.trim() !== "" && password.trim() !== "") {
             // Calls the 'login' API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/login");
             // When the admin is logging in, navigate to admin-page
@@ -56,7 +56,7 @@ function LoginPage() {
             }
         }
         else {
-            setErrorMessage('Username cannot be empty');
+            setErrorMessage('Username Or Password Can Not be Empty!');
         }
 
     }
@@ -65,6 +65,10 @@ function LoginPage() {
       <>
           {!isMobile && !isTablet && isDesktop ?
               <div className="login-container">
+                  <div className={"feedback"}>
+                      This Game is still in development, so if you encounter any problems or
+                      difficulties, we would be grateful for your feedback.
+                  </div>
                   {/* no mobile and tablet, isDesktop = {windows, ubuntu, mac, ...} */}
                   <Loader {...loaderStyles} />
                   <h1 className="gametitle">TRAVISIA</h1>
@@ -84,6 +88,11 @@ function LoginPage() {
                               type="text"
                               value={username}
                               onChange={handleUsernameChange}
+                              onKeyPress={(e) => {
+                                  if (e.key === 'Enter') {
+                                      handleLoginClick()
+                                  }
+                              }}
                           />
                       </div>
                       <div>
@@ -94,6 +103,11 @@ function LoginPage() {
                               type="password"
                               value={password}
                               onChange={handlePasswordChange}
+                              onKeyPress={(e) => {
+                                  if (e.key === 'Enter') {
+                                      handleLoginClick()
+                                  }
+                              }}
                           />
                       </div>
                       {/* Login button */}
