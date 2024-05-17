@@ -6,7 +6,7 @@ import metal from '../assets/metal.png';
 import food from '../assets/food.png';
 import Soldiers from "../assets/soldiers.jsx";
 import InformationTab from "../information/informationTab.jsx";
-import * as API from '../../../../api/EndPoints/EndPoints.jsx'
+import * as API from '../../../../api/EndPoints.jsx'
 import {useLocation} from "react-router-dom";
 import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
 

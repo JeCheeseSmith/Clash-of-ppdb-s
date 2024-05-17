@@ -1,4 +1,4 @@
-import {useEffect} from 'react'; // Importing React library
+import {useEffect, useState} from 'react'; // Importing React library
 import {useLocation} from "react-router-dom";
 import {updateResources, updateTimers, updateMap} from "./updateFunctions.jsx";
 import PlaySound from "../audioComponent/audio.jsx";
@@ -16,6 +16,7 @@ function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, 
 {
     const { sid, username } = useLocation().state
     const location = useLocation();
+    const [updateTime, setUpdateTime] = useState(null)
     const update = () =>
     {
         updateResources(sid, setResources)
@@ -27,9 +28,21 @@ function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, 
     }
     useEffect(() =>
     {
-        update()
-        setCallForUpdate(false)
-    }, [callForUpdate]);
+        if (callForUpdate)
+        {
+            const currentTime = Date.now();
+            if (updateTime === null)
+            {
+                setUpdateTime(Date.now())
+            }
+            else if (currentTime - updateTime >= 30000)
+            {
+                update();
+                setUpdateTime(Date.now())
+            }
+            setCallForUpdate(false);
+        }
+    }, [callForUpdate, updateTime]);
     useEffect(() => // Updating Game Essentials After Each 15 Minutes
     {
         update() // do this twice, because without the first time, resources are going to be 0

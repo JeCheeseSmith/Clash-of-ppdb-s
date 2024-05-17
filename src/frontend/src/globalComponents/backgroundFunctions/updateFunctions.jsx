@@ -1,4 +1,4 @@
-import * as API from "../../api/EndPoints/EndPoints.jsx";
+import * as API from "../../api/EndPoints.jsx";
 
 /*
 * made helper Functions for later use

@@ -6,7 +6,7 @@ import Grid from "./GridBuilder/GridView/grid3D.jsx";
 import Buildmenu from "./GridBuilder/BuildMenu/buildmenu.jsx";
 import ResourceBar from "./RecourceBar/resourcebar.jsx";
 import Account from "./Account/account.jsx";
-import * as API from "../../api/EndPoints/EndPoints.jsx"
+import * as API from "../../api/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import MapButton from "./MapButton/mapButton.jsx";
 import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusic.mp3"

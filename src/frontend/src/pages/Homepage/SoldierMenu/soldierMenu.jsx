@@ -15,7 +15,7 @@ import ambush3 from "./assets/assassin.png"
 import spear1 from "./assets/guardian.png"
 import spear2 from "./assets/Pikeman.png"
 import spear3 from "./assets/Halbardier.png"
-import * as API from "../../../api/EndPoints/EndPoints.jsx"
+import * as API from "../../../api/EndPoints.jsx"
 import {useLocation} from "react-router-dom";
 import PopUp from "../../../globalComponents/popupMessage/popup.jsx";
 import {empty} from "leaflet/src/dom/DomUtil.js";

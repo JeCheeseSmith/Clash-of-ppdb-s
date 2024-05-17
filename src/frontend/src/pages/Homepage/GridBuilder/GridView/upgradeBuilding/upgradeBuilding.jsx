@@ -4,7 +4,7 @@ import '../../../../../globalComponents/timeComponent/TimerProgressBar.jsx'
 import TimerProgressBar from "../../../../../globalComponents/timeComponent/TimerProgressBar.jsx";
 import DisplayAvatarName from "../../../../../globalComponents/avatarWithName/avatarWithName.jsx";
 import {useLocation} from "react-router-dom";
-import * as API from "../../../../../api/EndPoints/EndPoints.jsx";
+import * as API from "../../../../../api/EndPoints.jsx";
 import PopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 import GET from "../../../../../api/GET.jsx";

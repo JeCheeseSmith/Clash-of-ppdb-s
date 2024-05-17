@@ -52,21 +52,28 @@ function CreateClanPage()
     };
     const handleButtonClick = async () =>
     {
-        const data = await POST({
+        if (clanName.trim() === "" || clanDescription.trim() === "" || clanStatus.trim() === "")
+        {
+            setPopUpMessage("Please Enter All of your Clan Descriptors to Proceed!")
+        }
+        else
+        {
+            const data = await POST({
             name: clanName,
             description: clanDescription,
             status: clanStatus,
             pname: clanLeader
-        }, "/createClan");
+            }, "/createClan");
+            if (data.success)
+            {
+                setPopUpMessage("Clan Created!")
+            }
+            else
+            {
+                setPopUpMessage("Clan Could Not Be Created!")
+            }
+        }
         setPopUp(true)
-        if (data.success)
-        {
-            setPopUpMessage("Clan Created!")
-        }
-        else
-        {
-            setPopUpMessage("Clan Could Not Be Created!")
-        }
     };
 
     return (
