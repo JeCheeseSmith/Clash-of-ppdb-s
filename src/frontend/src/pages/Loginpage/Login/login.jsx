@@ -6,6 +6,7 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import {isMobile, isTablet, isDesktop} from 'react-device-detect';
 import {Loader} from "@react-three/drei";
 import {loaderStyles} from "../../../globalComponents/loadingScreen/loadingScreen.jsx";
+import Information from "../../../globalComponents/developersInfo/information.jsx";
 
 
 // Code for login page
@@ -65,10 +66,7 @@ function LoginPage() {
       <>
           {!isMobile && !isTablet && isDesktop ?
               <div className="login-container">
-                  <div className={"feedback"}>
-                      This Game is still in development, so if you encounter any problems or
-                      difficulties, we would be grateful for your feedback.
-                  </div>
+                  <Information/>
                   {/* no mobile and tablet, isDesktop = {windows, ubuntu, mac, ...} */}
                   <Loader {...loaderStyles} />
                   <h1 className="gametitle">TRAVISIA</h1>

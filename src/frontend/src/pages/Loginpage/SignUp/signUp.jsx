@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import POST from "../../../api/POST.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import Information from "../../../globalComponents/developersInfo/information.jsx";
 
 
 // Code for signing up
@@ -46,10 +47,7 @@ function RegistrationPage() {
 
     return (
         <div className="login-container">
-            <h1 className={"feedback"}>
-                This Game is still in development, so if you encounter any problems or
-                difficulties, we would be grateful for your feedback.
-            </h1>
+            <Information/>
             <h1 className="gametitle">TRAVISIA</h1>
             <h2 className="subtitle">FALLEN EMPIRE</h2>
             <div className="login-form">
