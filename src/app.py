@@ -588,7 +588,8 @@ def espionage():
     data = request.json
     timer = transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'),
                                                 timer_data_acces)
-    return jsonify(timer.to_dct())
+
+    return jsonify({"success": True})
 
 
 @app.route("/transfer", methods=["POST"])
