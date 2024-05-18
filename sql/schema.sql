@@ -31,10 +31,10 @@ CREATE TABLE IF NOT EXISTS package(
 CREATE TABLE IF NOT EXISTS player(
     name VARCHAR PRIMARY KEY,
     password VARCHAR NOT NULL,
-    avatar VARCHAR,
     xp BIGINT,
     level INT,
-    logout TIMESTAMP -- Last time a player logged out at this time
+    logout TIMESTAMP, -- Last time a player logged out at this time
+    last_timespin TIMESTAMP -- Last time a player span the wheel of fortune
 );
 
 CREATE TABLE IF NOT EXISTS content(
@@ -117,6 +117,16 @@ CREATE TABLE IF NOT EXISTS building(
     PRIMARY KEY (id,name)
 );
 
+CREATE TABLE IF NOT EXISTS timer(
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    oid INT, -- ID Of the Object
+    type TEXT CHECK (type IN ('building', 'soldier', 'transfer', 'attack', 'espionage','outpost')),
+    start TIMESTAMP NOT NULL,
+    done TIMESTAMP NOT NULL,
+    duration BIGINT NOT NULL,
+    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE -- BelongsTo relation
+);
+
 CREATE TABLE IF NOT EXISTS friend(
     pname1 VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
     pname2 VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -156,13 +166,6 @@ CREATE TABLE IF NOT EXISTS unlocked(
     PRIMARY KEY (sid,name)
 );
 
-CREATE TABLE IF NOT EXISTS wheelofFortune(
-    pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    last_timespin TIMESTAMP,
-    PRIMARY KEY (sid,pname)
-);
-
 CREATE TABLE IF NOT EXISTS achieved(
     pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
     aname VARCHAR REFERENCES achievement(name) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -170,15 +173,7 @@ CREATE TABLE IF NOT EXISTS achieved(
     PRIMARY KEY (pname,aname)
 );
 
-CREATE TABLE IF NOT EXISTS timer(
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    oid INT, -- ID Of the Object (can be converted to a numerical value depending on the type
-    type TEXT CHECK (type IN ('building', 'soldier', 'transfer', 'attack', 'espionage','outpost')),
-    start TIMESTAMP NOT NULL,
-    done TIMESTAMP NOT NULL,
-    duration BIGINT NOT NULL,
-    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE -- BelongsTo relation
-);
+
 
 -- Insert standard buildings
 

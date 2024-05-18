@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import './wheel.css'
 import GET from "../../../api/GET.jsx";
-import * as API from "../../../api/EndPoints/EndPoints.jsx";
+import * as API from "../../../api/EndPoints.jsx";
 import POST from "../../../api/POST.jsx";
 
 

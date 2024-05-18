@@ -1,0 +1,35 @@
+.feedback {
+  position: absolute;
+  padding: 5px 20px;
+  border: 5px solid rgba(255, 0, 0, 0.53);
+  border-radius: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  font-size: 30px;
+  color: #ff6100;
+  display: flex;
+  font-family: 'Anton', cursive;
+  align-items: center;
+  justify-content: center;
+  transition-duration: 2s;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 1600px;
+}
+
+.feedback:hover {
+  color: rgb(0, 0, 0);
+  background-color: rgba(255, 89, 0, 0.62);
+  cursor: pointer;
+}
+
+.last-update {
+  width: 181px;
+  font-size: 15px;
+  font-family: 'Anton', cursive;
+  color: rgb(255, 0, 0);
+  background-color: rgba(48, 4, 89, 0.49);
+  padding: 10px;
+  border-radius: 20px;
+  margin: 10px;
+}

@@ -10,6 +10,7 @@ In a settlement you can:
 - Resources are calculated interactively: buildings & troops have costs, troops consume resources
 - Spin a wheel for bonuses
 - Check which achievements or quests you have done
+- Use the green button as a resource cookie clicker
 
 On the map you can:
 

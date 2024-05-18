@@ -1,11 +1,9 @@
-import GET from "../GET.jsx";
-import POST from "../POST.jsx";
-import {empty} from "leaflet/src/dom/DomUtil.js";
-import LevelBar from "../../pages/Homepage/Level/Level.jsx";
+import GET from "./GET.jsx";
+import POST from "./POST.jsx";
 
 
 /*
-* made async API Functions for better use
+* async API Functions for better use
 */
 
 

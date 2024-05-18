@@ -50,7 +50,7 @@ def add_player():
     data = request.json
     name = data.get("name")
     password = data.get("password")
-    Player_obj = Player(name=name, password=password, avatar=None, xp=0, level=1, logout=None, pid=None)
+    Player_obj = Player(name=name, password=password, xp=0, level=1, logout=None, pid=None)
     control = player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     if control[0]:
         friend_data_access.add_admin(name)
@@ -80,7 +80,7 @@ def get_login():
     data = request.json
     player_name = data.get("name")
     player_password = data.get("password")
-    Player_obj = Player(name=player_name, password=player_password, avatar=None, xp=None, level=None,
+    Player_obj = Player(name=player_name, password=player_password, xp=None, level=None,
                         logout=None, pid=None)
     control = player_data_access.get_login(Player_obj)
     if control:
@@ -586,9 +586,10 @@ def espionage():
     }
     """
     data = request.json
-    timer = transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'),
+    transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'),
                                                 timer_data_acces)
-    return jsonify(timer.to_dct())
+
+    return jsonify({"success": True})
 
 
 @app.route("/transfer", methods=["POST"])
@@ -615,6 +616,9 @@ def transfer():
     }
     """
     data = request.json
+
+    print(data.get('resources'))
+    print(data.get('soldiers'))
 
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
                                                         False, data.get('soldiers'),

@@ -75,7 +75,8 @@ class TimerDataAccess:
         pname = cursor.fetchone()
 
         if timer.type == 'soldier':
-            cursor.execute('UPDATE achieved SET amount = amount - 1 WHERE pname = %s and aname=%s', (pname, "Hungry for more"))
+            cursor.execute('UPDATE achieved SET amount = amount - 1 WHERE pname = %s and aname=%s',
+                           (pname, "Hungry for more"))
         elif timer.type == 'building':
             cursor.execute('SELECT count(id) FROM building WHERE sid=%s and name=%s;', (timer.sid, 'WoodCuttersCamp'))
             count = cursor.fetchone()[0]
@@ -94,12 +95,13 @@ class TimerDataAccess:
                                (pname, "Fighter"))
             elif timer.type == 'outpost':
                 cursor.execute('UPDATE achieved SET amount = amount - 1 WHERE pname = %s and aname=%s',
-                                (pname, "Kingdom Rebuilder"))
+                               (pname, "Kingdom Rebuilder"))
 
         self.dbconnect.commit()  # Commit Achievement Changes
 
         # When an achievement amount hit 0; add XP
-        cursor.execute('SELECT aname FROM achieved WHERE amount=0 and pname=%s;', (pname,))  # If amount < 0: it has already been added
+        cursor.execute('SELECT aname FROM achieved WHERE amount=0 and pname=%s;',
+                       (pname,))  # If amount < 0: it has already been added
         achieved = cursor.fetchall()
         for quest in achieved:
             # Set moment and amount to -1; indicating the achievement is done
@@ -128,10 +130,12 @@ class TimerDataAccess:
             timer = Timer(timerDone[0], timerDone[1], timerDone[2], timerDone[3], timerDone[4], timerDone[5],
                           timerDone[6])
 
-            cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer already to make sure no request at this time has the same timer
+            cursor.execute('DELETE FROM timer WHERE id=%s;', (
+            timer.id,))  # Delete the old timer already to make sure no request at this time has the same timer
             self.dbconnect.commit()
 
-            self.evaluateQuests(timer, transfer_data_acces)  # Check up if any quest is done and an XP bonus needs to be added
+            self.evaluateQuests(timer,
+                                transfer_data_acces)  # Check up if any quest is done and an XP bonus needs to be added
             self.evaluateXP(timer, transfer_data_acces, player_data_acces)
 
             if timer.type == 'soldier':
@@ -140,7 +144,7 @@ class TimerDataAccess:
                 self.simulateUpgrade(timer, settlement_data_acces, content_data_access)
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access,
-                                     soldier_data_acces)
+                                      soldier_data_acces)
             elif timer.type == 'espionage':
                 self.simulateEspionage(timer, transfer_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
@@ -219,7 +223,8 @@ class TimerDataAccess:
 
             # We need to do this locally otherwise other functionality will break due to circular includes
             from .content import Content
-            content_data_access.add_message(Content(None, datetime.now(), f"""Your building {name} has been upgraded!""", 'admin'), pname)
+            content_data_access.add_message(
+                Content(None, datetime.now(), f"""Your building {name} has been upgraded!""", 'admin'), pname)
 
             self.dbconnect.commit()
         except Exception as e:
@@ -282,8 +287,15 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('SELECT gridX,gridY FROM building WHERE id=%s and sid=%s;', (timer.oid, timer.sid))
                 newInfo["ID"] = cursor.fetchone()
             elif timer.type == 'transfer' or timer.type == 'attack' or timer.type == 'outpost':
-                newInfo = self.addTransferTimerInfo(newInfo, timer, pname, transfer_data_acces)
+                newInfo = self.addTransferTimerInfo(newInfo, timer, pname, transfer_data_acces, friendly)
                 newInfo["ID"] = timer.oid
+
+                height = 0  # Calc and set the height of arrows for the frontend
+                for new_info in newData:
+                    if "height" in new_info.keys() and "to" in new_info.keys() and "from" in new_info.keys():
+                        if new_info["to"] == newInfo["to"] and new_info["from"] == newInfo["from"]:
+                            height += 1
+                newInfo["height"] = height
             elif timer.type == 'soldier':
                 newInfo["ID"] = timer.oid
                 cursor.execute('SELECT name FROM soldier WHERE id=%s;', (timer.oid,))
@@ -299,7 +311,7 @@ SELECT id FROM transfer WHERE discovered=True
             newData.append(newInfo)
         return newData
 
-    def addTransferTimerInfo(self, newInfo: dict, timer: Timer, pname: str, transfer_data_acces):
+    def addTransferTimerInfo(self, newInfo: dict, timer: Timer, pname: str, transfer_data_acces, friendly: str):
         """
         Helper function to add needed info for frontend to a transfer timer
         :param newInfo:
@@ -315,7 +327,22 @@ SELECT id FROM transfer WHERE discovered=True
         # Add info to dict
         newInfo["to"] = transfer_data_acces.translatePosition(transfer[2], transfer[3])
         newInfo["from"] = transfer_data_acces.translatePosition(transfer[4], transfer[5])
-        newInfo["discovered"] = transfer[1] or pname == transfer[7]  # Own transfer should always be visible
+
+        query = f""" -- Transfer interacting with friendly
+SELECT id FROM transfer WHERE pname IN({friendly}) -- Transfer owned by friendly
+UNION
+-- Someone's Transfers interacting with friendly transfers
+SELECT id FROM transfer WHERE totype=True and idto IN (SELECT id FROM transfer WHERE pname IN({friendly}))
+UNION
+-- Someone's Transfers going to friendly settlements
+SELECT id FROM transfer WHERE totype=False and idto IN (SELECT id FROM settlement WHERE pname IN ({friendly}))
+-- And add all other visible transfers too
+UNION
+SELECT id FROM transfer WHERE discovered=True
+"""
+        cursor.execute(query)
+        friended = cursor.fetchall()
+        newInfo["discovered"] = (transfer[0],) in friended
         newInfo["tid"] = transfer[0]
         newInfo["toType"] = transfer[3]
 

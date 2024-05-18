@@ -6,9 +6,15 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import {isMobile, isTablet, isDesktop} from 'react-device-detect';
 import {Loader} from "@react-three/drei";
 import {loaderStyles} from "../../../globalComponents/loadingScreen/loadingScreen.jsx";
+import Information from "../../../globalComponents/developersInfo/information.jsx";
 
 
-// Code for login page
+/**
+ * Represents the login page of the application.
+ *
+ * @returns {JSX.Element} The login page component.
+ */
+
 function LoginPage() {
 
     const [username, setUsername] = useState('');
@@ -34,37 +40,31 @@ function LoginPage() {
 
     // Handles the navigation from login page to mainpage
     const handleLoginClick = async () => {
-
-        if (username) {
-            // Calls the 'login' API and stores the returned value in data
-            const data = await POST({ name: username, password: password }, "/login");
-            // When the admin is logging in, navigate to admin-page
-            if (username === "admin" && password === "1234") {
-                navigate('/AdminPage');
-            }
-            else {
-                // If the data is true (account exists), then navigate to main page.
-                if (data.success) {
-                    let sid = data.sid
-                    // sid and username are given to main page
-                    navigate('/MainPage', { state: { sid, username }});
-                }
-                // Display error
-                else {
-                    setErrorMessage('Wrong login credentials');
-                }
-            }
+        // Calls the 'login' API and stores the returned value in data
+        const data = await POST({ name: username, password: password }, "/login");
+        // When the admin is logging in, navigate to admin-page
+        if (username === "admin" && password === "1234") {
+            navigate('/AdminPage');
         }
         else {
-            setErrorMessage('Username cannot be empty');
+            // If the data is true (account exists), then navigate to main page.
+            if (data.success) {
+                let sid = data.sid
+                // sid and username are given to main page
+                navigate('/MainPage', { state: { sid, username }});
+            }
+            // Display error
+            else {
+                setErrorMessage('Wrong login credentials');
+            }
         }
-
     }
 
   return (
       <>
           {!isMobile && !isTablet && isDesktop ?
               <div className="login-container">
+                  <Information/>
                   {/* no mobile and tablet, isDesktop = {windows, ubuntu, mac, ...} */}
                   <Loader {...loaderStyles} />
                   <h1 className="gametitle">TRAVISIA</h1>
@@ -84,6 +84,11 @@ function LoginPage() {
                               type="text"
                               value={username}
                               onChange={handleUsernameChange}
+                              onKeyPress={(e) => {
+                                  if (e.key === 'Enter') {
+                                      handleLoginClick()
+                                  }
+                              }}
                           />
                       </div>
                       <div>
@@ -94,6 +99,11 @@ function LoginPage() {
                               type="password"
                               value={password}
                               onChange={handlePasswordChange}
+                              onKeyPress={(e) => {
+                                  if (e.key === 'Enter') {
+                                      handleLoginClick()
+                                  }
+                              }}
                           />
                       </div>
                       {/* Login button */}

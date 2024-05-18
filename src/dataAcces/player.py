@@ -5,17 +5,16 @@ from .package import *
 
 
 class Player:
-    def __init__(self, name, password, avatar, xp, level, logout, pid):
+    def __init__(self, name, password, xp, level, logout, pid):
         self.name = name
         self.password = password
-        self.avatar = avatar
         self.xp = xp
         self.level = level
         self.logout = logout
         self.pid = pid
 
     def to_dct(self):
-        return {'name': self.name, 'password': self.password, 'avatar': self.avatar, 'xp': self.xp,
+        return {'name': self.name, 'password': self.password, 'xp': self.xp,
                 'level': self.level, 'logout': self.logout, 'pid': self.pid}
 
 
@@ -48,8 +47,8 @@ class PlayerDataAccess:
 
             # Create the player
             cursor.execute(
-                'INSERT INTO player(name,password,xp,level,avatar,logout) VALUES(%s,%s,%s,%s,%s,now());',
-                (obj.name, obj.password, obj.xp, obj.level, obj.avatar))
+                'INSERT INTO player(name,password,xp,level,logout) VALUES(%s,%s,%s,%s,now());',
+                (obj.name, obj.password, obj.xp, obj.level))
 
             # Create a package for the settlement
             pid = package_data_acces.add_resources(
@@ -76,9 +75,6 @@ class PlayerDataAccess:
             quests = cursor.fetchall()
             for tup in quests:
                 cursor.execute('INSERT INTO achieved(pname, aname, amount) VALUES(%s,%s,%s);', (obj.name, tup[0], tup[1]))
-            self.dbconnect.commit()
-
-            cursor.execute('INSERT INTO wheeloffortune(pname,sid) VALUES(%s,%s);', (obj.name, sid))
             self.dbconnect.commit()
 
             return True, sid
@@ -143,7 +139,7 @@ class PlayerDataAccess:
                FROM player
                WHERE name != 'admin'
                ORDER BY level DESC
-               LIMIT 10;
+               LIMIT 5;
            """
         cursor.execute(leaderboard)
         leaderboard = cursor.fetchall()
@@ -165,18 +161,18 @@ class PlayerDataAccess:
 
     def checkWheel(self, name):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT last_timespin FROM wheeloffortune where pname=%s;', (name,))
+        cursor.execute('SELECT last_timespin FROM player WHERE name=%s;', (name,))
         time = cursor.fetchone()[0]
 
         current_time = datetime.now()
 
         if time is None:
-            cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
+            cursor.execute('UPDATE PLAYER SET last_timespin = %s where name=%s;', (current_time, name,))
             self.dbconnect.commit()
             return True
         else:
             if current_time-time >= timedelta(days=1):
-                cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
+                cursor.execute('UPDATE PLAYER SET last_timespin = %s where name=%s;', (current_time, name,))
                 self.dbconnect.commit()
                 return True
             else:

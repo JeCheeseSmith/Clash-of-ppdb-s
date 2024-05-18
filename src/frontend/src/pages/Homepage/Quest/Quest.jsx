@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './quest.css'
-import {getAchieved} from "../../../api/EndPoints/EndPoints.jsx";
+import {getAchieved} from "../../../api/EndPoints.jsx";
 import {useLocation} from "react-router-dom";
-import * as API from "../../../api/EndPoints/EndPoints.jsx";
+import * as API from "../../../api/EndPoints.jsx";
 
 function QuestButton() {
 

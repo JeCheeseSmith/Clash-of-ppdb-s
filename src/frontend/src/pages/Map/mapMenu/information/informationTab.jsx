@@ -5,7 +5,7 @@ import wood from "../assets/wood.png";
 import stone from "../assets/stone.png";
 import metal from "../assets/metal.png";
 import food from "../assets/food.png";
-import * as API from '../../../../api/EndPoints/EndPoints.jsx'
+import * as API from '../../../../api/EndPoints.jsx'
 import {useLocation, useNavigate} from "react-router-dom";
 
 /**

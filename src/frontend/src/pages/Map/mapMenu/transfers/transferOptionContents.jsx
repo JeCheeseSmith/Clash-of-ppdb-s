@@ -6,23 +6,30 @@ import metal from '../assets/metal.png';
 import food from '../assets/food.png';
 import Soldiers from "../assets/soldiers.jsx";
 import InformationTab from "../information/informationTab.jsx";
-import * as API from '../../../../api/EndPoints/EndPoints.jsx'
+import * as API from '../../../../api/EndPoints.jsx'
 import {useLocation} from "react-router-dom";
 import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
+import {updateTimers} from "../../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
 
 
 /**
- * Component for social options.
+ * Component for displaying different transfer options based on the provided page name.
+ *
  * @param {Object} props - The props object.
- * @param {string} props.pageName - The name of the page ('createClan', 'joinClan', 'requests', 'searchPerson').
- * @returns {JSX.Element} - The JSX for social options.
+ * @param {string} props.pageName - The name of the page ('Transfer', 'Attack', 'Espionage', 'Information').
+ * @param {Object} props.selectedObject - The selected object for transfer.
+ * @param {boolean} props.outpostChosen - Flag indicating if an outpost is chosen.
+ * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
+ * @param {function} props.setTimers - Function to set timers for updates.
+ * @returns {JSX.Element} - The JSX for displaying transfer options.
  */
-function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpdate})
+
+function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpdate, setTimers})
 {
     return(
         <div className={"option-content"}>
-            {pageName === 'Transfer' && <TransferPage selectedObject={selectedObject} outpostChosen={outpostChosen} setCallForUpdate={setCallForUpdate}/>}
-            {pageName === 'Attack' && <AttackPage selectedObject={selectedObject} setCallForUpdate={setCallForUpdate}/>}
+            {pageName === 'Transfer' && <TransferPage selectedObject={selectedObject} outpostChosen={outpostChosen} setCallForUpdate={setCallForUpdate} setTimers={setTimers}/>}
+            {pageName === 'Attack' && <AttackPage selectedObject={selectedObject} setCallForUpdate={setCallForUpdate} setTimers={setTimers}/>}
             {pageName === 'Espionage' && <EspionagePage selectedObject={selectedObject}/>}
             {pageName === 'Information' && <InformationTab selectedObject={selectedObject}/>}
         </div>
@@ -31,7 +38,19 @@ function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpda
 
 export default TransferOption;
 
-function TransferPage({selectedObject, outpostChosen, setCallForUpdate})
+
+/**
+ * Component for the transfer page within TransferOption.
+ *
+ * @param {Object} props - The props object.
+ * @param {Object} props.selectedObject - The selected object for transfer.
+ * @param {boolean} props.outpostChosen - Flag indicating if an outpost is chosen.
+ * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
+ * @param {function} props.setTimers - Function to set timers for updates.
+ * @returns {JSX.Element} - The JSX for the transfer page.
+ */
+
+function TransferPage({selectedObject, outpostChosen, setCallForUpdate, setTimers})
 {
     const {username, sid} = useLocation().state
     const [popup, setPopup] = useState(false)
@@ -82,6 +101,7 @@ function TransferPage({selectedObject, outpostChosen, setCallForUpdate})
                 {
                     setErrorMessage("We're dispatching our forces and provisions to aid our ally's stronghold.")
                     setCallForUpdate(true)
+                    updateTimers(username, setTimers)
                 }
                 setPopup(true)
             })
@@ -146,7 +166,17 @@ function TransferPage({selectedObject, outpostChosen, setCallForUpdate})
     );
 }
 
-function AttackPage({selectedObject, setCallForUpdate})
+/**
+ * Component for the attack page within TransferOption.
+ *
+ * @param {Object} props - The props object.
+ * @param {Object} props.selectedObject - The selected object for transfer.
+ * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
+ * @param {function} props.setTimers - Function to set timers for updates.
+ * @returns {JSX.Element} - The JSX for the attack page.
+ */
+
+function AttackPage({selectedObject, setCallForUpdate, setTimers})
 {
     const {username, sid} = useLocation().state
     const [popup, setPopup] = useState(false)
@@ -189,6 +219,7 @@ function AttackPage({selectedObject, setCallForUpdate})
             {
                 setErrorMessage("We're laying siege to the enemy stronghold.")
                 setCallForUpdate(true)
+                updateTimers(username, setTimers)
             }
             setPopup(true)
         })
@@ -213,18 +244,29 @@ function AttackPage({selectedObject, setCallForUpdate})
     )
 }
 
+/**
+ * Component for the espionage page within TransferOption.
+ *
+ * @param {Object} props - The props object.
+ * @param {Object} props.selectedObject - The selected object for transfer.
+ * @returns {JSX.Element} - The JSX for the espionage page.
+ */
 
 function EspionagePage({selectedObject})
 {
     const {sid} = useLocation().state
+    const [popup, setPopup] = useState(false)
     const handleEspionageButton = () =>
     {
-        API.espionage(selectedObject.idTO, sid, selectedObject.toType).then(data =>
+        API.espionage(selectedObject.idTO, sid, selectedObject.toType).then(() =>
         {
-            console.log("Espionage Started: ", data)
+            setPopup(true)
         })
     }
     return (
-        <button className={"espionage-button"} onClick={handleEspionageButton}> ESPIONAGE </button>
+        <>
+            <button className={"espionage-button"} onClick={handleEspionageButton}> ESPIONAGE </button>
+            {popup && <PopUp message={"Espial in the city commenced. Our agent is embedded. Awaiting further commands."} setPopup={setPopup}/>}
+        </>
     )
 }
