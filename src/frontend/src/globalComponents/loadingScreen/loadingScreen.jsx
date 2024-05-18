@@ -1,3 +1,14 @@
+/**
+ * Styles object for customizing the appearance of a loader component.
+ *
+ * @typedef {Object} LoaderStyles
+ * @property {Object} containerStyles - Styles for the container element.
+ * @property {Object} innerStyles - Styles for the inner container element.
+ * @property {Object} barStyles - Styles for the loading bar element.
+ * @property {Object} dataStyles - Styles for the data display element.
+ * @property {function} dataInterpolation - A function to interpolate and format loading progress data.
+ * @property {function} initialState - A function to set the initial state of the loader.
+ */
 export const loaderStyles =
 {
     containerStyles: {
