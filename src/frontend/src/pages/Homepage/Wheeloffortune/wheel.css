@@ -100,27 +100,30 @@
 
 .prize {
     position: fixed;
-    width: 400px;
-    height: 70px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: white;
-    display: block;
-    border: 5px solid black;
-    background-color: #b26616;
-    padding: 10px;
-    color: gold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.89);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     z-index: 9999;
     text-align: center;
+    font-size: 16px;
+    color: #333;
+    font-family: Arial, sans-serif;
 }
 
 .prize-content {
-    text-align: center;
-    text-shadow: black;
-    font-size: 35px;
+    font-size: 20px;
+    font-family: 'MedievalSharp', cursive;
+    padding: 20px;
+    border-radius: 20px;
+    color: rgb(0, 0, 0);
+    background-image: linear-gradient(to right, rgb(255, 117, 0), rgb(255, 183, 0));
 }
-
 
 
