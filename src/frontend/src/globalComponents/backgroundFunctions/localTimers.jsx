@@ -66,8 +66,7 @@ function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, 
                     {
                         if (timer.duration === timer.totalDuration)
                         {
-                            update()
-                            break
+                            updateResources(sid, setResources)
                         }
                         updatedTimers.push({ ...timer, duration: timer.duration - 1 });
                     }

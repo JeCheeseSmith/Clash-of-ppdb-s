@@ -41,6 +41,7 @@ function MapMainpage()
                                   setMenuVisible={setMenuVisible}
                                   outpostChosen={outpostChosen}
                                   setCallForUpdate={setCallForUpdate}
+                                  setTimers={setTimers}
                     />
                 </div>)
             }
