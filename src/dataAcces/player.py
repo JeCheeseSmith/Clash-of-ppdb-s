@@ -47,7 +47,7 @@ class PlayerDataAccess:
 
             # Create the player
             cursor.execute(
-                'INSERT INTO player(name,password,xp,level,logout) VALUES(%s,%s,%s,%s,%s,now());',
+                'INSERT INTO player(name,password,xp,level,logout) VALUES(%s,%s,%s,%s,now());',
                 (obj.name, obj.password, obj.xp, obj.level))
 
             # Create a package for the settlement

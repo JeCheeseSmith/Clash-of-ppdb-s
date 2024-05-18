@@ -291,7 +291,6 @@ SELECT id FROM transfer WHERE discovered=True
                         if new_info["to"] == newInfo["to"] and new_info["from"] == newInfo["from"]:
                             height += 1
                 newInfo["height"] = height
-                print(height)
             elif timer.type == 'soldier':
                 newInfo["ID"] = timer.oid
                 cursor.execute('SELECT name FROM soldier WHERE id=%s;', (timer.oid,))
