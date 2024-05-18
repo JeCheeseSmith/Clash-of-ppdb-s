@@ -1147,18 +1147,18 @@ def getPrize():
 @app.route("/controlespin", methods=["GET"])
 def get_controlespin():
     """
-        GET API Call to get a bool to check if you already spin today
+    GET API Call to get a bool to check if you already spin today
 
-        JSON Input Format:
-        {
-        "name": <string> | Player name
-        }
+    JSON Input Format:
+    {
+    "name": <string> | Player name
+    }
 
-        JSON Output Format:
-        {
-        "bool":<boolean>| spin status
-        }
-        """
+    JSON Output Format:
+    {
+    "bool":<boolean>| spin status
+    }
+    """
     data = request.args
     player_name = data.get("name")
     info = player_data_access.checkWheel(player_name)
