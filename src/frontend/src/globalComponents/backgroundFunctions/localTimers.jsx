@@ -12,7 +12,7 @@ import PlaySound from "../audioComponent/audio.jsx";
  * @returns {null} Null component.
  */
 
-function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, callForUpdate, setCallForUpdate})
+function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, callForUpdate, setCallForUpdate, instantCallForUpdate, setInstantCallForUpdate})
 {
     const { sid, username } = useLocation().state
     const location = useLocation();
@@ -26,7 +26,7 @@ function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, 
             updateMap(username, setSettlements)
         }
     }
-    useEffect(() =>
+    useEffect(() => // Updating With Timeout
     {
         if (callForUpdate)
         {
@@ -43,6 +43,14 @@ function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, 
             setCallForUpdate(false);
         }
     }, [callForUpdate, updateTime]);
+    useEffect(() => // Updating Without Timeout
+    {
+        if (instantCallForUpdate)
+        {
+            update();
+            setInstantCallForUpdate(false);
+        }
+    }, [instantCallForUpdate]);
     useEffect(() => // Updating Game Essentials After Each 15 Minutes
     {
         update() // do this twice, because without the first time, resources are going to be 0

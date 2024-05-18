@@ -26,7 +26,7 @@ function MapMainpage()
     const [settlements, setSettlements] = useState([])
     const [timers, setTimers] = useState([])
     const [callForUpdate, setCallForUpdate] = useState(false)
-
+    const [instantCallForUpdate, setInstantCallForUpdate] = useState(false)
     const handleOutpostButton = () =>
     {
         setOutpostChosen(!outpostChosen)
@@ -41,8 +41,7 @@ function MapMainpage()
                     <TransferMenu selectedObject={selectedObject}
                                   setMenuVisible={setMenuVisible}
                                   outpostChosen={outpostChosen}
-                                  setCallForUpdate={setCallForUpdate}
-                                  setTimers={setTimers}
+                                  setInstantCallForUpdate={setInstantCallForUpdate}
                     />
                 </div>)
             }
@@ -64,6 +63,8 @@ function MapMainpage()
                          setTimers={setTimers}
                          callForUpdate={callForUpdate}
                          setCallForUpdate={setCallForUpdate}
+                         instantCallForUpdate={instantCallForUpdate}
+                         setInstantCallForUpdate={setInstantCallForUpdate}
             />
         </div>
     );
