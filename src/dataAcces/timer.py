@@ -284,6 +284,14 @@ SELECT id FROM transfer WHERE discovered=True
             elif timer.type == 'transfer' or timer.type == 'attack' or timer.type == 'outpost':
                 newInfo = self.addTransferTimerInfo(newInfo, timer, pname, transfer_data_acces)
                 newInfo["ID"] = timer.oid
+
+                height = 0  # Calc and set the height of arrows for the frontend
+                for new_info in newData:
+                    if "height" in new_info.keys() and "to" in new_info.keys() and "from" in new_info.keys():
+                        if new_info["to"] == newInfo["to"] and new_info["from"] == newInfo["from"]:
+                            height += 1
+                newInfo["height"] = height
+                print(height)
             elif timer.type == 'soldier':
                 newInfo["ID"] = timer.oid
                 cursor.execute('SELECT name FROM soldier WHERE id=%s;', (timer.oid,))
