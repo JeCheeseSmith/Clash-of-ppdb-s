@@ -5,7 +5,12 @@ import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import Information from "../../../globalComponents/developersInfo/information.jsx";
 
 
-// Code for signing up
+/**
+ * Represents the registration page for creating a new account.
+ *
+ * @returns {JSX.Element} The registration page component.
+ */
+
 function RegistrationPage() {
 
     const [username, setUsername] = useState('');
