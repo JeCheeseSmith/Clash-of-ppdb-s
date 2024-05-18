@@ -9,6 +9,7 @@ import InformationTab from "../information/informationTab.jsx";
 import * as API from '../../../../api/EndPoints.jsx'
 import {useLocation} from "react-router-dom";
 import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
+import {updateTimers} from "../../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
 
 
 /**
@@ -17,12 +18,12 @@ import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
  * @param {string} props.pageName - The name of the page ('createClan', 'joinClan', 'requests', 'searchPerson').
  * @returns {JSX.Element} - The JSX for social options.
  */
-function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpdate})
+function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpdate, setTimers})
 {
     return(
         <div className={"option-content"}>
-            {pageName === 'Transfer' && <TransferPage selectedObject={selectedObject} outpostChosen={outpostChosen} setCallForUpdate={setCallForUpdate}/>}
-            {pageName === 'Attack' && <AttackPage selectedObject={selectedObject} setCallForUpdate={setCallForUpdate}/>}
+            {pageName === 'Transfer' && <TransferPage selectedObject={selectedObject} outpostChosen={outpostChosen} setCallForUpdate={setCallForUpdate} setTimers={setTimers}/>}
+            {pageName === 'Attack' && <AttackPage selectedObject={selectedObject} setCallForUpdate={setCallForUpdate} setTimers={setTimers}/>}
             {pageName === 'Espionage' && <EspionagePage selectedObject={selectedObject}/>}
             {pageName === 'Information' && <InformationTab selectedObject={selectedObject}/>}
         </div>
@@ -31,7 +32,7 @@ function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpda
 
 export default TransferOption;
 
-function TransferPage({selectedObject, outpostChosen, setCallForUpdate})
+function TransferPage({selectedObject, outpostChosen, setCallForUpdate, setTimers})
 {
     const {username, sid} = useLocation().state
     const [popup, setPopup] = useState(false)
@@ -82,6 +83,7 @@ function TransferPage({selectedObject, outpostChosen, setCallForUpdate})
                 {
                     setErrorMessage("We're dispatching our forces and provisions to aid our ally's stronghold.")
                     setCallForUpdate(true)
+                    updateTimers(username, setTimers)
                 }
                 setPopup(true)
             })
@@ -146,7 +148,7 @@ function TransferPage({selectedObject, outpostChosen, setCallForUpdate})
     );
 }
 
-function AttackPage({selectedObject, setCallForUpdate})
+function AttackPage({selectedObject, setCallForUpdate, setTimers})
 {
     const {username, sid} = useLocation().state
     const [popup, setPopup] = useState(false)
@@ -189,6 +191,7 @@ function AttackPage({selectedObject, setCallForUpdate})
             {
                 setErrorMessage("We're laying siege to the enemy stronghold.")
                 setCallForUpdate(true)
+                updateTimers(username, setTimers)
             }
             setPopup(true)
         })
@@ -217,14 +220,18 @@ function AttackPage({selectedObject, setCallForUpdate})
 function EspionagePage({selectedObject})
 {
     const {sid} = useLocation().state
+    const [popup, setPopup] = useState(false)
     const handleEspionageButton = () =>
     {
-        API.espionage(selectedObject.idTO, sid, selectedObject.toType).then(data =>
+        API.espionage(selectedObject.idTO, sid, selectedObject.toType).then(() =>
         {
-            console.log("Espionage Started: ", data)
+            setPopup(true)
         })
     }
     return (
-        <button className={"espionage-button"} onClick={handleEspionageButton}> ESPIONAGE </button>
+        <>
+            <button className={"espionage-button"} onClick={handleEspionageButton}> ESPIONAGE </button>
+            {popup && <PopUp message={"Espial in the city commenced. Our agent is embedded. Awaiting further commands."} setPopup={setPopup}/>}
+        </>
     )
 }
