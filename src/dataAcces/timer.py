@@ -128,6 +128,9 @@ class TimerDataAccess:
             timer = Timer(timerDone[0], timerDone[1], timerDone[2], timerDone[3], timerDone[4], timerDone[5],
                           timerDone[6])
 
+            cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer already to make sure no request at this time has the same timer
+            self.dbconnect.commit()
+
             self.evaluateQuests(timer, transfer_data_acces)  # Check up if any quest is done and an XP bonus needs to be added
             self.evaluateXP(timer, transfer_data_acces, player_data_acces)
 
@@ -148,7 +151,7 @@ class TimerDataAccess:
                 self.simulateOutpost(timer, transfer_data_acces, settlement_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
 
-            cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
+            #cursor.execute('DELETE FROM timer WHERE id=%s;', (timer.id,))  # Delete the old timer
             self.dbconnect.commit()
 
             # Check for more timers
