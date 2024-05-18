@@ -77,9 +77,6 @@ class PlayerDataAccess:
                 cursor.execute('INSERT INTO achieved(pname, aname, amount) VALUES(%s,%s,%s);', (obj.name, tup[0], tup[1]))
             self.dbconnect.commit()
 
-            cursor.execute('INSERT INTO wheeloffortune(pname,sid) VALUES(%s,%s);', (obj.name, sid))
-            self.dbconnect.commit()
-
             return True, sid
         except Exception as e:
             print("Error:", e)
@@ -164,18 +161,18 @@ class PlayerDataAccess:
 
     def checkWheel(self, name):
         cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT last_timespin FROM wheeloffortune where pname=%s;', (name,))
+        cursor.execute('SELECT last_timespin FROM player WHERE name=%s;', (name,))
         time = cursor.fetchone()[0]
 
         current_time = datetime.now()
 
         if time is None:
-            cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
+            cursor.execute('UPDATE PLAYER SET last_timespin = %s where name=%s;', (current_time, name,))
             self.dbconnect.commit()
             return True
         else:
             if current_time-time >= timedelta(days=1):
-                cursor.execute('UPDATE wheeloffortune SET last_timespin = %s WHERE pname=%s;', (current_time, name,))
+                cursor.execute('UPDATE PLAYER SET last_timespin = %s where name=%s;', (current_time, name,))
                 self.dbconnect.commit()
                 return True
             else:
