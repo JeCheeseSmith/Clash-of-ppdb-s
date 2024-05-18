@@ -43,11 +43,16 @@ import Gazebo from "./GridView/models/Objects/Buildings/Gazebo.jsx";
 
 
 
-/*
-* Building Name: String
-* Building Resolution: [columns, rows]
-* */
-
+/**
+ * Represents a collection of building objects including their images, 3D models, and resolutions.
+ * @typedef {Object} Buildings
+ * @property {Object} Production - Production buildings.
+ * @property {Object} Defense - Defense buildings.
+ * @property {Object} Storage - Storage buildings.
+ * @property {Object} Governmental - Governmental buildings.
+ * @property {Object} Military - Military buildings.
+ * @property {Object} Decoration - Decorative buildings.
+ */
 const Buildings =
 {
     Production:
