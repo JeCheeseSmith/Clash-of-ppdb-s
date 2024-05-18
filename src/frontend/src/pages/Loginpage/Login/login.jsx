@@ -9,7 +9,12 @@ import {loaderStyles} from "../../../globalComponents/loadingScreen/loadingScree
 import Information from "../../../globalComponents/developersInfo/information.jsx";
 
 
-// Code for login page
+/**
+ * Represents the login page of the application.
+ *
+ * @returns {JSX.Element} The login page component.
+ */
+
 function LoginPage() {
 
     const [username, setUsername] = useState('');
