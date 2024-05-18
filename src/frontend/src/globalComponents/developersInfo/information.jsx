@@ -17,7 +17,7 @@ function Information()
     return (
         <>
             <div className={"last-update"}>
-                Last Update: 18/05/2024 19:15
+                Last Update: 18/05/2024 19:16
             </div>
             <div className={"feedback"}>
                 This Game is still in development, so if you encounter any problems or
