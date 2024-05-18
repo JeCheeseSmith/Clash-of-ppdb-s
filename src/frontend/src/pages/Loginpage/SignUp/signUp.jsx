@@ -3,7 +3,7 @@ import {useNavigate} from "react-router-dom";
 import POST from "../../../api/POST.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import Information from "../../../globalComponents/developersInfo/information.jsx";
-
+import Filter from 'bad-words';
 
 /**
  * Represents the registration page for creating a new account.
@@ -16,6 +16,7 @@ function RegistrationPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
+    const filter = new Filter();
 
     // Handler for username change
     function handleUsernameChange(event) {
@@ -30,7 +31,7 @@ function RegistrationPage() {
     let navigate = useNavigate();
 
     const handleSaveClick = async () => {
-        if (username.trim() !== "" && password.trim() !== "") {
+        if (username.trim() !== "" && password.trim() !== "" && !filter.isProfane(username)) {
             // Calls the API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/signup");
             // If the data is true (account doesn't exist), then navigate to main page
@@ -43,6 +44,9 @@ function RegistrationPage() {
             else {
                 setErrorMessage('User already exists');
             }
+        }
+        else if (filter.isProfane(username)) {
+            setErrorMessage('Please choose a more suitable username to continue.')
         }
         else {
             setErrorMessage('Username Or Password Can Not be Empty!');

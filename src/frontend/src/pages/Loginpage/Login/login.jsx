@@ -7,7 +7,6 @@ import {isMobile, isTablet, isDesktop} from 'react-device-detect';
 import {Loader} from "@react-three/drei";
 import {loaderStyles} from "../../../globalComponents/loadingScreen/loadingScreen.jsx";
 import Information from "../../../globalComponents/developersInfo/information.jsx";
-import Filter from 'bad-words';
 
 
 /**
@@ -21,7 +20,6 @@ function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
-    const filter = new Filter();
 
     // Handler for username change
     function handleUsernameChange(event) {
@@ -42,34 +40,24 @@ function LoginPage() {
 
     // Handles the navigation from login page to mainpage
     const handleLoginClick = async () => {
-
-        if (username.trim() !== "" && password.trim() !== "" && !filter.isProfane(username)) {
-            // Calls the 'login' API and stores the returned value in data
-            const data = await POST({ name: username, password: password }, "/login");
-            // When the admin is logging in, navigate to admin-page
-            if (username === "admin" && password === "1234") {
-                navigate('/AdminPage');
-            }
-            else {
-                // If the data is true (account exists), then navigate to main page.
-                if (data.success) {
-                    let sid = data.sid
-                    // sid and username are given to main page
-                    navigate('/MainPage', { state: { sid, username }});
-                }
-                // Display error
-                else {
-                    setErrorMessage('Wrong login credentials');
-                }
-            }
-        }
-        else if (filter.isProfane(username)) {
-            setErrorMessage('Please choose a more suitable username to continue.')
+        // Calls the 'login' API and stores the returned value in data
+        const data = await POST({ name: username, password: password }, "/login");
+        // When the admin is logging in, navigate to admin-page
+        if (username === "admin" && password === "1234") {
+            navigate('/AdminPage');
         }
         else {
-            setErrorMessage('Username Or Password Can Not be Empty!');
+            // If the data is true (account exists), then navigate to main page.
+            if (data.success) {
+                let sid = data.sid
+                // sid and username are given to main page
+                navigate('/MainPage', { state: { sid, username }});
+            }
+            // Display error
+            else {
+                setErrorMessage('Wrong login credentials');
+            }
         }
-
     }
 
   return (
