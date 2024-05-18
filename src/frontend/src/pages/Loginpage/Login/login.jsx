@@ -7,6 +7,7 @@ import {isMobile, isTablet, isDesktop} from 'react-device-detect';
 import {Loader} from "@react-three/drei";
 import {loaderStyles} from "../../../globalComponents/loadingScreen/loadingScreen.jsx";
 import Information from "../../../globalComponents/developersInfo/information.jsx";
+import Filter from 'bad-words';
 
 
 /**
@@ -20,6 +21,7 @@ function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errormessage, setErrorMessage] = useState('');
+    const filter = new Filter();
 
     // Handler for username change
     function handleUsernameChange(event) {
@@ -41,7 +43,7 @@ function LoginPage() {
     // Handles the navigation from login page to mainpage
     const handleLoginClick = async () => {
 
-        if (username.trim() !== "" && password.trim() !== "") {
+        if (username.trim() !== "" && password.trim() !== "" && !filter.isProfane(username)) {
             // Calls the 'login' API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/login");
             // When the admin is logging in, navigate to admin-page
@@ -60,6 +62,9 @@ function LoginPage() {
                     setErrorMessage('Wrong login credentials');
                 }
             }
+        }
+        else if (filter.isProfane(username)) {
+            setErrorMessage('Please choose a more suitable username to continue.')
         }
         else {
             setErrorMessage('Username Or Password Can Not be Empty!');
