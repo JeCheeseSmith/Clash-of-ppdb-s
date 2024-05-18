@@ -48,7 +48,6 @@ function MapMainpage()
             <ResourceBar resources={resources} setCallForUpdate={setCallForUpdate}/>
             <Outpost onClickFunction={handleOutpostButton}/>
             <Chat/>
-            <SocialBox/>
             <Account/>
             <img src={compass} alt={"compass"} className={"compass"}/>
             <Map setMenuVisible={setMenuVisible}
