@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './level.css'
-import * as API from "../../../api/EndPoints/EndPoints.jsx";
+import * as API from "../../../api/EndPoints.jsx";
 import {useLocation} from "react-router-dom";
 
 // Code for level

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {useNavigate} from "react-router-dom";
 import POST from "../../../api/POST.jsx";
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
+import Information from "../../../globalComponents/developersInfo/information.jsx";
 
 
 // Code for signing up
@@ -24,8 +25,7 @@ function RegistrationPage() {
     let navigate = useNavigate();
 
     const handleSaveClick = async () => {
-
-        if (username) {
+        if (username.trim() !== "" && password.trim() !== "") {
             // Calls the API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/signup");
             // If the data is true (account doesn't exist), then navigate to main page
@@ -40,45 +40,56 @@ function RegistrationPage() {
             }
         }
         else {
-            setErrorMessage('Username cannot be empty');
+            setErrorMessage('Username Or Password Can Not be Empty!');
         }
 
     }
 
     return (
         <div className="login-container">
-          <h1 className="gametitle">TRAVISIA</h1>
-          <h2 className="subtitle">FALLEN EMPIRE</h2>
-          <div className="login-form">
-              {errormessage && (
-          <div className="error-message">
-            <AiOutlineExclamationCircle /> {errormessage}
-          </div>
-        )}
-            <div>
-              {/* <div> groupes the label and input together on one line */}
-              <label htmlFor="username">Username:</label>
-              {/* When you click on the Label "Username", the input box is selected */}
-              <input
-                  id="username"
-                  type="text"
-                  value={username}
-                  onChange={handleUsernameChange}
-              />
+            <Information/>
+            <h1 className="gametitle">TRAVISIA</h1>
+            <h2 className="subtitle">FALLEN EMPIRE</h2>
+            <div className="login-form">
+                {errormessage && (
+                    <div className="error-message">
+                        <AiOutlineExclamationCircle/> {errormessage}
+                    </div>
+                )}
+                <div>
+                    {/* <div> groupes the label and input together on one line */}
+                    <label htmlFor="username">Username:</label>
+                    {/* When you click on the Label "Username", the input box is selected */}
+                    <input
+                        id="username"
+                        type="text"
+                        value={username}
+                        onChange={handleUsernameChange}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                                handleSaveClick()
+                            }
+                        }}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="password">Password:</label>
+                    {/* When you click on the Label "Password", the input box is selected*/}
+                    <input
+                        id="password"
+                        type="password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                        onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                                handleSaveClick()
+                            }
+                        }}
+                    />
+                </div>
+                {/* make account button */}
+                <button className="make-account-button" onClick={handleSaveClick}>Make Account</button>
             </div>
-            <div>
-              <label htmlFor="password">Password:</label>
-              {/* When you click on the Label "Password", the input box is selected*/}
-              <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={handlePasswordChange}
-              />
-            </div>
-            {/* make account button */}
-            <button className="make-account-button" onClick={handleSaveClick}>Make Account</button>
-          </div>
         </div>
     );
 }

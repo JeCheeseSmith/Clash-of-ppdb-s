@@ -13,6 +13,7 @@
   "dependencies": {
     "@react-three/drei": "^9.99.7",
     "@react-three/fiber": "^8.15.19",
+    "axios": "^1.6.8",
     "leaflet": "^1.9.4",
     "million": "^3.0.6",
     "react": "^18.2.0",
