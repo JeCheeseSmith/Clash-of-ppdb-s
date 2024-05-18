@@ -13,7 +13,6 @@ export default function Arrow({intercept, position, destinationPosition, height}
     if (arrowHeight > 0)
     {
         arrowHeight -= 0.8
-        console.log(arrowHeight)
     }
     if (intercept)
     {
