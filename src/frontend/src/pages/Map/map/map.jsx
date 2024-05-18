@@ -137,7 +137,7 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                               position={[colIndex + 0.5 - mapSize / 2, 0, rowIndex + 1 - mapSize / 2]}
                               onClick={() => handleTransfer(timer.tid, true)}
                         >
-                            <Arrow intercept={timer.toType} position={[rowIndex, colIndex]} destinationPosition={timer.to}/>
+                            <Arrow intercept={timer.toType} position={[rowIndex, colIndex]} destinationPosition={timer.to} height={timer.height}/>
                         </mesh>
                     );
                 }
