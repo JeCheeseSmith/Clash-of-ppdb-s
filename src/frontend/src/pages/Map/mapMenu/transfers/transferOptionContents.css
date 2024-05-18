@@ -132,7 +132,11 @@ hr {
     text-transform: uppercase;
     font-family: 'Anton', sans-serif;
     cursor: pointer;
-    transition: 2s;
+    transition: 1s;
+}
+
+.espionage-button:active {
+    scale: 0.6;
 }
 
 .espionage-button:hover {
