@@ -27,10 +27,12 @@
 
 .questpage-box {
     position: absolute;
-    left: 500px;
-    top: 100px;
+    left: 550px;
+    top: 0px;
+    bottom: 10px;
+    bottom: 10px;
     z-index: 9999;
-    width: 880px;
+    width: 800px;
     height: 650px;
     border: 2px solid #ffd700;
     border-radius: 15px;

@@ -37,7 +37,6 @@ function QuestLog(loaded) {
       API.getAchieved(username)
         .then((data) => {
           setAchieved(data);
-          console.log(data);
         })
         .catch((error) => {
           console.error('Error fetching achievements:', error);
