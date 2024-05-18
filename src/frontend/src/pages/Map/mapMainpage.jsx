@@ -7,15 +7,16 @@ import {Loader} from "@react-three/drei";
 import {loaderStyles} from "../../globalComponents/loadingScreen/loadingScreen.jsx";
 import compass from './map/assets/image-removebg-preview.png'
 import Chat from "../Homepage/Communication/chat/chat.jsx";
-import SocialBox from "../Homepage/Communication/social/social.jsx";
 import Account from "../Homepage/Account/account.jsx";
 import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
 import ResourceBar from "../Homepage/RecourceBar/resourcebar.jsx";
 
 /**
  * Represents the main page of the map component.
+ *
  * @returns {JSX.Element} MapMainpage component.
  */
+
 function MapMainpage()
 {
     const [menuVisible, setMenuVisible] = useState(false)

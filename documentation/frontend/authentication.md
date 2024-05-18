@@ -13,6 +13,8 @@ When you click on the login button, the event handler "HandleLoginClick" is call
 If the user exists, then the settlement ID (sid), which is returned by the API, is stored and navigation to the main page is initiated. 
 If the login fails, the errormessage state is updated to inform the user of incorrect credentials, displayed alongside an exclamation icon.
 
+You can also log in by clicking on the Enter Button
+
 # Sign-up page
 
 The function "RegistrationPage()", defined in the signUp.jsx file, is the component that generates the registration interface. 
@@ -23,4 +25,5 @@ The event handler "HandleLoginClick" is replaced by "HandleSaveClick". This even
 Next, it checks if the username already exists by consulting the database through an API call. If the username is not taken, the new user can proceed with the registration. 
 Their settlement ID (sid) will be saved, and they will be directed to the main page. If the username is already taken, an error message will appear, indicating that the user already exists.
 
+You can also sign up by clicking on the Enter Button
 

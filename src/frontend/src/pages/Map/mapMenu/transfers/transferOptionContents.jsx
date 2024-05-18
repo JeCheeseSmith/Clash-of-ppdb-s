@@ -13,11 +13,17 @@ import {updateTimers} from "../../../../globalComponents/backgroundFunctions/upd
 
 
 /**
- * Component for social options.
+ * Component for displaying different transfer options based on the provided page name.
+ *
  * @param {Object} props - The props object.
- * @param {string} props.pageName - The name of the page ('createClan', 'joinClan', 'requests', 'searchPerson').
- * @returns {JSX.Element} - The JSX for social options.
+ * @param {string} props.pageName - The name of the page ('Transfer', 'Attack', 'Espionage', 'Information').
+ * @param {Object} props.selectedObject - The selected object for transfer.
+ * @param {boolean} props.outpostChosen - Flag indicating if an outpost is chosen.
+ * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
+ * @param {function} props.setTimers - Function to set timers for updates.
+ * @returns {JSX.Element} - The JSX for displaying transfer options.
  */
+
 function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpdate, setTimers})
 {
     return(
@@ -31,6 +37,18 @@ function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpda
 }
 
 export default TransferOption;
+
+
+/**
+ * Component for the transfer page within TransferOption.
+ *
+ * @param {Object} props - The props object.
+ * @param {Object} props.selectedObject - The selected object for transfer.
+ * @param {boolean} props.outpostChosen - Flag indicating if an outpost is chosen.
+ * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
+ * @param {function} props.setTimers - Function to set timers for updates.
+ * @returns {JSX.Element} - The JSX for the transfer page.
+ */
 
 function TransferPage({selectedObject, outpostChosen, setCallForUpdate, setTimers})
 {
@@ -148,6 +166,16 @@ function TransferPage({selectedObject, outpostChosen, setCallForUpdate, setTimer
     );
 }
 
+/**
+ * Component for the attack page within TransferOption.
+ *
+ * @param {Object} props - The props object.
+ * @param {Object} props.selectedObject - The selected object for transfer.
+ * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
+ * @param {function} props.setTimers - Function to set timers for updates.
+ * @returns {JSX.Element} - The JSX for the attack page.
+ */
+
 function AttackPage({selectedObject, setCallForUpdate, setTimers})
 {
     const {username, sid} = useLocation().state
@@ -216,6 +244,13 @@ function AttackPage({selectedObject, setCallForUpdate, setTimers})
     )
 }
 
+/**
+ * Component for the espionage page within TransferOption.
+ *
+ * @param {Object} props - The props object.
+ * @param {Object} props.selectedObject - The selected object for transfer.
+ * @returns {JSX.Element} - The JSX for the espionage page.
+ */
 
 function EspionagePage({selectedObject})
 {

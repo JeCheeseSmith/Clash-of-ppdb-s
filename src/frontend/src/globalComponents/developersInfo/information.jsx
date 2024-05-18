@@ -1,6 +1,17 @@
 import React from 'react';
 import './Information.css'
 
+
+/**
+ * A React functional component that displays information about the last update
+ * and a feedback message for a game in development.
+ *
+ * @component
+ * @example
+ * return (
+ *   <Information />
+ * )
+ */
 function Information()
 {
     return (
