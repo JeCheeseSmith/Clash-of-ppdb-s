@@ -27,6 +27,7 @@ function MapMainpage()
     const [timers, setTimers] = useState([])
     const [callForUpdate, setCallForUpdate] = useState(false)
     const [instantCallForUpdate, setInstantCallForUpdate] = useState(false)
+    const [refresh, setRefresh] = useState(true)
     const handleOutpostButton = () =>
     {
         setOutpostChosen(!outpostChosen)
@@ -45,7 +46,12 @@ function MapMainpage()
                     />
                 </div>)
             }
-            <ResourceBar resources={resources} setCallForUpdate={setCallForUpdate}/>
+            <ResourceBar resources={resources} refresh={refresh} refreshFunction={() =>
+            {
+                setCallForUpdate(true)
+                setRefresh(false)
+            }}
+            />
             <Outpost onClickFunction={handleOutpostButton}/>
             <Chat/>
             <Account/>
@@ -65,6 +71,8 @@ function MapMainpage()
                          setCallForUpdate={setCallForUpdate}
                          instantCallForUpdate={instantCallForUpdate}
                          setInstantCallForUpdate={setInstantCallForUpdate}
+                         refresh={refresh}
+                         setRefresh={setRefresh}
             />
         </div>
     );
