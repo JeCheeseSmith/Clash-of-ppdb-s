@@ -28,7 +28,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | [clanRequest](#clanRequest)         | Specialization on request type                                                 |
 | [friendRequest](#friendRequest)     | Specialization on request type                                                 |
 | [settlement](#settlement)           | Store and link all data from a settlement                                      |
-| [admin](#admin)                     | Contains the users who are also admins                                         |
 | [clan](#clan)                       | Contains all current clans and their info                                      |
 | [achievement](#achievement)         | Stores the different achievements                                              |
 | [transfer](#transfer)               | Keeps all the active transfers between settlements                             |
@@ -47,7 +46,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | [shared](#shared)                 | Messages displayed in a groups chat from a clan           |
 | [troops](#troops)                 | Relation to stores troops connected to a package          |
 | [unlocked](#unlocked)             | Relation to express if a building or soldier is unlocked  |
-| [wheelofFortune](#wheelofFortune) | Interactive relation for the spin on the Wheel of Fortune |
 | [achieved](#achieved)             | Stores the achievements a player made                     |
 
 ### soldier
@@ -79,13 +77,14 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### player
 
-| Name     | Type      | Explanation                                               |
-|----------|-----------|-----------------------------------------------------------|
-| name     | VARCHAR   | PRIMARY KEY                                               |
-| password | VARCHAR   | Authentication                                            |
-| xp       | BIGINT    | Amount of current experience, used to calculate the level |
-| level    | INT       | Level                                                     |
-| logout   | TIMESTAMP | Last time a player logged out at this time                |
+| Name          | Type      | Explanation                                               |
+|---------------|-----------|-----------------------------------------------------------|
+| name          | VARCHAR   | PRIMARY KEY                                               |
+| password      | VARCHAR   | Authentication                                            |
+| xp            | BIGINT    | Amount of current experience, used to calculate the level |
+| level         | INT       | Level                                                     |
+| logout        | TIMESTAMP | Last time a player logged out at this time                |
+| last_timespin | TIMESTAMP | Last time a player span the wheel                         | 
 
 ### content
 

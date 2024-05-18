@@ -33,7 +33,8 @@ CREATE TABLE IF NOT EXISTS player(
     password VARCHAR NOT NULL,
     xp BIGINT,
     level INT,
-    logout TIMESTAMP -- Last time a player logged out at this time
+    logout TIMESTAMP, -- Last time a player logged out at this time
+    last_timespin TIMESTAMP -- Last time a player span the wheel of fortune
 );
 
 CREATE TABLE IF NOT EXISTS content(
@@ -163,13 +164,6 @@ CREATE TABLE IF NOT EXISTS unlocked(
     sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
     maxNumber INT,
     PRIMARY KEY (sid,name)
-);
-
-CREATE TABLE IF NOT EXISTS wheelofFortune(
-    pname VARCHAR REFERENCES player(name) ON DELETE CASCADE ON UPDATE CASCADE,
-    sid INT REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    last_timespin TIMESTAMP,
-    PRIMARY KEY (sid,pname)
 );
 
 CREATE TABLE IF NOT EXISTS achieved(
