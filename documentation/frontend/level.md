@@ -1,6 +1,6 @@
 # Level
 
-The LevelBar function, defined in Level.jsx, is responsible for rendering the level and the xp-bar.
+The LevelBar function, defined in Level.jsx, is responsible for rendering the level and the xp-bar. They are located in the top left corner.
 This function takes two parameters: 'vlag' and 'changeVlag'. Within this function, two states are initialized: 'level' and 'xp'. The player's username is also retrieved from the login page/sign-up page. 
 'level' represents the player's current level.
 
