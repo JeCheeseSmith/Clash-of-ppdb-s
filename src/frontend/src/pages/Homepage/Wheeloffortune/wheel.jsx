@@ -17,6 +17,7 @@ function WheelOfFortune ({username1,sid1,setFlag, setCallForUpdate}) {
   // Variable to set the prize itself, initially an empty string
   const [prize, setPrize] = useState('');
   const [canSpin, setCanSpin] = useState();
+  const [spinStatus, setSpinStatus] = useState(false);
 
 
   // This function handles the toggle-wheel-button click
@@ -44,7 +45,7 @@ function WheelOfFortune ({username1,sid1,setFlag, setCallForUpdate}) {
         setShowPrize(false);
         setFlag(true)
         setCallForUpdate(true)
-      }, 8000);
+      }, 8500);
 
        setTimeout(async () => {
          const arrowAngle = (390 - (newRotation % 360)) % 360;
@@ -56,7 +57,10 @@ function WheelOfFortune ({username1,sid1,setFlag, setCallForUpdate}) {
        setCanSpin(false);
      } else {
        setIsMenuOpen(false)
-       alert("You can only spin the wheel once a day.");
+       setSpinStatus(true)
+       setTimeout(() => {
+        setSpinStatus(false)
+      }, 2000);
      }
    };
 
@@ -112,6 +116,13 @@ function WheelOfFortune ({username1,sid1,setFlag, setCallForUpdate}) {
                 <div className={"segments-wheel"} style={{ "--i": 10, "--clr": "#00bfff" }}><span>Jackpot</span></div>
               </div>
             </div>
+        )}
+        {spinStatus &&(
+                  <div className="prize">
+                    <div className="prize-content">
+                      <p>{"You have already spin today!"}</p>
+                    </div>
+                  </div>
         )}
         {/* So when the spin is finished with spinning then the spin wil go away and the prize will be show as a popup */}
         {showPrize && (

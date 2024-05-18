@@ -4,13 +4,10 @@
 
 We would like to store the majority of our information in the database. This allows us to shut down the activity of a specific user totally when the user is not playing. 
 
-1. Each Clan Request is a message and has a status. It is created by a NonMember and SendTo the ClanLeader and so on shared with the Guild.
-2. Transfer Request is created by a friended Member (incl. Guild)| send to another person.
-3. An Update/Report should be created by the system/admin user.
-4. A package consists of resources and troops. All troops are used to defend the package.
-5. A transfer has a relation from and a relation to| to a settlement. This way a transfer can be easily changed to be captured by another nation.
-6. The format we use for polynomial functions is e.g.: [50,5,10] which translates to f(x)=50x^2 + 5x + 10. The array length is undefined, however it may not start with a **0**!
-7. The format we use for exponential function is e.g.: [0,50,1] which translates to: 50* **2^x** + 1. This form can only be expressed in an array of length 2.
+1. An Update/Report should be created by the system/admin user.
+2. A package consists of resources and troops. All troops are used to defend the package.
+3. The format we use for polynomial functions is e.g.: [50,5,10] which translates to f(x)=50x^2 + 5x + 10. The array length is undefined, however it may not start with a **0**!
+4. The format we use for exponential function is e.g.: [0,50,1] which translates to: 50* **2^x** + 1. This form can only be expressed in an array of length 2.
 
 A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole current database and creates a new one.
 
@@ -57,7 +54,8 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 | Name         | Type    | Explanation                                                                        |
 |--------------|---------|------------------------------------------------------------------------------------|
-| name         | VARCHAR | PRIMARY KEY                                                                        | Unique identifier & name                                             |
+| id           | INT     | PRIMARY KEY                                                                        |
+| name         | VARCHAR | Unique name                                                                        |                                            |
 | type         | VARCHAR | The soldiers specialization                                                        |
 | health       | INT     | Amount of health a soldier has                                                     |
 | damage       | INT     | Amount of damage a soldier does towards others                                     |
@@ -78,7 +76,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | steel | BIGINT | Amount of resource   |
 | food  | BIGINT | Amount of resource   |
 | gems  | BIGINT | Amount of resource   |
-| xp    | BIGINT | Amount of experience |
 
 ### player
 
@@ -86,8 +83,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 |----------|-----------|-----------------------------------------------------------|
 | name     | VARCHAR   | PRIMARY KEY                                               |
 | password | VARCHAR   | Authentication                                            |
-| avatar   | VARCHAR   | String to the avatar path                                 |
-| gems     | BIGINT    | Amount of gems, a special resource to fasten the game     |
 | xp       | BIGINT    | Amount of current experience, used to calculate the level |
 | level    | INT       | Level                                                     |
 | logout   | TIMESTAMP | Last time a player logged out at this time                |
@@ -96,7 +91,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 | Name    | Type      | Explanation                         |
 |---------|-----------|-------------------------------------|
-| 
 | id      | INT       | PRIMARY KEY                         |
 | moment  | TIMESTAMP | Moment of generation of the content |
 | content | TEXT      | The actual text                     |
@@ -112,7 +106,7 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 | Name   | Type | Explanation                   |
 |--------|------|-------------------------------|
-| id     | INT  | ID of Message; specialization |
+| id     | INT  | ID of Content; specialization |
 | accept | BOOL | Status of the request         |
 
 ### clanRequest
@@ -126,12 +120,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | Name | Type | Explanation                   |
 |------|------|-------------------------------|
 | id   | INT  | ID of Request; specialization |
-
-### admin
-
-| Name | Type | Explanation                  |
-|------|------|------------------------------|
-| id   | INT  | ID of Player; specialization |
 
 ### clan
 
@@ -155,11 +143,12 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### achievement
 
-| Name | Type    | Explanation                        |
-|------|---------|------------------------------------|
-| name | VARCHAR | PRIMARY KEY,                       |
-| task | TEXT    | Description of the tasks to do     |
-| pid  | INT     | Contains Relation (See ER-Diagram) |
+| Name    | Type    | Explanation                                   |
+|---------|---------|-----------------------------------------------|
+| name    | VARCHAR | PRIMARY KEY,                                  |
+| task    | TEXT    | Description of the tasks to do                |
+| xpBonus | INT     | Reward in xp amount for completing the action |
+| pid     | INT     | Contains Relation (See ER-Diagram)            |
 
 ### transfer
 
@@ -180,10 +169,10 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 |-----------------|----------|-----------------------------------------------------------------------------------------------------|
 | name            | VARCHAR  | PRIMARY KEY                                                                                         |
 | type            | VARCHAR  | The type of the building; Political,  Decoration, Resources, ...                                    |
-| function        | TEXT     | The mathematical function to evaluate the resource function with                                    |
-| upgradeFunction | TEXT     | Mathematical formula that takes the level as input to calculate upgrade resource                    |
+| function        | FLOAT4[] | The mathematical function to evaluate the resource function with                                    |
+| upgradeFunction | INT[]    | Mathematical formula that takes the level as input to calculate upgrade resource                    |
 | upgradeResource | SMALLINT | Defines which resources are needed to build: 1: Stone, 2: Wood, 3: Steel, 4: Food, 12: Stone & Wood |
-| timeFunction    | TEXT     | Mathematical formula that describes the building time needed                                        |
+| timeFunction    | INT[]    | Mathematical formula that describes the building time needed                                        |
 
 ### building
 
@@ -202,7 +191,7 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 |----------|-----------|------------------------------------------------------------------------|
 | id       | INT       | PRIMARY KEY                                                            |
 | oid      | INT       | Unique Identifier of the Object we are referring to (e.g. building ID) |
-| name     | TEXT      | Type of the object the id is referring to (e.g. building.name)         |
+| type     | TEXT      | Type of the object the id is referring to (e.g. building.name)         |
 | start    | TIMESTAMP | Start of the timer                                                     |
 | done     | TIMESTAMP | End of the timer                                                       |
 | duration | BIGINT    | Duration in seconds (done-start)                                       |
@@ -249,16 +238,16 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 | Name      | Type    | Explanation                                                                |
 |-----------|---------|----------------------------------------------------------------------------|
-| bname     | VARCHAR | Name of the soldier or buildable                                           |
+| name      | VARCHAR | Name of the soldier or buildable                                           |
 | sid       | INT     | Buildable or soldier which is unlocked by the settlement, specified by sid |
 | maxNumber | INT     | Maximum number of entries a settlement may have of this type               |
 
 ### wheelofFortune
 
-| Name  | Type      | Explanation                           |
-|-------|-----------|---------------------------------------|
-| pname | VARCHAR   | Name of the player spinning the wheel |
-| sid   | INT       | Sid of the player main settlement     |
+| Name          | Type      | Explanation                           |
+|---------------|-----------|---------------------------------------|
+| pname         | VARCHAR   | Name of the player spinning the wheel |
+| sid           | INT       | Sid of the player main settlement     |
 | last_timespin | TIMESTAMP | Stored time of the last spin          |
 
 

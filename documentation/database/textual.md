@@ -4,14 +4,14 @@
 ### General
 
 The general idea is that the user own and manages a settlement. They create resources and upgrades/builds their own buildings to increase their level.
-A player can train different types of soldiers and attack other players or NPCs. The main gameplay centers around sending "packages/transfers" around the world. 
+A player can train different types of soldiers and attack other players. The main gameplay centers around sending "packages/transfers" around the world. 
 A transfer can be an attack to another settlement or another transfer that currently travels around the map.
 You can capture and recapture transfers as long they move around the globe. Stealing each others transfer is an essential game mechanic!
 Multiple enhancements are added to improve the user experience; social menu's, quests, levels & guilds. 
 
 
 ### Player
-Players are uniquely identified by their username. The login is only password protected and optionally the (relative) path of an avatar can be set to display a users profile.
+Players are uniquely identified by their username. The login is only password protected.
 Each player has an amount of gems, a level and associated XP. The last logout timestamp is kept to recalculate the resources for a user on login. 
 
 It is possible to achieve Achievements which are uniquely identified by a name. A task is given.

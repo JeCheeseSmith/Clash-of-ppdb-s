@@ -35,19 +35,19 @@ def presets(connection):
     soldier_data_acces.dbconnect = temp_connection
     transfer_data_acces.dbconnect = temp_connection
 
-    Player_obj = Player(name='a', password='', avatar=None, xp=0, level=1, logout=None, pid=None)
+    Player_obj = Player(name='a', password='', xp=0, level=1, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     friend_data_access.add_admin('a')
 
-    Player_obj = Player(name='b', password='', avatar=None, xp=0, level=1, logout=None, pid=None)
+    Player_obj = Player(name='b', password='',xp=0, level=1, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     friend_data_access.add_admin('b')
 
-    Player_obj = Player(name='c', password='', avatar=None, xp=0, level=1, logout=None, pid=None)
+    Player_obj = Player(name='c', password='',xp=0, level=1, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     friend_data_access.add_admin('c')
 
-    Player_obj = Player(name='d', password='', avatar=None, xp=0, level=1, logout=None, pid=None)
+    Player_obj = Player(name='d', password='', xp=0, level=1, logout=None, pid=None)
     player_data_access.add_user(Player_obj, settlement_data_acces, content_data_access, package_data_acces)
     friend_data_access.add_admin('d')
 

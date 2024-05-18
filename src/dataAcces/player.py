@@ -5,17 +5,16 @@ from .package import *
 
 
 class Player:
-    def __init__(self, name, password, avatar, xp, level, logout, pid):
+    def __init__(self, name, password, xp, level, logout, pid):
         self.name = name
         self.password = password
-        self.avatar = avatar
         self.xp = xp
         self.level = level
         self.logout = logout
         self.pid = pid
 
     def to_dct(self):
-        return {'name': self.name, 'password': self.password, 'avatar': self.avatar, 'xp': self.xp,
+        return {'name': self.name, 'password': self.password, 'xp': self.xp,
                 'level': self.level, 'logout': self.logout, 'pid': self.pid}
 
 
@@ -48,8 +47,8 @@ class PlayerDataAccess:
 
             # Create the player
             cursor.execute(
-                'INSERT INTO player(name,password,xp,level,avatar,logout) VALUES(%s,%s,%s,%s,%s,now());',
-                (obj.name, obj.password, obj.xp, obj.level, obj.avatar))
+                'INSERT INTO player(name,password,xp,level,logout) VALUES(%s,%s,%s,%s,%s,now());',
+                (obj.name, obj.password, obj.xp, obj.level))
 
             # Create a package for the settlement
             pid = package_data_acces.add_resources(
