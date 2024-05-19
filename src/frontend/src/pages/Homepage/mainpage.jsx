@@ -32,7 +32,8 @@ function MainPage()
     const randomArray = useMemo(getRandomArray, []); // Memoize the random array
     const [flag, setFlag] = useState(true);
     const [callForUpdate, setCallForUpdate] = useState(false)
-
+    const [instantCallForUpdate, setInstantCallForUpdate] = useState(false)
+    const [refresh, setRefresh] = useState(true)
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
@@ -74,16 +75,22 @@ function MainPage()
             <Leaderboard/>
             <Chat/>
             <SocialBox/>
-            <WheelOfFortune username1={username} sid1={sid} setFlag={setFlag} setCallForUpdate={setCallForUpdate}/>
+            <WheelOfFortune username1={username} sid1={sid} setFlag={setFlag} setCallForUpdate={setInstantCallForUpdate}/>
             <Account/>
-            <Buildmenu buildings={buildings} addBuilding={addBuilding} setCallForUpdate={setCallForUpdate}/>
+            <Buildmenu buildings={buildings} addBuilding={addBuilding} setCallForUpdate={setInstantCallForUpdate}/>
             <div className={"grid"}>
                 <Grid buildings={buildings}
                       randomArray={randomArray}
                       getTimer={getTimer}
-                      setCallForUpdate={setCallForUpdate}/>
+                      setCallForUpdate={setCallForUpdate}
+                />
             </div>
-            <ResourceBar resources={resources} setCallForUpdate={setCallForUpdate}/>
+            <ResourceBar resources={resources} refresh={refresh} refreshFunction={() =>
+            {
+                setCallForUpdate(true)
+                setRefresh(false)
+            }}
+            />
             <MapButton/>
             <SoldierMenu setResources={setResources} timers={timers} setTimers={setTimers}/>
             <LocalTimers setResources={setResources}
@@ -92,6 +99,10 @@ function MainPage()
                          setFlag={setFlag}
                          callForUpdate={callForUpdate}
                          setCallForUpdate={setCallForUpdate}
+                         instantCallForUpdate={instantCallForUpdate}
+                         setInstantCallForUpdate={setInstantCallForUpdate}
+                         refresh={refresh}
+                         setRefresh={setRefresh}
             />
         </div>
     );

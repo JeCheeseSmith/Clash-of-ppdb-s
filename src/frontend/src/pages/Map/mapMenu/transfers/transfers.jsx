@@ -10,12 +10,11 @@ import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
  * @param {boolean} props.outpostChosen - A boolean indicating if an outpost is chosen.
  * @param {object} props.selectedObject - The selected object.
  * @param {Function} props.setMenuVisible - A function to set the visibility of the menu.
- * @param {Function} props.setCallForUpdate - A function to trigger an update.
- * @param {Function} props.setTimers - A function to set timers for updates.
+ * @param {Function} props.setInstantCallForUpdate - A function to trigger an update.
  * @returns {JSX.Element} TransferMenu component.
  */
 
-function TransferMenu({outpostChosen, selectedObject, setMenuVisible, setCallForUpdate, setTimers})
+function TransferMenu({outpostChosen, selectedObject, setMenuVisible, setInstantCallForUpdate})
 {
     const renderedOutpostChosen = !!(!outpostChosen && selectedObject[2])
     const [popUp, setPopup] = useState(!!(!outpostChosen && selectedObject[2]));
@@ -23,7 +22,7 @@ function TransferMenu({outpostChosen, selectedObject, setMenuVisible, setCallFor
         <>
             {!renderedOutpostChosen &&
                 <div>
-                    <Navbar outpostChosen={outpostChosen} selectedObject={selectedObject} setCallForUpdate={setCallForUpdate} setTimers={setTimers}/>
+                    <Navbar outpostChosen={outpostChosen} selectedObject={selectedObject} setInstantCallForUpdate={setInstantCallForUpdate}/>
                     <button className={"close-transfer-menu"} onClick={() => setMenuVisible(false)}>
                         <span className="transition"></span>
                         <span className="gradient"></span>
@@ -44,12 +43,11 @@ export default TransferMenu;
  * @param {object} props - The props object.
  * @param {boolean} props.outpostChosen - A boolean indicating if an outpost is chosen.
  * @param {object} props.selectedObject - The selected object.
- * @param {Function} props.setCallForUpdate - A function to trigger an update.
- * @param {Function} props.setTimers - A function to set timers for updates.
+ * @param {Function} props.setInstantCallForUpdate - A function to trigger an update.
  * @returns {JSX.Element} Navbar component.
  */
 
-function Navbar({outpostChosen, selectedObject, setCallForUpdate, setTimers})
+function Navbar({outpostChosen, selectedObject, setInstantCallForUpdate})
 {
     const [currentPage, setCurrentPage] = useState(outpostChosen ? 'Transfer' : 'Information');
 
@@ -106,8 +104,7 @@ function Navbar({outpostChosen, selectedObject, setCallForUpdate, setTimers})
                 currentPage && (<TransferOption pageName={currentPage}
                                                 selectedObject={selectedObject}
                                                 outpostChosen={outpostChosen}
-                                                setCallForUpdate={setCallForUpdate}
-                                                setTimers={setTimers}
+                                                setInstantCallForUpdate={setInstantCallForUpdate}
                 />)
             }
         </div>

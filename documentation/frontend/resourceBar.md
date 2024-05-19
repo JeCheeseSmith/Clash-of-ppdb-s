@@ -12,4 +12,5 @@ In the 'MainPage' function, two states are initialized: 'resources' and 'callFor
 'ResourceBar' as arguments.
 
 The variable 'resources' is used to display the amount of each resource. When you click on a resource or the refresh button, 'setCallForUpdate' sets the value of 'callForUpdate' to 'true'. This will update the amount of each resource.
+But you can only refresh them after each 30 seconds.
 

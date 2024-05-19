@@ -42,6 +42,7 @@
   cursor: pointer;
 }
 
+.updateResources-button-timout,
 .updateResources-button {
   top: 5px;
   left: 63.4%;
@@ -50,6 +51,10 @@
   width: 73px;
   height: 73px;
   transition: transform 0.4s;
+}
+
+.updateResources-button-timout {
+    filter: grayscale(100%);
 }
 
 .updateResources-button:hover {

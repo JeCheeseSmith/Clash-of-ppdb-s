@@ -9,14 +9,33 @@ import PlaySound from "../audioComponent/audio.jsx";
  * @param {Function} props.setResources - A function to set the resources.
  * @param {Array} props.timers - An array containing timer objects.
  * @param {Function} props.setTimers - A function to set the timers.
+ * @param {Function} props.setSettlements - A function to set the settlements.
+ * @param {Function} props.setFlag - A function to set the flag.
+ * @param {boolean} props.callForUpdate - A boolean indicating if an update is requested.
+ * @param {Function} props.setCallForUpdate - A function to set the update request.
+ * @param {boolean} props.instantCallForUpdate - A boolean indicating if an instant update is requested.
+ * @param {Function} props.setInstantCallForUpdate - A function to set the instant update request.
  * @returns {null} Null component.
  */
-
-function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, callForUpdate, setCallForUpdate})
+function LocalTimers(
+    {
+        setResources,
+        timers,
+        setTimers,
+        setSettlements,
+        setFlag,
+        callForUpdate,
+        setCallForUpdate,
+        instantCallForUpdate,
+        setInstantCallForUpdate,
+        refresh,
+        setRefresh
+    })
 {
     const { sid, username } = useLocation().state
     const location = useLocation();
     const [updateTime, setUpdateTime] = useState(null)
+    const timeout = 30000
     const update = () =>
     {
         updateResources(sid, setResources)
@@ -26,23 +45,43 @@ function LocalTimers({setResources, timers, setTimers, setSettlements, setFlag, 
             updateMap(username, setSettlements)
         }
     }
-    useEffect(() =>
+    useEffect(() => // Changing Refreshing Button
+    {
+        if (!refresh)
+        {
+            const timer = setTimeout(() =>
+            {
+                setRefresh(true);
+            }, timeout);
+            return () => clearTimeout(timer);
+        }
+    }, [refresh]);
+    useEffect(() => // Updating With Timeout
     {
         if (callForUpdate)
         {
             const currentTime = Date.now();
             if (updateTime === null)
             {
+                update()
                 setUpdateTime(Date.now())
             }
-            else if (currentTime - updateTime >= 30000)
+            else if (currentTime - updateTime >= timeout)
             {
-                update();
+                update()
                 setUpdateTime(Date.now())
             }
             setCallForUpdate(false);
         }
     }, [callForUpdate, updateTime]);
+    useEffect(() => // Updating Without Timeout
+    {
+        if (instantCallForUpdate)
+        {
+            update();
+            setInstantCallForUpdate(false);
+        }
+    }, [instantCallForUpdate]);
     useEffect(() => // Updating Game Essentials After Each 15 Minutes
     {
         update() // do this twice, because without the first time, resources are going to be 0

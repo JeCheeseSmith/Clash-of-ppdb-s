@@ -9,7 +9,6 @@ import InformationTab from "../information/informationTab.jsx";
 import * as API from '../../../../api/EndPoints.jsx'
 import {useLocation} from "react-router-dom";
 import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
-import {updateTimers} from "../../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
 
 
 /**
@@ -24,12 +23,12 @@ import {updateTimers} from "../../../../globalComponents/backgroundFunctions/upd
  * @returns {JSX.Element} - The JSX for displaying transfer options.
  */
 
-function TransferOption({pageName, selectedObject, outpostChosen, setCallForUpdate, setTimers})
+function TransferOption({pageName, selectedObject, outpostChosen, setInstantCallForUpdate})
 {
     return(
         <div className={"option-content"}>
-            {pageName === 'Transfer' && <TransferPage selectedObject={selectedObject} outpostChosen={outpostChosen} setCallForUpdate={setCallForUpdate} setTimers={setTimers}/>}
-            {pageName === 'Attack' && <AttackPage selectedObject={selectedObject} setCallForUpdate={setCallForUpdate} setTimers={setTimers}/>}
+            {pageName === 'Transfer' && <TransferPage selectedObject={selectedObject} outpostChosen={outpostChosen} setInstantCallForUpdate={setInstantCallForUpdate}/>}
+            {pageName === 'Attack' && <AttackPage selectedObject={selectedObject} setInstantCallForUpdate={setInstantCallForUpdate}/>}
             {pageName === 'Espionage' && <EspionagePage selectedObject={selectedObject}/>}
             {pageName === 'Information' && <InformationTab selectedObject={selectedObject}/>}
         </div>
@@ -45,12 +44,11 @@ export default TransferOption;
  * @param {Object} props - The props object.
  * @param {Object} props.selectedObject - The selected object for transfer.
  * @param {boolean} props.outpostChosen - Flag indicating if an outpost is chosen.
- * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
- * @param {function} props.setTimers - Function to set timers for updates.
+ * @param {function} props.setInstantCallForUpdate - Function to set a flag to trigger an update.
  * @returns {JSX.Element} - The JSX for the transfer page.
  */
 
-function TransferPage({selectedObject, outpostChosen, setCallForUpdate, setTimers})
+function TransferPage({selectedObject, outpostChosen, setInstantCallForUpdate})
 {
     const {username, sid} = useLocation().state
     const [popup, setPopup] = useState(false)
@@ -100,8 +98,7 @@ function TransferPage({selectedObject, outpostChosen, setCallForUpdate, setTimer
                 else
                 {
                     setErrorMessage("We're dispatching our forces and provisions to aid our ally's stronghold.")
-                    setCallForUpdate(true)
-                    updateTimers(username, setTimers)
+                    setInstantCallForUpdate(true)
                 }
                 setPopup(true)
             })
@@ -117,7 +114,7 @@ function TransferPage({selectedObject, outpostChosen, setCallForUpdate, setTimer
                 else
                 {
                     setErrorMessage("We're sending troops and supplies to bolster our outpost!")
-                    setCallForUpdate(true)
+                    setInstantCallForUpdate(true)
                 }
                 setPopup(true)
             })
@@ -176,7 +173,7 @@ function TransferPage({selectedObject, outpostChosen, setCallForUpdate, setTimer
  * @returns {JSX.Element} - The JSX for the attack page.
  */
 
-function AttackPage({selectedObject, setCallForUpdate, setTimers})
+function AttackPage({selectedObject, setInstantCallForUpdate})
 {
     const {username, sid} = useLocation().state
     const [popup, setPopup] = useState(false)
@@ -218,8 +215,7 @@ function AttackPage({selectedObject, setCallForUpdate, setTimers})
             else
             {
                 setErrorMessage("We're laying siege to the enemy stronghold.")
-                setCallForUpdate(true)
-                updateTimers(username, setTimers)
+                setInstantCallForUpdate(true)
             }
             setPopup(true)
         })
