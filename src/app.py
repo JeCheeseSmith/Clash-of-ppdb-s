@@ -617,9 +617,6 @@ def transfer():
     """
     data = request.json
 
-    print(data.get('resources'))
-    print(data.get('soldiers'))
-
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
                                                         False, data.get('soldiers'),
                                                         data.get('resources'), data.get('tType'), data.get('pname'),

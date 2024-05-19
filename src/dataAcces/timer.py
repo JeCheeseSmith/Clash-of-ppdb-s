@@ -393,7 +393,6 @@ SELECT id FROM transfer WHERE discovered=True
             spid = cursor.fetchone()[0]
         sp = transfer_data_acces.instantiatePackageWithSoldiers(spid, soldier_data_acces,
                                                                 package_data_acces)  # Package going to
-
         # Update correct data in the database
         sp += tp
         package_data_acces.update_resources(sp)

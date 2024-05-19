@@ -390,35 +390,35 @@ class PackageDataAccess:
                 if building[1] == "WoodCuttersCamp":
                     Level = building[2]
                     Generated_wood += PackageDataAccess.evaluate(Wood_function, calculated_time) * Level
-                if building[1] == "Quarry":
+                elif building[1] == "Quarry":
                     Level = building[2]
                     Generated_stone += PackageDataAccess.evaluate(Stone_function, calculated_time) * Level
-
-                if building[1] == "SteelMine":
+                elif building[1] == "SteelMine":
                     Level = building[2]
                     Generated_steel += PackageDataAccess.evaluate(Steel_function, calculated_time) * Level
-
-                if building[1] == "Farm":
+                elif building[1] == "Farm":
                     Level = building[2]
                     Generated_food += PackageDataAccess.evaluate(Food_function, calculated_time) * Level
-
-                if building[1] == "WoodStockPile":
+                elif building[1] == "WoodStockPile":
                     Level = building[2]
                     Wood += PackageDataAccess.evaluate(Wood_Storage_function, Level)
-
-                if building[1] == "StoneStockPile":
+                elif building[1] == "StoneStockPile":
                     Level = building[2]
                     Stone += PackageDataAccess.evaluate(Stone_Storage_function, Level)
-
-                if building[1] == "Armory":
+                elif building[1] == "Armory":
                     Level = building[2]
                     Steel += PackageDataAccess.evaluate(Steel_Storage_function, Level)
-
-                if building[1] == "GrainSilo":
+                elif building[1] == "GrainSilo":
                     Level = building[2]
                     Food += PackageDataAccess.evaluate(Food_Storage_function, Level)
-
-                if building[1] == "Castle":
+                elif building[1] == "Castle":
+                    Level = building[2]
+                    MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
+                    Wood += MainStorage
+                    Stone += MainStorage
+                    Steel += MainStorage
+                    Food += MainStorage
+                elif building[1] == "SatelliteCastle":
                     Level = building[2]
                     MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
                     Wood += MainStorage

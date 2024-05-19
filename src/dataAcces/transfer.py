@@ -261,7 +261,6 @@ class TransferDataAccess:
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sidFrom,))
         pid = cursor.fetchone()
 
-        print(resources)
         # Instantiate packages
         tp = PackageWithSoldier(Package(resources), soldiers)  # transferPackage
         sp = PackageWithSoldier(package_data_acces.get_resources(pid),
@@ -272,8 +271,6 @@ class TransferDataAccess:
         sp -= tp
         if sp.hasNegativeBalance():
             raise Exception(sp.deficitString())
-
-        print(sp.package.to_dct(), tp.package.to_dct())
 
         package_data_acces.add_resources(tp)  # Add the package in the database
         package_data_acces.update_resources(sp)  # Update the sp accordingly
@@ -300,8 +297,6 @@ class TransferDataAccess:
 
             # Restructure to a backend format
             soldiers = self.__restructure(soldiers, False)
-
-            print(resources)
 
             # Adjust resource & troop info
             tp = self.updateResourceTroops(idFrom, soldiers, resources, package_data_acces, soldier_data_acces, False)
