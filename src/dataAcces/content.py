@@ -76,7 +76,6 @@ class ContentDataAccess:
                                     FROM retrieved
                                     WHERE pname = %s   
                                 )
-                            LIMIT 10;
                         """
         cursor.execute(message1, (sname, pname,))
         messages = cursor.fetchall()
@@ -127,8 +126,7 @@ class ContentDataAccess:
                                             FROM shared
                                             WHERE cname = %s   
                                         )
-                                    ORDER BY message.id DESC 
-                                    LIMIT 10;
+                                    ORDER BY message.id DESC
                                 """
         cursor.execute(message1, (cname,))
         messages = cursor.fetchall()
