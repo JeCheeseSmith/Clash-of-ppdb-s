@@ -12,8 +12,11 @@ When you click on the sign-up button, the event handler "HandleSignUpClick" is c
 When you click on the login button, the event handler "HandleLoginClick" is called. This event handler checks if a user already exists by calling the API. 
 If the user exists, then the settlement ID (sid), which is returned by the API, is stored and navigation to the main page is initiated. 
 If the login fails, the errormessage state is updated to inform the user of incorrect credentials, displayed alongside an exclamation icon.
+You can also log in by clicking on the Enter Button on your keyboard.
 
-You can also log in by clicking on the Enter Button
+If the game is accessed using a computer or laptop, the login page will be displayed. Otherwise, the user will receive a message indicating that their device is not compatible.
+Additionally, the appropriateness of the username is verified.
+
 
 # Sign-up page
 
@@ -25,5 +28,7 @@ The event handler "HandleLoginClick" is replaced by "HandleSaveClick". This even
 Next, it checks if the username already exists by consulting the database through an API call. If the username is not taken, the new user can proceed with the registration. 
 Their settlement ID (sid) will be saved, and they will be directed to the main page. If the username is already taken, an error message will appear, indicating that the user already exists.
 
-You can also sign up by clicking on the Enter Button
+You can sign up by clicking on the Enter Button on your keyboard or on the 'Make Account' button.
+
+The appropriateness of the username is also verified.
 
