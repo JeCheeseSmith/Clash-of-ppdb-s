@@ -172,7 +172,23 @@ class ClanDataAccess:
         :param cname: Name of the clan
         :return:
         """
-        if not self.isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
+        cursor = self.dbconnect.get_cursor()
+        if not self.__isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
+            # Check if request doesn't exsist
+            QueryCheck = """
+                           SELECT *
+                           FROM clanrequest
+                           JOIN request ON clanrequest.id=request.id
+                           JOIN content ON request.id=content.id
+                           JOIN clan ON clan.name=%s
+                           JOIN retrieved ON retrieved.mid=request.id
+                           WHERE content.pname=%s AND request.accept IS NULL AND retrieved.pname=(SELECT pname FROM clan WHERE name=%s);
+                       """
+            cursor.execute(QueryCheck, (cname, request.sender, cname))
+            Controle = cursor.fetchone()
+            if Controle is not None:
+                return False
+
             try:
                 cursor = self.dbconnect.get_cursor()
 
