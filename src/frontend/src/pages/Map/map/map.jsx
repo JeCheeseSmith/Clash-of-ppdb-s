@@ -12,6 +12,7 @@ import textFont from './assets/MagelyfreeRegular-DOeXW.otf'
 import Capital from "./modals/Capital.jsx";
 import PlaySound from "../../../globalComponents/audioComponent/audio.jsx";
 
+const mapSize = 50;
 /**
  * Represents a component for displaying and interacting with a map.
  * @param {object} props - The props object.
@@ -21,7 +22,6 @@ import PlaySound from "../../../globalComponents/audioComponent/audio.jsx";
  * @param {Function} props.setOutpostChosen - A function to set if an outpost is chosen.
  * @returns {JSX.Element} Map component.
  */
-const mapSize = 50;
 function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen, settlements, timers})
 {
     let characteristics
@@ -76,8 +76,10 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
         );
     }
 
-    const renderSettlement = (rowIndex, colIndex) => {
-        for (let settlement of settlements) {
+    const renderSettlement = (rowIndex, colIndex) =>
+    {
+        for (let settlement of settlements)
+        {
             if (settlement.position[0] === rowIndex && settlement.position[1] === colIndex)
             {
                 if (settlement.me && !settlement.isOutpost)
@@ -182,11 +184,14 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
     );
 }
 
-function createSettlements(renderSettlement) {
+function createSettlements(renderSettlement)
+{
     const renderedCells = [];
-    for (let i = 0; i < mapSize; i++) {
+    for (let i = 0; i < mapSize; i++)
+    {
         const renderedRow = [];
-        for (let j = 0; j < mapSize; j++) {
+        for (let j = 0; j < mapSize; j++)
+        {
             renderedRow.push(renderSettlement(i, j));
         }
         renderedCells.push(renderedRow);
@@ -194,11 +199,14 @@ function createSettlements(renderSettlement) {
     return renderedCells;
 }
 
-function createTransfers(renderTransfers) {
+function createTransfers(renderTransfers)
+{
     const renderedCells = [];
-    for (let i = 0; i < mapSize; i++) {
+    for (let i = 0; i < mapSize; i++)
+    {
         const renderedRow = [];
-        for (let j = 0; j < mapSize; j++) {
+        for (let j = 0; j < mapSize; j++)
+        {
             renderedRow.push(renderTransfers(i, j));
         }
         renderedCells.push(renderedRow);
