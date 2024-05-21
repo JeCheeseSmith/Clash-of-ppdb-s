@@ -51,6 +51,18 @@ class FriendDataAccess:
         if pname == request.sender:
             return False
 
+        QueryCheck = """SELECT *
+                        FROM friendrequest
+                        JOIN request ON friendrequest.id = request.id
+                        JOIN retrieved ON request.id = retrieved.mid
+                        JOIN content ON request.id = content.id
+                        WHERE content.content=%s AND content.pname=%s AND retrieved.pname=%s AND request.accept IS NULL;
+          """
+        cursor.execute(QueryCheck, (request.content, request.sender, pname))
+        Controle = cursor.fetchone()
+        if Controle is not None:
+            return False
+
         try:
             cursor.execute('INSERT INTO content(moment,content,pname) VALUES (now(),%s,%s);',
                            (request.content, request.sender,))  # Insert the content in the database table content

@@ -50,8 +50,9 @@ function LoginPage() {
             // If the data is true (account exists), then navigate to main page.
             if (data.success) {
                 let sid = data.sid
+                const signUp = false
                 // sid and username are given to main page
-                navigate('/MainPage', { state: { sid, username }});
+                navigate('/MainPage', { state: { sid, username, signUp}});
             }
             // Display error
             else {
@@ -64,7 +65,7 @@ function LoginPage() {
       <>
           {!isMobile && !isTablet && isDesktop ?
               <div className="login-container">
-                  <Information/>
+                  {/*<Information/>*/}
                   {/* no mobile and tablet, isDesktop = {windows, ubuntu, mac, ...} */}
                   <Loader {...loaderStyles} />
                   <h1 className="gametitle">TRAVISIA</h1>
@@ -114,6 +115,7 @@ function LoginPage() {
               </div>
               : // else
               <div>
+                  <Loader {...loaderStyles} />
                   {/* smaller text for smaller device resolution */}
                   <h1 className="gametitle-wrong-device">TRAVISIA</h1>
                   <h2 className="subtitle-wrong-device">FALLEN EMPIRE</h2>

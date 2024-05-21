@@ -17,11 +17,11 @@ function QuestButton() {
     }
 
     return (
-        <div className="quest-container">
+        <>
             <button className="quest-button" onClick={HandleQuestClick}></button>
             {/* If click is true (quest-button has been clicked), then the quest log will open up */}
             {click && <QuestLog loaded={loaded}/>}
-        </div>
+        </>
     );
 }
 

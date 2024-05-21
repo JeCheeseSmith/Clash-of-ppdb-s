@@ -14,11 +14,18 @@
 - [x] Design Choices focused on a low server load
 - [x] Focus on database expandability
 - [x] Game is "user-interactive" in the sense that code only gets executed upon a user input
-- [x] Bad username filter
+- [x] Inappropriate username checker
+- [x] Username validation checker
+- [x] Narrator Intro
 
 ## Documentation
 
 For the workings of the game, refer to the [documentation](documentation) in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
+
+## Copyright Notice
+
+We don't own any right to the used artworks in our game (pictures, audio, video, 3D Models). We call upon the educational use of any potentially copyrighted materials. 
+Throughout our files and code you may find credits to the original authors. (e.g. see [buildingList](documentation/frontend/buildingList.md))
 
 ## How to start?
 

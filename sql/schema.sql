@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS timer(
     start TIMESTAMP NOT NULL,
     done TIMESTAMP NOT NULL,
     duration BIGINT NOT NULL,
-    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE -- BelongsTo relation
+    sid INT NOT NULL -- May be used as transfer id as well
 );
 
 CREATE TABLE IF NOT EXISTS friend(
@@ -177,7 +177,6 @@ CREATE TABLE IF NOT EXISTS achieved(
 
 -- Insert standard buildings
 
--- TODO change castle value back
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','storage','{12000,0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','storage','{1000,0}','{21600,21600}','{0,4000,0}',12);
 

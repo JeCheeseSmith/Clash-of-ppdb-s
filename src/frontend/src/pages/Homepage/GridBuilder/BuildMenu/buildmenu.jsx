@@ -85,32 +85,38 @@ function BuildOptions({ menuVisible, setMenuVisible, addBuildable, buildings}) {
           <ul className="buildoptions-links">
             {/* List of options */}
             <li>
-              <button onClick={() => handleButtonClick('Production')} className={"type-button"}>
+              <button onClick={() => handleButtonClick('Production')}
+                      className={currentPage === "Production" ? "type-button selected" : "type-button"}>
                 Production
               </button>
             </li>
             <li>
-              <button onClick={() => handleButtonClick('Defense')} className={"type-button"}>
+              <button onClick={() => handleButtonClick('Defense')}
+                      className={currentPage === "Defense" ? "type-button selected" : "type-button"}>
                 Defense
               </button>
             </li>
             <li>
-              <button onClick={() => handleButtonClick('Storage')} className={"type-button"}>
+              <button onClick={() => handleButtonClick('Storage')}
+                      className={currentPage === "Storage" ? "type-button selected" : "type-button"}>
                 Storage
               </button>
             </li>
             <li>
-              <button onClick={() => handleButtonClick('Governmental')} className={"type-button"}>
+              <button onClick={() => handleButtonClick('Governmental')}
+                      className={currentPage === "Governmental" ? "type-button selected" : "type-button"}>
                 Governmental
               </button>
             </li>
             <li>
-              <button onClick={() => handleButtonClick('Military')} className={"type-button"}>
+              <button onClick={() => handleButtonClick('Military')}
+                      className={currentPage === "Military" ? "type-button selected" : "type-button"}>
                 Military
               </button>
             </li>
             <li>
-              <button onClick={() => handleButtonClick('Decoration')} className={"type-button"}>
+              <button onClick={() => handleButtonClick('Decoration')}
+                      className={currentPage === "Decoration" ? "type-button selected" : "type-button"}>
                 Decoration
               </button>
             </li>

@@ -242,7 +242,7 @@ def update():
     pname = data.get('pname')
 
     if pname is not None:
-        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
+        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces, content_data_access)
         return jsonify(timers)
 
     # timers = timer_data_acces.retrieveTimers('a', transfer_data_acces) # This is for debug only
@@ -586,6 +586,7 @@ def espionage():
     }
     """
     data = request.json
+    print(data.get('idTo'), data.get('sidFrom'), data.get('toType'))
     transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'),
                                                 timer_data_acces)
 
@@ -616,6 +617,10 @@ def transfer():
     }
     """
     data = request.json
+
+    print(data.get('idTo'), data.get('toType'), data.get('idFrom'),
+                                                        False, data.get('soldiers'),
+                                                        data.get('resources'), data.get('tType'), data.get('pname'))
 
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
                                                         False, data.get('soldiers'),

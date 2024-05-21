@@ -75,7 +75,9 @@ class ContentDataAccess:
                                     SELECT mid
                                     FROM retrieved
                                     WHERE pname = %s   
-                                )
+                                ) ORDER BY content.moment DESC
+                                LIMIT 10
+
                         """
         cursor.execute(message1, (sname, pname,))
         messages = cursor.fetchall()

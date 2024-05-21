@@ -1,6 +1,7 @@
 import React from 'react';
 import './mapButton.css'
 import {useLocation, useNavigate} from "react-router-dom";
+import map from '../../../assets/mapLogo.png'
 
 /**
  * Represents a button component for navigating to the map.
@@ -15,7 +16,10 @@ function MapButton()
         navigate('/Map', { state: { sid, username}});
     };
     return (
-        <button className={"map-button"} onClick={handleMapButton}>Map</button>
+        <button onClick={() => {handleMapButton}} className={"map-button"}>
+            <div className={"map-button-name"}>Map</div>
+            <img src={map} className="map-button-icon"/>
+        </button>
     );
 }
 

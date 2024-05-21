@@ -31,14 +31,15 @@ function RegistrationPage() {
     let navigate = useNavigate();
 
     const handleSaveClick = async () => {
-        if (username.trim() !== "" && password.trim() !== "" && !filter.isProfane(username)) {
+        if (username.trim() !== "" && password.trim() !== "" && !filter.isProfane(username) && username.length <= 12) {
             // Calls the API and stores the returned value in data
             const data = await POST({ name: username, password: password }, "/signup");
             // If the data is true (account doesn't exist), then navigate to main page
             if (data.success) {
                 let sid = data.sid
+                const signUp = true
                 // sid and username are given to main page
-                navigate('/MainPage', { state: { sid, username }});
+                navigate('/MainPage', { state: { sid, username, signUp}});
             }
             // Display error
             else {
@@ -48,6 +49,9 @@ function RegistrationPage() {
         else if (filter.isProfane(username)) {
             setErrorMessage('Please choose a more suitable username to continue.')
         }
+        else if (username.length > 12) {
+            setErrorMessage('Your username must be fewer than 12 characters!')
+        }
         else {
             setErrorMessage('Username Or Password Can Not be Empty!');
         }
@@ -56,7 +60,7 @@ function RegistrationPage() {
 
     return (
         <div className="login-container">
-            <Information/>
+            {/*<Information/>*/}
             <h1 className="gametitle">TRAVISIA</h1>
             <h2 className="subtitle">FALLEN EMPIRE</h2>
             <div className="login-form">

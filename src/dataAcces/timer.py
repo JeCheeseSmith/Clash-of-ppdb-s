@@ -145,6 +145,7 @@ class TimerDataAccess:
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access,
                                       soldier_data_acces)
+                print("------------------------------------------------------------------")
             elif timer.type == 'espionage':
                 self.simulateEspionage(timer, transfer_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
@@ -231,7 +232,7 @@ class TimerDataAccess:
             print('error', e)
             self.dbconnect.rollback()
 
-    def retrieveTimers(self, pname: str, transfer_data_acces):
+    def retrieveTimers(self, pname: str, transfer_data_acces, content_data_access):
         """
         Get all timers for a certain settlement and convert to a frontend usable format
         :param transfer_data_acces:
@@ -287,6 +288,8 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('SELECT gridX,gridY FROM building WHERE id=%s and sid=%s;', (timer.oid, timer.sid))
                 newInfo["ID"] = cursor.fetchone()
             elif timer.type == 'transfer' or timer.type == 'attack' or timer.type == 'outpost':
+                if not self.__integrity(timer.oid, timer.id, content_data_access):
+                    continue
                 newInfo = self.addTransferTimerInfo(newInfo, timer, pname, transfer_data_acces, friendly)
                 newInfo["ID"] = timer.oid
 
@@ -310,6 +313,45 @@ SELECT id FROM transfer WHERE discovered=True
 
             newData.append(newInfo)
         return newData
+
+    def __integrity(self, transferID, timerID, content_data_access):
+        """
+        Check if the things we want to do on this transfer are valid (e.g. check if the transfer you're doing with goes to an existing transfer)
+        If not, False will be returned and the data is removed
+        :param transferID:
+        :param timerID:
+        :param content_data_access:
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        cursor.execute('SELECT * FROM transfer WHERE id=%s;', (transferID,))
+        transfer = cursor.fetchone()
+        tid = transfer[0]
+        idTo = transfer[2]
+        toType = transfer[3]
+        idFrom = transfer[4]
+        fromType = transfer[5]
+        pid = transfer[6]
+        pname = transfer[7]
+
+        from .content import Content
+
+        if toType:
+            cursor.execute('SELECT EXISTS( SELECT id FROM transfer WHERE id =%s);', (idTo,))
+            exist = cursor.fetchone()
+            if not exist[0]:
+                content_data_access.add_message(
+                    Content(None, datetime.now(), f"""Your transfer couldn't be made. It got lost!""",
+                            'admin'), pname)  # Notify sender
+
+                # Delete data from database
+                cursor.execute('DELETE FROM timer WHERE id=%s;', (timerID,))
+                cursor.execute('DELETE FROM transfer WHERE id=%s;', (tid,))
+                cursor.execute('DELETE FROM package WHERE id=%s;', (pid,))
+                cursor.execute('DELETE FROM troops WHERE pid=%s;', (pid,))
+                self.dbconnect.commit()
+                return False
+        return True
 
     def addTransferTimerInfo(self, newInfo: dict, timer: Timer, pname: str, transfer_data_acces, friendly: str):
         """
@@ -365,8 +407,9 @@ SELECT id FROM transfer WHERE discovered=True
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid, soldier_data_acces,
                                                                 package_data_acces)  # Transfer package
-        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
-        receiver = cursor.fetchone()[0]  # Get receivers name
+        if not transfer.toType:
+            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
+            receiver = cursor.fetchone()[0]  # Get receivers name
 
         # Notify the users at the end of a transfer
         from .content import \
@@ -374,10 +417,10 @@ SELECT id FROM transfer WHERE discovered=True
 
         if transfer.toType:  # To a transfer
             cursor.execute('SELECT pid FROM transfer WHERE id=%s;', (transfer.idTo,))
-            spid = cursor.fetchone()[0]
+            spid = cursor.fetchone()
             if spid is None:  # Transfer couldn't be met; return to base
                 content_data_access.add_message(
-                    Content(None, datetime.now(), f"""Your transfer to {receiver} couldn't be made. It got lost!""",
+                    Content(None, datetime.now(), f"""Your transfer couldn't be made. It got lost!""",
                             'admin'),
                     transfer.pname)  # Notify sender
 
@@ -387,6 +430,10 @@ SELECT id FROM transfer WHERE discovered=True
                 cursor.execute('DELETE FROM troops WHERE pid=%s;', (transfer.pid,))
                 self.dbconnect.commit()
                 return
+            else:
+                spid = spid[0]
+            cursor.execute('SELECT pname FROM transfer WHERE id=%s;', (transfer.idTo,))
+            receiver = cursor.fetchone()[0]
 
         else:  # To a settlement
             cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (transfer.idTo,))
@@ -478,6 +525,28 @@ SELECT id FROM transfer WHERE discovered=True
                                         transfer.pname)  # Notify sender
         return
 
+    def __returnToBase(self, transfer, transfer_data_acces, timer_data_access, soldier_data_acces, package_data_acces):
+        """
+        Helper function to send all transfer back home who went to 'transfer'
+        :param transfer:
+        :param transferDefendant:
+        :param transfer_data_acces:
+        :param timer_data_access:
+        :param soldier_data_acces:
+        :param package_data_acces:
+        :return:
+        """
+        cursor = self.dbconnect.get_cursor()
+        # Get transfer going to the transfer that doesn't exist anymore now
+        cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s EXCEPT SELECT %s;',
+                       (transfer.id, transfer.id))  # Except itsself
+
+        transfers = cursor.fetchall()
+        for tid in transfers:  # Send them back to where they came from
+            transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access,
+                                             soldier_data_acces, package_data_acces)
+            self.dbconnect.commit()
+
     def simulateAttack(self, timer: Timer, transfer_data_acces, content_data_access, package_data_acces,
                        soldier_data_acces, timer_data_access):
         """
@@ -535,15 +604,8 @@ SELECT id FROM transfer WHERE discovered=True
                 ap += dp
                 package_data_acces.update_resources(ap)  # Update database
 
-                # Get transfer going to the transfer that doesn't exist anymore now
-                cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s or idTo=%s EXCEPT SELECT %s;',
-                               (transferDefendant.id, transfer.id, transfer.id))
-
-                transfers = cursor.fetchall()
-                for tid in transfers:  # Send them back to where they came from
-                    transfer_data_acces.returnToBase(transfer_data_acces.instantiateTransfer(tid[0]), timer_data_access,
-                                                     soldier_data_acces, package_data_acces)
-                    self.dbconnect.commit()
+                # Get transfers going to the transfer that doesn't exist anymore now and send them back home
+                self.__returnToBase(transferDefendant, transfer_data_acces, timer_data_access, soldier_data_acces, package_data_acces)
 
                 attackerMessage = f"""We successfully captured the transfer of {defendant}! Returning home now, my Lord."""
                 defendantMessage = f"""You're transfer has been attacked and captured by {transfer.pname}!"""
@@ -576,7 +638,7 @@ SELECT id FROM transfer WHERE discovered=True
                 defendantMessage = f"""You've been attacked by {transfer.pname}!"""
 
             transfer_data_acces.returnToBase(transfer, timer_data_access, soldier_data_acces,
-                                             package_data_acces)  # Let the original transfer also return to base
+                                             package_data_acces, timer)  # Let the original transfer also return to base
             if transfer.toType:  # Delete defendant transfer, timer and package
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (transferDefendant.id,))
                 cursor.execute('DELETE FROM package WHERE id=%s;', (transferDefendant.pid,))

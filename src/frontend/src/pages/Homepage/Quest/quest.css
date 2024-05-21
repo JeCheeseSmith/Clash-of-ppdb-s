@@ -1,15 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
-.quest-container {
-    top: 0;
-    left: 0;
-    position: fixed;
-    z-index: 1;
+.quest-button {
+    position: absolute;
+    margin-left: 6px;
+    z-index: 5;
     padding-left: 10px;
     margin-top: 140px;
-}
-
-.quest-button {
     background: url(assets/quest.png) no-repeat center center;
     background-size: contain;
     width: 55px;
@@ -28,10 +24,8 @@
 .questpage-box {
     position: absolute;
     left: 550px;
-    top: 0px;
-    bottom: 10px;
-    bottom: 10px;
-    z-index: 9999;
+    top: 110px;
+    z-index: 5;
     width: 800px;
     height: 650px;
     border: 2px solid #ffd700;
@@ -44,7 +38,7 @@
     justify-content: center;
     align-items: center;
     height: 50px;
-    background-color: #DAA520;
+    background-image: linear-gradient(to right, rgb(115, 62, 0), rgb(229, 168, 0));;
     color: white;
     border-radius: 10px;
     border: 2px solid #ffd700;

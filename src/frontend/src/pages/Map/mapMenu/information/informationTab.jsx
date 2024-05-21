@@ -46,11 +46,14 @@ function InformationTab({selectedObject})
     const resources = resourcesFound(dictionary)
     return (
         <div className={"transferMenu-container"}>
+            <div className={"mapMenu-info"}>
+                Unearth hidden armies and treasures awaiting liberation. Engage in ESPIONAGE for further enlightenment!
+            </div>
             <div className={"soldierTransfer-container"}>
                 {Object.entries(Soldiers).map(([category, images]) => (
                     <div key={category}>
                         {Object.entries(images).map((image) => {
-                            const found = soldierFound(dictionary, image[0]);
+                            const found = soldierFound(dictionary, image[0], sid, sidSettlementSelected);
                             if (found[0]) {
                                 return (
                                     <div key={image[0]} className={"iconWithAmount"}>
@@ -82,25 +85,35 @@ function InformationTab({selectedObject})
                     <div className={"amount"}>{resources.food}</div>
                 </div>
             </div>
-            {outpostSelected && <button className={"send-transferTYPE"} onClick={handleNavigationButton}> Adventure Awaits at your Outpost! </button>}
-            {mainSettlementSelected && <button className={"send-transferTYPE"} onClick={handleNavigationButton}> Go Back to Main Settlement! </button>}
+            {outpostSelected && !selectedObject.toType && <button className={"navigation outpost"} onClick={handleNavigationButton}> Adventure Awaits at your Outpost! </button>}
+            {mainSettlementSelected && !selectedObject.toType && <button className={"navigation main"} onClick={handleNavigationButton}> Go Back To Your Main Settlement! </button>}
         </div>
     );
 }
 
-function soldierFound(dictionary, soldierName) {
-    for (let key in dictionary) {
-        if (key === soldierName) {
+function soldierFound(dictionary, soldierName, sid, sidSettlementSelected)
+{
+    for (let key in dictionary)
+    {
+        if (key === soldierName)
+        {
             return [true, dictionary[key]]
         }
+        else if (sid === parseInt(sidSettlementSelected))
+        {
+            return [true, "Zzz...   "];
+        }
     }
-    return [true, null]
+    return [true, "?"]
 }
 
-function resourcesFound(dictionary) {
+function resourcesFound(dictionary)
+{
     const resourcesDict = {wood: null, stone: null, steel: null, food: null};
-    for (let key in dictionary) {
-        if (resourcesDict.hasOwnProperty(key)) {
+    for (let key in dictionary)
+    {
+        if (resourcesDict.hasOwnProperty(key))
+        {
             resourcesDict[key] = dictionary[key];
         }
     }

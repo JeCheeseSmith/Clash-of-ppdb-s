@@ -55,7 +55,7 @@ function TransferPage({selectedObject, outpostChosen, setInstantCallForUpdate})
     const [errorMessage, setErrorMessage] = useState(null)
     const [outpostName, setOutpostName] = useState(null)
     const [soldiers, setSoldiers] = useState([/*[name, amount], ...*/]);
-    let resources = [0,0,0,0,0,0,0]
+    const [resources, setResources] = useState([0,0,0,0,0,0,0])
     const handleSoldierChange = (name, amount) =>
     {
         if (isNaN(amount) || amount === null)
@@ -82,7 +82,9 @@ function TransferPage({selectedObject, outpostChosen, setInstantCallForUpdate})
     };
     const handleResourceChange = (index, amount) =>
     {
-        resources[index] = amount
+        const updatedResources = [...resources]
+        updatedResources[index] = amount
+        setResources(updatedResources)
     }
 
     const handleTransferButton = () =>
@@ -123,6 +125,9 @@ function TransferPage({selectedObject, outpostChosen, setInstantCallForUpdate})
 
     return (
         <div className={"transferMenu-container"} key={"TransferPage"}>
+            <div className={"mapMenu-info"}>
+                Dispatch Your Warriors and Treasures to Aid Your Noble Ally or Comrade!
+            </div>
             <div className={"soldierTransfer-container"} key={"TransferPage"}>
                 {Object.entries(Soldiers).map(([category, images]) => (
                     <div key={category}>
@@ -131,6 +136,7 @@ function TransferPage({selectedObject, outpostChosen, setInstantCallForUpdate})
                                 <img src={image[1]} className={"soldier-image"} alt={"Soldier"}/>
                                 <input className={"amount"}
                                        onChange={(e) => handleSoldierChange(image[0], parseInt(e.target.value))}
+                                       placeholder={"amount..."}
                                 />
                             </div>
                         ))}
@@ -141,23 +147,24 @@ function TransferPage({selectedObject, outpostChosen, setInstantCallForUpdate})
             <div className={"resourcesTransfer-container"}>
                 <div className={"iconWithAmount"}>
                     <img src={wood} className={"resource-image"} alt={"Resource"}/>
-                    <input className={"amount"} onChange={(e) => handleResourceChange(2, parseInt(e.target.value))}/>
+                    <input className={"amount"} onChange={(e) => handleResourceChange(2, parseInt(e.target.value))} placeholder={"amount..."}/>
                 </div>
                 <div className={"iconWithAmount"}>
                     <img src={stone} className={"resource-image"} alt={"Resource"}/>
-                    <input className={"amount"} onChange={(e) => handleResourceChange(1, parseInt(e.target.value))}/>
+                    <input className={"amount"} onChange={(e) => handleResourceChange(1, parseInt(e.target.value))} placeholder={"amount..."}/>
                 </div>
                 <div className={"iconWithAmount"}>
                     <img src={metal} className={"resource-image"} alt={"Resource"}/>
-                    <input className={"amount"} onChange={(e) => handleResourceChange(3, parseInt(e.target.value))}/>
+                    <input className={"amount"} onChange={(e) => handleResourceChange(3, parseInt(e.target.value))} placeholder={"amount..."}/>
                 </div>
                 <div className={"iconWithAmount"}>
                     <img src={food} className={"resource-image"} alt={"Resource"}/>
-                    <input className={"amount"} onChange={(e) => handleResourceChange(4, parseInt(e.target.value))}/>
+                    <input className={"amount"} onChange={(e) => handleResourceChange(4, parseInt(e.target.value))} placeholder={"amount..."}/>
                 </div>
             </div>
-            <button className={"send-transferTYPE"} onClick={handleTransferButton}> Send Soldier and Resources! </button>
-            {outpostChosen && <input className={"outpost-Name"} placeholder={"Settlement Name..."} onChange={(e) => setOutpostName(e.target.value)}/>}
+            <button className={"send-transferTYPE"} onClick={handleTransferButton}> Start Transfer!</button>
+            {outpostChosen && <input className={"outpost-Name"} placeholder={"Settlement Name..."}
+                                     onChange={(e) => setOutpostName(e.target.value)}/>}
             {popup && <PopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     );
@@ -222,19 +229,25 @@ function AttackPage({selectedObject, setInstantCallForUpdate})
     }
     return (
         <div className={"transferMenu-container"} key={"AttackPage"}>
+            <div className={"mapMenu-info"}>
+                Gather your stalwart warriors, don your armor, and set forth to conquer! The hour of battle is upon us!
+            </div>
             <div className={"soldierTransfer-container"} key={"AttackPage"}>
                 {Object.entries(Soldiers).map(([category, images]) => (
                     <div key={category}>
                         {Object.entries(images).map((image) => (
                             <div key={image[0]} className={"iconWithAmount"}>
                                 <img src={image[1]} className={"soldier-image"} alt={"Soldier"}/>
-                                <input className={"amount"} onChange={(e) => handleSoldierChange(image[0], parseInt(e.target.value))}/>
+                                <input className={"amount"}
+                                       onChange={(e) => handleSoldierChange(image[0], parseInt(e.target.value))}
+                                       placeholder={"amount..."}
+                                />
                             </div>
                         ))}
                     </div>
                 ))}
             </div>
-            <button className={"send-transferTYPE"} onClick={handleAttack}> Send Troops and Attack!</button>
+            <button className={"send-transferTYPE"} onClick={handleAttack}> Start Attack!</button>
             {popup && <PopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     )

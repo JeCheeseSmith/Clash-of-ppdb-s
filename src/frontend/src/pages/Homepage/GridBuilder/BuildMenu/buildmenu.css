@@ -5,12 +5,21 @@
     z-index: 3;
     display: flex; /* Use flexbox for layout */
     align-items: center; /* Center items vertically */
-    background-color: transparent;
+    background-image: linear-gradient(to right, rgb(27, 0, 84), rgb(62, 0, 115), #240036);
     padding: 10px 25px 10px 25px; /* Adjust padding as needed */
     font-size: 50px;
     border-radius: 20px;
+    border: 2px solid #b25100;
     font-family: "Anton", cursive;
     letter-spacing: 1px;
+    cursor: pointer;
+    transition-duration: 0.1s;
+}
+
+.toggle-menu-button:hover {
+    scale: 1.05;
+    bottom: 5px;
+    border: 5px solid #3a1200;
 }
 
 .image-container {

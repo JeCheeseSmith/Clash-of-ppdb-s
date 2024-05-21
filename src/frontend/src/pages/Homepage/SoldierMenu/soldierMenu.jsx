@@ -21,6 +21,7 @@ import PopUp from "../../../globalComponents/popupMessage/popup.jsx";
 import {empty} from "leaflet/src/dom/DomUtil.js";
 import {updateResources} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
 import {updateTimers} from "../../../globalComponents/backgroundFunctions/updateFunctions.jsx";
+import {div} from "three/examples/jsm/nodes/math/OperatorNode.js";
 
 /**
  * React component for the troop screen button
@@ -192,11 +193,13 @@ function SoldierNavbar({soldierVisible, setTimers, setResources, timers, }) {
             <nav className="navbar visible">
                 <ul className="navbar-links">
                     <li>
-                        <button onClick={() => handleButtonClick('troopOverview')} className={"soldierMenuOption"}>Troop Overview
+                        <button onClick={() => handleButtonClick('troopOverview')}
+                                className={currentPage === "troopOverview" ? "soldierMenuOption selected" : "soldierMenuOption"}>Troop Overview
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => handleButtonClick('trainTroopOverview')} className={"soldierMenuOption"}>Troop Training
+                        <button onClick={() => handleButtonClick('trainTroopOverview')}
+                                className={currentPage === "trainTroopOverview" ? "soldierMenuOption selected" : "soldierMenuOption"}>Troop Training
                         </button>
                     </li>
                 </ul>
@@ -254,6 +257,9 @@ function TroopOverviewPage({setResources, soldiersAvailable, soldiers, consumpti
     const {sid, username} = useLocation().state;
     const [errorMessage, setErrorMessage] = useState("")
     const [popup, setPopup] = useState(false)
+    const [showTooltip, setShowTooltip] = useState(false);
+    const [name, setTooltipName] = useState("");
+
 
     useEffect(() => {
         update(sid);
@@ -271,6 +277,15 @@ function TroopOverviewPage({setResources, soldiersAvailable, soldiers, consumpti
             }
         );
     };
+    const handleMouseEnter = (name) =>
+    {
+        setShowTooltip(true);
+        setTooltipName(name)
+    };
+    const handleMouseLeave = () =>
+    {
+        setShowTooltip(false);
+    };
 
     return (
         <div className="soldier-primair-input">
@@ -283,139 +298,168 @@ function TroopOverviewPage({setResources, soldiersAvailable, soldiers, consumpti
                 {/* Each soldier has a symbol and a count */}
                 <div className="soldierSection">
                     {soldiersAvailable.heavyInfantry1 ?
-                        <button className="button"><img src={heavyInfantry1} alt="Armored footman"
-                                                        className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("ArmoredFootman")}/>
+                        <button className="button"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"
+                                                        onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Armored Footman")}
+                onMouseLeave={handleMouseLeave} />
                         </button>
                         : <button className="button">
                             <div id="wrapper"><img src={heavyInfantry1} alt="Armored footman"
                                                    className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Armored Footman")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.heavyInfantry1}</p>
                     {soldiersAvailable.heavyInfantry2 ?
                         <button className="button"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Huskarl")}/></button>
+                                                        onClick={() => handleTroopTrain("Huskarl")} onMouseEnter={() => handleMouseEnter("Huskarl")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Huskarl")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.heavyInfantry2}</p>
                     {soldiersAvailable.heavyInfantry3 ?
-                        <button className="button"><img src={heavyInfantry3} alt="Order Knights"
-                                                        className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("OrderKnight")}/></button>
+                        <button className="button"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon"
+                                                        onClick={() => handleTroopTrain("OrderKnight")} onMouseEnter={() => handleMouseEnter("Order Knights")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Order Knights")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.heavyInfantry3}</p>
                 </div>
                 <div className="soldierSection">
                     {soldiersAvailable.spear1 ?
                         <button className="button"><img src={spear1} alt="Guardsman" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Guardsman")}/></button>
+                                                        onClick={() => handleTroopTrain("Guardsman")} onMouseEnter={() => handleMouseEnter("Guardsman")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={spear1} alt="Guardsman" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Guardsman")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.spear1}</p>
                     {soldiersAvailable.spear2 ?
                         <button className="button"><img src={spear2} alt="Pike man" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Pikeman")}/></button>
+                                                        onClick={() => handleTroopTrain("Pikeman")} onMouseEnter={() => handleMouseEnter("Pike man")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={spear2} alt="Pike man" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Pike man")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.spear2}</p>
                     {soldiersAvailable.spear3 ?
                         <button className="button"><img src={spear3} alt="Halbardier" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Halbardier")}/></button>
+                                                        onClick={() => handleTroopTrain("Halbardier")} onMouseEnter={() => handleMouseEnter("Halbardier")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={spear3} alt="Halbardier" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Halbardier")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.spear3}</p>
                 </div>
                 <div className="soldierSection">
                     {soldiersAvailable.horseman1 ?
                         <button className="button"><img src={horseman1} alt="Horseman" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Horseman")}/></button>
+                                                        onClick={() => handleTroopTrain("Horseman")} onMouseEnter={() => handleMouseEnter("Horseman")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={horseman1} alt="Horseman" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Horseman")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.horseman1}</p>
                     {soldiersAvailable.horseman2 ?
                         <button className="button"><img src={horseman2} alt="Knight" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Knight")}/></button>
+                                                        onClick={() => handleTroopTrain("Knight")} onMouseEnter={() => handleMouseEnter("Knight")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={horseman2} alt="Knight" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Knight")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.horseman2}</p>
                     {soldiersAvailable.horseman3 ?
                         <button className="button"><img src={horseman3} alt="War elephant" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("WarElephant")}/></button>
+                                                        onClick={() => handleTroopTrain("WarElephant")} onMouseEnter={() => handleMouseEnter("War elephant")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={horseman3} alt="War elephant" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("War elephant")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.horseman3}</p>
                 </div>
                 <div className="soldierSection">
                     {soldiersAvailable.bowman1 ?
                         <button className="button"><img src={bowman1} alt="Bowman" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Bowman")}/></button>
+                                                        onClick={() => handleTroopTrain("Bowman")} onMouseEnter={() => handleMouseEnter("Bowman")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={bowman1} alt="Bowman" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Bowman")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.bowman1}</p>
                     {soldiersAvailable.bowman2 ?
                         <button className="button"><img src={bowman2} alt="Longbowman" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("LongbowMan")}/></button>
+                                                        onClick={() => handleTroopTrain("LongbowMan")} onMouseEnter={() => handleMouseEnter("Longbowman")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={bowman2} alt="Longbowman" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Longbowman")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.bowman2}</p>
                     {soldiersAvailable.bowman3 ?
                         <button className="button"><img src={bowman3} alt="Crossbowman" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("CrossbowMan")}/></button>
+                                                        onClick={() => handleTroopTrain("CrossbowMan")} onMouseEnter={() => handleMouseEnter("Crossbowman")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={bowman3} alt="Crossbowman" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Crossbowman")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.bowman3}</p>
                 </div>
                 <div className="soldierSection">
                     {soldiersAvailable.ambush1 ?
                         <button className="button"><img src={ambush1} alt="Bandit" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Bandit")}/></button>
+                                                        onClick={() => handleTroopTrain("Bandit")} onMouseEnter={() => handleMouseEnter("Bandit")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={ambush1} alt="Bandit" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Bandit")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.ambush1}</p>
                     {soldiersAvailable.ambush2 ?
                         <button className="button"><img src={ambush2} alt="Militia" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Militia")}/></button>
+                                                        onClick={() => handleTroopTrain("Militia")} onMouseEnter={() => handleMouseEnter("Militia")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={ambush2} alt="Militia" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Militia")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.ambush2}</p>
                     {soldiersAvailable.ambush3 ?
                         <button className="button"><img src={ambush3} alt="Skirmishers" className="soldier-icon"
-                                                        onClick={() => handleTroopTrain("Skirmisher")}/></button>
+                                                        onClick={() => handleTroopTrain("Skirmisher")} onMouseEnter={() => handleMouseEnter("Skirmishers")}
+                onMouseLeave={handleMouseLeave}/></button>
                         : <button className="button">
                             <div id="wrapper"><img src={ambush3} alt="Skirmishers" className="soldier-icon"
-                                                   onClick={() => handleTroopTrain("ArmoredFootman")}/></div>
+                                                   onClick={() => handleTroopTrain("ArmoredFootman")} onMouseEnter={() => handleMouseEnter("Skirmishers")}
+                onMouseLeave={handleMouseLeave}/></div>
                         </button>}
                     <p className="soldierCount">{soldiers.ambush3}</p>
                 </div>
             </div>
+            {showTooltip && <div className="soldier-primair-input">{name}</div>}
             {popup && <PopUp message={errorMessage} setPopup={setPopup}/>}
         </div>
     )
@@ -436,127 +480,168 @@ function calcTrainees(timers, TraineesUpdate){
 function TroopTrainPage({timers, traineesAvailable, traineesAmount, TraineesUpdate}) {
     const {sid} = useLocation().state;
     const initialized = useState(false)
+    const [showTooltip, setShowTooltip] = useState(false);
+    const [name, setTooltipName] = useState("");
     useEffect(() => {
         if (!initialized.current) {
             initialized.current = true
             calcTrainees(timers = {timers}, TraineesUpdate = {TraineesUpdate})
         }
     }, []);
+    const handleMouseEnter = (name) =>
+    {
+        setShowTooltip(true);
+        setTooltipName(name)
+    };
+    const handleMouseLeave = () =>
+    {
+        setShowTooltip(false);
+    };
     return (
         <div className="soldier-primair-input">
             <div className="army-title"> Training Queue</div>
             <div className="soldierSection">
                 {traineesAvailable.heavyInfantry1 ?
                     <button className="button"><img src={heavyInfantry1} alt="Armored footman"
-                                                    className="soldier-icon"/></button>
+                                                    className="soldier-icon" onMouseEnter={() => handleMouseEnter("Armored Footman")} onMouseLeave={handleMouseLeave}/></button>
                     : <button className="button">
-                        <div id="wrapper"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon"/>
+                        <div id="wrapper"><img src={heavyInfantry1} alt="Armored footman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Armored Footman")}
+                onMouseLeave={handleMouseLeave}/>
                         </div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.heavyInfantry1}</p>
                 {traineesAvailable.heavyInfantry2 ?
-                    <button className="button"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"/>
+                    <button className="button"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Huskarl")}
+                onMouseLeave={handleMouseLeave}/>
                     </button>
                     : <button className="button">
-                        <div id="wrapper"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={heavyInfantry2} alt="Huskarl" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Huskarl")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.heavyInfantry2}</p>
                 {traineesAvailable.heavyInfantry3 ?
                     <button className="button"><img src={heavyInfantry3} alt="Order Knights"
-                                                    className="soldier-icon"/>
+                                                    className="soldier-icon" onMouseEnter={() => handleMouseEnter("Order Knights")}
+                onMouseLeave={handleMouseLeave}/>
                     </button>
                     : <button className="button">
-                        <div id="wrapper"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon"/>
+                        <div id="wrapper"><img src={heavyInfantry3} alt="Order Knights" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Order Knights")}
+                onMouseLeave={handleMouseLeave}/>
                         </div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.heavyInfantry3}</p>
             </div>
             <div className="soldierSection">
                 {traineesAvailable.spear1 ?
-                    <button className="button"><img src={spear1} alt="Guardsman" className="soldier-icon"/></button>
+                    <button className="button"><img src={spear1} alt="Guardsman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Guardsman")}
+                onMouseLeave={handleMouseLeave}/></button>
                     : <button className="button">
-                        <div id="wrapper"><img src={spear1} alt="Guardsman" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={spear1} alt="Guardsman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Guardsman")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.spear1}</p>
                 {traineesAvailable.spear2 ?
-                    <button className="button"><img src={spear2} alt="Pike man" className="soldier-icon"/></button>
+                    <button className="button"><img src={spear2} alt="Pike man" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Pike man")}
+                onMouseLeave={handleMouseLeave}/></button>
                     : <button className="button">
-                        <div id="wrapper"><img src={spear2} alt="Pike man" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={spear2} alt="Pike man" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Pike man")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.spear2}</p>
                 {traineesAvailable.spear3 ?
-                    <button className="button"><img src={spear3} alt="Halbardier" className="soldier-icon"/>
+                    <button className="button"><img src={spear3} alt="Halbardier" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Halbardier")}
+                onMouseLeave={handleMouseLeave}/>
                     </button>
                     : <button className="button">
-                        <div id="wrapper"><img src={spear3} alt="Halbardier" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={spear3} alt="Halbardier" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Halbardier")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.spear3}</p>
             </div>
             <div className="soldierSection">
                 {traineesAvailable.horseman1 ?
-                    <button className="button"><img src={horseman1} alt="Horseman" className="soldier-icon"/>
+                    <button className="button"><img src={horseman1} alt="Horseman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Guardsman")}
+                onMouseLeave={handleMouseLeave}/>
                     </button>
                     : <button className="button">
-                        <div id="wrapper"><img src={horseman1} alt="Horseman" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={horseman1} alt="Horseman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Guardsman")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.horseman1}</p>
                 {traineesAvailable.horseman2 ?
-                    <button className="button"><img src={horseman2} alt="Knight" className="soldier-icon"/></button>
+                    <button className="button"><img src={horseman2} alt="Knight" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Knight")}
+                onMouseLeave={handleMouseLeave}/></button>
                     : <button className="button">
-                        <div id="wrapper"><img src={horseman2} alt="Knight" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={horseman2} alt="Knight" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Knight")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.horseman2}</p>
                 {traineesAvailable.horseman3 ?
-                    <button className="button"><img src={horseman3} alt="War elephant" className="soldier-icon"/>
+                    <button className="button"><img src={horseman3} alt="War elephant" className="soldier-icon" onMouseEnter={() => handleMouseEnter("War elephant")}
+                onMouseLeave={handleMouseLeave}/>
                     </button>
                     : <button className="button">
-                        <div id="wrapper"><img src={horseman3} alt="War elephant" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={horseman3} alt="War elephant" className="soldier-icon" onMouseEnter={() => handleMouseEnter("War elephant")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.horseman3}</p>
             </div>
             <div className="soldierSection">
                 {traineesAvailable.bowman1 ?
-                    <button className="button"><img src={bowman1} alt="Bowman" className="soldier-icon"/></button>
+                    <button className="button"><img src={bowman1} alt="Bowman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Bowman")}
+                onMouseLeave={handleMouseLeave}/></button>
                     : <button className="button">
-                        <div id="wrapper"><img src={bowman1} alt="Bowman" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={bowman1} alt="Bowman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Bowman")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.bowman1}</p>
                 {traineesAvailable.bowman2 ?
-                    <button className="button"><img src={bowman2} alt="Longbowman" className="soldier-icon"/>
+                    <button className="button"><img src={bowman2} alt="Longbowman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Longbowman")}
+                onMouseLeave={handleMouseLeave}/>
                     </button>
                     : <button className="button">
-                        <div id="wrapper"><img src={bowman2} alt="Longbowman" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={bowman2} alt="Longbowman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Longbowman")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.bowman2}</p>
                 {traineesAvailable.bowman3 ?
-                    <button className="button"><img src={bowman3} alt="Crossbowman" className="soldier-icon"/>
+                    <button className="button"><img src={bowman3} alt="Crossbowman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Crossbowman")}
+                onMouseLeave={handleMouseLeave}/>
                     </button>
                     : <button className="button">
-                        <div id="wrapper"><img src={bowman3} alt="Crossbowman" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={bowman3} alt="Crossbowman" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Crossbowman")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.bowman3}</p>
             </div>
             <div className="soldierSection">
                 {traineesAvailable.ambush1 ?
-                    <button className="button"><img src={ambush1} alt="Bandit" className="soldier-icon"/></button>
+                    <button className="button"><img src={ambush1} alt="Bandit" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Bandit")}
+                onMouseLeave={handleMouseLeave}/></button>
                     : <button className="button">
-                        <div id="wrapper"><img src={ambush1} alt="Bandit" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={ambush1} alt="Bandit" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Bandit")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.ambush1}</p>
                 {traineesAvailable.ambush2 ?
-                    <button className="button"><img src={ambush2} alt="Militia" className="soldier-icon"/></button>
+                    <button className="button"><img src={ambush2} alt="Militia" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Militia")}
+                onMouseLeave={handleMouseLeave}/></button>
                     : <button className="button">
-                        <div id="wrapper"><img src={ambush2} alt="Militia" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={ambush2} alt="Militia" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Militia")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.ambush2}</p>
                 {traineesAvailable.ambush3 ?
-                    <button className="button"><img src={ambush3} alt="Skirmishers" className="soldier-icon"/>
+                    <button className="button"><img src={ambush3} alt="Skirmishers" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Skirmishers")}
+                onMouseLeave={handleMouseLeave}/>
                     </button>
                     : <button className="button">
-                        <div id="wrapper"><img src={ambush3} alt="Skirmishers" className="soldier-icon"/></div>
+                        <div id="wrapper"><img src={ambush3} alt="Skirmishers" className="soldier-icon" onMouseEnter={() => handleMouseEnter("Skirmishers")}
+                onMouseLeave={handleMouseLeave}/></div>
                     </button>}
                 <p className="soldierCount">{traineesAmount.ambush3}</p>
             </div>
+            {showTooltip && <div className="soldier-primair-input">{name}</div>}
         </div>
     )
 }
