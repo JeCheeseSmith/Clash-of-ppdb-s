@@ -78,16 +78,20 @@ function Navbar({ socialVisible })
                 <nav className="navbar visible">
                     <ul className="navbar-links">
                         <li>
-                            <button onClick={() => handleButtonClick('createClan')} className={"socialOption"}>Create Clan</button>
+                            <button onClick={() => handleButtonClick('createClan')}
+                                    className={currentPage === "createClan" ? "type-button selected" : "type-button"}>Create Clan</button>
                         </li>
                         <li>
-                            <button onClick={() => handleButtonClick('joinClan')} className={"socialOption"}>Join Clan</button>
+                            <button onClick={() => handleButtonClick('joinClan')}
+                                    className={currentPage === "joinClan" ? "type-button selected" : "type-button"}>Join Clan</button>
                         </li>
                         <li>
-                            <button onClick={() => sendData()} className={"socialOption"}>General Requests</button>
+                            <button onClick={() => sendData()}
+                                    className={currentPage === "requests" ? "type-button selected" : "type-button"}>General Requests</button>
                         </li>
                         <li>
-                            <button onClick={() => handleButtonClick('searchPerson')} className={"socialOption"}>Search Person</button>
+                            <button onClick={() => handleButtonClick('searchPerson')}
+                                    className={currentPage === "searchPerson" ? "type-button selected" : "type-button"}>Search Person</button>
                         </li>
                     </ul>
                 </nav>
