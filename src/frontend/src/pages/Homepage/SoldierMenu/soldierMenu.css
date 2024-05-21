@@ -187,6 +187,21 @@
 
 }
 
+.tooltip {
+    visibility: hidden;
+    width: auto;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .navbar {
     padding: 20px 20px 20px 4%;
     border: 2px solid #ffd700; /* Golden border color */
