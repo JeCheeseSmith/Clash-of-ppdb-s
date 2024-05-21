@@ -154,6 +154,7 @@
 }
 
 .soldierMenuButton-icon {
+    position: relative;
     width: 50px; /* Set width of the image container */
     height: 50px; /* Set height of the image container */
     background-image: url(assets/swords.png); /* Ensure the image path is correct */
@@ -165,6 +166,8 @@
     padding-right: 50px;
     padding-top: 50px;
     align-items: center;
+    right: 7px;
+    top: 5px
 }
 
 .food-icon {
