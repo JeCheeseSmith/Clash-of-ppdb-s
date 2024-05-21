@@ -7,20 +7,16 @@ import {useLocation} from "react-router-dom";
 import * as API from "../../../../../api/EndPoints.jsx";
 import PopUp from "../../../../../globalComponents/popupMessage/popup.jsx";
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
-import GET from "../../../../../api/GET.jsx";
 
 /**
- * UpgradeBuilding component for upgrading selected building.
- *
- * @param {Object} props - Component props.
+ * Represents a component for upgrading selected buildings.
+ * @param {Object} props - The component props.
  * @param {Object[]} props.selectedBuilding - Information about the selected building.
- * @param {Function} props.updateResources - Function to update resources.
- * @param {Function} props.updateTimers - Function to update timers.
  * @param {Function} props.getTimer - Function to get timer information.
- * @param {number} props.oldPosition - Old position of the building.
- * @returns {JSX.Element} React component.
+ * @param {number[]} props.oldPosition - The old position of the building.
+ * @param {Function} props.setCallForUpdate - Function to set a call for update.
+ * @returns {JSX.Element} - React component.
  */
-
 function UpgradeBuilding({selectedBuilding, getTimer, oldPosition, setCallForUpdate}) {
 
     const { sid, username } = useLocation().state;
