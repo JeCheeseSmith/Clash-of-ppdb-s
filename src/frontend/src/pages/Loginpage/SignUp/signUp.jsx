@@ -60,7 +60,7 @@ function RegistrationPage() {
 
     return (
         <div className="login-container">
-            <Information/>
+            {/*<Information/>*/}
             <h1 className="gametitle">TRAVISIA</h1>
             <h2 className="subtitle">FALLEN EMPIRE</h2>
             <div className="login-form">

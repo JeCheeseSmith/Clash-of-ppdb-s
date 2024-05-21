@@ -65,7 +65,7 @@ function LoginPage() {
       <>
           {!isMobile && !isTablet && isDesktop ?
               <div className="login-container">
-                  <Information/>
+                  {/*<Information/>*/}
                   {/* no mobile and tablet, isDesktop = {windows, ubuntu, mac, ...} */}
                   <Loader {...loaderStyles} />
                   <h1 className="gametitle">TRAVISIA</h1>
