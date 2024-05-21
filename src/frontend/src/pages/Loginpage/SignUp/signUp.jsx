@@ -37,8 +37,9 @@ function RegistrationPage() {
             // If the data is true (account doesn't exist), then navigate to main page
             if (data.success) {
                 let sid = data.sid
+                const signUp = true
                 // sid and username are given to main page
-                navigate('/MainPage', { state: { sid, username }});
+                navigate('/MainPage', { state: { sid, username, signUp}});
             }
             // Display error
             else {

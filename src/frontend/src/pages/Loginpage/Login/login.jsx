@@ -50,8 +50,9 @@ function LoginPage() {
             // If the data is true (account exists), then navigate to main page.
             if (data.success) {
                 let sid = data.sid
+                const signUp = false
                 // sid and username are given to main page
-                navigate('/MainPage', { state: { sid, username }});
+                navigate('/MainPage', { state: { sid, username, signUp}});
             }
             // Display error
             else {
