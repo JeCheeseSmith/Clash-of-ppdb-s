@@ -5,6 +5,25 @@ import GET from "../../../../../api/GET.jsx";
 import {useLocation} from "react-router-dom";
 import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx";
 
+
+/**
+ * @brief Component responsible for displaying and managing contact icons in the chat interface.
+ *
+ * This component renders icons representing different contacts in the chat. It allows users to select a contact
+ * to initiate or continue a conversation. It also handles message retrieval and updates based on the selected contact.
+ *
+ * @param {Object} props - Properties passed to the component.
+ * @param {Object} props.contactList - List of contacts available for chatting.
+ * @param {Array} props.messages - Array of message objects in the current chat.
+ * @param {Function} props.updateMessages - Function to update the message list.
+ * @param {String} props.receiver - The current receiver of messages.
+ * @param {Function} props.updateReceiver - Function to update the receiver of messages.
+ * @param {Function} props.updateTypeReceiver - Function to update the type of receiver (person or group).
+ * @param {Boolean} props.chatVisible - Indicates whether the chat interface is visible or not.
+ * @param {Function} props.setNewReport - Function to set the flag for new reports.
+ * @returns {JSX.Element} JSX representation of the ChatIcons component.
+ */
+
 function ChatIcons({contactList, messages, updateMessages, receiver, updateReceiver, updateTypeReceiver, chatVisible, setNewReport})
 {
     const location = useLocation();
