@@ -13,15 +13,16 @@ import Bush from "./models/Objects/Bush.jsx";
 import BackgroundTree from "./models/Objects/BackgroundTree.jsx";
 import Mountain from "./models/Objects/Mountain.jsx";
 import Cobblestones from "./models/Objects/Cobblestones.jsx";
-import Knight from "./models/Objects/NPC's/Knight.jsx";
+
 /**
  * A 3D grid component with interactive cells and objects.
  * @component
  * @param {Object[]} buildings - Array of buildings.
- * @param addBuildings
+ * @param {Array} randomArray - Array of random values for bush positioning.
+ * @param {Function} getTimer - Function to get the timer value.
+ * @param {Function} setCallForUpdate - Function to set the flag for updating the grid.
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
-
 function Grid({buildings, randomArray, getTimer, setCallForUpdate})
 {
     const { sid, username } = useLocation().state;

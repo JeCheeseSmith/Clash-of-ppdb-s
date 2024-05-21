@@ -18,11 +18,9 @@ import PopUp from "../../../../globalComponents/popupMessage/popup.jsx";
  * @param {string} props.pageName - The name of the page ('Transfer', 'Attack', 'Espionage', 'Information').
  * @param {Object} props.selectedObject - The selected object for transfer.
  * @param {boolean} props.outpostChosen - Flag indicating if an outpost is chosen.
- * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
- * @param {function} props.setTimers - Function to set timers for updates.
+ * @param {function} props.setInstantCallForUpdate - Function to set a flag to trigger an update.
  * @returns {JSX.Element} - The JSX for displaying transfer options.
  */
-
 function TransferOption({pageName, selectedObject, outpostChosen, setInstantCallForUpdate})
 {
     return(
@@ -175,11 +173,9 @@ function TransferPage({selectedObject, outpostChosen, setInstantCallForUpdate})
  *
  * @param {Object} props - The props object.
  * @param {Object} props.selectedObject - The selected object for transfer.
- * @param {function} props.setCallForUpdate - Function to set a flag to trigger an update.
- * @param {function} props.setTimers - Function to set timers for updates.
+ * @param {function} props.setInstantCallForUpdate - Function to set a flag to trigger an update.
  * @returns {JSX.Element} - The JSX for the attack page.
  */
-
 function AttackPage({selectedObject, setInstantCallForUpdate})
 {
     const {username, sid} = useLocation().state

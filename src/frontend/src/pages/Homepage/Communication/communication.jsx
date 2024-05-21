@@ -10,8 +10,9 @@ import PlaySound from "../../../globalComponents/audioComponent/audio.jsx";
  * @param {string} props.type - The type of communication button ('chat' or 'social').
  * @param {Function} props.buttonFunction - Function to handle button click event.
  * @param {boolean} props.visible - Flag indicating visibility of the button.
- * @param {Object} props.buttonAudio - Audio object for button sound (only required for social buttons).
  * @param {Function} props.setVariable - Function to set a variable (only required for chat buttons).
+ * @param {boolean} props.newReport - Flag indicating the presence of new reports (only required for chat buttons).
+ * @param {Function} props.setNewReport - Function to set the flag for new reports (only required for chat buttons).
  * @returns {JSX.Element} - The JSX for communication buttons.
  */
 function CommunicationButton({type, buttonFunction, visible, setVariable, newReport, setNewReport})
@@ -36,6 +37,8 @@ function CommunicationButton({type, buttonFunction, visible, setVariable, newRep
  * @param {Function} props.toggleChatVisibility - Function to toggle chat visibility.
  * @param {boolean} props.chatVisible - Flag indicating chat visibility.
  * @param {Function} props.setContactList - Function to set the contact list.
+ * @param {boolean} props.newReport - Flag indicating the presence of new reports.
+ * @param {Function} props.setNewReport - Function to set the flag for new reports.
  * @returns {JSX.Element} - The JSX for chat button.
  */
 function ChatButton({toggleChatVisibility, chatVisible, setContactList, newReport, setNewReport})
@@ -59,7 +62,6 @@ function ChatButton({toggleChatVisibility, chatVisible, setContactList, newRepor
  * Component for social button.
  * @param {Object} props - The props object.
  * @param {Function} props.toggleSocialVisibility - Function to toggle social visibility.
- * @param {Function} props.playSocial - Function to play social audio.
  * @returns {JSX.Element} - The JSX for social button.
  */
 function SocialButton({toggleSocialVisibility}) {
