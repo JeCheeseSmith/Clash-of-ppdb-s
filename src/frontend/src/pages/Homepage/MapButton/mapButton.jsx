@@ -16,7 +16,7 @@ function MapButton()
         navigate('/Map', { state: { sid, username}});
     };
     return (
-        <button onClick={() => {handleMapButton}} className={"map-button"}>
+        <button onClick={() => {handleMapButton()}} className={"map-button"}>
             <div className={"map-button-name"}>Map</div>
             <img src={map} className="map-button-icon"/>
         </button>
