@@ -500,7 +500,7 @@ SELECT id FROM transfer WHERE discovered=True
         :return:
         """
         # Instantiate Usable Data Objects
-        success = True #choice([True, False])  # Choose a random winner # TODO THIS NEEDS TO BE RANDOM
+        success = choice([True, False])  # Choose a random winner
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
 

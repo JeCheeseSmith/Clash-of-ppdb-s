@@ -210,7 +210,6 @@ class TransferDataAccess:
         if transfer.toType:  # If we went to a transfer x, the start location will be the end of x
             cursor.execute('SELECT idTo FROM transfer WHERE id=%s;', (transfer.idTo,))
             idTo = cursor.fetchone()[0]
-            # TODO Unsure if this works in frontend, since it goes towards the same settlement now
         else:  # We went to a settlement, now leaving from there: transfer data doesn't need to be adjusted
             idTo = transfer.idTo
         # Make a resource transfer back home
