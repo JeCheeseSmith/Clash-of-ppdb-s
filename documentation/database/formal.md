@@ -17,36 +17,36 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 ### Entity Tables
 > These tables are mostly used to store factual data about an Entity in the game. 
 
-| Table                               | Function                                                                       |
-|-------------------------------------|--------------------------------------------------------------------------------|
-| [soldier](#soldier)                 | Stores all the different soldier types possible                                |
-| [package](#package)                 | Contains the different packages; resources & soldiers linked to another entity |
-| [player](#player)                   | Contains the data of all users                                                 |
-| [content](#content)                 | Base class to store message related data                                       |
-| [message](#message)                 | Specialisation Class to store messages between users                           |
-| [request](#request)                 | Specialisation Base Class to store requests and their status                   |
-| [clanRequest](#clanRequest)         | Specialization on request type                                                 |
-| [friendRequest](#friendRequest)     | Specialization on request type                                                 |
-| [settlement](#settlement)           | Store and link all data from a settlement                                      |
-| [clan](#clan)                       | Contains all current clans and their info                                      |
-| [achievement](#achievement)         | Stores the different achievements                                              |
-| [transfer](#transfer)               | Keeps all the active transfers between settlements                             |
-| [buildable](#buildable)             | All possible buildings to build                                                |
-| [building](#building)               | Actual buildable placed into a settlement                                      |
-| [timer](#timer)                     | Keep track of the currently ongoing time process                               |
+| Table                           | Function                                                                       |
+|---------------------------------|--------------------------------------------------------------------------------|
+| [soldier](#soldier)             | Stores all the different soldier types possible                                |
+| [package](#package)             | Contains the different packages; resources & soldiers linked to another entity |
+| [player](#player)               | Contains the data of all users                                                 |
+| [content](#content)             | Base class to store message related data                                       |
+| [message](#message)             | Specialisation Class to store messages between users                           |
+| [request](#request)             | Specialisation Base Class to store requests and their status                   |
+| [clanRequest](#clanRequest)     | Specialization on request type                                                 |
+| [friendRequest](#friendRequest) | Specialization on request type                                                 |
+| [settlement](#settlement)       | Store and link all data from a settlement                                      |
+| [clan](#clan)                   | Contains all current clans and their info                                      |
+| [achievement](#achievement)     | Stores the different achievements                                              |
+| [transfer](#transfer)           | Keeps all the active transfers                                                 |
+| [buildable](#buildable)         | All possible buildings to build                                                |
+| [building](#building)           | Actual buildable placed into a settlement                                      |
+| [timer](#timer)                 | Keeps track of the currently ongoing time process'                             |
 
 ### Relational Tables
 > These tables are used to implemented relations between entities from the table.
 
-| Table                             | Function                                                  |
-|-----------------------------------|-----------------------------------------------------------|
-| [friend](#friend)                 | Stores the friended relation between users                |
-| [member](#member)                 | Stores the members of a clan                              |
-| [retrieved](#retrieved)           | Keeps track of the messages delivered to a receiving user |
-| [shared](#shared)                 | Messages displayed in a groups chat from a clan           |
-| [troops](#troops)                 | Relation to stores troops connected to a package          |
-| [unlocked](#unlocked)             | Relation to express if a building or soldier is unlocked  |
-| [achieved](#achieved)             | Stores the achievements a player made                     |
+| Table                   | Function                                                  |
+|-------------------------|-----------------------------------------------------------|
+| [friend](#friend)       | Stores the friended relation between users                |
+| [member](#member)       | Stores the members of a clan                              |
+| [retrieved](#retrieved) | Keeps track of the messages delivered to a receiving user |
+| [shared](#shared)       | Messages displayed in a groups chat from a clan           |
+| [troops](#troops)       | Relation to store troops connected to a package           |
+| [unlocked](#unlocked)   | Relation to express if a building or soldier is unlocked  |
+| [achieved](#achieved)   | Stores the achievements a player made                     |
 
 ### soldier
 
@@ -142,33 +142,33 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### achievement
 
-| Name    | Type    | Explanation                                   |
-|---------|---------|-----------------------------------------------|
-| name    | VARCHAR | PRIMARY KEY,                                  |
-| task    | TEXT    | Description of the tasks to do                |
-| xpBonus | INT     | Reward in xp amount for completing the action |
-| pid     | INT     | Contains Relation (See ER-Diagram)            |
+| Name    | Type    | Explanation                                      |
+|---------|---------|--------------------------------------------------|
+| name    | VARCHAR | PRIMARY KEY                                      |
+| task    | TEXT    | Description of the tasks to do                   |
+| xpBonus | INT     | Reward in xp amount for completing the action    |
+| amount  | INT     | Preset number of times the task needs to be done |
 
 ### transfer
 
 | Name       | Type    | Explanation                                                                  |
 |------------|---------|------------------------------------------------------------------------------|
 | id         | INT     | PRIMARY KEY                                                                  |
+| discovered | BOOL    | Saying if the transfer has been spotted by others                            |
 | idTo       | INT     | settlement ID where the transfer goes to: To Relation                        |
 | toType     | BOOL    | False: Going to a Settlement, True: Going to a Transfer                      |
-| discovered | BOOL    | Saying if the transfer has been spotted by others                            |
 | idFrom     | INT     | settlement ID where the transfer comes from: From Relation                   |
 | fromType   | BOOL    | Specifies the type we're going from, similar as toType                       |
 | pid        | INT     | Referring a Package ID; Contains Relation (The associated package/resources) |
-| pname      | VARCHAR | Player who owns the package                                                  |  
+| pname      | VARCHAR | OwnedBy Relation: Player who owns the package                                |  
 
 ### buildable
 
 | Name            | Type     | Explanation                                                                                         |
 |-----------------|----------|-----------------------------------------------------------------------------------------------------|
 | name            | VARCHAR  | PRIMARY KEY                                                                                         |
-| type            | VARCHAR  | The type of the building; Political,  Decoration, Resources, ...                                    |
-| function        | FLOAT4[] | The mathematical function to evaluate the resource function with                                    |
+| type            | VARCHAR  | The type of the building; Military,  Decoration, Production, ...                                    |
+| function        | FLOAT4[] | The mathematical function to evaluate the [resource function](../backend/resources.md) with         |
 | upgradeFunction | INT[]    | Mathematical formula that takes the level as input to calculate upgrade resource                    |
 | upgradeResource | SMALLINT | Defines which resources are needed to build: 1: Stone, 2: Wood, 3: Steel, 4: Food, 12: Stone & Wood |
 | timeFunction    | INT[]    | Mathematical formula that describes the building time needed                                        |
@@ -190,11 +190,11 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 |----------|-----------|------------------------------------------------------------------------|
 | id       | INT       | PRIMARY KEY                                                            |
 | oid      | INT       | Unique Identifier of the Object we are referring to (e.g. building ID) |
-| type     | TEXT      | Type of the object the id is referring to (e.g. building.name)         |
+| type     | TEXT      | Type of the object the id is referring to (e.g. 'building')            |
 | start    | TIMESTAMP | Start of the timer                                                     |
 | done     | TIMESTAMP | End of the timer                                                       |
 | duration | BIGINT    | Duration in seconds (done-start)                                       |
-| sid      | INT       | Identifier of the settlement the timer belongs to                      |
+| sid      | INT       | Identifier of the settlement/transfer the timer belongs to             |
 
 ### friend
 
@@ -205,10 +205,10 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### member
 
-| Name  | Type    | Explanation              |
-|-------|---------|--------------------------|
-| pname | VARCHAR | Player which is in cname |
-| cname | VARCHAR | Name of the clan         |
+| Name  | Type    | Explanation            |
+|-------|---------|------------------------|
+| pname | VARCHAR | Player who is in cname |
+| cname | VARCHAR | Name of the clan       |
 
 ### retrieved
 
@@ -226,12 +226,12 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### troops
 
-| Name         | Type    | Explanation                                                                            |
-|--------------|---------|----------------------------------------------------------------------------------------|
-| pid          | INT     | Package ID the soldier belongs to                                                      |
-| sname        | VARCHAR | Identifier for the soldier                                                             |
-| amount       | INT     | Number of soldiers of type sname                                                       |
-| discovered   | BOOL    | Indicating if soldiers are spotted by another settlement                               |
+| Name         | Type    | Explanation                                          |
+|--------------|---------|------------------------------------------------------|
+| pid          | INT     | Package ID the soldier belongs to                    |
+| sname        | VARCHAR | Identifier for the soldier                           |
+| amount       | INT     | Number of soldiers of type sname                     |
+| discovered   | BOOL    | Indicating if soldiers are spotted by another player |
 
 ### unlocked
 
@@ -240,15 +240,6 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 | name      | VARCHAR | Name of the soldier or buildable                                           |
 | sid       | INT     | Buildable or soldier which is unlocked by the settlement, specified by sid |
 | maxNumber | INT     | Maximum number of entries a settlement may have of this type               |
-
-### wheelofFortune
-
-| Name          | Type      | Explanation                           |
-|---------------|-----------|---------------------------------------|
-| pname         | VARCHAR   | Name of the player spinning the wheel |
-| sid           | INT       | Sid of the player main settlement     |
-| last_timespin | TIMESTAMP | Stored time of the last spin          |
-
 
 ### achieved
 
