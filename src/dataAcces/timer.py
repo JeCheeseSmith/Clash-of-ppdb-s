@@ -365,8 +365,12 @@ SELECT id FROM transfer WHERE discovered=True
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         tp = transfer_data_acces.instantiatePackageWithSoldiers(transfer.pid, soldier_data_acces,
                                                                 package_data_acces)  # Transfer package
-        cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
-        receiver = cursor.fetchone()[0]  # Get receivers name
+        if not transfer.toType:
+            cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (transfer.idTo,))
+            receiver = cursor.fetchone()[0]  # Get receivers name
+        else:
+            cursor.execute('SELECT pname FROM transfer WHERE id=%s;', (transfer.idTo,))
+            receiver = cursor.fetchone()[0]
 
         # Notify the users at the end of a transfer
         from .content import \
@@ -496,7 +500,7 @@ SELECT id FROM transfer WHERE discovered=True
         :return:
         """
         # Instantiate Usable Data Objects
-        success = choice([True, False])  # Choose a random winner
+        success = True #choice([True, False])  # Choose a random winner # TODO THIS NEEDS TO BE RANDOM
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
 
@@ -577,7 +581,7 @@ SELECT id FROM transfer WHERE discovered=True
                 defendantMessage = f"""You've been attacked by {transfer.pname}!"""
 
             transfer_data_acces.returnToBase(transfer, timer_data_access, soldier_data_acces,
-                                             package_data_acces)  # Let the original transfer also return to base
+                                             package_data_acces, timer)  # Let the original transfer also return to base
             if transfer.toType:  # Delete defendant transfer, timer and package
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (transferDefendant.id,))
                 cursor.execute('DELETE FROM package WHERE id=%s;', (transferDefendant.pid,))

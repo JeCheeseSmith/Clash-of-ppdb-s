@@ -187,7 +187,7 @@ class TransferDataAccess:
             return None
         return Transfer(tid, data[1], data[2], data[3], data[4], data[5], data[6], data[7])
 
-    def returnToBase(self, transfer: Transfer, timer_data_access, soldier_data_acces, package_data_acces):
+    def returnToBase(self, transfer: Transfer, timer_data_access, soldier_data_acces, package_data_acces, timer=None):
         """
         Helper function to delete the current transfer and make a new transfer towards home (idFrom)
         :param package_data_acces:
@@ -200,7 +200,9 @@ class TransferDataAccess:
         cursor.execute("SELECT id FROM timer WHERE oid=%s and type IN('attack','outpost','transfer')", (oldTid,))
         originalTimerID = cursor.fetchone()  # Already get the original timer ID before we make any changes
 
-        if originalTimerID is None:  # The transfer was an espionage; will be handled separately
+        if originalTimerID is None and timer is not None:
+            pass
+        elif originalTimerID is None:  # Spionage is handled differently
             return
         else:
             originalTimerID = originalTimerID[0]
@@ -239,7 +241,8 @@ class TransferDataAccess:
 
         # Delete the old transfer and old timer in the database (package is recycled)
         cursor.execute('DELETE FROM transfer WHERE id=%s;', (oldTid,))
-        cursor.execute('DELETE FROM timer WHERE id=%s;', (originalTimerID,))
+        if originalTimerID is not None:
+            cursor.execute('DELETE FROM timer WHERE id=%s;', (originalTimerID,))
 
         # Commit Data
         self.dbconnect.commit()
