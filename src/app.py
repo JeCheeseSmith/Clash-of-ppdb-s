@@ -618,9 +618,10 @@ def transfer():
     """
     data = request.json
 
-    print(data.get('idTo'), data.get('toType'), data.get('idFrom'),
-                                                        False, data.get('soldiers'),
-                                                        data.get('resources'), data.get('tType'), data.get('pname'))
+    if data.get('idTo') == data.get('idFrom') and not data.get('toType'):  # Going to the same settlement as you came from
+        dct = dict(success=False)
+        dct["error"] = "You can't transfer to the same settlement"
+        return jsonify(dct)
 
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
                                                         False, data.get('soldiers'),
