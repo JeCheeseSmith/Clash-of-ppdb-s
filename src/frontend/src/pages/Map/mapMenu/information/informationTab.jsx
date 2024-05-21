@@ -10,8 +10,8 @@ import {useLocation, useNavigate} from "react-router-dom";
 
 /**
  * Represents a component for displaying information about a selected object and navigating to it (if outpost).
- * @param {object} props - The props object.
- * @param {object} props.selectedObject - The selected object.
+ * @param {Object} props - The props object.
+ * @param {Object} props.selectedObject - The selected object.
  * @returns {JSX.Element} InformationTab component.
  */
 function InformationTab({selectedObject})
