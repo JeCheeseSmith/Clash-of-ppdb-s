@@ -114,6 +114,7 @@ function LoginPage() {
               </div>
               : // else
               <div>
+                  <Loader {...loaderStyles} />
                   {/* smaller text for smaller device resolution */}
                   <h1 className="gametitle-wrong-device">TRAVISIA</h1>
                   <h2 className="subtitle-wrong-device">FALLEN EMPIRE</h2>

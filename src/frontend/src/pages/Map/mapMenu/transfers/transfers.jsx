@@ -73,26 +73,26 @@ function Navbar({outpostChosen, selectedObject, setInstantCallForUpdate})
                             <>
                                 <li>
                                     <button onClick={() => handleButtonClick('Information')}
-                                            className={"transferOption"}>
-                                        Information
+                                            className={currentPage === "Information" ? "transferOption selected" : "transferOption"}>
+                                        Details
                                     </button>
                                 </li>
                                 <li>
                                     <button onClick={() => handleButtonClick('Transfer')}
-                                            className={"transferOption"}>
+                                            className={currentPage === "Transfer" ? "transferOption selected" : "transferOption"}>
                                         Transfer
                                     </button>
                                 </li>
                                 <li>
                                     <button onClick={() => handleButtonClick('Attack')}
-                                            className={"transferOption"}>
-                                        Attack
+                                            className={currentPage === "Attack" ? "transferOption selected" : "transferOption"}>
+                                        Attack!
                                     </button>
                                 </li>
                                 <li>
                                     <button onClick={() => handleButtonClick('Espionage')}
-                                            className={"transferOption"}>
-                                        Espionage
+                                            className={currentPage === "Espionage" ? "transferOption selected" : "transferOption"}>
+                                        Espionage...
                                     </button>
                                 </li>
                             </>

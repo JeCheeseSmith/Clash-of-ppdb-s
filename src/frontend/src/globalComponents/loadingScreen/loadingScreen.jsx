@@ -12,28 +12,53 @@
 export const loaderStyles =
 {
     containerStyles: {
-        // Styles for the container element
-        // For example:
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        backgroundColor: '#001711',
+        backgroundColor: '#070017',
     },
     innerStyles: {
         width: '500px',
-        height: '100px',
+        height: '10px',
         backgroundColor: '#ccc',
         borderRadius: '5px',
     },
     barStyles: {
-        backgroundColor: 'green',
+        backgroundColor: '#d35400',
         width: '500px',
-        height: '100px',
+        height: '10px',
+        borderRadius: '5px',
     },
     dataStyles: {
-        color: '#555',
+        color: 'rgba(204,3,3,0.64)',
+        fontSize: '18px',
+        fontWeight: '500',
     },
-    dataInterpolation: (progress) => `${progress.toFixed(1)}% loaded`,
+    dataInterpolation: (progress) =>
+    {
+        let message = '';
+        if (progress < 25)
+        {
+            message = 'The village is waking up! Get ready for battle!';
+        }
+        else if (progress < 50)
+        {
+            message = 'Troops are training, defenses are building!';
+        }
+        else if (progress < 75)
+        {
+            message = 'Your army is almost ready, prepare for victory!';
+        }
+        else if (progress < 98)
+        {
+            message = 'Final touches are being made!';
+        }
+        else
+        {
+            message = 'All set! Time to conquer and defend your village!';
+        }
+        return `${message}`;
+    },
     initialState: (active) => active,
 };

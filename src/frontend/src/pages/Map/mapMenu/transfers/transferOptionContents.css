@@ -13,13 +13,31 @@
 }
 
 hr {
-    margin-top: 50px;
+    margin-top: 20px;
     width: 900px;
 }
 
 .transferMenu-container {
-    margin: 10px 10px 10px;
+    margin: 20px 10px 10px;
 }
+
+.mapMenu-info {
+    font-family: 'Anton', sans-serif;
+    font-size: 22px;
+    color: white;
+    margin-left: auto;
+    margin-right: auto; /* to center horizontally */
+    margin-bottom: 10px;
+    background-color: #651700;
+    border: 5px solid #0e0049;
+    width: 1000px;
+    padding: 10px;
+    border-radius: 20px;
+    display: flex; /* to use flexbox */
+    justify-content: center; /* to center horizontally */
+    align-items: center; /* to center vertically */
+}
+
 
 .soldierTransfer-container {
     display: flex;
@@ -43,7 +61,7 @@ hr {
 .amount{
     width: 38px;
     height: 20px;
-    margin-top: 40px;
+    margin-top: 35px;
     margin-left: 20px;
     margin-right: 20px;
     background-color: #1a1a1a;
@@ -54,6 +72,10 @@ hr {
     color: white;
     animation: rotateShadow 2s infinite linear;
     font-family: "Anton", cursive;
+}
+
+.amount::placeholder {
+    font-size: 9px;
 }
 
 .amount:focus {
@@ -152,8 +174,8 @@ hr {
   --text-light: rgba(255, 255, 255, 0.4);
   --back-color: 240, 40%;
 
-    margin-left: 450px;
-    margin-top: 50px;
+    margin-left: 520px;
+    margin-top: 30px;
     cursor: pointer;
     padding: 0.7em 1em;
     border-radius: 0.5em;
