@@ -242,7 +242,7 @@ def update():
     pname = data.get('pname')
 
     if pname is not None:
-        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces)
+        timers = timer_data_acces.retrieveTimers(pname, transfer_data_acces, content_data_access)
         return jsonify(timers)
 
     # timers = timer_data_acces.retrieveTimers('a', transfer_data_acces) # This is for debug only
