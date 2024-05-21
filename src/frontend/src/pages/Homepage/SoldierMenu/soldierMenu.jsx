@@ -193,11 +193,13 @@ function SoldierNavbar({soldierVisible, setTimers, setResources, timers, }) {
             <nav className="navbar visible">
                 <ul className="navbar-links">
                     <li>
-                        <button onClick={() => handleButtonClick('troopOverview')} className={"soldierMenuOption"}>Troop Overview
+                        <button onClick={() => handleButtonClick('troopOverview')}
+                                className={currentPage === "troopOverview" ? "soldierMenuOption selected" : "soldierMenuOption"}>Troop Overview
                         </button>
                     </li>
                     <li>
-                        <button onClick={() => handleButtonClick('trainTroopOverview')} className={"soldierMenuOption"}>Troop Training
+                        <button onClick={() => handleButtonClick('trainTroopOverview')}
+                                className={currentPage === "trainTroopOverview" ? "soldierMenuOption selected" : "soldierMenuOption"}>Troop Training
                         </button>
                     </li>
                 </ul>

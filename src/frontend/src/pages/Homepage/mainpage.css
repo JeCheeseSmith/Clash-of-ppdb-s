@@ -1,27 +1,27 @@
 .mainpage {
-  position: fixed;        /* Position the container fixed to the viewport */
-  top: 0;             /* Shift the background image 20px above the top of the viewport */
-  left: 0;                /* Align to the left of the viewport */
-  width: 100vw;           /* Set width to viewport width */
-  height: 100vh;          /* Set height to viewport height */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 .grid {
-    /*position: absolute;        !* Position the container fixed to the viewport *!*/
-    width: 100vw;           /* Set width to viewport width */
+    width: 100vw;
     height: 100vh;
     z-index: 2;
     display: block;
 }
 
-/* Add this to your mainpage.css file */
 .fade-in {
     opacity: 0;
-    transition: opacity 1s ease-in;
+    background-color: black;
+    transition: opacity 1s ease-in, background-color 1s ease-in;
 }
 
 .fade-in-visible {
     opacity: 1;
+    background-color: transparent;
 }
 
 

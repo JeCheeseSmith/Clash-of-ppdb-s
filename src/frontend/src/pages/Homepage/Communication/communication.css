@@ -4,7 +4,7 @@
     transform: translateY(-50%);
     height: 100px;
     width: 100px;
-    z-index: 10000;
+    z-index: 5;
     padding: 2px;
     background-color: #262826;
     font-family: "Fira Code", italic, serif;
