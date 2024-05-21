@@ -13,7 +13,6 @@ import Bush from "./models/Objects/Bush.jsx";
 import BackgroundTree from "./models/Objects/BackgroundTree.jsx";
 import Mountain from "./models/Objects/Mountain.jsx";
 import Cobblestones from "./models/Objects/Cobblestones.jsx";
-import Knight from "./models/Objects/NPC's/Knight.jsx";
 /**
  * A 3D grid component with interactive cells and objects.
  * @component

@@ -1,30 +1,65 @@
-## Social systems
+# SocialBox Component
 
-#### Friends
+## Overview
+This component represents a social box that contains various social options. It allows users to interact with different social features such as creating clans, joining clans, viewing general requests, and searching for other users.
 
-##### Sending friend requests
+## Props
 
-When sending a friend request on the frontend, a POST request is send to '/sendfriendrequest' on which an API function in app.py: `def sendfriendrequest()` is called
+This component does not receive any props directly. However, it relies on props passed to its child components.
 
-This function extracts the data from the provided JSON into a message object. Using the friend_data_access, a backend function `Friendrequest(self, request, sname)` is called using this message object and sname from the JSON file.
+## Functions
 
-This function inserts a friend request into the database.
+### toggleSocialVisibility
+- **Description**: Toggles the visibility of the social box.
+- **Parameters**: None
+- **Return**: None
 
-#### Clans
+## Example Usage
 
-###### Creating a clan
+```jsx
+import React from 'react';
+import SocialBox from './SocialBox';
 
-When making a clan on the frontend, a POST request is send to '/createClan' on which an API function in app.py: `def createClan()` is called
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Social App</h1>
+        <SocialBox />
+      </header>
+    </div>
+  );
+}
 
-This function extracts the data from the provided JSON into a Clan object. This data is immediately inserted into a backend function `add_clan(self, object)` using the clan_data_access.
+export default App;
+````
 
-This function inserts a clan into the database with the given information.
+# SocialOption Component
 
-##### Joining a clan
+## Overview
+This component represents a set of social options based on the selected page. It includes functionalities such as creating clans, joining clans, viewing general requests, and searching for other users.
 
-When you want to join a clan, a POST request is send to '/joinClan' on which an API function in app.py: `def joinClan` is called
+## Props
 
-This function extracts data from the JSON (clan name and sender) and creates a message for the clan leader. A backend function `sendRequest(self, request)` is also called using clan_data_access.
-Finally a last message is returned to the sender of the request to let them know that their request has been successfully send.
+- `pageName` (string): The name of the page ('createClan', 'joinClan', 'requests', 'searchPerson').
+- `requests` (Array): Array of requests data (only required for 'requests' page).
+- `sendData` (Function): Function to send data (only required for 'requests' page).
 
-In the backend function `sendRequest` the request is inserted into the database and then the clan leader is send the request.
+## Example Usage
+
+```jsx
+import React from 'react';
+import SocialOption from './SocialOption';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Social App</h1>
+        <SocialOption pageName="createClan" />
+      </header>
+    </div>
+  );
+}
+
+export default App;
