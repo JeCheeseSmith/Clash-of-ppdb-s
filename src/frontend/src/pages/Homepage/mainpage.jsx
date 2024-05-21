@@ -73,7 +73,7 @@ function MainPage()
                 audio.pause(); // Pause the audio when component unmounts
             };
         }
-    }, [backgroundMusic]);
+    }, [backgroundMusic, intro]);
     useEffect(() =>
     {
         if (signUpIntro.current)

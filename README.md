@@ -22,6 +22,8 @@
 
 For the workings of the game, refer to the [documentation](documentation) in which every component is explained. We recommend reading from the database, to the backend to the frontend to get a solid grasp about the mechanics. 
 
+## Copyright Notice
+
 ## How to start?
 
 > This guide assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL configured with a valid SSL Certificate. Optionally, like we did, you can retrieve your free SSL Certificate using [Certbot](https://certbot.eff.org/). 
