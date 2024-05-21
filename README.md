@@ -24,6 +24,9 @@ For the workings of the game, refer to the [documentation](documentation) in whi
 
 ## Copyright Notice
 
+We don't own any right to the used artworks in our game (pictures, audio, video, 3D Models). We call upon the educational use of any potentially copyrighted materials. 
+Throughout our files and code you may find credits to the original authors. (e.g. see [buildingList](documentation/frontend/buildingList.md))
+
 ## How to start?
 
 > This guide assumes you have an Ubuntu Server running with a Nginx Webserver & PostgreSQL configured with a valid SSL Certificate. Optionally, like we did, you can retrieve your free SSL Certificate using [Certbot](https://certbot.eff.org/). 
