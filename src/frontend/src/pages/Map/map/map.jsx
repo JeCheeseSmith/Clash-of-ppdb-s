@@ -13,14 +13,17 @@ import Capital from "./modals/Capital.jsx";
 import PlaySound from "../../../globalComponents/audioComponent/audio.jsx";
 
 const mapSize = 50;
+
 /**
  * Represents a component for displaying and interacting with a map.
- * @param {object} props - The props object.
- * @param {Function} props.setMenuVisible - A function to set the visibility of the menu.
- * @param {Function} props.setSelectedObject - A function to set the selected object.
- * @param {boolean} props.outpostChosen - A boolean indicating if an outpost is chosen.
- * @param {Function} props.setOutpostChosen - A function to set if an outpost is chosen.
- * @returns {JSX.Element} Map component.
+ * @param {Object} props - The props object.
+ * @param {Function} props.setMenuVisible - Function to set the visibility of the menu.
+ * @param {Function} props.setSelectedObject - Function to set the selected object.
+ * @param {boolean} props.outpostChosen - Flag indicating if an outpost is chosen.
+ * @param {Function} props.setOutpostChosen - Function to set if an outpost is chosen.
+ * @param {Object[]} props.settlements - Array of settlements.
+ * @param {Object[]} props.timers - Array of timers.
+ * @returns {JSX.Element} - The map component.
  */
 function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen, settlements, timers})
 {
