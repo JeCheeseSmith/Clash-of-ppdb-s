@@ -15,6 +15,7 @@
 - [x] Focus on database expandability
 - [x] Game is "user-interactive" in the sense that code only gets executed upon a user input
 - [x] Bad username filter
+- [x] Narrator Intro
 
 ## Documentation
 

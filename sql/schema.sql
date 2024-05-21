@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS timer(
     start TIMESTAMP NOT NULL,
     done TIMESTAMP NOT NULL,
     duration BIGINT NOT NULL,
-    sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE -- BelongsTo relation
+    sid INT NOT NULL -- May be used as transfer id as well
 );
 
 CREATE TABLE IF NOT EXISTS friend(

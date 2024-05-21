@@ -586,6 +586,7 @@ def espionage():
     }
     """
     data = request.json
+    print(data.get('idTo'), data.get('sidFrom'), data.get('toType'))
     transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'),
                                                 timer_data_acces)
 
@@ -617,8 +618,9 @@ def transfer():
     """
     data = request.json
 
-    print(data.get('resources'))
-    print(data.get('soldiers'))
+    print(data.get('idTo'), data.get('toType'), data.get('idFrom'),
+                                                        False, data.get('soldiers'),
+                                                        data.get('resources'), data.get('tType'), data.get('pname'))
 
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
                                                         False, data.get('soldiers'),
