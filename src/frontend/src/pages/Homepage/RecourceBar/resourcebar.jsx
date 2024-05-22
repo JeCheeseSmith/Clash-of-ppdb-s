@@ -17,23 +17,23 @@ function ResourceBar({resources, refresh, refreshFunction}) {
                 {/* Each resource has a symbol and a count */}
                 <div className="resourceSection">
                     <img src={gem} alt="Gem" className="resourceIcon" onClick={refreshFunction}/>
-                    <span className="resourceCount">{resources.gems}</span>
+                    <div className="resourceCount">{resources.gems}</div>
                 </div>
                 <div className="resourceSection">
                     <img src={woodLog} alt="Wood" className="resourceIcon" onClick={refreshFunction}/>
-                    <span className="resourceCount">{resources.wood}</span>
+                    <div className="resourceCount">{resources.wood}</div>
                 </div>
                 <div className="resourceSection">
                     <img src={stone} alt="Stone" className="resourceIcon" onClick={refreshFunction}/>
-                    <span className="resourceCount">{resources.stone}</span>
+                    <div className="resourceCount">{resources.stone}</div>
                 </div>
                 <div className="resourceSection">
                     <img src={metal} alt="Metal" className="resourceIcon" onClick={refreshFunction}/>
-                    <span className="resourceCount">{resources.steel}</span>
+                    <div className="resourceCount">{resources.steel}</div>
                 </div>
                 <div className="resourceSection">
                     <img src={food} alt="Food" className="resourceIcon" onClick={refreshFunction}/>
-                    <span className="resourceCount">{resources.food}</span>
+                    <div className="resourceCount">{resources.food}</div>
                 </div>
             </div>
             <img src={refreshButton} alt={"refresh-icon"} className={refresh ? "updateResources-button" : "updateResources-button-timout"} onClick={refreshFunction}/>
