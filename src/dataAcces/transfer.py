@@ -261,17 +261,22 @@ class TransferDataAccess:
         cursor = self.dbconnect.get_cursor()  # DB Acces
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sidFrom,))
         pid = cursor.fetchone()
-
+        print(resources)
         # Instantiate packages
         tp = PackageWithSoldier(Package(resources), soldiers)  # transferPackage
         sp = PackageWithSoldier(package_data_acces.get_resources(pid),
                                 self.extent(soldier_data_acces.getTroops(sidFrom, 'settlement'),
                                             discovered))  # settlementPackage
 
-        # Do arithmetic and verify result
+        print(tp.package.id,sp.package.id)
+
+              # Do arithmetic and verify result
         sp -= tp
         if sp.hasNegativeBalance():
             raise Exception(sp.deficitString())
+
+        print(tp.package.id, tp.soldiers)
+        print(sp.package.id, sp.soldiers)
 
         package_data_acces.add_resources(tp)  # Add the package in the database
         package_data_acces.update_resources(sp)  # Update the sp accordingly

@@ -254,19 +254,19 @@ class PackageDataAccess:
                 amount = package.soldiers[soldier]['amount']
                 discovered = package.soldiers[soldier]['discovered']
 
-                if amount != 0:  # Don't insert useless info
-                    # Check if we need to insert or update this troop!
-                    cursor.execute('SELECT EXISTS(SELECT sname,pid FROM troops WHERE sname=%s AND pid=%s);',
-                                   (soldier, package.package.id))
+                #if amount != 0:  # Don't insert useless info
+                # Check if we need to insert or update this troop!
+                cursor.execute('SELECT EXISTS(SELECT sname,pid FROM troops WHERE sname=%s AND pid=%s);',
+                               (soldier, package.package.id))
 
-                    if cursor.fetchone()[0]:  # It exists, so update
-                        cursor.execute(
-                            'UPDATE troops SET amount = %s ,discovered = %s WHERE pid=%s AND sname=%s;',
-                            (amount, discovered, package.package.id, soldier))
-                    else:  # Insert
-                        cursor.execute(
-                            'INSERT INTO troops(pid, sname, amount,discovered) VALUES (%s, %s, %s, %s);',
-                            (package.package.id, soldier, amount, discovered))
+                if cursor.fetchone()[0]:  # It exists, so update
+                    cursor.execute(
+                        'UPDATE troops SET amount = %s ,discovered = %s WHERE pid=%s AND sname=%s;',
+                        (amount, discovered, package.package.id, soldier))
+                else:  # Insert
+                    cursor.execute(
+                        'INSERT INTO troops(pid, sname, amount,discovered) VALUES (%s, %s, %s, %s);',
+                        (package.package.id, soldier, amount, discovered))
 
         self.dbconnect.commit()
 
