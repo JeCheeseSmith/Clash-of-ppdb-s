@@ -76,7 +76,6 @@ class TransferDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
         if transfer:  # If it's a transfer, we take the middle of the 2 sids
-            print(oid)
             cursor.execute('SELECT idTo,toType,idFrom, fromtype FROM transfer WHERE id=%s;', (oid,))
             ids = cursor.fetchone()
             sidTo = self.translatePosition(ids[0], ids[1])  # This can go recursively for transfers on transfers
@@ -153,8 +152,6 @@ class TransferDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
 
-        print(soldiers)
-
         if soldiers is not None:
             speed = inf  # Retrieve the minimal speed
             amount = 1
@@ -167,10 +164,8 @@ class TransferDataAccess:
             speed = 1
 
         distance = SettlementDataAcces.calculateDistance(to, start)  # Calc distance
-        print(distance)
-        duration =  (distance * (speed * self.determineSpeed(package)))
+        duration = (distance * (speed * self.determineSpeed(package)))
         start = datetime.now()
-        print(duration)
         stop = start + timedelta(seconds=duration)
 
         return start, stop, int(duration)  # Return time
