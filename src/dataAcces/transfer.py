@@ -34,10 +34,10 @@ class TransferDataAccess:
         """
         speed = 1
         if package is not None:  # (None = Espionage or Attack)
-            speed += package.stone % 1000
-            speed += package.wood % 1000
-            speed += package.food % 1000
-            speed += package.steel % 1000
+            speed += package.stone / 250
+            speed += package.wood / 250
+            speed += package.food / 250
+            speed += package.steel / 250
         return speed
 
     def extent(self, soldierDict, discovered):
@@ -112,7 +112,7 @@ class TransferDataAccess:
             cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (idFrom,))
         pname2 = cursor.fetchone()[0]
 
-        return not (friend_data_acces.areFriends(pname1, pname2) or clan_data_acces.areAllies(pname1, pname2))
+        return not (friend_data_acces.areFriends(pname1, pname2) or clan_data_acces.areAllies(pname1, pname2) or pname1==pname2)
 
     def getNumberOfSettlements(self, sid: int):
         """
@@ -167,11 +167,11 @@ class TransferDataAccess:
             speed = 1
 
         distance = SettlementDataAcces.calculateDistance(to, start)  # Calc distance
-
-        duration =  speed * self.determineSpeed(package) / distance
+        print(distance)
+        duration =  (distance * (speed * self.determineSpeed(package)))
         start = datetime.now()
         print(duration)
-        stop = start + timedelta(minutes=duration)
+        stop = start + timedelta(seconds=duration)
 
         return start, stop, int(duration)  # Return time
 
