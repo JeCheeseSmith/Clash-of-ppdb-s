@@ -564,7 +564,7 @@ SELECT id FROM transfer WHERE discovered=True
         :return:
         """
         # Instantiate Usable Data Objects
-        success = choice([True, False])  # Choose a random winner
+        success = True #choice([True, False])  # Choose a random winner
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
 
@@ -620,12 +620,19 @@ SELECT id FROM transfer WHERE discovered=True
                 dp = list(cursor.fetchone())  # Defendant resources
 
                 # Calculate amount that will be stolen
+                print(dp)
+
                 ap = package_data_acces.get_resources(transfer.pid)  # Attacker package
                 capacity = soldier_data_acces.getCapacity(transfer.pid)  # Amount an attacker can take with
                 resourceStolen = choice([1, 2, 3, 4])  # Choose a random resource
+                print(ap.to_dct(), capacity, dp[resourceStolen])
                 stolen = min(capacity, dp[resourceStolen])  # Amount that will be stolen
+                oldDp = Package(dp)
                 dp[resourceStolen] -= stolen
                 dp = Package(dp)
+                ap = oldDp - dp
+                ap.id = transfer.pid
+                print(dp.to_dct(), ap.to_dct())
 
                 # Adjust new resources to database
                 package_data_acces.update_resources(dp)

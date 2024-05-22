@@ -96,32 +96,32 @@ def presets(connection):
     resources = [0, 5000, 5000, 5000, 5000, 0, 0, 0]
     soldiers = [["Halbardier", 15, "True"], ["Bandit", 5, "False"]]
 
-    # a gives resources to friend b
-    transfer_data_acces.createTransfer(2, False, 1, False, soldiers, resources, 'transfer', 'a', timer_data_acces,
-                                       package_data_acces, clan_data_acces, friend_data_access, soldier_data_acces)
-
-    # d attacks a
-    transfer_data_acces.createTransfer(1, False, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
-                                       timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
-                                       soldier_data_acces)
-
-    # a spies on d
-    transfer_data_acces.createEspionage(4, 1, False, timer_data_acces)
-
-    # a attacks the transfer attack to a from d
-    transfer_data_acces.createTransfer(2, True, 1, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'a',
-                                       timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
-                                       soldier_data_acces)
-
-    # d attacks the transfer attack to d from a
-    transfer_data_acces.createTransfer(4, True, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
-                                       timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
-                                       soldier_data_acces)
+    # # a gives resources to friend b
+    # transfer_data_acces.createTransfer(2, False, 1, False, soldiers, resources, 'transfer', 'a', timer_data_acces,
+    #                                    package_data_acces, clan_data_acces, friend_data_access, soldier_data_acces)
+    #
+    # # d attacks a
+    # transfer_data_acces.createTransfer(1, False, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
+    #                                    timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
+    #                                    soldier_data_acces)
+    #
+    # # a spies on d
+    # transfer_data_acces.createEspionage(4, 1, False, timer_data_acces)
+    #
+    # # a attacks the transfer attack to a from d
+    # transfer_data_acces.createTransfer(2, True, 1, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'a',
+    #                                    timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
+    #                                    soldier_data_acces)
+    #
+    # # d attacks the transfer attack to d from a
+    # transfer_data_acces.createTransfer(4, True, 4, False, soldiers, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 'attack', 'd',
+    #                                    timer_data_acces, package_data_acces, clan_data_acces, friend_data_access,
+    #                                    soldier_data_acces)
 
     # a creates an outpost
-    cursor.execute("INSERT INTO building(name,level,gridX,gridy,sid, occuppiedcells) VALUES ('Chancery', 1, 28,2,1,'{{1,2}}');")
-    transfer_data_acces.createOutpost(1, settlement_data_acces.getNewCoordinate(0, 0), 'Outpost of a', soldiers, resources, timer_data_acces, package_data_acces,
-                                      clan_data_acces, friend_data_access, soldier_data_acces, settlement_data_acces)
+    # cursor.execute("INSERT INTO building(name,level,gridX,gridy,sid, occuppiedcells) VALUES ('Chancery', 1, 28,2,1,'{{1,2}}');")
+    # transfer_data_acces.createOutpost(1, settlement_data_acces.getNewCoordinate(0, 0), 'Outpost of a', soldiers, resources, timer_data_acces, package_data_acces,
+    #                                   clan_data_acces, friend_data_access, soldier_data_acces, settlement_data_acces)
 
     #cursor.execute("UPDATE timer SET done = done + interval '8 minutes' WHERE type!=%s;", ('outpost', ))
 

@@ -108,7 +108,7 @@ SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FR
 
         for soldier in troops.keys():
             cursor.execute('SELECT capacity FROM soldier WHERE name=%s;', (soldier,))
-            capacity += cursor.fetchone()[0]
+            capacity += cursor.fetchone()[0] * troops[soldier].get('amount')
         return capacity
 
     def getBarrackLevelSum(self, sid):

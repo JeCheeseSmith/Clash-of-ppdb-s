@@ -153,19 +153,25 @@ class TransferDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
 
+        print(soldiers)
+
         if soldiers is not None:
             speed = inf  # Retrieve the minimal speed
+            amount = 1
             for name in soldiers.keys():
                 cursor.execute('SELECT speed FROM soldier WHERE name=%s;', (name,))
                 speed = min(cursor.fetchone()[0], speed)
+                amount += soldiers[name].get('amount')
+            speed = speed * 3.14 * amount
         else:  # Espionage
             speed = 1
 
         distance = SettlementDataAcces.calculateDistance(to, start)  # Calc distance
 
-        duration = distance / speed * self.determineSpeed(package)
+        duration =  speed * self.determineSpeed(package) / distance
         start = datetime.now()
-        stop = start + timedelta(seconds=duration)
+        print(duration)
+        stop = start + timedelta(minutes=duration)
 
         return start, stop, int(duration)  # Return time
 
