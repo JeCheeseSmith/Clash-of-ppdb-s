@@ -29,17 +29,14 @@
 }
 
 .resourceIcon {
-  width: 50px;
-  height: auto;
+  width: 40px;
+  height: 40px;
   transition: transform 0.3s ease;
 }
 
 .resourceCount {
   color: rgb(255, 136, 0);
-  background: #28003a;
   font-family: "Anton", cursive;
-  border-radius: 8px;
-  padding: 5px;
 }
 
 .resourceIcon:hover {

@@ -4,6 +4,7 @@ import avatar from "../../assets/clanPicture.jpg";
 import notFound from "../../assets/groupnotfound.png";
 import person from "../../assets/person.png";
 import group from "../../assets/group.png";
+import reports from "../../assets/reports.png";
 import Buildings from "../../pages/Homepage/GridBuilder/buildings.jsx";
 
 /**
@@ -94,11 +95,14 @@ function ClanSearch({name, pname, succes}) {
 function ChatPerson({name})
 {
     let finalName = name
-    if (name === "admin") {finalName = "Imperial Messenger"}
+    let report = false
+    if (name === "admin") {finalName = "Imperial Messenger"; report = true}
     return (
         <div>
-            <img src={person} className={"chat-ICON-avatar"}/>
-            <h3>{finalName}</h3>
+            {!report && <img src={person} className={"chat-ICON-avatar"}/>}
+            {report && <img src={reports} className={"chat-ICON-avatar-report"}/>}
+            {!report && <h3>{finalName}</h3>}
+            {report && <h3 className={"chat-ICON-name"}>{finalName}</h3>}
         </div>
     );
 }

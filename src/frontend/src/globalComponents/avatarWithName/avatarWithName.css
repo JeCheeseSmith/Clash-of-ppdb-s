@@ -72,6 +72,23 @@
     border-radius: 10px;
 }
 
+.chat-ICON-avatar-report{
+    height: 60px;
+    width: 60px;
+    border-radius: 10px;
+    background-color: #fc0000;
+}
+
+.chat-ICON-name {
+    color: #e5dada;
+    font-family: "Anton", cursive;
+    letter-spacing: 2px;
+    background-color: #6b0000;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
 .building-SELECTED{
     display: flex;
     flex-direction: column;

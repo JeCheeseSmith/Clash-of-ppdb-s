@@ -97,6 +97,18 @@
     padding: 20px;
 }
 
+.message-time{
+    margin-top: 20px;
+    color: #0e0049;
+    font-family: "Anton", cursive;
+}
+
+.message-time-receiver{
+    margin-top: 20px;
+    color: #3b1403;
+    font-family: "Anton", cursive;
+}
+
 .message-input {
     padding: 20px;
     font-size: 20px;

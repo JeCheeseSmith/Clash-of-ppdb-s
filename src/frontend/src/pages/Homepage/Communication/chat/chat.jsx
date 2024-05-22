@@ -14,7 +14,15 @@ import {useLocation} from "react-router-dom"; // CSS file for styling
  */
 function ChatBox()
 {
-    const [messages, setMessages] = useState([{content:"Welcome to Chat!", sender:"Travisia"}]); // Initialize messages
+    const [messages, setMessages] = useState(
+        [
+        {
+            content:"Welcome to Chat!",
+            sender:"Travisia",
+            moment: "1605-05-21 15:43:55.754304"
+        }
+        ]
+    ); // Initialize messages
     const [chatVisible, setChatVisible] = useState(false); // State variable to track chat visibility
     const [contactList, setContactList] = useState([])
     const [receiver, setReceiver] = useState("")
@@ -80,17 +88,46 @@ function MessageDisplay({ messages })
           messageDisplayRef.current.scrollTop = messageDisplayRef.current.scrollHeight;
         }
     }, [messages]);
-
+    const formatDate = (dateString) =>
+    {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString();
+        const options = { hour12: true, hour: 'numeric', minute: 'numeric' };
+        let when = " at "
+        const formattedTime = when + date.toLocaleTimeString(undefined, options);
+        if (formattedDate !== "Invalid Date" && formattedTime !== "Invalid Date")
+        {
+            return { formattedDate, formattedTime };
+        }
+        else
+        {
+            return { formattedDate:"", formattedTime:"Just Now" };
+        }
+    };
     return (
         <div ref={messageDisplayRef} className="message-display">
             {messages.map((message, index) => {
                 const senderName = message.sender === "admin" ? "Imperial Messenger" : message.sender;
-                return (<div key={index} className={`message ${message.sender === username ? 'sent' : 'received'}`}>
-                    {message.sender === username && <div>{message.content}</div>}
-                    {message.sender === username && <div className="you-name">you</div>}
-                    {message.sender !== username && <div className="sender-name">{senderName}</div>}
-                    {message.sender !== username && <div>{message.content}</div>}
-                </div>)
+                return (
+                    <div key={index} className={`message ${message.sender === username ? 'sent' : 'received'}`}>
+                        {message.sender === username &&
+                            <div>
+                                {message.content}
+                                <div className={"message-time"}>
+                                    {formatDate(message.moment).formattedDate}{formatDate(message.moment).formattedTime}
+                                </div>
+                            </div>}
+                        {message.sender === username && <div className="you-name">you</div>}
+                        {message.sender !== username && <div className="sender-name">{senderName}</div>}
+                        {message.sender !== username &&
+                            <div>
+                                {message.content}
+                                <div className={"message-time-receiver"}>
+                                    {formatDate(message.moment).formattedDate}{formatDate(message.moment).formattedTime}
+                                </div>
+                            </div>}
+                    </div>
+                )
             })}
         </div>
     );
