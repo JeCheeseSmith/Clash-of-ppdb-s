@@ -13,7 +13,7 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background-image: linear-gradient(to right, rgba(96, 53, 4, 0.64), rgba(154, 93, 44, 0.63), rgba(103, 57, 9, 0.66));
+  background-image: linear-gradient(to right, rgba(132, 56, 215, 0.56), rgba(82, 34, 0, 0.63), rgba(155, 76, 218, 0.66));
   background-size: cover;
   width: 25%;
   margin: 0 auto;
@@ -25,6 +25,7 @@
 .resourceSection {
   flex: 1;
   text-align: center;
+  margin-left: 10px;
 }
 
 .resourceIcon {
@@ -34,7 +35,11 @@
 }
 
 .resourceCount {
-  margin-left: 8px;
+  color: rgb(255, 136, 0);
+  background: #28003a;
+  font-family: "Anton", cursive;
+  border-radius: 8px;
+  padding: 5px;
 }
 
 .resourceIcon:hover {
