@@ -112,6 +112,7 @@ function MainPage()
                               randomArray={randomArray}
                               getTimer={getTimer}
                               setCallForUpdate={setCallForUpdate}
+                              setInstantCallForUpdate={setInstantCallForUpdate}
                         />
                     </div>
                     <ResourceBar resources={resources} refresh={refresh} refreshFunction={() => {

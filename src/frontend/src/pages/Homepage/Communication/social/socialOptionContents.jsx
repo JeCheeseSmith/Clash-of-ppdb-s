@@ -56,6 +56,10 @@ function CreateClanPage()
         {
             setPopUpMessage("Please Enter All of your Clan Descriptors to Proceed!")
         }
+        else if (clanName.length > 20)
+        {
+            setPopUpMessage("Your Clan Name must be fewer than 20 characters!")
+        }
         else
         {
             const data = await POST({

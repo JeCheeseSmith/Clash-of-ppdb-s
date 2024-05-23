@@ -23,7 +23,7 @@ import Cobblestones from "./models/Objects/Cobblestones.jsx";
  * @param {Function} setCallForUpdate - Function to set the flag for updating the grid.
  * @return {JSX.Element} A React JSX Element representing the 3D grid.
  */
-function Grid({buildings, randomArray, getTimer, setCallForUpdate})
+function Grid({buildings, randomArray, getTimer, setCallForUpdate, setInstantCallForUpdate})
 {
     const { sid, username } = useLocation().state;
     const [selectedBuilding, setSelectedBuilding] =
@@ -77,7 +77,7 @@ function Grid({buildings, randomArray, getTimer, setCallForUpdate})
                 if (moved[0] !== moved[1])
                 {
                     await POST({"oldPosition":moved[0], "newPosition": moved[1], "occupiedCells": moved[2][1], "sid": sid}, "/moveBuilding")
-                    setCallForUpdate(true)
+                    setInstantCallForUpdate(true)
                 }
             }
         }
@@ -239,6 +239,7 @@ function Grid({buildings, randomArray, getTimer, setCallForUpdate})
                                  oldPosition={oldPosition}
                                  getTimer={getTimer}
                                  setCallForUpdate={setCallForUpdate}
+                                 setInstantCallForUpdate={setInstantCallForUpdate}
                 />}
         </Suspense>
     );

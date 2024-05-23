@@ -19,3 +19,15 @@
     position: absolute;
     z-index: 1;
 }
+
+
+.fade-in {
+    opacity: 0;
+    background-color: black;
+    transition: opacity 1s ease-in, background-color 1s ease-in;
+}
+
+.fade-in-visible {
+    opacity: 1;
+    background-color: transparent;
+}

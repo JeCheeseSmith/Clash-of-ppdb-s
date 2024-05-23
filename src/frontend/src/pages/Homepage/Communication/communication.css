@@ -23,6 +23,7 @@
 
 .toggle-chat-button.visible {
     left: 516px; /* Slide in when visible */
+    z-index: 10000;
 }
 
 .toggle-chat-button.hidden {

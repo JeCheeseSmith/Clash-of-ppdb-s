@@ -36,4 +36,12 @@ This document outlines the various sound files we have curated for educational u
    - **Source:** [YouTube - Social Button Sound](https://www.youtube.com/watch?v=T9N0pmLI7Jw)
    - **Description:** This sound is specifically used for social media buttons and interactions within our educational applications, providing a clear and pleasant auditory feedback.
 
+### 9. Medieval Battle Sound
+   - **Source:** [YouTube - Siege Battle](https://www.youtube.com/watch?v=EspwQ6Phw0g)
+   - **Description:** This sound is specifically used for the background sound of the map, providing a clear and pleasant auditory feedback.
+
+### 10 Medieval City Sound
+   - **Source:** [YouTube - Market Day Ambience](https://www.youtube.com/watch?v=o-b5nMCj5hI&t=950s)
+   - **Description:** This sound is specifically used for the background sound of the main page, providing a clear and pleasant auditory feedback.
+
 By incorporating these sound files into our educational materials, we aim to create an immersive and engaging learning environment. Each sound has been chosen for its ability to enhance comprehension and retention, ensuring our educational content is both effective and enjoyable.
