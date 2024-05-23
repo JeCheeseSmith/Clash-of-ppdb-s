@@ -13,6 +13,9 @@ This API call retrieves all buildings in a settlement and gives a format the fro
 
 API Call to retrieve all settlements and their coordinates to visualise on the map in the frontend.
 
+#### Explanation of helper functions
+> These helper functions are relatively short but used to keep things clean.
+
 ##### getResources()
 Simple function to return a Package object from the database, connected to the settlement. (Uses the settlement id instead of the package id)
 
@@ -30,3 +33,6 @@ Helper function which checks if a given settlement is an outpost or the main set
 
 #### calculateDistance()
 Calculates the distance between 2 settlements or transfers (coordinates)
+
+#### getNewCoordinate()
+Helper function to generate new unique coordinates for new settlements on the map

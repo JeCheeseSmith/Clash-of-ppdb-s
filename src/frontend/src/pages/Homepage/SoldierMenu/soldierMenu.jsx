@@ -226,33 +226,6 @@ function SoldierMenuOptions({pageName, setTimers, setResources, timers, soldiers
     )
 }
 
-// function SoldierAmountSelectBar({soldierVisible, TroopAmount, onTroopAmountChange}) {
-//     const { sid,  } = useLocation().state;
-//     const [amount, setAmount] = useState(1)
-//
-//      const handleButtonClick = () => {
-//       onTroopAmountChange(amount);
-//       getBarrackSum()
-//     };
-//
-//      const getBarrackSum = () => {
-//         API.getBarrackLevelSum(sid).then(data => setAmount(
-//         {
-//             amount: data.amount
-//         })
-//         )
-//      }
-//
-//      console.log(amount)
-//
-//     return (
-//         <div className="TroopAmountbar">
-//             <button onClick={() => handleButtonClick()} className={"AmountMenuOption"}>{amount} x</button>
-//         </div>
-//     )
-// }
-
-
 function TroopOverviewPage({setResources, soldiersAvailable, soldiers, consumption, setTimers, update}) {
     const {sid, username} = useLocation().state;
     const [errorMessage, setErrorMessage] = useState("")

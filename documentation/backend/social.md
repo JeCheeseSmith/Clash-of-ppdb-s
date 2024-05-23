@@ -13,7 +13,7 @@ In this function we also use another function from the class FriendDataAccess ca
 
 add_admin. It is a function that makes you and the admin automatically friends.
 
-####  def get_login()
+#### get_login()
 
 This function is made to log in a player. So the frontend can do a post to check if the player really exists in the backend.
 
@@ -21,7 +21,9 @@ For this function we use another function from the class PlayerDataAccess called
 
 get_login. It checks if the player really exists.
 
+#### logout()
 
+Function to register to logout time of a player. The logout time can be used to compute the new resources after login in again that are generated over time.
 
 
 **update_chat():**
@@ -57,21 +59,6 @@ chat of a clan.
 *API methods=POST AND GET*
 
 
-
-**get_resources()**
-
-This function is made to get the resources of a player. So the frontend can do a post
-
-to check the resources of a player.
-
-For this function we use another function from the class SettlementDataAcces called
-
-getResources. It returns all resources of a player.
-
-*API method=POST*
-
-
-
 **createClan():**
 
 This function is made to create a new clan with a unique name and a clan leader. So
@@ -83,8 +70,6 @@ For this function we use another function from the class ClanDataAccess called
 add\_clan. It inserts a new clan in the correct way in the database.
 
 *API method=POST*
-
-
 
 
 
