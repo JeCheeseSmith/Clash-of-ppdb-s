@@ -31,6 +31,7 @@ function MapMainpage()
     const [refresh, setRefresh] = useState(true)
     const intro = false
     const [fadeIn, setFadeIn] = useState(false);
+    const [isBackgroundAudioEnabled, setIsBackgroundAudioEnabled] = useState(true)
     const handleOutpostButton = () =>
     {
         setOutpostChosen(!outpostChosen)
@@ -45,14 +46,17 @@ function MapMainpage()
     }, [intro]);
     useEffect(() =>
     {
-        const audio = new Audio(backgroundMusic);
-        audio.loop = true; // Loop the audio
-        audio.play();
-        return () =>
+        if (!intro && isBackgroundAudioEnabled)
         {
-            audio.pause(); // Pause the audio when component unmounts
-        };
-    }, [backgroundMusic]);
+            const audio = new Audio(backgroundMusic);
+            audio.loop = true; // Loop the audio
+            audio.play();
+            return () =>
+            {
+                audio.pause(); // Pause the audio when component unmounts
+            };
+        }
+    }, [backgroundMusic, intro, isBackgroundAudioEnabled]);
     return (
         <div className={`map-mainpage fade-in ${fadeIn ? 'fade-in-visible' : ''}`}>
             <Loader {...loaderStyles} />
@@ -74,7 +78,7 @@ function MapMainpage()
             />
             <Outpost onClickFunction={handleOutpostButton}/>
             <Chat/>
-            <Account/>
+            <Account isBackgroundAudioEnabled={isBackgroundAudioEnabled} setIsBackgroundAudioEnabled={setIsBackgroundAudioEnabled}/>
             <img src={compass} alt={"compass"} className={"compass"}/>
             <Map setMenuVisible={setMenuVisible}
                  setSelectedObject={setSelectedObject}

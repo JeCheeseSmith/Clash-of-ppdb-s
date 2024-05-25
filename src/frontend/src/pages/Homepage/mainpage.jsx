@@ -24,6 +24,7 @@ import introVideo from '../../assets/Travisia - Fallen Empire Intro Story.mp4'
  * Functional component representing the main page of the application.
  * Displays a full-bleed background image.
  */
+let audioSetting = true;
 function MainPage()
 {
     const { sid, username, signUp} = useLocation().state;
@@ -38,6 +39,7 @@ function MainPage()
     const [instantCallForUpdate, setInstantCallForUpdate] = useState(false)
     const [refresh, setRefresh] = useState(true)
     const [fadeIn, setFadeIn] = useState(false);
+    const [isBackgroundAudioEnabled, setIsBackgroundAudioEnabled] = useState(true)
     const addBuilding = (type, position, size, occupiedCells) =>
     {
         setBuildings([...buildings, {type, position, size, occupiedCells}]);
@@ -63,7 +65,7 @@ function MainPage()
     }, []);
     useEffect(() =>
     {
-        if (!intro)
+        if (!intro && isBackgroundAudioEnabled)
         {
             const audio = new Audio(backgroundMusic);
             audio.loop = true; // Loop the audio
@@ -73,7 +75,7 @@ function MainPage()
                 audio.pause(); // Pause the audio when component unmounts
             };
         }
-    }, [backgroundMusic, intro]);
+    }, [backgroundMusic, intro, isBackgroundAudioEnabled]);
     useEffect(() =>
     {
         if (signUpIntro.current)
@@ -105,7 +107,7 @@ function MainPage()
                     <SocialBox/>
                     <WheelOfFortune username1={username} sid1={sid} setFlag={setFlag}
                                     setCallForUpdate={setInstantCallForUpdate}/>
-                    <Account/>
+                    <Account isBackgroundAudioEnabled={isBackgroundAudioEnabled} setIsBackgroundAudioEnabled={setIsBackgroundAudioEnabled}/>
                     <Buildmenu buildings={buildings} addBuilding={addBuilding} setCallForUpdate={setInstantCallForUpdate}/>
                     <div className={"grid"}>
                         <Grid buildings={buildings}

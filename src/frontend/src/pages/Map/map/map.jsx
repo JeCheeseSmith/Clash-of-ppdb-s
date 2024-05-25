@@ -57,9 +57,9 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                 </mesh>
                 {!outpostChosen &&
                     <>
-                       <Text position={[positionX, characteristics.height, positionY]}
+                       <Text position={[positionX, characteristics.height-1, positionY]}
                                rotation={[-0.5, 0, 0]}
-                               scale={characteristics.scale}
+                               scale={characteristics.scale-0.2}
                                font={textFont}
                                onClick={() => handleTransfer(settlement.sid, false)}
                        >
@@ -99,11 +99,11 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                 }
                 else if (settlement.isFriend)
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City (Companion)`, color: "purple", scale: 1, height: 9}
+                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City`, color: "purple", scale: 1, height: 11}
                 }
                 else if (settlement.isAllied)
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City (Ally)`, color: "Maroon", scale: 1, height: 9}
+                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City`, color: "Maroon", scale: 1, height: 9}
                 }
                 else
                 {
