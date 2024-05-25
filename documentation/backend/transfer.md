@@ -34,3 +34,59 @@ Creating an outpost performs the same steps as a resource transfer. But now basi
 This API is used to retrieve the info for a settlement or transfer visible on the map.
 
 Depending on the allied status of the owners, more or less info may be shown. This is determined using the discovered bool.
+
+#### Helper Functions
+> To keep the code clean and usable, numerous helper functions were made.
+
+##### determineSpeed()
+
+Depending on the goods transfered, a speed value is generated.
+
+##### extent()
+
+Helper function to add soldiers with amount 0 to the dictionary
+
+##### __restructure()
+
+Helper function to reformat the list from frontend to a backend usable format
+
+##### translatePosition()
+
+Translate a SID to a coordinate [x,y]
+
+##### areEnemies()
+
+Helper function which verifies if 2 objects are befriended or not
+
+##### getNumberOfSettlements()
+
+Retrieve the number of settlements for a player
+
+##### getMaxNumberOfSettlements()
+
+Retrieve the maximal number of settlements a user may have (= Chancery level + 1)
+
+##### hasChancery()
+
+Verify if a settlement contains a chancery and may create an outpost
+
+##### calculateDuration()
+
+Calculates the duration for a transfer
+
+##### instantiatePackageWithSoldiers()
+
+Helper function to create PackageWithSoldier from database info
+
+##### instantiateTransfer()
+
+Instantiates a transfer python object.
+
+##### returnToBase()
+
+Helper function to delete the current transfer and make a new transfer towards home
+
+##### updateResourceTroops()
+
+Helper function to update the resource and soldiers amounts in the settlement and insert the new correct data into the database
+Error will be thrown and needs to be handled upon negative balances. 

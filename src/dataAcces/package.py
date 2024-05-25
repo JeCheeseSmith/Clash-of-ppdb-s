@@ -254,7 +254,6 @@ class PackageDataAccess:
                 amount = package.soldiers[soldier]['amount']
                 discovered = package.soldiers[soldier]['discovered']
 
-                #if amount != 0:  # Don't insert useless info
                 # Check if we need to insert or update this troop!
                 cursor.execute('SELECT EXISTS(SELECT sname,pid FROM troops WHERE sname=%s AND pid=%s);',
                                (soldier, package.package.id))
@@ -477,7 +476,7 @@ class PackageDataAccess:
         # Player resources
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))
         pid = cursor.fetchone()[0]
-        cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid,))
+        cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid, ))
         Pwood = cursor.fetchone()[0]
         cursor.execute('SELECT stone FROM package WHERE id=%s;', (pid,))
         Pstone = cursor.fetchone()[0]

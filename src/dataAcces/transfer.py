@@ -228,16 +228,6 @@ class TransferDataAccess:
         timer = Timer(None, transfer.id, 'transfer', start, stop, duration, transfer.idTo)
         timer_data_access.insertTimer(timer)
 
-        # if transfer.toType:
-        #     # We need to call this recursively on any transfers linked to this one
-        #     cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s;',
-        #                    (transfer.id,))
-        #     transfers = cursor.fetchall()
-        #     for tid in transfers:  # Send them back to where they came from
-        #         self.returnToBase(self.instantiateTransfer(tid[0]), timer_data_access,
-        #                           soldier_data_acces, package_data_acces)
-        #         self.dbconnect.commit()
-
         # Delete the old timer in the database (package and transfer is recycled)
         if originalTimerID is not None:
             cursor.execute('DELETE FROM timer WHERE id=%s;', (originalTimerID,))
@@ -261,22 +251,16 @@ class TransferDataAccess:
         cursor = self.dbconnect.get_cursor()  # DB Acces
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sidFrom,))
         pid = cursor.fetchone()
-        print(resources)
         # Instantiate packages
         tp = PackageWithSoldier(Package(resources), soldiers)  # transferPackage
         sp = PackageWithSoldier(package_data_acces.get_resources(pid),
                                 self.extent(soldier_data_acces.getTroops(sidFrom, 'settlement'),
                                             discovered))  # settlementPackage
 
-        print(tp.package.id,sp.package.id)
-
-              # Do arithmetic and verify result
+        # Do arithmetic and verify result
         sp -= tp
         if sp.hasNegativeBalance():
             raise Exception(sp.deficitString())
-
-        print(tp.package.id, tp.soldiers)
-        print(sp.package.id, sp.soldiers)
 
         package_data_acces.add_resources(tp)  # Add the package in the database
         package_data_acces.update_resources(sp)  # Update the sp accordingly

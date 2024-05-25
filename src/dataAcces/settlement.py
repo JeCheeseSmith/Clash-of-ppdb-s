@@ -313,8 +313,6 @@ class SettlementDataAcces:
         try:
             if not soldier_data_acces.unlocked(sid, sname):
                 raise Exception("You have not yet unlocked this soldier! Consider upgrading your Castle or building Barracks.")
-            if amount > soldier_data_acces.getBarrackLevelSum(sid):  # Verify amount correctness
-                raise Exception(f"You can only train {soldier_data_acces.getBarrackLevelSum(sid)} in parallel!")
 
             cursor = self.dbconnect.get_cursor()  # Get DB acces
 

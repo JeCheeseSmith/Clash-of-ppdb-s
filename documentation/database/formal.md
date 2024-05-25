@@ -131,14 +131,15 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### settlement
 
-| Name  | Type    | Explanation                                         |
-|-------|---------|-----------------------------------------------------|
-| id    | INT     | PRIMARY KEY                                         |
-| name  | VARCHAR | Unique name of the settlement                       |
-| mapX  | INT     | X Coordinate on the map                             |
-| mapY  | INT     | Y Coordinate on the map                             |
-| pid   | INT     | Has Relation: Resources currently in the settlement |
-| pname | VARCHAR | Owns Relation: Player owning the settlement         |
+| Name          | Type    | Explanation                                                                                               |
+|---------------|---------|-----------------------------------------------------------------------------------------------------------|
+| id            | INT     | PRIMARY KEY                                                                                               |
+| name          | VARCHAR | Unique name of the settlement                                                                             |
+| mapX          | INT     | X Coordinate on the map                                                                                   |
+| mapY          | INT     | Y Coordinate on the map                                                                                   |
+| pid           | INT     | Has Relation: Resources currently in the settlement                                                       |
+| pname         | VARCHAR | Owns Relation: Player owning the settlement                                                               |
+| Constraint #1 | /       | The combination of mapX & mapY is unique, as only 1 setttlement can occupy a specific position on the map | 
 
 ### achievement
 
@@ -175,15 +176,16 @@ A SQL setup file is provided [here](../../sql/schema.sql). This drops the whole 
 
 ### building
 
-| Name          | Type    | Explanation                                                              |
-|---------------|---------|--------------------------------------------------------------------------|
-| id            | INT     | Unique Identifier (Multiple same buildables can be placed)               |
-| name          | VARCHAR | Name of the buildable                                                    |
-| level         | INT     | Level of the building                                                    |
-| gridX         | INT     | X Coordinate on the settlement grid  (Upper Left corner of the building) |
-| gridY         | INT     | Y Coordinate on the settlement grid  (Upper Left corner of the building) |
-| sid           | INT     | Contains Relation; Expressing which buildings are in which settlement    |
-| occupiedCells | INT[][] | Contains the cells a Building occupies on the grid                       |
+| Name          | Type    | Explanation                                                                                                                                    |
+|---------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| id            | INT     | Unique Identifier (Multiple same buildables can be placed)                                                                                     |
+| name          | VARCHAR | Name of the buildable                                                                                                                          |
+| level         | INT     | Level of the building                                                                                                                          |
+| gridX         | INT     | X Coordinate on the settlement grid  (Upper Left corner of the building)                                                                       |
+| gridY         | INT     | Y Coordinate on the settlement grid  (Upper Left corner of the building)                                                                       |
+| sid           | INT     | Contains Relation; Expressing which buildings are in which settlement                                                                          |
+| occupiedCells | INT[][] | Contains the cells a Building occupies on the grid                                                                                             |
+| Constraint #1 | /       | The combination of sid, gridX and gridY is unique since multiple buildings may be placed in 1 settlement but logically have an unique position |
 
 ### timer
 | Name     | Type      | Explanation                                                            |

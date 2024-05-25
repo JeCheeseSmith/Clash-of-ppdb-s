@@ -9,15 +9,11 @@ Similar to buildings, first is checked if the settlements meets all the requirem
 
 If everything is good to go, a soldier timer will be made and sent back. When the timer ran out, the soldier(s) are successfully trained and are added to the settlement.
 
-### getBarrackLevelSum()
-
-This is a helper function to retrieve the sum of all the levels of the barracks in a settlement. It is used for the max amount of troops that may be trained in parallel (of the same type)
-
 #### getConsumption()
 
 API call to retrieve the current consumption of all troops in the settlement to visualise for the user in the frontend.
 
-Under the hood it calls the PackageDataAccess function: calc_consumption()
+Under the hood it calls the PackageDataAccess function: [calc_consumption()](resources.md)
 
 #### getTroops()
 
@@ -26,3 +22,19 @@ API function to retrieve all troops currently stationed in a settlement.
 #### unlockedTroops()
 
 API to give a status for each soldier if they're unlocked or not. This is needed to execute some frontend functionality.
+
+### Helper Functions
+
+#### getCapacity()
+
+Helper function to calculate the total capacity soldiers can take with for a given package ID. (The soldier info will be retrieved from the database)
+
+#### calculateTrainTime()
+
+Helper function to retrieve the start,stop and duration for a timer to train a soldier.
+
+As TroopTraining may not run in parallel, the latest soldier training is taken into account.
+
+#### unlocked()
+
+Helper function: Gives True if a settlement unlocked this type of soldier

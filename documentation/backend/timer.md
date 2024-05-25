@@ -25,7 +25,7 @@ This function call functionality to execute all timers passed their due date.
 To start this process, the TimerDataAccess is used to call the evaluateTimers() functions.
 
 First, it executes a query to retrieve all timers that are passed. Some timers might be from different players.
-Depending on the timer type, the operation function is execute. E.g. for upgrading a Castle, the simulateUpgrade() is called. 
+Depending on the timer type, the operation function is executed. E.g. for upgrading a Castle, the simulateUpgrade() is called.
 
 There exists these types and called functions:
 
@@ -40,6 +40,12 @@ There exists these types and called functions:
 
 The first step in executing this functionality always is recomposing the data from the database into usable Python Objects.
 
+#### evaluateTimers()
+
+This functions contains a loop based on the amount of done timers. As long as there is a timer done, the handlers are called and the loop continuous.
+
+[evaluateQuests()](achievement.md) and [evaluateXP()](achievement.md) is called too. After handling 1 timer, the process is committed and repeated.
+
 #### simulateUpgrade()
 
 The level of the building is incremented. If the castle or barracks are upgraded, extra functionality is called to set new unlocked soldiers or newly unlocked buildings.
@@ -51,6 +57,8 @@ The player is notified when their building is upgraded.
 The trained troop is added to the troops of the settlement.
 
 #### simulateTransfer()  
+
+Before executing this function, __integrity() is called. A helper function to validate if the transfer goes to another transfer, that the transfer still exists. Otherwise, the player will be notified that their transfer couldn't be made.
 
 The resources and troops from the packages are added to the arriving settlement.
 
@@ -97,7 +105,7 @@ This function is called to retrieve all active timers associated to a player, th
 
 We use a "monster query", as we would like to call it, to retrieve it all at once from the database.
 
-Depending on the timer type, additional data might be added.
+Depending on the timer type, additional data might be added (See [addTransferTimerInfo()](../../src/dataAcces/timer.py))
 
 Explanation of the so called, "monster" query:
 
