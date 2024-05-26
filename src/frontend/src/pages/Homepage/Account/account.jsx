@@ -30,7 +30,7 @@ function Account({isBackgroundAudioEnabled, setIsBackgroundAudioEnabled})
     };
     return (
         <>
-            <button className={"username"} onClick={handleAccountButton}>User: {username}</button>
+            <button className={"username"} onClick={handleAccountButton}>{username}</button>
             <div className={navbar ? 'account-hidden account-visible' : 'account-hidden'}>
                 <button className={"account-button"} onClick={handleSettingsButton}>SETTINGS</button>
                 <button className={"account-button"} onClick={handleLogOutClick}>LOGOUT</button>

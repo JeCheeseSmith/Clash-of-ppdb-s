@@ -91,6 +91,7 @@ function MessageDisplay({ messages })
     const formatDate = (dateString) =>
     {
         const date = new Date(dateString);
+        date.setHours(date.getHours() + 2);
         const formattedDate = date.toLocaleDateString();
         const options = { hour12: true, hour: 'numeric', minute: 'numeric' };
         let when = " at "

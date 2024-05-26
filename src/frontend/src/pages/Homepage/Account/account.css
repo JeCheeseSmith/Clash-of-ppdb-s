@@ -2,32 +2,33 @@
 
 .username{
     position: absolute;
-    top: 3%;
-    right: 1%;
+    top: 1.5%;
+    right: 0.5%;
     z-index: 2;
     cursor: pointer;
     padding: 10px 20px;
     border: none;
-    font-size: 17px;
+    font-size: 25px;
     color: #fff;
-    border-radius: 7px;
+    border-radius: 20px;
     letter-spacing: 4px;
     font-weight: 700;
+    font-family: 'MedievalSharp', sans-serif;
     text-transform: uppercase;
     transition: 0.5s;
     transition-property: box-shadow;
 }
 
 .username{
-  background: rgb(0,140,255);
-  box-shadow: 0 0 25px rgb(0,140,255);
+  background: rgb(85, 0, 255);
+  box-shadow: 0 0 25px rgb(0, 27, 134);
 }
 
 .username:hover {
-  box-shadow: 0 0 5px rgb(0,140,255),
-              0 0 25px rgb(0,140,255),
-              0 0 50px rgb(0,140,255),
-              0 0 100px rgb(0,140,255);
+  box-shadow: 0 0 5px rgb(255, 89, 0),
+              0 0 25px rgb(98, 37, 0),
+              0 0 50px rgb(147, 59, 0),
+              0 0 100px rgb(255, 106, 0);
 }
 
 .account-hidden {
