@@ -14,7 +14,7 @@ export default function Settlement1(props) {
   const { nodes, materials } = useGLTF(settlement)
   return (
     <group {...props} dispose={null}>
-      <group rotation={[-Math.PI / 2, 0, 34]} scale={0.005} position={[-0.25,0.4,-0.5]}>
+      <group rotation={[-Math.PI / 2, 0, 34]} scale={0.002} position={[-0.25,0.1,-0.5]}>
         <mesh
           castShadow
           receiveShadow

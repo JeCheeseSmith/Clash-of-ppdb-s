@@ -1,82 +1,91 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 
-
-.username {
-    z-index: 999;
+.username{
     position: absolute;
-    top: 10px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
+    top: 1.5%;
+    right: 0.5%;
+    z-index: 2;
+    cursor: pointer;
     padding: 10px 20px;
-    border-radius: 15px;
-    border: 2px solid rgb(213, 185, 185);
-    font-family: MedievalSharp, cursive;
+    border: none;
     font-size: 25px;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 2px;
-    background: rgba(133, 43, 0, 0.57);
     color: #fff;
-    overflow: hidden;
-    box-shadow: 0 0 0 0 transparent;
-    -webkit-transition: all 0.2s ease-in;
-    -moz-transition: all 0.2s ease-in;
-    transition: all 0.2s ease-in;
+    border-radius: 20px;
+    letter-spacing: 4px;
+    font-weight: 700;
+    font-family: 'MedievalSharp', sans-serif;
+    text-transform: uppercase;
+    transition: 0.5s;
+    transition-property: box-shadow;
+}
+
+.username{
+  background: rgb(85, 0, 255);
+  box-shadow: 0 0 25px rgb(0, 27, 134);
 }
 
 .username:hover {
-    background: rgb(25, 0, 115);
-    box-shadow: 0 0 30px 5px rgba(0, 142, 236, 0.815);
-    -webkit-transition: all 0.2s ease-out;
-    -moz-transition: all 0.2s ease-out;
-    transition: all 0.2s ease-out;
-    cursor: pointer;
-    border: 2px solid rgba(31, 19, 0, 0.25);
+  box-shadow: 0 0 5px rgb(255, 89, 0),
+              0 0 25px rgb(98, 37, 0),
+              0 0 50px rgb(147, 59, 0),
+              0 0 100px rgb(255, 106, 0);
 }
 
-.username:hover::before {
-    -webkit-animation: sh02 0.5s 0s linear;
-    -moz-animation: sh02 0.5s 0s linear;
-    animation: sh02 0.5s 0s linear;
-}
-
-.username::before {
-    content: '';
-    display: block;
-    width: 0px;
-    height: 86%;
+.account-hidden {
     position: absolute;
-    top: 7%;
-    left: 0%;
-    opacity: 0;
-    background: #fff;
-    box-shadow: 0 0 50px 30px #fff;
-    -webkit-transform: skewX(-20deg);
-    -moz-transform: skewX(-20deg);
-    -ms-transform: skewX(-20deg);
-    -o-transform: skewX(-20deg);
-    transform: skewX(-20deg);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+    top: -100px;
+    right: 15px;
+    background-color: black;
+    border-radius: 15px;
+    padding: 25px;
+    border: 5px solid #480094;
+    opacity: 0; /* Start invisible */
+    transition: top 0.3s ease-out, opacity 0.3s ease-out;
 }
 
-@keyframes sh02 {
-  from {
-    opacity: 0;
-    left: 0%;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-    left: 100%;
-  }
+.account-visible {
+    top: 10px;
+    opacity: 1; /* Fully visible */
 }
 
-.username:active {
-    box-shadow: 0 0 0 0 transparent;
-    -webkit-transition: box-shadow 0.2s ease-in;
-    -moz-transition: box-shadow 0.2s ease-in;
-    transition: box-shadow 0.2s ease-in;
+.account-button {
+    --clr-font-main: hsla(0 0% 20% / 100);
+    --btn-bg-1: hsl(28, 100%, 22%);
+    --btn-bg-2: hsl(260, 100%, 30%);
+    --btn-bg-color: hsla(360 100% 100% / 1);
+    --radii: 0.5em;
+
+    margin-top: 5px;
+    cursor: pointer;
+    padding: 0.9em 1.4em;
+    min-width: 120px;
+    min-height: 44px;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    font-weight: 500;
+    transition: 0.8s;
+    background-size: 280% auto;
+    background-image: linear-gradient(325deg, var(--btn-bg-2) 0%, var(--btn-bg-1) 55%, var(--btn-bg-2) 90%);
+    border: none;
+    border-radius: var(--radii);
+    color: var(--btn-bg-color);
+    box-shadow: 0px 0px 20px rgba(71, 184, 255, 0.5), 0px 5px 5px -1px rgba(58, 125, 233, 0.25), inset 4px 4px 8px rgba(175, 230, 255, 0.5), inset -4px -4px 8px rgba(19, 95, 216, 0.35);
 }
 
+.account-button:hover {
+  background-position: right top;
+}
+
+.account-button:is(:focus, :focus-visible, :active) {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--btn-bg-color), 0 0 0 6px var(--btn-bg-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-button {
+    transition: linear;
+  }
+}

@@ -2,7 +2,7 @@
 .map-button {
     z-index: 999;
     position: absolute;
-    top: 100px; /* Adjust as needed */
+    top: 450px; /* Adjust as needed */
     right: 10px; /* Adjust as needed */
     border-radius: 15px;
     border: 2px solid rgb(213, 185, 185);
