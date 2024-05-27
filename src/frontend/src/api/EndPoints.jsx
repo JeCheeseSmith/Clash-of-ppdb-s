@@ -18,7 +18,7 @@ export const get_resources = async (sid) =>
 
 export const get_unlockedTroops = async (sid) =>
 {
-    return await GET( {"id": sid}, '/unlockedTroops');
+    return await GET( {"sid": sid}, '/unlockedTroops');
 }
 
 export const get_getTroops = async (sid) =>
