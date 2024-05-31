@@ -14,10 +14,25 @@ import backgroundMusic from "../../globalComponents/audioComponent/assets/Backgr
 
 /**
  * Represents the main page of the map component.
+ * The `MapMainpage` component serves as the central hub for interacting with the map
+ * and its associated functionalities within the application. It provides users with
+ * a comprehensive interface for managing resources, selecting outposts, engaging in chat,
+ * and accessing account settings.
  *
- * @returns {JSX.Element} MapMainpage component.
+ * Features:
+ * - Map Interface: Displays the interactive map where users can view territories, landmarks,
+ *   and other relevant information.
+ * - Resource Bars: Visual indicators showing the current levels of available resources
+ *   such as wood, stone, steel, and food.
+ * - Outpost Selection: Allows users to select outposts on the map for various purposes,
+ *   such as resource gathering, defense, or expansion.
+ * - Chat Integration: Enables real-time communication among players through chat functionality,
+ *   fostering collaboration and social interaction within the game environment.
+ * - Account Management: Provides access to user account settings, including options to
+ *   customize preferences, manage notifications, and update profile information.
+ *
+ * @returns {JSX.Element} The JSX representation of the MapMainpage component.
  */
-
 function MapMainpage()
 {
     const [menuVisible, setMenuVisible] = useState(false)

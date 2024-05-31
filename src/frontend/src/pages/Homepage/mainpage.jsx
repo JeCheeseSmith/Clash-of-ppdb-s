@@ -30,9 +30,20 @@ import TutorialButton from "./TutorialButton/tutorialButton.jsx";
 
 /**
  * Functional component representing the main page of the application.
- * Displays a full-bleed background image.
+ * This component serves as the primary interface for users, displaying various game elements,
+ * communication features, and user interactions.
+ *
+ * The main page consists of:
+ * - Grid view displaying buildings and game elements
+ * - Build menu for constructing new buildings
+ * - Resource bar showing available resources
+ * - Chat and social features for player communication
+ * - Account management for user settings and logout
+ * - Quests, leaderboard, and other game-related functionalities
+ * - Background music and tutorial elements
+ *
+ * @returns {JSX.Element} The JSX for the main page.
  */
-let audioSetting = true;
 function MainPage()
 {
     const { sid, username, signUp} = useLocation().state;
