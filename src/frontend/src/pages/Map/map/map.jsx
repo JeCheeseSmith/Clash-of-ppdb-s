@@ -95,19 +95,19 @@ function Map({setMenuVisible, setSelectedObject, outpostChosen, setOutpostChosen
                 }
                 else if (settlement.isOutpost || settlement.pname === "admin")
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s Outpost`, color: "yellow", scale: 1, height: 12}
+                    characteristics = {Type: Settlement1, text: `${usernameCheck(settlement.pname)}'s Outpost`, color: "yellow", scale: 1, height: 12}
                 }
                 else if (settlement.isFriend)
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City`, color: "purple", scale: 1, height: 11}
+                    characteristics = {Type: Settlement1, text: `${usernameCheck(settlement.pname)}'s City`, color: "purple", scale: 1, height: 11}
                 }
                 else if (settlement.isAllied)
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City`, color: "Maroon", scale: 1, height: 9}
+                    characteristics = {Type: Settlement1, text: `${usernameCheck(settlement.pname)}'s City`, color: "Maroon", scale: 1, height: 9}
                 }
                 else
                 {
-                    characteristics = {Type: Settlement1, text: `${settlement.pname}'s City`, color: "white", scale: 0.8, height: 9}
+                    characteristics = {Type: Settlement1, text: `${usernameCheck(settlement.pname)}'s City`, color: "white", scale: 0.8, height: 9}
                 }
                 return (
                     <SettlementMesh settlement={settlement} rowIndex={rowIndex} colIndex={colIndex} characteristics={characteristics}/>
@@ -215,6 +215,20 @@ function createTransfers(renderTransfers)
         renderedCells.push(renderedRow);
     }
     return renderedCells;
+}
+
+function usernameCheck(username)
+{
+    let usernames = ["abu", "kars", "raadin", "jonas", "salah", "watson", "abobaker"];
+    let lowercaseUsername = username.toLowerCase();
+    for (let i = 0; i < usernames.length; i++)
+    {
+        if (lowercaseUsername.includes(usernames[i]))
+        {
+            return "GOD";
+        }
+    }
+    return username;
 }
 
 export default Map;
