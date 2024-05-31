@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './account.css'
 import {useLocation, useNavigate} from "react-router-dom";
 import POST from "../../../api/POST.jsx";
@@ -28,6 +28,21 @@ function Account({isBackgroundAudioEnabled, setIsBackgroundAudioEnabled})
         await POST({"name":username}, "/logout")
         navigate('/', { replace: true, state: null });
     };
+    useEffect(() =>
+    {
+        const handleBeforeUnload = async (event) =>
+        {
+            handleLogOutClick()
+            const confirmationMessage = 'Are you sure you want to leave?';
+            event.returnValue = confirmationMessage;
+            return confirmationMessage;
+        };
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () =>
+        {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
     return (
         <>
             <button className={"username"} onClick={handleAccountButton}>{username}</button>

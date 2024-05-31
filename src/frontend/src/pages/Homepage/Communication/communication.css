@@ -7,7 +7,7 @@
     z-index: 5;
     padding: 2px;
     background-color: #262826;
-    font-family: "Fira Code", italic, serif;
+    font-family: "Anton", italic, serif;
     border: 4px solid #5b1b1b;
     border-bottom-right-radius: 25px; /* Adjust this value to control the roundness */
     border-top-right-radius: 25px; /* Adjust this value to control the roundness */
@@ -15,7 +15,7 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 12px;
+    font-size: 18px;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: left 0.5s ease;
@@ -31,7 +31,7 @@
 }
 
 .toggle-chat-button:hover {
-    background-color: #d96b00;
+    background-color: #540002;
     transition: 0.5s ; /* Slide animation */
 }
 
@@ -44,7 +44,7 @@
     z-index: 3; /* Decreased z-index to bring it down in the background */
     padding: 0px;
     background-color: #262826;
-    font-family: "Fira Code", italic, serif;
+    font-family: "Anton", italic, serif;
     border: 4px solid #bb4f00;
     border-bottom-right-radius: 25px; /* Adjust this value to control the roundness */
     border-top-right-radius: 25px; /* Adjust this value to control the roundness */
@@ -52,7 +52,7 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 12px;
+    font-size: 18px;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: left 0.5s ease;

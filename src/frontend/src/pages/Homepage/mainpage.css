@@ -30,3 +30,48 @@ video {
     height: 100vh;
     object-fit: cover;
 }
+
+.next-button {
+    position: absolute;
+    z-index: 1;
+    bottom: 50px;
+    right: 50px;
+    border: #2c0088 solid 3px;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    font-family: Anton, serif;
+    font-size: 20px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+.previous-button {
+    position: absolute;
+    z-index: 2;
+    bottom: 50px;
+    left: 50px;
+    border: #2c0088 solid 3px;
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    font-family: Anton, serif;
+    font-size: 20px;
+    cursor: pointer;
+    transition-duration: 0.3s;
+}
+
+.next-button:hover {
+    scale: 1.5;
+}
+
+.next-button:active {
+    scale: 0.8;
+}
+
+.previous-button:hover {
+    scale: 1.5;
+}
+
+.previous-button:active {
+    scale: 0.8;
+}
