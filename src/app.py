@@ -566,7 +566,6 @@ def espionage():
     }
     """
     data = request.json
-    print(data.get('idTo'), data.get('sidFrom'), data.get('toType'))
     transfer_data_acces.createEspionage(data.get('idTo'), data.get('sidFrom'), data.get('toType'),
                                                 timer_data_acces)
 
@@ -1101,8 +1100,7 @@ def getPrize():
         player_data_access.updateGems(sid, 200)
     if prize == 'You won 150 xp!':
         player_data_access.updateXPandLevel(150, pname)
-
-    if prize == 'You won 1000 gems!':
+    if prize == 'You won 1000 gems':
         player_data_access.updateGems(sid, 1000)
     if prize == 'Level up':
         player_data_access.updateXPandLevel(1000, pname)
