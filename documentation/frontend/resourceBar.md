@@ -4,8 +4,8 @@
 The bar in the top middle part of the screen displays the amount of resources you have with their respective icon.
 Hovering over an icon will enlarge it. API calls are made to ensure that the amount displayed matches with the amount of resources your city has.
 
-Five resources are displayed: Gems, wood, stone, steel & food. Wood and stone are predominantly used for constructing buildings and upgrading them while iron is mainly used to recruit your troops, food is used to maintain your current amount of troops. If there is not enough food available your troops will starve and die.
-Gems are used to purchase decorations for buildings.
+Five resources are displayed: Gems, wood, stone, steel & food. Wood and stone are predominantly used for constructing buildings and upgrading them while iron is mainly used to recruit your troops, food is used to maintain your current amount of troops. 
+If there is not enough food available your troops will starve and die. Gems are used to purchase decorations for buildings.
 
 The 'ResourceBar' function, defined in 'resourcebar.jsx', is responsible for rendering the resource bar. It returns a JSX that contains its design. The style is present in 'resourcebar.css'.
 'ResourceBar' takes three arguments: 'resources', 'refresh' and 'refreshFunction'. 
