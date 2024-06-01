@@ -1,10 +1,10 @@
 # Level
 
-The LevelBar function, defined in Level.jsx, is responsible for rendering the level and the xp-bar. They are located in the top left corner.
+The 'LevelBar' function, defined in 'Level.jsx', is responsible for rendering the level and the xp-bar. They are located in the top left corner.
 This function takes two parameters: 'vlag' and 'changeVlag'. Within this function, two states are initialized: 'level' and 'xp'. The player's username is also retrieved from the login page/sign-up page. 
 'level' represents the player's current level.
 
-The useEffect inside this function fetches the current level and XP by calling the 'requestLevel' and 'requestXP' functions, both of which require the player's username ('username1') as a parameter. 
+The useEffect inside this function fetches the current level and XP by calling the 'requestLevel' and 'requestXP' functions, both of which require the player's username as an argument. 
 Both these functions call the 'getXPandLevel' API, which returns the level and xp from the database. The value of 'level' is set to the current level and the value of 'xp' is set to the current XP.
 This useEffect will be executed every time the value of 'vlag' is set to 'true'. 
 
