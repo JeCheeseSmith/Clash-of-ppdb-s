@@ -17,6 +17,7 @@
 - [x] Inappropriate username checker
 - [x] Username validation checker
 - [x] Narrator Intro
+- [x] Guidance 
 
 ## Documentation
 
