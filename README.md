@@ -10,14 +10,14 @@
 - [X] Idle Game
 - [X] Multiplayer Mechanics
 - [X] Documentation
-- [x] See [ultra-high-level](documentation/ultra-high-level.md) for an incomplete but short overview
+- [x] See [ultra-high-level](documentation/ultra-high-level.md) for an incomplete but short overview of the game play
 - [x] Design Choices focused on a low server load
 - [x] Focus on database expandability
 - [x] Game is "user-interactive" in the sense that code only gets executed upon a user input
 - [x] Inappropriate username checker
 - [x] Username validation checker
 - [x] Narrator Intro
-- [x] Guidance 
+- [x] In-game Guidance & Explanation 
 
 ## Documentation
 
