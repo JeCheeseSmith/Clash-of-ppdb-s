@@ -15,8 +15,8 @@ In a settlement you can:
 On the map you can:
 
 - See other settlements
-- See transfers going from and to transfer or settlements
-- Attack, espionage or trade with others
+- See transfers going from and to transfers or settlements
+- Attack, espionage or trade with others (using transfers)
 - Create new settlements: outposts
 
 Chat:

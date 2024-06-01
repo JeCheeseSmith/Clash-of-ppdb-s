@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Map from "./map/map.jsx";
 import './mapMainpage.css'
 import TransferMenu from "./mapMenu/transfers/transfers.jsx";
@@ -10,6 +10,7 @@ import Chat from "../Homepage/Communication/chat/chat.jsx";
 import Account from "../Homepage/Account/account.jsx";
 import LocalTimers from "../../globalComponents/backgroundFunctions/localTimers.jsx";
 import ResourceBar from "../Homepage/RecourceBar/resourcebar.jsx";
+import backgroundMusic from "../../globalComponents/audioComponent/assets/BackgroundMusicMap.mp3";
 
 /**
  * Represents the main page of the map component.
@@ -28,13 +29,36 @@ function MapMainpage()
     const [callForUpdate, setCallForUpdate] = useState(false)
     const [instantCallForUpdate, setInstantCallForUpdate] = useState(false)
     const [refresh, setRefresh] = useState(true)
+    const intro = false
+    const [fadeIn, setFadeIn] = useState(false);
+    const [isBackgroundAudioEnabled, setIsBackgroundAudioEnabled] = useState(true)
     const handleOutpostButton = () =>
     {
         setOutpostChosen(!outpostChosen)
         setMenuVisible(false)
     }
+    useEffect(() =>
+    {
+        if (!intro)
+        {
+            setFadeIn(true);
+        }
+    }, [intro]);
+    useEffect(() =>
+    {
+        if (!intro && isBackgroundAudioEnabled)
+        {
+            const audio = new Audio(backgroundMusic);
+            audio.loop = true; // Loop the audio
+            audio.play();
+            return () =>
+            {
+                audio.pause(); // Pause the audio when component unmounts
+            };
+        }
+    }, [backgroundMusic, intro, isBackgroundAudioEnabled]);
     return (
-        <div className={"map-mainpage"}>
+        <div className={`map-mainpage fade-in ${fadeIn ? 'fade-in-visible' : ''}`}>
             <Loader {...loaderStyles} />
             {
                 menuVisible &&
@@ -54,7 +78,7 @@ function MapMainpage()
             />
             <Outpost onClickFunction={handleOutpostButton}/>
             <Chat/>
-            <Account/>
+            <Account isBackgroundAudioEnabled={isBackgroundAudioEnabled} setIsBackgroundAudioEnabled={setIsBackgroundAudioEnabled}/>
             <img src={compass} alt={"compass"} className={"compass"}/>
             <Map setMenuVisible={setMenuVisible}
                  setSelectedObject={setSelectedObject}

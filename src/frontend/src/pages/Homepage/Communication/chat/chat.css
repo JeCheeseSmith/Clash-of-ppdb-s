@@ -26,6 +26,7 @@
     padding-bottom: 35px;
     border-radius: 20px;
     font-size: 70px; /* Adjust the font size as needed */
+    font-family: Anton, cursive;
 }
 
 .message-display {
@@ -95,6 +96,18 @@
     background-color: #2b0057;
     border-radius: 10px;
     padding: 20px;
+}
+
+.message-time{
+    margin-top: 20px;
+    color: #0e0049;
+    font-family: "Anton", cursive;
+}
+
+.message-time-receiver{
+    margin-top: 20px;
+    color: #3b1403;
+    font-family: "Anton", cursive;
 }
 
 .message-input {

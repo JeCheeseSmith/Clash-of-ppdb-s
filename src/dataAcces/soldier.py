@@ -24,7 +24,7 @@ class SoldierDataAccess:
     def calculateTrainTime(self, sname, sid):
         """
         Helper function to retrieve the start,stop and duration for a timer to train a soldier
-        REMEMBER: Troop training may not work in parallel; will retrieve
+        REMEMBER: Troop training may not work in parallel;
         :param sid:
         :param sname: Name of the soldier
         :return: start: now() , stop: datetime, duration: int
@@ -65,9 +65,9 @@ class SoldierDataAccess:
         :return: Array of soldier name and unlocked status (True/False)
         """
         cursor = self.dbconnect.get_cursor()
-        query = """SELECT soldier.name,True FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=1
+        query = """SELECT soldier.name,True FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=%s
 UNION
-SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=1);"""
+SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FROM soldier JOIN unlocked on soldier.name = unlocked.name WHERE sid=%s);"""
         cursor.execute(query, (sid, sid))
         data = cursor.fetchall()
 
@@ -108,18 +108,5 @@ SELECT soldier.name,False FROM soldier WHERE name NOT IN (SELECT soldier.name FR
 
         for soldier in troops.keys():
             cursor.execute('SELECT capacity FROM soldier WHERE name=%s;', (soldier,))
-            capacity += cursor.fetchone()[0]
+            capacity += cursor.fetchone()[0] * troops[soldier].get('amount')
         return capacity
-
-    def getBarrackLevelSum(self, sid):
-        """
-        Retrieves the sum of the levels of all barracks in a settlement. This is used to let the user know it can train this amount in parallel.
-        :param sid: Settlement ID
-        :return:
-        """
-        cursor = self.dbconnect.get_cursor()
-        cursor.execute('SELECT SUM(level) FROM building WHERE sid=%s and name=%s;', (sid, 'Barracks'))
-        amount = cursor.fetchone()[0]
-        if amount is None:
-            amount = 0
-        return amount

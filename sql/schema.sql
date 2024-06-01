@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS transfer(
 CREATE TABLE IF NOT EXISTS buildable(
     name VARCHAR PRIMARY KEY,
     type VARCHAR NOT NULL,
-    function FLOAT4[] NOT NULL, -- The mathematical function to evaluate the resource function with
+    function FLOAT4[] NOT NULL, -- The mathematical function to evaluate the resource amount with
     upgradeFunction INT[] NOT NULL,
     upgradeResource SMALLINT NOT NULL, -- 2: Wood , 1: Stone, 3: Steel, 4: Food, 12: Stone & Wood
     timeFunction INT[] NOT NULL
@@ -113,18 +113,18 @@ CREATE TABLE IF NOT EXISTS building(
     gridY INT NOT NULL,
     sid INT NOT NULL REFERENCES settlement(id) ON DELETE CASCADE ON UPDATE CASCADE, -- Contains Relation
     occuppiedCells INT[][] NOT NULL,
-    UNIQUE (gridX,gridY,sid),
-    PRIMARY KEY (id,name)
+    UNIQUE (gridX,gridY,sid), -- A building has a unique coordinate in a settlement
+    PRIMARY KEY (id,name) -- Multiple building from the same type may be placed
 );
 
 CREATE TABLE IF NOT EXISTS timer(
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    oid INT, -- ID Of the Object
+    oid INT, -- ID Of the Object referring to
     type TEXT CHECK (type IN ('building', 'soldier', 'transfer', 'attack', 'espionage','outpost')),
     start TIMESTAMP NOT NULL,
     done TIMESTAMP NOT NULL,
     duration BIGINT NOT NULL,
-    sid INT NOT NULL -- May be used as transfer id as well
+    sid INT NOT NULL -- May be used as a transfer id as well
 );
 
 CREATE TABLE IF NOT EXISTS friend(
@@ -173,9 +173,7 @@ CREATE TABLE IF NOT EXISTS achieved(
     PRIMARY KEY (pname,aname)
 );
 
-
-
--- Insert standard buildings
+-- Insert standard data
 
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('Castle','storage','{12000,0}','{21600,21600}','{0,4000,0}',12);
 INSERT INTO buildable(name,type,function,timeFunction,upgradeFunction, upgradeResource) VALUES('SatelliteCastle','storage','{1000,0}','{21600,21600}','{0,4000,0}',12);

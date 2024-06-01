@@ -454,26 +454,6 @@ def getConsumption():
     return jsonify(amount)
 
 
-@app.route("/getBarrackLevelSum", methods=["POST"])
-def getBarrackLevelSum():
-    """
-    Retrieve the food consumption per time unit for a settlement
-
-    JSON Input Format
-    {
-    "id": <INT> | Identifier of the settlement referring to
-    }
-
-    JSON Output Format:
-    {
-    <INT> | sum of level of each barrack
-    }
-    """
-    data = request.json
-    amount = soldier_data_acces.getBarrackLevelSum(data.get('id'))
-    return jsonify({"amount": amount})
-
-
 @app.route("/trainTroop", methods=["POST"])
 def trainTroop():
     """
@@ -618,9 +598,10 @@ def transfer():
     """
     data = request.json
 
-    print(data.get('idTo'), data.get('toType'), data.get('idFrom'),
-                                                        False, data.get('soldiers'),
-                                                        data.get('resources'), data.get('tType'), data.get('pname'))
+    if data.get('idTo') == data.get('idFrom') and not data.get('toType'):  # Going to the same settlement as you came from
+        dct = dict(success=False)
+        dct["error"] = "You can't transfer to the same settlement"
+        return jsonify(dct)
 
     success, timer = transfer_data_acces.createTransfer(data.get('idTo'), data.get('toType'), data.get('idFrom'),
                                                         False, data.get('soldiers'),
@@ -1064,18 +1045,6 @@ def getLeaderboard():
    List with players returned in json format, ordered by level
    """
     return jsonify(player_data_access.getPlayers())
-
-
-@app.route("/setXPandLevel", methods=["POST"])
-def setXPandLevel():
-
-    """
-    POST: modify the xp and level in the database
-    """
-    data = request.json
-    player_name = data.get("name")
-    xp_count = data.get("xp")
-    player_data_access.updateXPandLevel(xp_count, player_name)
 
 
 @app.route("/getXPandLevel", methods=["GET"])

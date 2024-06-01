@@ -12,6 +12,28 @@
     border: 2px solid rgb(147, 78, 17);
 }
 
+.contact-list::-webkit-scrollbar {
+    height: 20px;
+    width: 20px;
+}
+
+.contact-list::-webkit-scrollbar-track {
+    background: rgba(255, 183, 0, 0.29);
+    border-radius: 10px;
+}
+
+.contact-list::-webkit-scrollbar-thumb {
+    background: rgba(147, 78, 17, 0.8);
+    border-radius: 50px;
+    border: 2px solid rgba(255, 183, 0, 0.29);
+}
+
+.contact-list::-webkit-scrollbar-thumb:hover {
+    background: rgb(45, 17, 147);
+}
+
+
+
 .icons {
     transition: transform 0.4s;
     background-color: transparent;

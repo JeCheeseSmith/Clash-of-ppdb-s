@@ -254,19 +254,18 @@ class PackageDataAccess:
                 amount = package.soldiers[soldier]['amount']
                 discovered = package.soldiers[soldier]['discovered']
 
-                if amount != 0:  # Don't insert useless info
-                    # Check if we need to insert or update this troop!
-                    cursor.execute('SELECT EXISTS(SELECT sname,pid FROM troops WHERE sname=%s AND pid=%s);',
-                                   (soldier, package.package.id))
+                # Check if we need to insert or update this troop!
+                cursor.execute('SELECT EXISTS(SELECT sname,pid FROM troops WHERE sname=%s AND pid=%s);',
+                               (soldier, package.package.id))
 
-                    if cursor.fetchone()[0]:  # It exists, so update
-                        cursor.execute(
-                            'UPDATE troops SET amount = %s ,discovered = %s WHERE pid=%s AND sname=%s;',
-                            (amount, discovered, package.package.id, soldier))
-                    else:  # Insert
-                        cursor.execute(
-                            'INSERT INTO troops(pid, sname, amount,discovered) VALUES (%s, %s, %s, %s);',
-                            (package.package.id, soldier, amount, discovered))
+                if cursor.fetchone()[0]:  # It exists, so update
+                    cursor.execute(
+                        'UPDATE troops SET amount = %s ,discovered = %s WHERE pid=%s AND sname=%s;',
+                        (amount, discovered, package.package.id, soldier))
+                else:  # Insert
+                    cursor.execute(
+                        'INSERT INTO troops(pid, sname, amount,discovered) VALUES (%s, %s, %s, %s);',
+                        (package.package.id, soldier, amount, discovered))
 
         self.dbconnect.commit()
 
@@ -390,35 +389,35 @@ class PackageDataAccess:
                 if building[1] == "WoodCuttersCamp":
                     Level = building[2]
                     Generated_wood += PackageDataAccess.evaluate(Wood_function, calculated_time) * Level
-                if building[1] == "Quarry":
+                elif building[1] == "Quarry":
                     Level = building[2]
                     Generated_stone += PackageDataAccess.evaluate(Stone_function, calculated_time) * Level
-
-                if building[1] == "SteelMine":
+                elif building[1] == "SteelMine":
                     Level = building[2]
                     Generated_steel += PackageDataAccess.evaluate(Steel_function, calculated_time) * Level
-
-                if building[1] == "Farm":
+                elif building[1] == "Farm":
                     Level = building[2]
                     Generated_food += PackageDataAccess.evaluate(Food_function, calculated_time) * Level
-
-                if building[1] == "WoodStockPile":
+                elif building[1] == "WoodStockPile":
                     Level = building[2]
                     Wood += PackageDataAccess.evaluate(Wood_Storage_function, Level)
-
-                if building[1] == "StoneStockPile":
+                elif building[1] == "StoneStockPile":
                     Level = building[2]
                     Stone += PackageDataAccess.evaluate(Stone_Storage_function, Level)
-
-                if building[1] == "Armory":
+                elif building[1] == "Armory":
                     Level = building[2]
                     Steel += PackageDataAccess.evaluate(Steel_Storage_function, Level)
-
-                if building[1] == "GrainSilo":
+                elif building[1] == "GrainSilo":
                     Level = building[2]
                     Food += PackageDataAccess.evaluate(Food_Storage_function, Level)
-
-                if building[1] == "Castle":
+                elif building[1] == "Castle":
+                    Level = building[2]
+                    MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
+                    Wood += MainStorage
+                    Stone += MainStorage
+                    Steel += MainStorage
+                    Food += MainStorage
+                elif building[1] == "SatelliteCastle":
                     Level = building[2]
                     MainStorage = PackageDataAccess.evaluate(Castle_Storage_function, Level)
                     Wood += MainStorage
@@ -477,7 +476,7 @@ class PackageDataAccess:
         # Player resources
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sid,))
         pid = cursor.fetchone()[0]
-        cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid,))
+        cursor.execute('SELECT wood FROM package WHERE id=%s;', (pid, ))
         Pwood = cursor.fetchone()[0]
         cursor.execute('SELECT stone FROM package WHERE id=%s;', (pid,))
         Pstone = cursor.fetchone()[0]

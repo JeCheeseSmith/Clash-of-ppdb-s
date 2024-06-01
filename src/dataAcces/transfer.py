@@ -34,10 +34,10 @@ class TransferDataAccess:
         """
         speed = 1
         if package is not None:  # (None = Espionage or Attack)
-            speed += package.stone % 1000
-            speed += package.wood % 1000
-            speed += package.food % 1000
-            speed += package.steel % 1000
+            speed += package.stone / 250
+            speed += package.wood / 250
+            speed += package.food / 250
+            speed += package.steel / 250
         return speed
 
     def extent(self, soldierDict, discovered):
@@ -76,7 +76,6 @@ class TransferDataAccess:
         """
         cursor = self.dbconnect.get_cursor()
         if transfer:  # If it's a transfer, we take the middle of the 2 sids
-            print(oid)
             cursor.execute('SELECT idTo,toType,idFrom, fromtype FROM transfer WHERE id=%s;', (oid,))
             ids = cursor.fetchone()
             sidTo = self.translatePosition(ids[0], ids[1])  # This can go recursively for transfers on transfers
@@ -112,7 +111,7 @@ class TransferDataAccess:
             cursor.execute('SELECT pname FROM settlement WHERE id=%s;', (idFrom,))
         pname2 = cursor.fetchone()[0]
 
-        return not (friend_data_acces.areFriends(pname1, pname2) or clan_data_acces.areAllies(pname1, pname2))
+        return not (friend_data_acces.areFriends(pname1, pname2) or clan_data_acces.areAllies(pname1, pname2) or pname1==pname2)
 
     def getNumberOfSettlements(self, sid: int):
         """
@@ -155,15 +154,17 @@ class TransferDataAccess:
 
         if soldiers is not None:
             speed = inf  # Retrieve the minimal speed
+            amount = 1
             for name in soldiers.keys():
                 cursor.execute('SELECT speed FROM soldier WHERE name=%s;', (name,))
                 speed = min(cursor.fetchone()[0], speed)
+                amount += soldiers[name].get('amount')
+            speed = speed * 3.14 * amount
         else:  # Espionage
             speed = 1
 
         distance = SettlementDataAcces.calculateDistance(to, start)  # Calc distance
-
-        duration = distance / speed * self.determineSpeed(package)
+        duration = (distance * (speed * self.determineSpeed(package)))
         start = datetime.now()
         stop = start + timedelta(seconds=duration)
 
@@ -227,16 +228,6 @@ class TransferDataAccess:
         timer = Timer(None, transfer.id, 'transfer', start, stop, duration, transfer.idTo)
         timer_data_access.insertTimer(timer)
 
-        # if transfer.toType:
-        #     # We need to call this recursively on any transfers linked to this one
-        #     cursor.execute('SELECT id FROM transfer WHERE totype=True and idTo=%s;',
-        #                    (transfer.id,))
-        #     transfers = cursor.fetchall()
-        #     for tid in transfers:  # Send them back to where they came from
-        #         self.returnToBase(self.instantiateTransfer(tid[0]), timer_data_access,
-        #                           soldier_data_acces, package_data_acces)
-        #         self.dbconnect.commit()
-
         # Delete the old timer in the database (package and transfer is recycled)
         if originalTimerID is not None:
             cursor.execute('DELETE FROM timer WHERE id=%s;', (originalTimerID,))
@@ -260,8 +251,6 @@ class TransferDataAccess:
         cursor = self.dbconnect.get_cursor()  # DB Acces
         cursor.execute('SELECT pid FROM settlement WHERE id=%s;', (sidFrom,))
         pid = cursor.fetchone()
-
-        print(resources)
         # Instantiate packages
         tp = PackageWithSoldier(Package(resources), soldiers)  # transferPackage
         sp = PackageWithSoldier(package_data_acces.get_resources(pid),
@@ -272,8 +261,6 @@ class TransferDataAccess:
         sp -= tp
         if sp.hasNegativeBalance():
             raise Exception(sp.deficitString())
-
-        print(sp.package.to_dct(), tp.package.to_dct())
 
         package_data_acces.add_resources(tp)  # Add the package in the database
         package_data_acces.update_resources(sp)  # Update the sp accordingly
@@ -300,8 +287,6 @@ class TransferDataAccess:
 
             # Restructure to a backend format
             soldiers = self.__restructure(soldiers, False)
-
-            print(resources)
 
             # Adjust resource & troop info
             tp = self.updateResourceTroops(idFrom, soldiers, resources, package_data_acces, soldier_data_acces, False)

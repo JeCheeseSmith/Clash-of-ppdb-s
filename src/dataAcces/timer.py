@@ -145,7 +145,6 @@ class TimerDataAccess:
             elif timer.type == 'transfer':
                 self.simulateTransfer(timer, transfer_data_acces, package_data_acces, content_data_access,
                                       soldier_data_acces)
-                print("------------------------------------------------------------------")
             elif timer.type == 'espionage':
                 self.simulateEspionage(timer, transfer_data_acces, content_data_access)
                 cursor.execute('DELETE FROM transfer WHERE id=%s;', (timer.oid,))
@@ -440,7 +439,6 @@ SELECT id FROM transfer WHERE discovered=True
             spid = cursor.fetchone()[0]
         sp = transfer_data_acces.instantiatePackageWithSoldiers(spid, soldier_data_acces,
                                                                 package_data_acces)  # Package going to
-
         # Update correct data in the database
         sp += tp
         package_data_acces.update_resources(sp)
@@ -565,7 +563,7 @@ SELECT id FROM transfer WHERE discovered=True
         :return:
         """
         # Instantiate Usable Data Objects
-        success = choice([True, False])  # Choose a random winner
+        success = True #choice([True, False])  # Choose a random winner
         transfer = transfer_data_acces.instantiateTransfer(timer.oid)
         cursor = self.dbconnect.get_cursor()
 
@@ -625,8 +623,11 @@ SELECT id FROM transfer WHERE discovered=True
                 capacity = soldier_data_acces.getCapacity(transfer.pid)  # Amount an attacker can take with
                 resourceStolen = choice([1, 2, 3, 4])  # Choose a random resource
                 stolen = min(capacity, dp[resourceStolen])  # Amount that will be stolen
+                oldDp = Package(dp)
                 dp[resourceStolen] -= stolen
                 dp = Package(dp)
+                ap = oldDp - dp
+                ap.id = transfer.pid
 
                 # Adjust new resources to database
                 package_data_acces.update_resources(dp)

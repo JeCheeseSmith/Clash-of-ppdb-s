@@ -17,7 +17,7 @@ import PlaySound from "../../../../../globalComponents/audioComponent/audio.jsx"
  * @param {Function} props.setCallForUpdate - Function to set a call for update.
  * @returns {JSX.Element} - React component.
  */
-function UpgradeBuilding({selectedBuilding, getTimer, oldPosition, setCallForUpdate}) {
+function UpgradeBuilding({selectedBuilding, getTimer, oldPosition, setCallForUpdate, setInstantCallForUpdate}) {
 
     const { sid, username } = useLocation().state;
     const [click, setClick] = useState(false);
@@ -39,7 +39,6 @@ function UpgradeBuilding({selectedBuilding, getTimer, oldPosition, setCallForUpd
     }, []);
 
     function HandleUpgradeClick() {
-        setCallForUpdate(true)
         if (!click)
         {
             API.upgradeBuilding(oldPosition, sid).then(data =>
@@ -50,12 +49,14 @@ function UpgradeBuilding({selectedBuilding, getTimer, oldPosition, setCallForUpd
                     setCurrentTimeValue(data.duration)
                     setCurrentTotalDuration(data.duration)
                     setClick(true)
+                    setInstantCallForUpdate(true)
                 }
                 else
                 {
                     setErrorMessage(data.error);
                     setPopup(true)
                     const promise = PlaySound("ResourcesError")
+                    setCallForUpdate(true)
                 }
             })
             let promise  = PlaySound("Click")

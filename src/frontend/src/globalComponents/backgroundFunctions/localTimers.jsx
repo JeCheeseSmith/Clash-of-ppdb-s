@@ -35,6 +35,7 @@ function LocalTimers(
     const { sid, username } = useLocation().state
     const location = useLocation();
     const [updateTime, setUpdateTime] = useState(null)
+    const [helpTimers, setHelpTimers] = useState(null)
     const timeout = 30000
     const update = () =>
     {
@@ -43,6 +44,7 @@ function LocalTimers(
         if (location.pathname === "/Map")
         {
             updateMap(username, setSettlements)
+            updateTimers(username, setHelpTimers)
         }
     }
     useEffect(() => // Changing Refreshing Button
@@ -100,7 +102,15 @@ function LocalTimers(
                 const updatedTimers = [];
                 for (let i = 0; i < timers.length; i++)
                 {
-                    const timer = timers[i];
+                    let timer
+                    if (location.pathname === "/Map")
+                    {
+                        timer = helpTimers[i];
+                    }
+                    else
+                    {
+                        timer = timers[i];
+                    }
                     if (timer.duration > 0)
                     {
                         if (timer.duration === timer.totalDuration)
@@ -123,11 +133,18 @@ function LocalTimers(
                         break
                     }
                 }
-                setTimers(updatedTimers);
+                if (location.pathname === "/Map")
+                {
+                    setHelpTimers(updatedTimers);
+                }
+                else
+                {
+                    setTimers(updatedTimers);
+                }
             }, 1000); // Decrease duration every second
             return () => clearInterval(timerInterval); // Clean up interval on component unmount
         }
-    }, [timers]);
+    }, [timers, helpTimers]);
     return null
 }
 export default LocalTimers; // Exporting the MainPage component

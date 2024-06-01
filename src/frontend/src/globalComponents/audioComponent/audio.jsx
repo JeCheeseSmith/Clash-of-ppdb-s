@@ -7,6 +7,13 @@ import newMessage from "./assets/NewMessage.mp3"
 import report from "./assets/Report.mp3"
 import click from "./assets/Click.mp3"
 
+
+export let audioSetting = true;
+export const setAudioSetting = (value) =>
+{
+    audioSetting = value;
+};
+
 /**
  * Plays a specified sound based on the provided type.
  *
@@ -25,6 +32,7 @@ import click from "./assets/Click.mp3"
 
 async function PlaySound(typeSound, volume=null)
 {
+    if (!audioSetting) return;
     let sound;
     if (typeSound === "Click")
     {
