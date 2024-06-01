@@ -11,7 +11,6 @@ function LevelBar({vlag, changeVlag}) {
     const { username } = useLocation().state;
 
     useEffect(() => {
-        //if (!vlag) return;
 
         const fetchData = async () => {
             try {
