@@ -53,7 +53,7 @@ export const get_unlockedTroops = async (sid) =>
 
 export const get_getTroops = async (sid) =>
 {
-    return await GET( {"id": sid}, '/getTroops');
+    return await GET( {"id": sid, "type": "settlement"}, '/getTroops');
 }
 
 export const get_getConsumption = async (sid) =>
