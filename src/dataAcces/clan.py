@@ -173,7 +173,7 @@ class ClanDataAccess:
         :return:
         """
         cursor = self.dbconnect.get_cursor()
-        if not self.__isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
+        if not self.isMember(request.sender):  # Check if they're not already in a clan (Member or Leader)
             # Check if request doesn't exsist
             QueryCheck = """
                            SELECT *
