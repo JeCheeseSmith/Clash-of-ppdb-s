@@ -2,8 +2,6 @@
 > Web-based idle game in a medieval context. A project for the course Programming Project Databases (INFORMAT 1002WETDAT)
 > > By Abobaker Rahman, Raadin Bahrami, Jonas Degruytere, Salaheddine Edfiri, Kars van Velzen
 
-## Play the game [here!](https://team8.ua-ppdb.me/)
-
 ### Functionalities: 
 - [X] Scope & Game Description
 - [X] Simple Auto-Build to server (Follow ([autoBuild](documentation/autoBuild.md) after the initial setup)
